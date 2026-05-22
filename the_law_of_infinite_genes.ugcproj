@@ -1,16 +1,16 @@
 [Root]
-ProjectDisplayName=shjy
-ProjectDescription=shjy
+ProjectDisplayName=the_law_of_infinite_genes
+ProjectDescription=the_law_of_infinite_genes
 DataTableRootDir=
-ProjectName=shjy
-ProjectTrueName=56D1D5A1759E94CAEFA9FA068063224A879FE0269CE361E843F742EF18AFFEE4
-ProjectShortPath=/shjy/
-StartMapName=/shjy/UGCmap
+ProjectName=the_law_of_infinite_genes
+ProjectTrueName=FD64375A2EF3C03D6A7C71A928C2397E45516300374EDC77AEDFA5025F7CBFF8C8CF0526A54113937978179BE2609EA1
+ProjectShortPath=/the_law_of_infinite_genes/
+StartMapName=/the_law_of_infinite_genes/UGCmap
 MapMode=0
 bIsBigWorld=0
 Version=1.36.11.29254
 UpdateVersion=10
-GameModePath=/shjy/Asset/Blueprint/UGCGameMode.UGCGameMode_C
+GameModePath=/the_law_of_infinite_genes/Asset/Blueprint/UGCGameMode.UGCGameMode_C
 
 [FeatureFlags]
 bOpenItemEditorV1=0
