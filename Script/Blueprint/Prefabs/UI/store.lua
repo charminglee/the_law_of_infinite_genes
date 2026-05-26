@@ -1,12 +1,18 @@
 ---@class store_C:UUserWidget
----@field BlockyLoopScrollGrid_0 UBlockyLoopScrollGrid
+---@field bg_01 UImage
+---@field bg_02 UImage
+---@field equipmentSlot equipmentSlot_C
+---@field ReuseList2 ReuseList2_C
+---@field ReuseList2_0 ReuseList2_C
+---@field storeTab storeTab_C
+---@field storeTopBar storeTopBar_C
+---@field WidgetSwitcher_0 UWidgetSwitcher
 --Edit Below--
-local store = { bInitDoOnce = false } 
+local store = { bInitDoOnce = false, LobbyUIControl=nil} 
 
 
 function store:Construct()
 	self:LuaInit();
-	
 end
 
 
@@ -18,19 +24,14 @@ end
 
 -- end
 
--- [Editor Generated Lua] function define Begin:
 function store:LuaInit()
 	if self.bInitDoOnce then
 		return;
 	end
 	self.bInitDoOnce = true;
-	-- [Editor Generated Lua] BindingProperty Begin:
-	-- [Editor Generated Lua] BindingProperty End;
-	
-	-- [Editor Generated Lua] BindingEvent Begin:
+	self.storeTopBar.paternal = self
 	self.BlockyLuaLoopScrollGrid_0.OnRefreshItem:Add(self.BlockyLuaLoopScrollGrid_0_OnRefreshItem, self);
 	self.BlockyLuaLoopScrollGrid_0.OnChangeData:Add(self.BlockyLuaLoopScrollGrid_0_OnChangeData, self);
-	-- [Editor Generated Lua] BindingEvent End;
 end
 
 function store:BlockyLuaLoopScrollGrid_0_OnRefreshItem(Item, Index)

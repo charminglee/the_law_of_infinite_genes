@@ -1,10 +1,10 @@
 local UGCPlayerPawn = {}
  
+--[[
 function UGCPlayerPawn:ReceiveBeginPlay()
-    self.bVaultIsOpen = true
-    -- self.IsOpenShovelAbility = true
     UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self)
 end
+--]]
 
 --[[
 function UGCPlayerPawn:ReceiveTick(DeltaTime)
@@ -18,11 +18,11 @@ function UGCPlayerPawn:ReceiveEndPlay()
 end
 --]]
 
---[[ 
+--[[
 function UGCPlayerPawn:GetAvailableServerRPCs()
     return
 end
--- ]]
+--]]
 
 function UGCPlayerPawn:GetReplicatedProperties()
     return {"__SubObjectRepList", "Lazy"}
