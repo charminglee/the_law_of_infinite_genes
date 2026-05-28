@@ -1,20 +1,29 @@
 ---@class equipmentSlot_C:UUserWidget
 ---@field ReuseList2 ReuseList2_C
 --Edit Below--
-local equipmentSlot = { bInitDoOnce = false } 
+local equipmentSlot = { bInitDoOnce = false} 
 
---[==[ Construct
 function equipmentSlot:Construct()
-	
+	self:LuaInit();
 end
--- Construct ]==]
 
--- function equipmentSlot:Tick(MyGeometry, InDeltaTime)
+function equipmentSlot:LuaInit()
+    if self.bInitDoOnce then
+		return;
+	end
+	self.bInitDoOnce = true;
+    self:ListenEvent();
+    self:InitUI();
+end
 
--- end
+function equipmentSlot:ListenEvent()
+    self.ReuseList2.OnUpdateItem:Add(self.UpdateEquipmentItem, self)
+end
+function equipmentSlot:InitUI()
+    self.ReuseList2:Reload(5);
+end
 
--- function equipmentSlot:Destruct()
-
--- end
+function equipmentSlot:UpdateEquipmentItem(item, index)
+end
 
 return equipmentSlot

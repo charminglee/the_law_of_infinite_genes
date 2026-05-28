@@ -6,8 +6,8 @@ local topBarBtn = { bInitDoOnce = false, BtnText = 'text', is_clicked = false, p
 
 
 function topBarBtn:Construct()
+	ugcprint('init topbar btn')
 	self:LuaInit();
-	ugcprint('paternal is:'..tostring(self.paternal))
 end
 
 function topBarBtn:LuaInit()
@@ -41,11 +41,8 @@ function topBarBtn:changeLabel(text)
 end
 
 function topBarBtn:switchPanel(idx)
-	ugcprint('paternal control is:'..tostring(self.paternal))
-	ugcprint('IndexUIControl control is:'..tostring(self.paternal.IndexUIControl))
-	ugcprint('LobbyUIControl control is:'..tostring(self.paternal.IndexUIControl.LobbyUIControl))
 	self.paternal.IndexUIControl.LobbyUIControl:switchActiveWidget(1)
-	ugcprint('1')
+	self.paternal.IndexUIControl.LobbyUIControl.store.storeTab.ReuseList2:Reload(5);
 end
 
 return topBarBtn

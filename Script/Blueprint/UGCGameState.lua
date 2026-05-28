@@ -23,8 +23,6 @@ function UGCGameState:ReceiveBeginPlay()
         MainUI_BP:AddToViewport(10000);
         -- 将 MainUI 加入视口，显示UI
         InitSubControl(MainUI_BP);
-        ugcprint("MainUI结构：" .. UE.GetFullName(MainUI_BP))
-        ugcprint('control is:'..tostring(MainUI_BP.index.topBar.IndexUIControl))
     end
 
 end

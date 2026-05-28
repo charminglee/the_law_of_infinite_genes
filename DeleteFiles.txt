@@ -1,3 +1,0 @@
-the_law_of_infinite_genes/Asset/Blueprint/ItemStruct.uasset
-the_law_of_infinite_genes/Asset/Blueprint/itemEnum.uasset
-the_law_of_infinite_genes/Asset/UIResource/border2.png
