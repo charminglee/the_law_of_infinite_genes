@@ -12,7 +12,7 @@ local topBar = {
 	}
 
 function topBar:Construct()
-	self.btnLabel = UGCGameSystem.GetTableData('/a1/Asset/Data/Table/Customized/lobbyBtnName.lobbyBtnName')
+	self.btnLabel = UGCGameSystem.GetTableData('/the_law_of_infinite_genes/Asset/Data/Table/Customized/lobbyBtnName.lobbyBtnName')
 	self:LuaInit();
 	self:InitBindEvent();
 	self:InitUI();
