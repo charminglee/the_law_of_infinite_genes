@@ -12,10 +12,11 @@ local topBar = {
 	}
 
 function topBar:Construct()
-	self.btnLabel = UGCGameSystem.GetTableData('/a1/Asset/Data/Table/Customized/lobbyBtnName.lobbyBtnName')
+	self.btnLabel = {'大厅', '仓库', '组队', '商城', '抽奖'}
 	self:LuaInit();
 	self:InitBindEvent();
 	self:InitUI();
+	ugcprint('init topbar')
 end
 
 function topBar:LuaInit()
@@ -46,7 +47,7 @@ function topBar:InitBtn(Item, Index)
 	if Item.paternal == nil then
 		Item.paternal = self;
 		Item.idx = Index;
-		Item.BtnText = tostring(self.btnLabel[Index].label);
+		Item.BtnText = tostring(self.btnLabel[Index+1]);
 		Item:NotifyPropertyChanged('BtnText');
 	end
 	if Index == self.selectedIdx then

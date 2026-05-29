@@ -11,8 +11,8 @@ local storeTab = {
 
 function storeTab:Construct()
 	self:LuaInit();
-    self.InitBindEvent();
-	self.InitUI();
+    self:InitBindEvent();
+	self:InitUI();
 end
 
 function storeTab:LuaInit()
@@ -23,7 +23,7 @@ function storeTab:LuaInit()
 end
 
 function storeTab:InitBindEvent()
-    self.ReuseList2.OnUpdateItem:Add(self.ReuseList2_OnUpdateItem, self);
+    self.ReuseList2.OnUpdateItem:Add(self.UpdateReuseList2, self);
 end
 
 function storeTab:InitUI()
@@ -31,9 +31,27 @@ function storeTab:InitUI()
 	self.ReuseList2:Reload(#self.tabLabel);
 end
 
-function storeTab:ReuseList2_OnUpdateItem(Widget, Idx)
-    
+function storeTab:UpdateReuseList2(Widget, Idx)
+
+	if Widget.paternal == nil then
+	    Widget.idx=Idx;
+		Widget.paternal=self;
+		Widget.BtnText=self.tabLabel[Idx+1]
+		Widget:NotifyPropertyChanged('BtnText');
+	end
+	if Idx == self.selectedIdx then
+		Widget:changeBackgroundColor({R=1, G=1,B=1,a=1});
+		Widget:SetTextColor('#000000')
+	else
+		Widget:changeBackgroundColor({R=0, G=0,B=0,a=0});
+		Widget:SetTextColor('#FFFFFF');
+	end
 	return nil;
+end
+
+function storeTab:changeSelected(idx)
+	self.selectedIdx = idx;
+	self.ReuseList2:Reload(#self.tabLabel);
 end
 
 -- [Editor Generated Lua] function define End;

@@ -5,8 +5,8 @@
 local index = { bInitDoOnce = false, LobbyUIControl=nil} 
 
 function index:Construct()
-	ugcprint('index init!')
 	self.LuaInit();
+	ugcprint('init index')
 end
 
 function index:LuaInit()

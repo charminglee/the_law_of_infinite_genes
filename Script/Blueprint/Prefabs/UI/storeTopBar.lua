@@ -21,6 +21,7 @@ function storeTopBar:LuaInit()
 end
 
 function storeTopBar:Button_1_OnClicked()
+	ugcprint('button click:'..tostring(self.paternal.LobbyUIControl))
 	self.paternal.LobbyUIControl:switchActiveWidget(0)
     return nil;
 end
