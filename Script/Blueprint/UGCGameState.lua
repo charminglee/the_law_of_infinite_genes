@@ -18,7 +18,7 @@ function UGCGameState:ReceiveBeginPlay()
         -- 加载 MainUI 蓝图类
         local PlayerController = GameplayStatics.GetPlayerController(self, 0);
         -- 获得当前PlayerController
-        local MainUI_BP = UserWidget.NewWidgetObjectBP(PlayerController,MainUI);
+        local MainUI_BP = UserWidget.NewWidgetObjectBP(PlayerController, MainUI);
         -- 加载 MainUI
         MainUI_BP:AddToViewport(10000);
         -- 将 MainUI 加入视口，显示UI

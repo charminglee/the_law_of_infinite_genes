@@ -41,8 +41,16 @@ function topBarBtn:changeLabel(text)
 end
 
 function topBarBtn:switchPanel(idx)
-	self.paternal.IndexUIControl.LobbyUIControl:switchActiveWidget(1)
-	self.paternal.IndexUIControl.LobbyUIControl.store.storeTab.ReuseList2:Reload(5);
+	if idx == 0 then
+		ShopV2Manager:OpenMainUI();
+	elseif idx == 1 then
+		LotteryManager:OpenLotteryPanel();
+	elseif idx == 2 then
+		RankingListManager:OpenRankingList();
+	elseif idx == 3 then
+		self.paternal.IndexUIControl.LobbyUIControl:switchActiveWidget(1)
+		self.paternal.IndexUIControl.LobbyUIControl.store.storeTab.ReuseList2:Reload(5);
+	end
 end
 
 return topBarBtn

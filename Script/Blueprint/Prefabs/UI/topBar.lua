@@ -12,7 +12,7 @@ local topBar = {
 	}
 
 function topBar:Construct()
-	self.btnLabel = {'大厅', '仓库', '组队', '商城', '抽奖'}
+	self.btnLabel = {'商城', '抽奖', '排行榜', '仓库', '组队'}
 	self:LuaInit();
 	self:InitBindEvent();
 	self:InitUI();
