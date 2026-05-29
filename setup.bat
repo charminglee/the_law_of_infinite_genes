@@ -13,9 +13,9 @@ if %errorLevel% neq 0 (
 )
 
 set "SRC=%CD%\src"
-for /d %%A in ("%SRC%\*") do (
+for /d %%A in ("!SRC!\*") do (
     set "PROJECT_NAME=%%~nxA"
-    set "PROJ=%SRC%\%PROJECT_NAME%"
+    set "PROJ=!SRC!\!PROJECT_NAME!"
     goto NEXT
 )
 
@@ -33,7 +33,7 @@ echo 正在创建链接...
 mklink /D "%DST%" "%PROJ%"
 
 if %errorlevel% equ 0 (
-    echo 已将 "%PROJ%" 链接到 "%DST%"
+    echo 成功！
 ) else (
     echo 创建链接时出错！
 )
