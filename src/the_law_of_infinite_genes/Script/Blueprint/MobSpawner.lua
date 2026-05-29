@@ -12,7 +12,7 @@ function MobSpawner:OnMobSpawn(MobPawn)
 end
 --]]
 
-function MobSpawner:CustomSpawnMob()
+function MobSpawner:CustomSpawnMob(InCustomParam)
     
 end
 

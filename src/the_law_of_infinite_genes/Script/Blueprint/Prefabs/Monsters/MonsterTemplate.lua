@@ -1,4 +1,4 @@
----@class Infected_C:BP_UGC_GenericMobPawn_Base_C
+---@class MonsterTemplate_C:BP_UGC_GenericMobPawn_Base_C
 ---@field HitBox UCapsuleComponent
 --Edit Below--
 local Infected = {}

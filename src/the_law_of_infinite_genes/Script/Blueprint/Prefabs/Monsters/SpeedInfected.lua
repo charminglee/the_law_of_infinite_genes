@@ -1,0 +1,116 @@
+---@class SpeedInfected_C:MonsterTemplate_C
+--Edit Below--
+local SpeedInfected = {}
+
+-- function SpeedInfected:ReceiveBeginPlay()
+--     SpeedInfected.SuperClass.ReceiveBeginPlay(self)
+-- end
+
+-- function SpeedInfected:ReceiveTick(DeltaTime)
+--     SpeedInfected.SuperClass.ReceiveTick(self, DeltaTime)
+-- end
+
+-- function SpeedInfected:ReceiveEndPlay()
+--     SpeedInfected.SuperClass.ReceiveEndPlay(self) 
+-- end
+
+-- function SpeedInfected:GetReplicatedProperties()
+--     return
+-- end
+
+-- ---受击前置事件
+-- ---生效范围：服务器
+-- ---@param Damage float 伤害值
+-- ---@param EventInstigator AController 伤害来源的Controller
+-- ---@param DamageCauser AActor 伤害来源
+-- ---@param DamageContext FGameMagnitudeContext  伤害上下文
+-- function SpeedInfected:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
+     
+-- end
+
+-- ---受击后置事件
+-- ---生效范围：服务器
+-- ---@param Damage float 伤害值
+-- ---@param EventInstigator AController 伤害来源的Controller
+-- ---@param DamageCauser AActor 伤害来源
+-- ---@param DamageContext FGameMagnitudeContext  伤害上下文
+-- function SpeedInfected:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
+    
+-- end
+
+-- ---受击前置伤害修改
+-- ---生效范围：服务器
+-- ---@param Damage float 伤害值
+-- ---@param EventInstigator AController 伤害来源的Controller
+-- ---@param DamageCauser AActor 伤害来源
+-- ---@param DamageContext FGameMagnitudeContext  伤害上下文
+-- ---@return float 修改后的伤害值
+-- function SpeedInfected:PreOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
+--     return Damage
+-- end
+
+-- ---受击后置伤害修改
+-- ---生效范围：服务器
+-- ---@param Damage float 伤害值
+-- ---@param EventInstigator AController 伤害来源的Controller
+-- ---@param DamageCauser AActor 伤害来源
+-- ---@param DamageContext FGameMagnitudeContext  伤害上下文
+-- ---@return float 修改后的伤害值
+-- function SpeedInfected:PostOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
+--     return Damage
+-- end
+
+---角色死亡事件
+---生效范围：服务器&客户端
+---@param Damage float 伤害值
+---@param EventInstigator AController 伤害来源的Controller
+---@param DamageCauser AActor 伤害来源
+---@param FDamageEvent DamageEvent 伤害事件
+---@param DamageTypeID int32 伤害类型
+function SpeedInfected:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
+    if self:HasAuthority() then
+        -- 只有服务端才可以掉落
+        self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
+    end
+end
+
+-- ---状态进入事件
+-- ---生效范围：服务器&客户端
+-- ---@param DynamicState FGameplayTag 进入的状态
+-- function SpeedInfected:OnEnterTagState_BP(DynamicState)
+--     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
+--     ugcprint('OnEnterTagState_BP: ' .. Tag)
+-- end
+
+-- ---状态退出事件
+-- ---生效范围：服务器&客户端
+-- ---@param DynamicState FGameplayTag 退出的状态
+-- function SpeedInfected:OnLeaveTagState_BP(DynamicState)
+--     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
+--     ugcprint('OnLeaveTagState_BP: ' .. Tag)
+-- end
+
+-- ---状态打断事件
+-- ---生效范围：服务器&客户端
+-- ---@param DynamicState FGameplayTag 打断的状态
+-- function SpeedInfected:OnInterruptTagState_BP(DynamicState)
+--     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
+--     ugcprint('OnInterruptTagState_BP' .. Tag)
+-- end
+
+-- ---行为树消息
+-- ---生效范围：服务器
+-- ---@param NotifyMsg string 消息
+-- function SpeedInfected:OnBehaviorNotify_BP(NotifyMsg)
+--     ugcprint('OnBehaviorNotify_BP: ' .. NotifyMsg)
+-- end
+
+-- ---怪物的目标发生变化事件
+-- ---生效范围：服务器&客户端
+-- ---@param NewTarget AActor 新目标
+-- ---@param OldTarget AActor 旧目标
+-- function SpeedInfected:OnTargetChange_BP(NewTarget, OldTarget)
+    
+-- end
+
+return SpeedInfected
