@@ -1,10 +1,9 @@
 local UGCPlayerPawn = {}
  
---[[
 function UGCPlayerPawn:ReceiveBeginPlay()
-    UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self)
+    self.bVaultIsOpen = true
+    self.SuperClass.ReceiveBeginPlay(self)
 end
---]]
 
 --[[
 function UGCPlayerPawn:ReceiveTick(DeltaTime)

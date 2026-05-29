@@ -23,6 +23,11 @@ function UGCGameState:ReceiveBeginPlay()
         MainUI_BP:AddToViewport(10000);
         -- 将 MainUI 加入视口，显示UI
         InitSubControl(MainUI_BP);
+        -- 隐藏原生界面
+        local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/Prefabs/WidgetLayout/hideLayout.hideLayout_C')
+        UGCWidgetManagerSystem.SetWidgetLayout(path)
+        UGCWidgetManagerSystem.GetMainControlUI().NavigatorPanel:SetVisibility(ESlateVisibility.Collapsed);
+        UGCWidgetManagerSystem.GetMainControlUI().Image_0:SetVisibility(ESlateVisibility.Collapsed);
     end
 
 end
