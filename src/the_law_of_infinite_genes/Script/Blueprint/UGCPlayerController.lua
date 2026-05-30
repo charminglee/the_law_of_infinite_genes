@@ -1,5 +1,5 @@
 local UGCPlayerController = {}
- 
+
 function UGCPlayerController:ReceiveBeginPlay()
     UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
     if not self:HasAuthority() then
@@ -7,13 +7,15 @@ function UGCPlayerController:ReceiveBeginPlay()
     end
 
     -- 初始武器
-    if not UGCBackPackSystem.IsAttachItemType(101003) then
+    local WeaponId = 8310018
+    local BulletId = 301001
+    if not UGCBackPackSystem.IsAttachItemType(WeaponId) then
         local delegate = ObjectExtend.CreateDelegate(
             self, 
             function()
                 local pawn = self:GetPlayerCharacterSafety()
-                UGCBackPackSystem.AddItem(pawn, 101003, 1)
-                UGCGunSystem.EnableInfiniteBullets(pawn, true)
+                UGCBackPackSystem.AddItem(pawn, WeaponId, 1)
+                UGCBackPackSystem.AddItem(pawn, BulletId, 500)
             end
         )
         KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)
