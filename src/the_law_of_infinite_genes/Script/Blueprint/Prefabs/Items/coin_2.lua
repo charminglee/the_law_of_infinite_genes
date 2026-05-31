@@ -1,71 +1,71 @@
----@class coin_2_C:Template_ItemHandle_C
+---@class Coin_2_C:Template_ItemHandle_C
 --Edit Below--
-local coin_2 = {} 
+local Coin_0 = {} 
 
 --[[V2背包事件]]--
 --[[
 --- func 能否创建物品Handle(服务端生效)
 ---@return bool @是否允许创建物品Handle, 若不允许，物品也将创建失败
--- function coin_2:CanCreateItemHandleV2()
---     return coin_2.SuperClass.CanCreateItemHandleV2(self);
+-- function Coin_0:CanCreateItemHandleV2()
+--     return Coin_0.SuperClass.CanCreateItemHandleV2(self);
 -- end
 
 --- func 当创建物品Handle后回调，可重载并自定义(服务端生效)
---  function coin_2:OnCreateItemHandleV2()
---     coin_2.SuperClass.OnCreateItemHandleV2(self);
+--  function Coin_0:OnCreateItemHandleV2()
+--     Coin_0.SuperClass.OnCreateItemHandleV2(self);
 --  end
 
 --- func 能否销毁物品Handle，可重载并自定义(服务端生效)
 ---@return bool 是否允许销毁Handle, 若不允许，物品移除或丢弃也可能失败
--- function coin_2:CanDestoryItemHandleV2()
---     return coin_2.SuperClass.CanDestoryItemHandleV2(self);
+-- function Coin_0:CanDestoryItemHandleV2()
+--     return Coin_0.SuperClass.CanDestoryItemHandleV2(self);
 -- end
 
 --- func 销毁物品Handle前回调，可重载并自定义(服务端生效)
--- function coin_2:OnDestoryItemHandleV2()
---     coin_2.SuperClass.OnDestoryItemHandleV2(self);
+-- function Coin_0:OnDestoryItemHandleV2()
+--     Coin_0.SuperClass.OnDestoryItemHandleV2(self);
 -- end
 
 --- func 能否更新此物品实例，可重载并自定义(服务端生效)
 ---@param NewItemCount number 新物品数量
 ---@param OldItemCount number 旧物品数量
 ---@return 是否允许物品数量更新，若不允许，物品添加或移除操作可能失败
--- function coin_2:CanUpdateItemCountV2(NewItemCount, OldItemCount)
---     return coin_2.SuperClass.CanUpdateItemCountV2(self, NewItemCount, OldItemCount);
+-- function Coin_0:CanUpdateItemCountV2(NewItemCount, OldItemCount)
+--     return Coin_0.SuperClass.CanUpdateItemCountV2(self, NewItemCount, OldItemCount);
 -- end
 
 --- func 物品数量更新后回调，可重载并自定义(服务端生效)
 ---@param NewItemCount number 新物品数量
 ---@param OldItemCount number 旧物品数量
--- function coin_2:OnUpdateItemCountV2(NewItemCount, OldItemCount)
---     coin_2.SuperClass.OnUpdateItemCountV2(self, NewItemCount, OldItemCount);
+-- function Coin_0:OnUpdateItemCountV2(NewItemCount, OldItemCount)
+--     Coin_0.SuperClass.OnUpdateItemCountV2(self, NewItemCount, OldItemCount);
 -- end
 
 --- func 能否使用物品，可重载并自定义(服务端生效)
 ---@return 物品是否能够被使用
--- function coin_2:CanUseV2()
---     return coin_2.SuperClass.CanUseV2(self);
+-- function Coin_0:CanUseV2()
+--     return Coin_0.SuperClass.CanUseV2(self);
 -- end
 
 --- func 当物品被使用回调，可重载并自定义(服务端生效)
--- function coin_2:OnUseV2()
---     coin_2.SuperClass.OnUseV2(self);
+-- function Coin_0:OnUseV2()
+--     Coin_0.SuperClass.OnUseV2(self);
 -- end
 
 --- func 当物品被取消使用，与UseItem对应，用于清理状态，应当支持多次调用，不产生额外副作用，移除物品时自动调用，可重载并自定义(服务端生效)
--- function coin_2:OnDisuseV2()
---     coin_2.SuperClass.OnDisuseV2(self);
+-- function Coin_0:OnDisuseV2()
+--     Coin_0.SuperClass.OnDisuseV2(self);
 -- end
 
 --- func 当物品开始使用时回调，可重载并自定义(服务端生效)
--- function coin_2:UGC_OnStartUse()
---     coin_2.SuperClass.UGC_OnStartUse(self)
+-- function Coin_0:UGC_OnStartUse()
+--     Coin_0.SuperClass.UGC_OnStartUse(self)
 -- end
 
 --- func 当物品停止使用时回调，可重载并自定义(服务端生效)，在OnUseV2后调用
--- function coin_2:UGC_OnStopUse(Reason)
-    coin_2.SuperClass.UGC_OnStopUse(self, Reason)
+-- function Coin_0:UGC_OnStopUse(Reason)
+    Coin_0.SuperClass.UGC_OnStopUse(self, Reason)
 -- end
 ]]--
 
-return coin_2
+return Coin_0

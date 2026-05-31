@@ -1,3 +1,6 @@
+---@class UGCPlayerPawn_C:BP_UGCPlayerPawn_C
+---@field Widget UWidgetComponent
+--Edit Below--
 local UGCPlayerPawn = {}
  
 function UGCPlayerPawn:ReceiveBeginPlay()
