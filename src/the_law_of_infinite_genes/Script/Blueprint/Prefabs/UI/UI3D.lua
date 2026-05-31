@@ -10,10 +10,10 @@ function UI3D:Construct()
 	
 end
 
-
--- function UI3D:Tick(MyGeometry, InDeltaTime)
-
--- end
+function UI3D:Tick(MyGeometry, InDeltaTime)
+    -- ugcprint('UI3D')
+    -- self.Icon:SetBrushFromTexturePath("Texture2D'/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_1.WealthTitle_1'")
+end
 
 -- function UI3D:Destruct()
 
@@ -27,7 +27,7 @@ function UI3D:LuaInit()
 	self.bInitDoOnce = true;
 	-- [Editor Generated Lua] BindingProperty Begin:
 	self.Title:BindingProperty("Text", self.Title_Text, self);
-	self.Icon:BindingProperty("Brush", self.Icon_Brush, self);
+	-- self.Icon:BindingProperty("Brush", self.Icon_Brush, self);
 	-- [Editor Generated Lua] BindingProperty End;
 	
 	-- [Editor Generated Lua] BindingEvent Begin:
@@ -38,13 +38,11 @@ function UI3D:Title_Text(ReturnValue)
 	return "略有盈余";
 end
 
-function UI3D:Icon_Brush(ReturnValue)
-	return {
-        Brush = {
-            ResourceObject=UE.LoadObject("MaterialInstanceConstant'/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_1.WealthTitle_1'")
-        }
-    };
-end
+-- function UI3D:Icon_Brush(ReturnValue)
+-- 	return {
+--         ResourceObject=UE.LoadObject(UGCGameSystem.GetUGCResourcesFullPath('Asset/Texture/Titles/WealthTitle_1.WealthTitle_1'))
+--     };
+-- end
 
 -- [Editor Generated Lua] function define End;
 
