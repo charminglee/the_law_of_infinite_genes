@@ -7,7 +7,6 @@
 ---@field forge forge_C
 ---@field Image_97 UImage
 ---@field LeftTabList ReuseList2_C
----@field REINST_forge_C_0 forge_C
 ---@field storeTab storeTab_C
 ---@field storeTopBar storeTopBar_C
 ---@field WidgetSwitcher_0 UWidgetSwitcher
