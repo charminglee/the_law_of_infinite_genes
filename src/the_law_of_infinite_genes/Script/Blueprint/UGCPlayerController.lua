@@ -1,8 +1,10 @@
+---@class UGCPlayerController: ASTExtraPlayerController
 local UGCPlayerController = {}
+
 
 function UGCPlayerController:ReceiveBeginPlay()
     UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
-    if not self:HasAuthority() then
+    if not UGCGameSystem.IsServer() then
         return
     end
 
@@ -13,6 +15,9 @@ function UGCPlayerController:ReceiveBeginPlay()
         local delegate = ObjectExtend.CreateDelegate(
             self, 
             function()
+                UGCPlayerControllerSystem.TeleportTo(self, 3634, 10340, 90)
+                local spawnerManager = UGCActorComponentUtility.GetActorByActorInstancePath("UGCmap.MobSpawnerManager_10")
+                spawnerManager:StartSpawnerManager()
                 local pawn = self:GetPlayerCharacterSafety()
                 UGCBackPackSystem.AddItem(pawn, weaponId, 1)
                 UGCBackPackSystem.AddItem(pawn, bulletId, 100)
@@ -24,11 +29,13 @@ function UGCPlayerController:ReceiveBeginPlay()
     end
 end
 
+
 --[[
 function UGCPlayerController:ReceiveTick(DeltaTime)
     UGCPlayerController.SuperClass.ReceiveTick(self, DeltaTime)
 end
 --]]
+
 
 --[[
 function UGCPlayerController:ReceiveEndPlay()
@@ -36,16 +43,19 @@ function UGCPlayerController:ReceiveEndPlay()
 end
 --]]
 
+
 --[[
 function UGCPlayerController:GetReplicatedProperties()
     return
 end
 --]]
 
+
 --[[
 function UGCPlayerController:GetAvailableServerRPCs()
     return
 end
 --]]
+
 
 return UGCPlayerController
