@@ -9,9 +9,9 @@ function UGCPlayerPawn:ReceiveBeginPlay()
 UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/Prefabs/UI/Title.Title_C'),
         { X = 0, Y = 0, Z = 100 }, 
         true, 
+        true, 
         false, 
-        false, 
-        true
+        false
     )
     self.SuperClass.ReceiveBeginPlay(self)
 end
