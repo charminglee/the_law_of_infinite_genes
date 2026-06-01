@@ -7,15 +7,17 @@ function UGCPlayerController:ReceiveBeginPlay()
     end
 
     -- 初始武器
-    local WeaponId = 8310018
-    local BulletId = 301001
-    if not UGCBackPackSystem.IsAttachItemType(WeaponId) then
+    local weaponId = 8310018
+    local bulletId = 301001
+    if not UGCBackPackSystem.IsAttachItemType(weaponId) then
         local delegate = ObjectExtend.CreateDelegate(
             self, 
             function()
                 local pawn = self:GetPlayerCharacterSafety()
-                UGCBackPackSystem.AddItem(pawn, WeaponId, 1)
-                UGCBackPackSystem.AddItem(pawn, BulletId, 500)
+                UGCBackPackSystem.AddItem(pawn, weaponId, 1)
+                UGCBackPackSystem.AddItem(pawn, bulletId, 100)
+                UGCBackPackSystem.AddItem(pawn, bulletId, 100)
+                UGCBackPackSystem.AddItem(pawn, bulletId, 100)
             end
         )
         KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)

@@ -29,15 +29,38 @@ if exist "%DST%" (
     goto END
 )
 
-echo 正在创建链接...
+echo 正在创建项目链接...
 mklink /D "%DST%" "%PROJ%"
 
 if %errorlevel% equ 0 (
     echo 成功！
 ) else (
-    echo 创建链接时出错！
+    echo 创建项目链接时出错！
 )
 
+:: ========== 新增：在当前目录创建指向 Content\LuaHelper 的软链接 ==========
+:: 计算目标路径：%DST%\..\Content\LuaHelper
+for %%I in ("%DST%") do set "PARENT=%%~dpI"
+set "PARENT=%PARENT:~0,-1%"
+set "TARGET=%PARENT%\..\Content\LuaHelper"
+
+:: 设定链接名称（可根据需要修改，这里固定为 LuaHelper）
+set "LINK_NAME=LuaHelper"
+set "LINK_PATH=%CD%\%LINK_NAME%"
+
+:: 检查链接是否已存在
+if exist "%LINK_PATH%" (
+    echo 当前目录下已存在 %LINK_NAME%，跳过创建。
+) else (
+    echo 正在创建软链接...
+    mklink /D "%LINK_PATH%" "%TARGET%"
+    if %errorlevel% equ 0 (
+        echo 软链接创建成功！
+    ) else (
+        echo 软链接创建失败，请检查目标路径是否有效。
+    )
+)
+:: ==================================================
 :END
 echo.
 pause

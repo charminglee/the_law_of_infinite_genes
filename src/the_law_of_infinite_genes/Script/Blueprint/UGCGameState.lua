@@ -1,7 +1,11 @@
 ---@class UGCGameState_C:BP_UGCGameState_C
 --Edit Below--
 UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
-local UGCGameState = {}; 
+
+local UGCGameState = {
+    waveNum = 0, -- 当前波数
+}; 
+
 local function InitSubControl(mainUI)
     if mainUI.index.topBar.IndexUIControl == nil then
         mainUI.index.topBar.IndexUIControl = mainUI.index
