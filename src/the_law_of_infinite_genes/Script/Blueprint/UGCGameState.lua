@@ -6,6 +6,7 @@ local UGCGameState = {
     isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
     totalWaves = 10,    -- 总波数
     waveIndex = -1,     -- 当前波数
+    specialEvent = -1,  -- 当前特殊事件
 }
 
 
