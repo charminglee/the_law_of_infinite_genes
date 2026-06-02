@@ -19,7 +19,7 @@ bOpenParticleEditorV1=0
 
 [MatchSetting]
 NumberOfTeams=1
-TeamPlayers=1
+TeamPlayers=4
 bIsAllowStageMatching=0
 TeamSettings="{\"TeamSettings\": []}"
 bEnableChat=0
@@ -35,7 +35,7 @@ MaxMessageLines=6
 bEnableSystemChannel=0
 bEnableChatBubble=0
 BubbleLifetime=10
-MatchMethod=0
+MatchMethod=1
 InitialScore=2000
 MinScore=0
 MaxScore=4000
