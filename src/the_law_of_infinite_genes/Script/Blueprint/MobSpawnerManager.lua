@@ -13,7 +13,7 @@ end
 function MobSpawnerManager:OnWaveStart(waveIndex)
     GameState.waveIndex = waveIndex
 
-    if not UGCGameSystem.IsServer() then
+    if not self:HasAuthority() then
         return
     end
 
