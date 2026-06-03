@@ -20,3 +20,12 @@ ELotteryResetType = {
 }; 
 
 
+---@enum SpecialEvent
+SpecialEvent = { 
+    CorpseHuntingSurge = 0,
+    CorpseSurgeGoldRush = 1,
+    HeavenPunishmentThunderStrike = 2,
+    PutridMiasma = 3,
+}; 
+
+
