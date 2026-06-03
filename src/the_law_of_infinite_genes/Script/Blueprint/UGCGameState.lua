@@ -1,13 +1,14 @@
-UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
-
-
 ---@class UGCGameState: ASTExtraGameStateBase
+UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 local UGCGameState = {
     isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
     totalWaves = 10,    -- 总波数
     waveIndex = -1,     -- 当前波数
     specialEvent = -1,  -- 当前特殊事件
 }
+
+
+UGCGameSystem.UGCRequire("Script/Common/Const")
 
 
 local function InitSubControl(mainUI)
@@ -49,6 +50,41 @@ end
 -- function UGCGameState:ReceiveEndPlay()
  
 -- end
+
+
+---开始游戏
+function UGCGameState:StartGame()
+    -- 传送所有玩家到关卡
+    local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.LevelStart)
+    local loc = levelStart:K2_GetActorLocation()
+    for _, controller in pairs(UGCGameSystem.GetAllPlayerController(false)) do
+        UGCPlayerControllerSystem.TeleportTo(controller, loc.X, loc.Y, loc.Z)
+    end
+
+    -- 启动刷怪
+    local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
+    sm:StartSpawnerManager()
+
+    self.isWaiting = false
+end
+
+
+---结束游戏
+function UGCGameState:EndGame()
+    self.isWaiting = true
+end
+
+
+---触发特殊事件
+function UGCGameState:TriggerSpecialEvent(specialEvent)
+    for _, controller in pairs(UGCGameSystem.GetAllPlayerController(false)) do
+        local pawn = controller:GetPlayerCharacterSafety()
+        local cls = UGCObjectUtility.LoadClass(ClassPath[specialEvent])
+        UGCPersistEffectSystem.AddBuffByClass(pawn, cls)
+    end
+
+    self.specialEvent = specialEvent
+end
 
 
 return UGCGameState

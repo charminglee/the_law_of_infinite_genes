@@ -1,1 +1,0 @@
-the_law_of_infinite_genes/Asset/Blueprint/LevelStart/LevelStart0.uasset

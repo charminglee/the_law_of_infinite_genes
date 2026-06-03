@@ -4,8 +4,10 @@
 ---@field ShopV2Component ShopV2Component_C
 ---@field LotteryComponent LotteryComponent_C
 --Edit Below--
-
 local UGCPlayerController = {}
+
+
+UGCGameSystem.UGCRequire("Script/Common/Const")
 
 
 local GameState = UGCGameSystem.GetGameState()
@@ -20,13 +22,6 @@ function UGCPlayerController:ReceiveBeginPlay()
     local delegate = ObjectExtend.CreateDelegate(
         self, 
         function()
-            -- 开局传送
-            if GameState.isWaiting then
-                local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath("UGCmap.LevelStart_8")
-                local loc = levelStart:K2_GetActorLocation()
-                UGCPlayerControllerSystem.TeleportTo(self, loc.X, loc.Y, loc.Z)
-            end
-
             -- 初始武器
             local weaponId = 8310018
             local bulletId = 301001
@@ -36,10 +31,10 @@ function UGCPlayerController:ReceiveBeginPlay()
                 UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
                 UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
             end
-            
-            -- 启动刷怪
-            local spawnerManager = UGCActorComponentUtility.GetActorByActorInstancePath("UGCmap.MobSpawnerManager_10")
-            spawnerManager:StartSpawnerManager()
+
+            -- 测试
+            GameState:StartGame()
+            GameState:TriggerSpecialEvent(SpecialEvent.CorpseHuntingSurge)
         end
     )
     KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)    
