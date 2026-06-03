@@ -29,7 +29,6 @@ function HomeManager:OpenMainUI()
         return;
     end
     ugcprint('open main ui')
-    self.MainUI:RefreshHomeToolBar();
     self.MainUI:SetVisibility(ESlateVisibility.Visible);
 end
 

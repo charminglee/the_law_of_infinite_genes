@@ -1,4 +1,5 @@
 ---@class lobby_C:UserWidgetLayout
+---@field HomeToolBarButton HomeToolBarButton_C
 --Edit Below--
 local lobby = { bInitDoOnce = false } 
 

@@ -11,21 +11,21 @@ ELotteryMainUIType = {
 }; 
 
 
----@enum ELotteryResetType
-ELotteryResetType = { 
-    NotReset = 0,
-    DailyReset = 1,
-    MonthlyReset = 2,
-    WeeklyReset = 3,
-}; 
-
-
 ---@enum SpecialEvent
 SpecialEvent = { 
     CorpseHuntingSurge = 0,
     CorpseSurgeGoldRush = 1,
     HeavenPunishmentThunderStrike = 2,
     PutridMiasma = 3,
+}; 
+
+
+---@enum ELotteryResetType
+ELotteryResetType = { 
+    NotReset = 0,
+    DailyReset = 1,
+    MonthlyReset = 2,
+    WeeklyReset = 3,
 }; 
 
 
