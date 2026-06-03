@@ -4,7 +4,12 @@
 ---@field ShopV2Component ShopV2Component_C
 ---@field LotteryComponent LotteryComponent_C
 --Edit Below--
+
 local UGCPlayerController = {}
+
+
+local GameState = UGCGameSystem.GetGameState()
+
 
 function UGCPlayerController:ReceiveBeginPlay()
     UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
@@ -12,23 +17,34 @@ function UGCPlayerController:ReceiveBeginPlay()
         return
     end
 
-    -- 初始武器
-    local weaponId = 8310018
-    local bulletId = 301001
-    if not UGCBackPackSystem.IsAttachItemType(weaponId) then
-        local delegate = ObjectExtend.CreateDelegate(
-            self, 
-            function()
-                local pawn = self:GetPlayerCharacterSafety()
-                UGCBackPackSystem.AddItem(pawn, weaponId, 1)
-                UGCBackPackSystem.AddItem(pawn, bulletId, 100)
-                UGCBackPackSystem.AddItem(pawn, bulletId, 100)
-                UGCBackPackSystem.AddItem(pawn, bulletId, 100)
+    local delegate = ObjectExtend.CreateDelegate(
+        self, 
+        function()
+            -- 开局传送
+            if GameState.isWaiting then
+                local levelStart0 = UGCActorComponentUtility.GetActorByActorInstancePath("UGCmap.LevelStart0_8")
+                local loc = levelStart0:K2_GetActorLocation()
+                UGCPlayerControllerSystem.TeleportTo(self, loc.X, loc.Y, loc.Z)
             end
-        )
-        KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)
-    end
+
+            -- 初始武器
+            local weaponId = 8310018
+            local bulletId = 301001
+            if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
+                UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
+                UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
+                UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
+                UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
+            end
+            
+            -- 启动刷怪
+            local spawnerManager = UGCActorComponentUtility.GetActorByActorInstancePath("UGCmap.MobSpawnerManager_10")
+            spawnerManager:StartSpawnerManager()
+        end
+    )
+    KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)    
 end
+
 
 --[[
 function UGCPlayerController:ReceiveTick(DeltaTime)
@@ -36,11 +52,13 @@ function UGCPlayerController:ReceiveTick(DeltaTime)
 end
 --]]
 
+
 --[[
 function UGCPlayerController:ReceiveEndPlay()
     UGCPlayerController.SuperClass.ReceiveEndPlay(self) 
 end
 --]]
+
 
 --[[
 function UGCPlayerController:GetReplicatedProperties()
@@ -48,13 +66,13 @@ function UGCPlayerController:GetReplicatedProperties()
 end
 --]]
 
+
 --[[
 function UGCPlayerController:GetAvailableServerRPCs()
     return
 end
 --]]
 
--- [Editor Generated Lua] function define Begin:
 function UGCPlayerController:LuaInit()
 	if self.bInitDoOnce then
 		return;
@@ -69,6 +87,5 @@ end
 
 
 
--- [Editor Generated Lua] function define End;
 
 return UGCPlayerController

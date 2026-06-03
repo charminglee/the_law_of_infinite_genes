@@ -1,10 +1,14 @@
----@class UGCGameState_C:BP_UGCGameState_C
---Edit Below--
 UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 
+
+---@class UGCGameState: ASTExtraGameStateBase
 local UGCGameState = {
-    waveNum = 0, -- 当前波数
-}; 
+    isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
+    totalWaves = 10,    -- 总波数
+    waveIndex = -1,     -- 当前波数
+    specialEvent = -1,  -- 当前特殊事件
+}
+
 
 local function InitSubControl(mainUI)
     if mainUI.index.topBar.IndexUIControl == nil then
@@ -12,8 +16,9 @@ local function InitSubControl(mainUI)
     end
 end
 
+
 function UGCGameState:ReceiveBeginPlay()
-    self.SuperClass.ReceiveBeginPlay(self);
+    self.SuperClass.ReceiveBeginPlay(self)
 
     if self:HasAuthority() == true then 
         -- 只有客户端加载UI
@@ -27,19 +32,23 @@ function UGCGameState:ReceiveBeginPlay()
         -- MainUI_BP:AddToViewport(10000);
         -- -- 将 MainUI 加入视口，显示UI
         -- -- 隐藏原生界面
+
         local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/Prefabs/WidgetLayout/hideLayout.hideLayout_C')
         UGCWidgetManagerSystem.SetWidgetLayout(path)
-        UGCWidgetManagerSystem.GetMainControlUI().NavigatorPanel:SetVisibility(ESlateVisibility.Collapsed);
-        UGCWidgetManagerSystem.GetMainControlUI().Image_0:SetVisibility(ESlateVisibility.Collapsed);
+        UGCWidgetManagerSystem.GetMainControlUI().NavigatorPanel:SetVisibility(ESlateVisibility.Collapsed)
+        UGCWidgetManagerSystem.GetMainControlUI().Image_0:SetVisibility(ESlateVisibility.Collapsed)
     end
-
 end
+
+
 -- function UGCGameState:ReceiveTick(DeltaTime)
 
 -- end
+
+
 -- function UGCGameState:ReceiveEndPlay()
  
 -- end
 
 
-return UGCGameState;
+return UGCGameState
