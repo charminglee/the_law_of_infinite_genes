@@ -16,7 +16,8 @@ function StoreList:LuaInit()
 		return;
 	end
 	self.bInitDoOnce = true;
-    self:Listen();
+    -- self:Listen();
+	ugcprint('Store List 加载');
 end
 
 function StoreList:Listen()
@@ -42,7 +43,6 @@ function StoreList:ReuseList2_OnUpdateItem(Item, Idx)
 	else
 		Item:SetSelectedVisiblity(ESlateVisibility.Collapsed)
 	end
-	self:SetItemData(Item, Idx);
 	return nil;
 end
 

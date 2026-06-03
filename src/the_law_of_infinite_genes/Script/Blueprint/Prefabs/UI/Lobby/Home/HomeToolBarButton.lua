@@ -37,7 +37,7 @@ function HomeToolBarButton:Button_0_Clicked()
 		RankingListManager:OpenRankingList();
         return nil;
 	elseif self.Index  == 3 then
-        HomeManager:CloseMainUI();
+        StoreManager:OpenMainUI();
         return nil;
 	end
 end

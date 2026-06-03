@@ -19,10 +19,11 @@ function StoreToolBar:LuaInit()
 	end
 	self.bInitDoOnce = true;
 	self.Button_1.OnClicked:Add(self.Button_1_OnClicked, self);
+	ugcprint('store Tool bar 加载');
 end
 
 function StoreToolBar:Button_1_OnClicked()
-	self.parent:SwitchLobby();
+	StoreManager:CloseMainUI();
 	return nil;
 end
 

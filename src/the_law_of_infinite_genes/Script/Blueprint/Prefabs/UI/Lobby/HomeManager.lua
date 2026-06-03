@@ -1,7 +1,11 @@
 
 HomeManager = HomeManager or
 {
-    HomeMain = nil;
+    MainUI = nil;
+    PlayerId = nil;
+    Cost_1 = 0;
+    Cost_2 = 0;
+    TeamInfo = {};
 }
 
 function HomeManager:RegisterComponentClass(CompClass)
@@ -28,7 +32,6 @@ function HomeManager:OpenMainUI()
     if self.MainUI == nil then
         return;
     end
-    ugcprint('open main ui')
     self.MainUI:SetVisibility(ESlateVisibility.Visible);
 end
 

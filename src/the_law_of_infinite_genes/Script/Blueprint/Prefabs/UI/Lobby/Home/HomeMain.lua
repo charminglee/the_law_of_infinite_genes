@@ -1,5 +1,8 @@
 ---@class HomeMain_C:UserWidgetLayout
+---@field Button_46 UButton
 ---@field HomeToolBar HomeToolBar_C
+---@field HomeUserInfo HomeUserInfo_C
+---@field REINST_HomeUserInfo_C_0 HomeUserInfo_C
 --Edit Below--
 local HomeMain = {
 	bInitDoOnce = false,

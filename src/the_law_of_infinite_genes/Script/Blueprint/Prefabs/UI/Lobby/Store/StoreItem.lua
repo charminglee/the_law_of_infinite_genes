@@ -68,7 +68,6 @@ function StoreItem:SetItemData(quality, number, sticker)
 	self.quality = quality;
 	self.number = number;
 	self.sticker = sticker;
-	ugcprint('item data '..tostring(self.index)..' is:'..tostring(quality)..'/'..tostring(number)..'/'..tostring(sticker))
 end
 
 return StoreItem

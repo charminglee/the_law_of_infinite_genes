@@ -1,44 +1,78 @@
 ---@class StoreMain_C:UUserWidget
+---@field BackpackList ReuseList2_C
 ---@field bg_01 UImage
 ---@field bg_02 UImage
----@field StoreList StoreList_C
+---@field Image_0 UImage
+---@field StoreTabList ReuseList2_C
 ---@field StoreToolBar StoreToolBar_C
+---@field WidgetSwitcher_0 UWidgetSwitcher
 --Edit Below--
 local StoreMain = { 
     bInitDoOnce = false,
-    parent = nil, 
+    TabSelectIndex = 0,
+    BackpackSelectIndex = -1,
+    TabLabelList = {'物品','强化','合成'}
     } 
 
 function StoreMain:Construct()
+    self:LuaInit();
+end
+
+function StoreMain:Tick(MyGeometry, InDeltaTime)
+    if self.TabSelectIndex ~= StoreManager.TabSelectIndex then
+        self.TabSelectIndex = StoreManager.TabSelectIndex;
+        self.StoreTabList:Reload(#self.TabLabelList);
+        self.WidgetSwitcher_0:SetActiveWidgetIndex(self.TabSelectIndex);
+    end
+    if self.BackpackSelectIndex ~= StoreManager.BackpackSelectIndex then
+        self.BackpackSelectIndex = StoreManager.BackpackSelectIndex;
+        self.BackpackList:Reload(100);
+    end        
+end
+
+function StoreMain:LuaInit()
+    ugcprint('store main 加载');
 	if self.bInitDoOnce then
 		return;
 	end
 	self.bInitDoOnce = true;
+    StoreManager:RegisterMainUI(self);
+    self:Listen();
     self:InitUI();
-
 end
+
+function StoreMain:Listen()
+    self.StoreTabList.OnUpdateItem:Add(self.StoreTabListUpdate, self);
+    self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
+end
+
 
 function StoreMain:InitUI()
-    self.StoreToolBar.parent = self;
-    self.StoreList.parent = self;
-    local DataList = {
-        {ItemId=0, number=1},
-        {ItemId=0, number=1},
-        {ItemId=0, number=1},
-        {ItemId=0, number=1},
-        {ItemId=0, number=1},
-        {ItemId=0, number=1},
-        {ItemId=0, number=1},
-        {ItemId=0, number=1},
-        {ItemId=0, number=1},
-        {ItemId=0, number=1}   
-    }
-    self.StoreList:ReloadList(DataList)
-    UGCWidgetManagerSystem.GetUserWidgetByWidgetLayout()
+    self.StoreTabList:Reload(#self.TabLabelList);
+    self.BackpackList:Reload(100);
 end
 
-function StoreMain:SwitchLobby()
-    self.parent:switchActiveWidget(0);
+function StoreMain:StoreTabListUpdate(Item, Index)
+    if Item.Index == nil then
+        Item.Index = Index;
+    end
+    if self.TabSelectIndex == Index then
+        Item:SetSelectedVisible(ESlateVisibility.Visible);
+    else
+        Item:SetSelectedVisible(ESlateVisibility.Collapsed);
+    
+    end
+    Item:SetText(self.TabLabelList[Index+1])
+end
+
+function StoreMain:BackpackListUpdate(Item, Index)
+    Item.Index = Index
+    if self.BackpackSelectIndex == Index then
+        Item:SetSelectedVisible(ESlateVisibility.Visible);
+    else
+        Item:SetSelectedVisible(ESlateVisibility.Collapsed);
+    
+    end
 end
 
 return StoreMain
