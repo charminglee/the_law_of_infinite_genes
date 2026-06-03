@@ -22,8 +22,8 @@ function UGCPlayerController:ReceiveBeginPlay()
         function()
             -- 开局传送
             if GameState.isWaiting then
-                local levelStart0 = UGCActorComponentUtility.GetActorByActorInstancePath("UGCmap.LevelStart0_8")
-                local loc = levelStart0:K2_GetActorLocation()
+                local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath("UGCmap.LevelStart_8")
+                local loc = levelStart:K2_GetActorLocation()
                 UGCPlayerControllerSystem.TeleportTo(self, loc.X, loc.Y, loc.Z)
             end
 
