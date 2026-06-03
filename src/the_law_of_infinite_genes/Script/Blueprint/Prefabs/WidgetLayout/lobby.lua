@@ -1,7 +1,4 @@
 ---@class lobby_C:UserWidgetLayout
----@field index index_C
----@field store store_C
----@field WidgetSwitcher_0 UWidgetSwitcher
 --Edit Below--
 local lobby = { bInitDoOnce = false } 
 
@@ -14,8 +11,8 @@ function lobby:LuaInit()
 		return;
 	end
 	ugcprint('初始化lobby界面！')
-	self.index.LobbyUIControl = self
-	self.store.LobbyUIControl = self
+	self.IndexMain.parent = self;
+	self.StoreMain.parent = self;
 	self.bInitDoOnce = true;
 	self.WidgetSwitcher_0:SetActiveWidget(0)
 end

@@ -1,3 +1,9 @@
+---@class UGCPlayerController_C:BP_UGCPlayerController_C
+---@field HomeComponent HomeComponent_C
+---@field RankingListComponent RankingListComponent_C
+---@field ShopV2Component ShopV2Component_C
+---@field LotteryComponent LotteryComponent_C
+--Edit Below--
 local UGCPlayerController = {}
 
 function UGCPlayerController:ReceiveBeginPlay()
@@ -47,5 +53,22 @@ function UGCPlayerController:GetAvailableServerRPCs()
     return
 end
 --]]
+
+-- [Editor Generated Lua] function define Begin:
+function UGCPlayerController:LuaInit()
+	if self.bInitDoOnce then
+		return;
+	end
+	self.bInitDoOnce = true;
+	-- [Editor Generated Lua] BindingProperty Begin:
+	-- [Editor Generated Lua] BindingProperty End;
+	
+	-- [Editor Generated Lua] BindingEvent Begin:
+	-- [Editor Generated Lua] BindingEvent End;
+end
+
+
+
+-- [Editor Generated Lua] function define End;
 
 return UGCPlayerController

@@ -29,7 +29,6 @@ local ShopV2_MainUI_UIBP =
 }
 
 function ShopV2_MainUI_UIBP:Construct()
-
     self:InitCurrencyBar();
     self:BindEvent();
 

@@ -71,6 +71,8 @@ function store:ReloadUI()
 end
 
 function store:changePanel(idx)
-	self.WidgetSwitcher_0:SetActiveWidgetIndex(idx)
+	self.WidgetSwitcher_0:SetActiveWidgetIndex(idx);
+	ugcprint('change panel');
+	ugcprint('owner is:'..tostring());
 end
 return store

@@ -10,13 +10,14 @@
 ---@field Image_12 UImage
 ---@field Image_Bg_Default UImage
 ---@field ScaleBox_IPX UScaleBox
+---@field TextBlock_8 UTextBlock
 ---@field TextBlock_9 UTextBlock
 ---@field TextBlock_16 UTextBlock
 ---@field TextBlock_17 UTextBlock
 ---@field TextBlock_RankTime UTextBlock
----@field UGC_RankingList_But_UIBP UUGC_RankingList_But_UIBP_C
----@field UGC_ReuseList2_Rank UUGC_ReuseList2_C
----@field UGC_ReuseList2_tab UUGC_ReuseList2_C
+---@field UGC_RankingList_But_UIBP UGC_RankingList_But_UIBP_C
+---@field UGC_ReuseList2_Rank UGC_ReuseList2_C
+---@field UGC_ReuseList2_tab UGC_ReuseList2_C
 ---@field WidgetSwitcher_Data UWidgetSwitcher
 ---@field WidgetSwitcher_Rank UWidgetSwitcher
 ---@field ItemTipUIClassPath FSoftClassPath

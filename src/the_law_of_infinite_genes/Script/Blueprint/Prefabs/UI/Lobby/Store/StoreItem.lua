@@ -7,12 +7,12 @@
 --Edit Below--
 local StoreItem = { 
 	bInitDoOnce = false,
-	quality = 0,
-	number = 0,
-	sticker = 0,
 	index = nil,
 	storeList = nil,
 	parent = nil,
+	quality = 0,
+	number = 0,
+	sticker = 0,
 } 
 
 
@@ -38,25 +38,37 @@ function StoreItem:quality_Brush(ReturnValue)
 end
 
 function StoreItem:number_label_Text(ReturnValue)
+	if self.number == 0 then
+		return '';
+	end
 	return tostring(self.number);
 end
 
 function StoreItem:sticker_Brush(ReturnValue)
-	return { };
+	return {};
 end
 
 function StoreItem:Button_0_clicked()
+	self.parent:RefreshSelect(self.index);
 	return nil
 end
 
-function StoreItem:GetOwnerParent()
-	return self:GetOwner();
-end
-
 function StoreItem:SetSelectedVisiblity(Visible)
-	self.selected:SetVisiblity(Visible)	
+	self.selected:SetVisiblity(Visible)
+	self.Button_0:SetVisiblity(ESlateVisibility.Visiblity)	
 end
 
--- [Editor Generated Lua] function define End;
+function StoreItem:SetDefaultData()
+	self.quality = 0;
+	self.number = 0;
+	self.sticker = 0;
+end
+
+function StoreItem:SetItemData(quality, number, sticker)
+	self.quality = quality;
+	self.number = number;
+	self.sticker = sticker;
+	ugcprint('item data '..tostring(self.index)..' is:'..tostring(quality)..'/'..tostring(number)..'/'..tostring(sticker))
+end
 
 return StoreItem
