@@ -23,17 +23,6 @@ function UGCGameState:ReceiveBeginPlay()
     if self:HasAuthority() == true then 
         -- 只有客户端加载UI
     else
-<<<<<<< HEAD
-        -- local MainUI = UE.LoadClass( UGCMapInfoLib.GetRootLongPackagePath().. "Asset/Blueprint/Prefabs/WidgetLayout/lobby.lobby_C");
-        -- -- 加载 MainUI 蓝图类
-        -- local PlayerController = GameplayStatics.GetPlayerController(self, 0);
-        -- -- 获得当前PlayerController
-        -- local MainUI_BP = UserWidget.NewWidgetObjectBP(PlayerController, MainUI);
-        -- -- 加载 MainUI
-        -- MainUI_BP:AddToViewport(10000);
-        -- -- 将 MainUI 加入视口，显示UI
-        -- -- 隐藏原生界面
-=======
         local MainUI = UE.LoadClass(UGCMapInfoLib.GetRootLongPackagePath().."Asset/Blueprint/Prefabs/WidgetLayout/lobby.lobby_C")
         -- 加载 MainUI 蓝图类
         local PlayerController = GameplayStatics.GetPlayerController(self, 0)
@@ -44,7 +33,6 @@ function UGCGameState:ReceiveBeginPlay()
         -- 将 MainUI 加入视口，显示UI
         InitSubControl(MainUI_BP)
         -- 隐藏原生界面
->>>>>>> 284d6dbc61fb4d4769938cfa4b96def16c4782cc
         local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/Prefabs/WidgetLayout/hideLayout.hideLayout_C')
         UGCWidgetManagerSystem.SetWidgetLayout(path)
         UGCWidgetManagerSystem.GetMainControlUI().NavigatorPanel:SetVisibility(ESlateVisibility.Collapsed)
