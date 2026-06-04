@@ -2,7 +2,8 @@
 ---@field Button_46 UButton
 ---@field HomeToolBar HomeToolBar_C
 ---@field HomeUserInfo HomeUserInfo_C
----@field REINST_HomeUserInfo_C_0 HomeUserInfo_C
+---@field Image_0 UImage
+---@field Image_1 UImage
 --Edit Below--
 local HomeMain = {
 	bInitDoOnce = false,

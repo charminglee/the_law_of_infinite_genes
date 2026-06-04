@@ -2,7 +2,9 @@
 ---@field BackpackList ReuseList2_C
 ---@field bg_01 UImage
 ---@field bg_02 UImage
+---@field EquipSlotList ReuseList2_C
 ---@field Image_0 UImage
+---@field PorpertyList ReuseList2_C
 ---@field StoreTabList ReuseList2_C
 ---@field StoreToolBar StoreToolBar_C
 ---@field WidgetSwitcher_0 UWidgetSwitcher
@@ -16,6 +18,7 @@ local StoreMain = {
 
 function StoreMain:Construct()
     self:LuaInit();
+    
 end
 
 function StoreMain:Tick(MyGeometry, InDeltaTime)
@@ -44,12 +47,15 @@ end
 function StoreMain:Listen()
     self.StoreTabList.OnUpdateItem:Add(self.StoreTabListUpdate, self);
     self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
+    self.PorpertyList.OnUpdateItem:Add(self.PorpertyListUpdate, self);
+    self.EquipSlotList.OnUpdateItem:Add(self.EquipSlotListUpdate, self);
 end
 
 
 function StoreMain:InitUI()
     self.StoreTabList:Reload(#self.TabLabelList);
     self.BackpackList:Reload(100);
+    self.EquipSlotList:Reload(5);
 end
 
 function StoreMain:StoreTabListUpdate(Item, Index)
@@ -73,6 +79,14 @@ function StoreMain:BackpackListUpdate(Item, Index)
         Item:SetSelectedVisible(ESlateVisibility.Collapsed);
     
     end
+end
+
+function StoreMain:PorpertyListUpdate(Item, Index)
+    
+end
+
+function StoreMain:EquipSlotListUpdate(Item, Index)
+
 end
 
 return StoreMain
