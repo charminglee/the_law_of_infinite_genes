@@ -1,8 +1,8 @@
 ---@class HomeToolBarButton_C:UUserWidget
 ---@field Button_0 UButton
 ---@field button_icon UImage
----@field Image_46 UImage
----@field selected UImage
+---@field Image_0 UImage
+---@field Image_1 UImage
 ---@field TextBlock_0 UTextBlock
 --Edit Below--
 local HomeToolBarButton = { 
