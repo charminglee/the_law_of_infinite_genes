@@ -8,6 +8,8 @@ local UGCPlayerController = {}
 
 
 UGCGameSystem.UGCRequire("Script/Common/Const")
+UGCGameSystem.UGCRequire('Script.Common.UGCLog')
+-- UGCGameSystem.UGCRequire('Script.Common.TweenManager')
 
 
 local GameState = UGCGameSystem.GetGameState()
