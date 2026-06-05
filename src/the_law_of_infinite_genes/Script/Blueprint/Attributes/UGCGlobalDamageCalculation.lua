@@ -1,9 +1,6 @@
 local UGCGlobalDamageCalculation = {}
 
 
-UGCGameSystem.UGCRequire("Script/Common/Config")
-
-
 local GameState = UGCGameSystem.GetGameState()
 
 

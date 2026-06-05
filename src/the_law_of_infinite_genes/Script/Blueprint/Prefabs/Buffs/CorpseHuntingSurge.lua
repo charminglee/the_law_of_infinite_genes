@@ -3,9 +3,6 @@
 local CorpseHuntingSurge = {}
 
 
-UGCGameSystem.UGCRequire("Script/Common/Config")
-
-
 function CorpseHuntingSurge:AttackBuffFormula(...)
 	return 1 + SpecialEventConfig[SpecialEvent.CorpseHuntingSurge].AttackBuff
 end

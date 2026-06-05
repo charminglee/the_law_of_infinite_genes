@@ -1,5 +1,5 @@
-UGCGameSystem.UGCRequire('Script.GameAttribute.game_attribute_type')
 local UGCGlobalRecoveryCalculation = {}
+
 
 function UGCGlobalRecoveryCalculation:GetCalculationResult(Context, ExtraResult)
     local BeRecoveredActor				= UGCAttributeSystem.GetVictimFromContext(Context)      --接受治疗者
@@ -12,5 +12,6 @@ function UGCGlobalRecoveryCalculation:GetCalculationResult(Context, ExtraResult)
     local RecoveredValue = UGCAttributeSystem.GetSourceMagnitudeFromContext(Context)
     return RecoveredValue, ExtraResult
 end
+
 
 return UGCGlobalRecoveryCalculation
