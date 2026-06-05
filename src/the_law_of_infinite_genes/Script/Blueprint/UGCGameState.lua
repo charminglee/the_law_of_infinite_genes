@@ -9,10 +9,10 @@ local UGCGameState = {
 
 UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 UGCGameSystem.UGCRequire('Script.GameAttribute.game_attribute_type')
-UGCGameSystem.UGCRequire("Script/Common/Const")
-UGCGameSystem.UGCRequire("Script/Common/Config")
+UGCGameSystem.UGCRequire("Script.Common.Const")
+UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Common")
-
+UGCGameSystem.UGCRequire('Script.Common.UGCLog')
 
 local function InitSubControl(mainUI)
     if mainUI.index.topBar.IndexUIControl == nil then
