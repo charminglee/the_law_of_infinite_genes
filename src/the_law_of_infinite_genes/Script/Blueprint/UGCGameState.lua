@@ -14,6 +14,7 @@ UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Common")
 UGCGameSystem.UGCRequire('Script.Common.UGCLog')
 
+
 local function InitSubControl(mainUI)
     if mainUI.index.topBar.IndexUIControl == nil then
         mainUI.index.topBar.IndexUIControl = mainUI.index
@@ -57,6 +58,12 @@ end
 
 ---开始游戏
 function UGCGameState:StartGame()
+    self.isWaiting = false
+
+    if not self:HasAuthority() then
+        return
+    end
+
     -- 传送所有玩家到关卡
     local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.LevelStart)
     local loc = levelStart:K2_GetActorLocation()
@@ -65,30 +72,42 @@ function UGCGameState:StartGame()
     end
 
     -- 启动刷怪
-    -- local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
-    -- sm:StartSpawnerManager()
-
-    self.isWaiting = false
+    local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
+    sm:StartSpawnerManager()
 end
 
 
 ---结束游戏
 function UGCGameState:EndGame()
     self.isWaiting = true
+
+    if not self:HasAuthority() then
+        return
+    end
 end
 
 
 ---触发特殊事件
 function UGCGameState:TriggerSpecialEvent(specialEvent)
-    ugcprint("触发特殊事件："..specialEvent)
-    for _, controller in pairs(UGCGameSystem.GetAllPlayerController(false)) do
-        local pawn = controller:GetPlayerCharacterSafety()
-        local cls = UGCObjectUtility.LoadClass(ClassPath[specialEvent])
-        local res = UGCPersistEffectSystem.AddBuffByClass(pawn, cls)
-        ugcprint("触发特殊事件："..specialEvent..res)
+    self.specialEvent = specialEvent
+
+    if not self:HasAuthority() then
+        return
     end
 
-    self.specialEvent = specialEvent
+    for _, controller in pairs(UGCGameSystem.GetAllPlayerController(false)) do
+        -- local cls = UGCObjectUtility.LoadClass(SpecialEvent2BuffClassPath[specialEvent])
+        local cls = ClassPath[specialEvent]
+        UGCPersistEffectSystem.AddBuffByClass(controller, cls)
+    end
+
+    -- 腐秽瘴潮：感染者获得全属性加成
+    if specialEvent == SpecialEvent.PutridMiasma then
+        for _, actor in pairs(UGCActorComponentUtility.GetAllActorsWithTag(self, Tag.Monster)) do
+            local cls = ClassPath[Buff.PutridMiasma_Monster]
+            UGCPersistEffectSystem.AddBuffByClass(actor, cls)
+        end
+    end
 end
 
 

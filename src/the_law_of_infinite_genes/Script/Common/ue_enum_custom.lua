@@ -29,3 +29,13 @@ ELotteryResetType = {
 }; 
 
 
+---@enum Buff
+Buff = { 
+    CorpseHuntingSurge = 0,
+    CorpseSurgeGoldRush = 1,
+    HeavenPunishmentThunderStrike = 2,
+    PutridMiasma = 3,
+    PutridMiasma_Monster = 4,
+}; 
+
+
