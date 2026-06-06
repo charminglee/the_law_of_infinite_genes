@@ -1,5 +1,5 @@
 ---@class HomeToolBar_C:UUserWidget
----@field aniBtn UButton
+---@field AnimBtn UButton
 ---@field ReuseList2 ReuseList2_C
 --Edit Below--
 local HomeToolBar = { 
@@ -23,7 +23,7 @@ function HomeToolBar:LuaInit()
 	self:Listen();
 	self:RefreshHomeToolBar();
 
-	self.aniBtn.OnClicked:Add(self.aniBtn_OnClicked, self);
+	self.AnimBtn.OnClicked:Add(self.AnimBtnOnClicked, self);
 
 end
 
@@ -43,7 +43,7 @@ function HomeToolBar:HomeToolBarUpdate(Item, Index)
 	Item:SetText(self.ToolBarButtonLabel[Index+1]);
 end
 
-function HomeToolBar:aniBtn_OnClicked()
+function HomeToolBar:AnimBtnOnClicked()
     self.aniState = not self.aniState
     local slot = UGCWidgetManagerSystem.SlotAsCanvasSlot(self.ReuseList2)
     local currentSize = slot:GetSize()
