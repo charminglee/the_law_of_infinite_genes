@@ -11,8 +11,6 @@ local HomeToolBar = {
 	currentTween = nil
 }
 
-local TweenManager = UGCGameSystem.UGCRequire('Script.Common.TweenManager')
-
 function HomeToolBar:Construct()
 	self:LuaInit();
 end
@@ -24,8 +22,6 @@ function HomeToolBar:LuaInit()
 	self.bInitDoOnce = true;
 	self:Listen();
 	self:RefreshHomeToolBar();
-
-	TweenManager:Initialize();
 
 	self.aniBtn.OnClicked:Add(self.aniBtn_OnClicked, self);
 
@@ -48,44 +44,28 @@ function HomeToolBar:HomeToolBarUpdate(Item, Index)
 end
 
 function HomeToolBar:aniBtn_OnClicked()
-
     self.aniState = not self.aniState
-
-	local slot = UGCWidgetManagerSystem.SlotAsCanvasSlot(self.ReuseList2)
-
-	-- 获取当前实时尺寸（防止动画跳跃）
+    local slot = UGCWidgetManagerSystem.SlotAsCanvasSlot(self.ReuseList2)
     local currentSize = slot:GetSize()
-    local easingType = self.aniState and TweenManager.EEasingType.QuartIn or TweenManager.EEasingType.QuartOut
-    local startWidth = currentSize.X
-    local endWidth = self.aniState and 0 or 500 
-
     -- 停止正在播放的动画（避免同时多个动画冲突）
     if self.currentTween then
         TweenManager.Stop(self.currentTween)
         self.currentTween = nil
     end
-
-    -- 创建宽度动画（从当前宽度到目标宽度）
-    local startVec = KismetMathLibrary.MakeVector(startWidth, 0, 0)
-    local endVec   = KismetMathLibrary.MakeVector(endWidth, 0, 0)
-
-    self.currentTween = TweenManager.VectorAnim(
-        function(value)
-            slot:SetSize(KismetMathLibrary.MakeVector2D(value.X, currentSize.Y))
-        end,
-        startVec,
-        endVec,
-        0.25,
-        easingType
+    self.currentTween = TweenManager.SizeAnim(
+        slot,
+        KismetMathLibrary.MakeVector2D(0, 60),
+        KismetMathLibrary.MakeVector(currentSize.X, 0, 0),
+        KismetMathLibrary.MakeVector(self.aniState and 0 or 500 , 0, 0),
+        0.5,
+        self.aniState and TweenManager.EEasingType.QuartInOut or TweenManager.EEasingType.QuartOut
     )
-
     -- 动画结束后清除句柄
     if self.currentTween then
         TweenManager.OnComplete(self.currentTween, function()
             self.currentTween = nil
         end)
     end
-
 end
 
 return HomeToolBar

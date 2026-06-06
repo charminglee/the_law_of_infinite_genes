@@ -13,6 +13,7 @@ UGCGameSystem.UGCRequire("Script.Common.Const")
 UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Common")
 UGCGameSystem.UGCRequire('Script.Common.UGCLog')
+UGCGameSystem.UGCRequire('Script.Common.TweenManager')
 
 
 local function InitSubControl(mainUI)
@@ -24,7 +25,7 @@ end
 
 function UGCGameState:ReceiveBeginPlay()
     self.SuperClass.ReceiveBeginPlay(self)
-
+    TweenManager:Initialize();
     if self:HasAuthority() == true then 
         -- 只有客户端加载UI
     else

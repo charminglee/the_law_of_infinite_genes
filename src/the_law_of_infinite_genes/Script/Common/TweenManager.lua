@@ -4,7 +4,7 @@
 -- 依赖：TweenLibrary, UGCDelegateUtility, UGCGameSystem
 -- ============================================================
 
-local TweenManager = {}
+TweenManager = TweenManager or {}
 
 -- 私有变量：TweenLibrary 实例和默认上下文（本地玩家控制器）
 local _tweenLib = nil
@@ -51,6 +51,7 @@ function TweenManager.DefaultConfig(delay, repeatCount, yoyo, repeatDelay)
 end
 
 -- ==================== 通用委托创建 ====================
+
 local function CreateDelegate(callback, selfObj)
     local delegate = UGCDelegateUtility.CreateUEDelegate(_defaultContext)
     if selfObj then
@@ -59,6 +60,18 @@ local function CreateDelegate(callback, selfObj)
         delegate:Bind(callback)
     end
     return delegate
+end
+
+-- 通用的 Canvas 槽位动画（偏移量基于基准值）
+local function createCanvasAnim(slot, baseValue, setterFunc, startOffset, endOffset, duration, easingType, config)
+    if not slot then return nil end
+    local delegate = CreateDelegate(function(value)
+        local finalX = baseValue.X + value.X
+        local finalY = baseValue.Y + value.Y
+        setterFunc(slot, KismetMathLibrary.MakeVector2D(finalX, finalY))
+    end)
+    local cfg = config or TweenManager.DefaultConfig(0, 1, false, 0)
+    return _tweenLib.TweenVectorValue(_defaultContext, startOffset, endOffset, duration, easingType, delegate, cfg)
 end
 
 -- ==================== 动画创建接口 ====================
@@ -88,11 +101,21 @@ end
 -- @param config: 可选配置
 -- @param selfObj: 可选，绑定 updateFunc 的 self
 -- @return tweenHandle 或 nil
-function TweenManager.VectorAnim(updateFunc, startVec, endVec, duration, easingType, config, selfObj)
+function TweenManager.VectorAnim(widget, updateFunc, startVec, endVec, offsetVec, duration, aniType, easingType, config, selfObj)
     if type(updateFunc) ~= "function" then return nil end
     local delegate = CreateDelegate(updateFunc, selfObj)
     local cfg = config or TweenManager.DefaultConfig(0, 1, false, 0)
     return _tweenLib.TweenVectorValue(_defaultContext, startVec, endVec, duration, easingType, delegate, cfg)
+end
+
+-- 基于Canvas 槽位的位置动画
+function TweenManager.PositionAnim(slot, basePos, startOff, endOff, dur, easing, cfg)
+    return createCanvasAnim(slot, basePos, function(s, v) s:SetPosition(v) end, startOff, endOff, dur, easing, cfg)
+end
+
+-- 基于Canvas 槽位的尺寸动画
+function TweenManager.SizeAnim(slot, baseSize, startOff, endOff, dur, easing, cfg)
+    return createCanvasAnim(slot, baseSize, function(s, v) s:SetSize(v) end, startOff, endOff, dur, easing, cfg)
 end
 
 -- 3. 浮点数值动画（进度条、数值变化等）
