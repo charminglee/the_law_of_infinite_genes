@@ -3,8 +3,10 @@
 ---@field StoreItemInfoDialogPath FSoftClassPath
 --Edit Below--
 local StoreComponent = {}
+
+
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.StoreManager");
-UGCGameSystem.UGCRequire("Script.Common.Common");
+
 
 function StoreComponent:ReceiveBeginPlay()
     StoreComponent.SuperClass.ReceiveBeginPlay(self);

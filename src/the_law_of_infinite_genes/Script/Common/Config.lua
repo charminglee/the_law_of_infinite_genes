@@ -25,7 +25,7 @@ SpecialEventConfig = {
     [SpecialEvent.PutridMiasma] = {
         Duration = 30,              -- 持续时间（编辑器定义）
         MiasmaDamage = 10,          -- 毒气伤害
-        MiasmaInterval = 2,         -- 毒气伤害间隔时间
-        InfectedAllAttrBuff = 0.03, -- 感染者全属性加成百分比
+        MiasmaInterval = 2,         -- 毒气伤害间隔时间（编辑器定义）
+        InfectedAllAttrBuff = 0.1,  -- 感染者全属性加成百分比
     },
 }

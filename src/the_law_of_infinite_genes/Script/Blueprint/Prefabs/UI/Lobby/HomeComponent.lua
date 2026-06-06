@@ -3,7 +3,6 @@
 --Edit Below--
 local HomeComponent = {}
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.HomeManager");
-UGCGameSystem.UGCRequire("Script.Common.Common");
 
 function HomeComponent:ReceiveBeginPlay()
     HomeComponent.SuperClass.ReceiveBeginPlay(self);

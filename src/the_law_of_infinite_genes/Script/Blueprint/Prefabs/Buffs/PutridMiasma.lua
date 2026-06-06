@@ -1,5 +1,3 @@
----@class PutridMiasma_C:PersistEffectBuff
---Edit Below--
 local PutridMiasma = {}
  
 -- buff启动条件

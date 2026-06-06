@@ -7,9 +7,6 @@
 local UGCPlayerController = {}
 
 
-UGCGameSystem.UGCRequire("Script/Common/Const")
-
-
 local GameState = UGCGameSystem.GetGameState()
 
 
