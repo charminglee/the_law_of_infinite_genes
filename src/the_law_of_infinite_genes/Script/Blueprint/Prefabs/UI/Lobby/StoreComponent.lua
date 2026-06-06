@@ -1,5 +1,6 @@
 ---@class StoreComponent_C:ActorComponent
 ---@field MainUIClassPath FSoftClassPath
+---@field StoreItemInfoDialogPath FSoftClassPath
 --Edit Below--
 local StoreComponent = {}
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.StoreManager");
@@ -22,6 +23,16 @@ function StoreComponent:InitStoreUI(MainUIClass)
 
             local MainUI = UserWidget.NewWidgetObjectBP(self:GetOwner(), MainUIClass);
             MainUI:AddToViewport(10050);
+            MainUI:SetVisibility(ESlateVisibility.Collapsed);
+        end
+    );
+    Common.LoadObjectWithSoftPathAsync(self.StoreItemInfoDialogPath, 
+        function (MainUIClass)
+            if self == nil or MainUIClass == nil then
+                return;
+            end
+            local MainUI = UserWidget.NewWidgetObjectBP(self:GetOwner(), MainUIClass);
+            MainUI:AddToViewport(11000);
             MainUI:SetVisibility(ESlateVisibility.Collapsed);
         end
     );

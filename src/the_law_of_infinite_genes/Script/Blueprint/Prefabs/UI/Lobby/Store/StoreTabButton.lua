@@ -1,10 +1,7 @@
 ---@class StoreTabButton_C:UUserWidget
----@field border UImage
 ---@field Button_0 UButton
----@field Image_3 UImage
----@field selected UImage
+---@field checked UImage
 ---@field TextBlock_0 UTextBlock
----@field un_selected UImage
 --Edit Below--
 local StoreTabButton = {bInitDoOnce = false, Index=nil} 
 
@@ -36,7 +33,7 @@ end
 
 ---@param Visible number
 function StoreTabButton:SetSelectedVisible(Visible)
-	self.selected:SetVisibility(Visible);
+	self.checked:SetVisibility(Visible);
 end
 
 return StoreTabButton

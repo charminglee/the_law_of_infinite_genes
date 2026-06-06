@@ -4,7 +4,12 @@
 ---@field bg_02 UImage
 ---@field EquipSlotList ReuseList2_C
 ---@field Image_0 UImage
+---@field Image_1 UImage
+---@field Image_2 UImage
+---@field Image_3 UImage
+---@field Image_4 UImage
 ---@field PorpertyList ReuseList2_C
+---@field StoreBackpackTabList ReuseList2_C
 ---@field StoreTabList ReuseList2_C
 ---@field StoreToolBar StoreToolBar_C
 ---@field WidgetSwitcher_0 UWidgetSwitcher
@@ -13,7 +18,9 @@ local StoreMain = {
     bInitDoOnce = false,
     TabSelectIndex = 0,
     BackpackSelectIndex = -1,
-    TabLabelList = {'物品','强化','合成'}
+    TabLabelList = {'物品','强化','合成'},
+    StoreBackpackTabLabel = {'装备', '消耗品', '材料', '其他'},
+    StoreBackpackTabSelectIndex = 0,
     } 
 
 function StoreMain:Construct()
@@ -30,7 +37,11 @@ function StoreMain:Tick(MyGeometry, InDeltaTime)
     if self.BackpackSelectIndex ~= StoreManager.BackpackSelectIndex then
         self.BackpackSelectIndex = StoreManager.BackpackSelectIndex;
         self.BackpackList:Reload(100);
-    end        
+    end
+    if self.StoreBackpackTabSelectIndex ~= StoreManager.StoreBackpackTabSelectIndex then
+        self.StoreBackpackTabSelectIndex = StoreManager.StoreBackpackTabSelectIndex;
+        self.StoreBackpackTabList:Reload(4);
+    end     
 end
 
 function StoreMain:LuaInit()
@@ -49,6 +60,7 @@ function StoreMain:Listen()
     self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
     self.PorpertyList.OnUpdateItem:Add(self.PorpertyListUpdate, self);
     self.EquipSlotList.OnUpdateItem:Add(self.EquipSlotListUpdate, self);
+    self.StoreBackpackTabList.OnUpdateItem:Add(self.StoreBackpackTabListUpdate, self);
 end
 
 
@@ -56,6 +68,7 @@ function StoreMain:InitUI()
     self.StoreTabList:Reload(#self.TabLabelList);
     self.BackpackList:Reload(100);
     self.EquipSlotList:Reload(5);
+    self.StoreBackpackTabList:Reload(#self.StoreBackpackTabLabel);
 end
 
 function StoreMain:StoreTabListUpdate(Item, Index)
@@ -87,6 +100,16 @@ end
 
 function StoreMain:EquipSlotListUpdate(Item, Index)
 
+end
+
+function StoreMain:StoreBackpackTabListUpdate(Item, Index)
+    Item.Index = Index;
+    Item:SetText(self.StoreBackpackTabLabel[Index + 1]);
+    if self.StoreBackpackTabSelectIndex == Index then
+        Item:SetSelectedVisible(ESlateVisibility.Visible);
+    else
+        Item:SetSelectedVisible(ESlateVisibility.Collapsed);
+    end
 end
 
 return StoreMain

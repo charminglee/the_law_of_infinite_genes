@@ -1,9 +1,9 @@
 ---@class StoreBackpackItem_C:UUserWidget
----@field Button_0 UButton
----@field number_label UTextBlock
----@field quality UImage
+---@field Button_1 UButton
+---@field Image_0 UImage
+---@field Image_1 UImage
 ---@field selected UImage
----@field sticker UImage
+---@field TextBlock_0 UTextBlock
 --Edit Below--
 local StoreBackpackItem = { bInitDoOnce = false, Index = nil} 
 
@@ -20,10 +20,13 @@ function StoreBackpackItem:LuaInit()
 end
 
 function StoreBackpackItem:Listen()
-    self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
+    self.Button_1.OnClicked:Add(self.Button_1_Clicked, self);
 end
 
-function StoreBackpackItem:Button_0_Clicked()
+function StoreBackpackItem:Button_1_Clicked()
+    if StoreManager.BackpackSelectIndex == self.Index then
+        StoreManager:OpenStoreItemInfoDialog();
+    end
     StoreManager.BackpackSelectIndex = self.Index;
 end
 

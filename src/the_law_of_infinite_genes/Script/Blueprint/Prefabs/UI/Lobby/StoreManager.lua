@@ -2,9 +2,11 @@
 StoreManager = StoreManager or
 {
     MainUI = nil;
+    ItemInfoDialogUI = nil;
     TabSelectIndex = 0;
     MaxStoreBackpackSize = 100;
     BackpackSelectIndex = -1;
+    StoreBackpackTabSelectIndex = 0;
 }
 
 function StoreManager:RegisterComponentClass(CompClass)
@@ -18,6 +20,12 @@ function StoreManager:RegisterMainUI(MainUI)
     
     if self.MainUI == nil then
         self.MainUI = MainUI;
+    end
+end
+
+function StoreManager:RegisterItemInfoDialogUI(UI)
+    if self.ItemInfoDialogUI == nil then
+        self.ItemInfoDialogUI = UI;    
     end
 end
 
@@ -36,6 +44,13 @@ function StoreManager:OpenMainUI()
     self.TabSelectIndex = 0;
     self.BackpackSelectIndex = -1;
     self.MainUI:SetVisibility(ESlateVisibility.Visible);
+end
+
+function StoreManager:OpenStoreItemInfoDialog()
+    if self.ItemInfoDialogUI == nil then
+        return;
+    end
+    self.ItemInfoDialogUI:SetVisibility(ESlateVisibility.Visible);
 end
 
 function StoreManager:CloseMainUI()
