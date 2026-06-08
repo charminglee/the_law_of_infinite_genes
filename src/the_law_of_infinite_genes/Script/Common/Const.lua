@@ -7,6 +7,8 @@ ClassPath = {
     [Buff.HeavenPunishmentThunderStrike]    = root.."Asset/Blueprint/Prefabs/Buffs/HeavenPunishmentThunderStrike.HeavenPunishmentThunderStrike_C",
     [Buff.PutridMiasma]                     = root.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
     [Buff.PutridMiasma_Monster]             = root.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
+
+    MonsterTemplate                         = root.."Asset/Blueprint/Prefabs/Monsters/MonsterTemplate.MonsterTemplate_C",
 }
 
 

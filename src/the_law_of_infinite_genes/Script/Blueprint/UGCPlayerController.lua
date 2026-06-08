@@ -31,10 +31,17 @@ function UGCPlayerController:ReceiveBeginPlay()
 
             -- 测试
             GameState:StartGame()
-            GameState:TriggerSpecialEvent(SpecialEvent.CorpseHuntingSurge)
         end
     )
-    KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)    
+    KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)
+
+    -- local delegate = ObjectExtend.CreateDelegate(
+    --     self, 
+    --     function()
+    --         GameState:TriggerSpecialEvent(SpecialEvent.PutridMiasma)
+    --     end
+    -- )
+    -- KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 3, false)
 end
 
 

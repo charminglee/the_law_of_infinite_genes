@@ -7,13 +7,13 @@ local UGCGameState = {
 }
 
 
-UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
-UGCGameSystem.UGCRequire('Script.GameAttribute.game_attribute_type')
+UGCGameSystem.UGCRequire("Script.Common.ue_enum_custom")
+UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
 UGCGameSystem.UGCRequire("Script.Common.Const")
 UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Common")
-UGCGameSystem.UGCRequire('Script.Common.UGCLog')
-UGCGameSystem.UGCRequire('Script.Common.TweenManager')
+UGCGameSystem.UGCRequire("Script.Common.UGCLog")
+UGCGameSystem.UGCRequire("Script.Common.TweenManager")
 
 
 local function InitSubControl(mainUI)
@@ -73,42 +73,61 @@ function UGCGameState:StartGame()
     end
 
     -- 启动刷怪
-    local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
-    sm:StartSpawnerManager()
+    -- local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
+    -- sm:StartSpawnerManager()
 end
 
 
 ---结束游戏
 function UGCGameState:EndGame()
-    self.isWaiting = true
-
-    if not self:HasAuthority() then
+    if self.isWaiting then
         return
     end
+
+    self.isWaiting = true
 end
 
 
 ---触发特殊事件
-function UGCGameState:TriggerSpecialEvent(specialEvent)
+function UGCGameState:TriggerSpecialEvent(specialEvent, autoStop)
     self.specialEvent = specialEvent
+    if autoStop then
+        -- 自动触发事件结束
+        local dur = SpecialEventConfig[specialEvent].Duration
+        local delegate = ObjectExtend.CreateDelegate(self, self.StopSpecialEvent)
+        KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, dur, false)
+    end
 
     if not self:HasAuthority() then
         return
     end
 
-    for _, controller in pairs(UGCGameSystem.GetAllPlayerController(false)) do
-        -- local cls = UGCObjectUtility.LoadClass(SpecialEvent2BuffClassPath[specialEvent])
-        local cls = ClassPath[specialEvent]
-        UGCPersistEffectSystem.AddBuffByClass(controller, cls)
+    -- 给玩家添加对应buff
+    local buffCls = ClassPath[specialEvent]
+    local allPlayers = UGCGameSystem.GetAllPlayerPawn()
+    for _, pawn in pairs(allPlayers) do
+        UGCPersistEffectSystem.AddBuffByClass(pawn, buffCls)
     end
 
-    -- 腐秽瘴潮：感染者获得全属性加成
+    -- 腐秽瘴潮：所有怪物获得全属性加成
     if specialEvent == SpecialEvent.PutridMiasma then
-        for _, actor in pairs(UGCActorComponentUtility.GetAllActorsWithTag(self, Tag.Monster)) do
-            local cls = ClassPath[Buff.PutridMiasma_Monster]
-            UGCPersistEffectSystem.AddBuffByClass(actor, cls)
+        local buffCls = ClassPath[Buff.PutridMiasma_Monster]
+        local allMonsters = {}
+        GameplayStatics.GetAllActorsOfClass(self, UGCObjectUtility.LoadClass(ClassPath.MonsterTemplate), allMonsters)
+        for _, actor in pairs(allMonsters) do
+            UGCPersistEffectSystem.AddBuffByClass(actor, buffCls)
         end
     end
+end
+
+
+---结束当前正在进行的特殊事件
+function UGCGameState:StopSpecialEvent()
+    if self.specialEvent == -1 then
+        return
+    end
+
+    self.specialEvent = -1
 end
 
 
