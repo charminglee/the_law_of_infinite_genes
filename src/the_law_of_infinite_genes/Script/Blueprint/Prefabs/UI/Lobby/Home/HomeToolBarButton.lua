@@ -39,6 +39,9 @@ function HomeToolBarButton:Button_0_Clicked()
 	elseif self.Index  == 3 then
         StoreManager:OpenMainUI();
         return nil;
+    elseif self.Index  == 4 then
+        ACHVManager:OpenMainUI();
+        return nil;
 	end
 end
 

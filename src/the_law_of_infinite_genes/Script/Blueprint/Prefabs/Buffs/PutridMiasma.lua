@@ -1,4 +1,10 @@
 local PutridMiasma = {}
+
+
+function PutridMiasma:MiasmaDamageFormula()
+	return SpecialEventConfig[SpecialEvent.PutridMiasma].MiasmaDamage
+end
+
  
 -- buff启动条件
 --[[

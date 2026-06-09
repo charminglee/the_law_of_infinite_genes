@@ -1,23 +1,34 @@
 ---@class MonsterTemplate_C:BP_UGC_GenericMobPawn_Base_C
 ---@field HitBox UCapsuleComponent
 --Edit Below--
-local Infected = {}
+local MonsterTemplate = {}
 
--- function Infected:ReceiveBeginPlay()
---     Infected.SuperClass.ReceiveBeginPlay(self)
+
+local GameState = UGCGameSystem.GetGameState()
+
+
+function MonsterTemplate:ReceiveBeginPlay()
+    MonsterTemplate.SuperClass.ReceiveBeginPlay(self)
+
+    -- 腐秽瘴潮：所有怪物获得全属性加成
+    if GameState.specialEvent == SpecialEvent.PutridMiasma then
+        local buffCls = ClassPath[Buff.PutridMiasma_Monster]
+        UGCPersistEffectSystem.AddBuffByClass(self, buffCls)
+    end
+end
+
+
+-- function MonsterTemplate:ReceiveTick(DeltaTime)
+--     MonsterTemplate.SuperClass.ReceiveTick(self, DeltaTime)
 -- end
 
--- function Infected:ReceiveTick(DeltaTime)
---     Infected.SuperClass.ReceiveTick(self, DeltaTime)
+-- function MonsterTemplate:ReceiveEndPlay()
+--     MonsterTemplate.SuperClass.ReceiveEndPlay(self) 
 -- end
 
--- function Infected:ReceiveEndPlay()
---     Infected.SuperClass.ReceiveEndPlay(self) 
--- end
-
--- function Infected:GetReplicatedProperties()
+-- function MonsterTemplate:GetReplicatedProperties()
 --     return
--- end 
+-- end
 
 -- ---受击前置事件
 -- ---生效范围：服务器
@@ -25,7 +36,7 @@ local Infected = {}
 -- ---@param EventInstigator AController 伤害来源的Controller
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
--- function Infected:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function MonsterTemplate:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
      
 -- end
 
@@ -35,7 +46,7 @@ local Infected = {}
 -- ---@param EventInstigator AController 伤害来源的Controller
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
--- function Infected:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function MonsterTemplate:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
     
 -- end
 
@@ -46,7 +57,7 @@ local Infected = {}
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- ---@return float 修改后的伤害值
--- function Infected:PreOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function MonsterTemplate:PreOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
 --     return Damage
 -- end
 
@@ -57,28 +68,28 @@ local Infected = {}
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- ---@return float 修改后的伤害值
--- function Infected:PostOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function MonsterTemplate:PostOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
 --     return Damage
 -- end
 
 ---角色死亡事件
 ---生效范围：服务器&客户端
--- ---@param Damage float 伤害值
--- ---@param EventInstigator AController 伤害来源的Controller
--- ---@param DamageCauser AActor 伤害来源
--- ---@param FDamageEvent DamageEvent 伤害事件
--- ---@param DamageTypeID int32 伤害类型
--- function Infected:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
---     if self:HasAuthority() then
---         -- 只有服务端才可以掉落
---         self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
---     end
--- end
+---@param Damage float 伤害值
+---@param EventInstigator AController 伤害来源的Controller
+---@param DamageCauser AActor 伤害来源
+---@param FDamageEvent DamageEvent 伤害事件
+---@param DamageTypeID int32 伤害类型
+function MonsterTemplate:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
+    if self:HasAuthority() then
+        -- 只有服务端才可以掉落
+        self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
+    end
+end
 
 -- ---状态进入事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 进入的状态
--- function Infected:OnEnterTagState_BP(DynamicState)
+-- function MonsterTemplate:OnEnterTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnEnterTagState_BP: ' .. Tag)
 -- end
@@ -86,7 +97,7 @@ local Infected = {}
 -- ---状态退出事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 退出的状态
--- function Infected:OnLeaveTagState_BP(DynamicState)
+-- function MonsterTemplate:OnLeaveTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnLeaveTagState_BP: ' .. Tag)
 -- end
@@ -94,7 +105,7 @@ local Infected = {}
 -- ---状态打断事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 打断的状态
--- function Infected:OnInterruptTagState_BP(DynamicState)
+-- function MonsterTemplate:OnInterruptTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnInterruptTagState_BP' .. Tag)
 -- end
@@ -102,7 +113,7 @@ local Infected = {}
 -- ---行为树消息
 -- ---生效范围：服务器
 -- ---@param NotifyMsg string 消息
--- function Infected:OnBehaviorNotify_BP(NotifyMsg)
+-- function MonsterTemplate:OnBehaviorNotify_BP(NotifyMsg)
 --     ugcprint('OnBehaviorNotify_BP: ' .. NotifyMsg)
 -- end
 
@@ -110,12 +121,12 @@ local Infected = {}
 -- ---生效范围：服务器&客户端
 -- ---@param NewTarget AActor 新目标
 -- ---@param OldTarget AActor 旧目标
--- function Infected:OnTargetChange_BP(NewTarget, OldTarget)
+-- function MonsterTemplate:OnTargetChange_BP(NewTarget, OldTarget)
     
 -- end
 
 -- [Editor Generated Lua] function define Begin:
-function Infected:LuaInit()
+function MonsterTemplate:LuaInit()
 	if self.bInitDoOnce then
 		return;
 	end
@@ -128,10 +139,10 @@ function Infected:LuaInit()
 	-- [Editor Generated Lua] BindingEvent End;
 end
 
--- function Infected:UGCPresetCommonDropItemComponent_OnDropItem(ItemActor)
+-- function MonsterTemplate:UGCPresetCommonDropItemComponent_OnDropItem(ItemActor)
 -- 	return nil;
 -- end
 
 -- [Editor Generated Lua] function define End;
 
-return Infected
+return MonsterTemplate
