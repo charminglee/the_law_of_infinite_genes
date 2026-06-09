@@ -11,6 +11,16 @@ ELotteryMainUIType = {
 }; 
 
 
+---@enum Buff
+Buff = { 
+    CorpseHuntingSurge = 0,
+    CorpseSurgeGoldRush = 1,
+    HeavenPunishmentThunderStrike = 2,
+    PutridMiasma = 3,
+    PutridMiasma_Monster = 4,
+}; 
+
+
 ---@enum SpecialEvent
 SpecialEvent = { 
     CorpseHuntingSurge = 0,
@@ -26,16 +36,6 @@ ELotteryResetType = {
     DailyReset = 1,
     MonthlyReset = 2,
     WeeklyReset = 3,
-}; 
-
-
----@enum Buff
-Buff = { 
-    CorpseHuntingSurge = 0,
-    CorpseSurgeGoldRush = 1,
-    HeavenPunishmentThunderStrike = 2,
-    PutridMiasma = 3,
-    PutridMiasma_Monster = 4,
 }; 
 
 

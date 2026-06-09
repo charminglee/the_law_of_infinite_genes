@@ -10,6 +10,9 @@
 ---@field Image_4 UImage
 ---@field PorpertyList ReuseList2_C
 ---@field StoreBackpackTabList ReuseList2_C
+---@field StoreRefinedPanel StoreRefinedPanel_C
+---@field StoreResultantPanel StoreResultantPanel_C
+---@field StoreStrengthenPanel StoreStrengthenPanel_C
 ---@field StoreTabList ReuseList2_C
 ---@field StoreToolBar StoreToolBar_C
 ---@field WidgetSwitcher_0 UWidgetSwitcher
@@ -18,9 +21,10 @@ local StoreMain = {
     bInitDoOnce = false,
     TabSelectIndex = 0,
     BackpackSelectIndex = -1,
-    TabLabelList = {'物品','强化','合成'},
+    TabLabelList = {'物品','强化', '洗练', '合成'},
     StoreBackpackTabLabel = {'装备', '消耗品', '材料', '其他'},
     StoreBackpackTabSelectIndex = 0,
+    StoreChoseItemIndex = 0,
     } 
 
 function StoreMain:Construct()
@@ -32,6 +36,7 @@ function StoreMain:Tick(MyGeometry, InDeltaTime)
     if self.TabSelectIndex ~= StoreManager.TabSelectIndex then
         self.TabSelectIndex = StoreManager.TabSelectIndex;
         self.StoreTabList:Reload(#self.TabLabelList);
+        StoreManager.StoreChoseItemIndex = 0;
         self.WidgetSwitcher_0:SetActiveWidgetIndex(self.TabSelectIndex);
     end
     if self.BackpackSelectIndex ~= StoreManager.BackpackSelectIndex then
@@ -41,7 +46,7 @@ function StoreMain:Tick(MyGeometry, InDeltaTime)
     if self.StoreBackpackTabSelectIndex ~= StoreManager.StoreBackpackTabSelectIndex then
         self.StoreBackpackTabSelectIndex = StoreManager.StoreBackpackTabSelectIndex;
         self.StoreBackpackTabList:Reload(4);
-    end     
+    end
 end
 
 function StoreMain:LuaInit()

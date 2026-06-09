@@ -7,6 +7,8 @@ StoreManager = StoreManager or
     MaxStoreBackpackSize = 100;
     BackpackSelectIndex = -1;
     StoreBackpackTabSelectIndex = 0;
+    StoreStrengthenChoseItemIndex = 0;
+    StoreRefinedChoseItemIndex = 0;
 }
 
 function StoreManager:RegisterComponentClass(CompClass)
