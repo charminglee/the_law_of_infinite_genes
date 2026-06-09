@@ -2,7 +2,9 @@
 ---@field Icon UImage
 ---@field Name UTextBlock
 --Edit Below--
-local Title = { bInitDoOnce = false } 
+local Title = { 
+	bInitDoOnce = false,
+} 
 
 
 function Title:Construct()
@@ -24,15 +26,10 @@ function Title:LuaInit()
 		return;
 	end
 	self.bInitDoOnce = true;
-	-- [Editor Generated Lua] BindingProperty Begin:
-	self.Name:BindingProperty("Text", self.Name_Text, self);
-	-- [Editor Generated Lua] BindingProperty End;
-	
-	-- [Editor Generated Lua] BindingEvent Begin:
-	-- [Editor Generated Lua] BindingEvent End;
+	self.Name:BindingProperty("Text", self.NameText, self);
 end
 
-function Title:Name_Text(ReturnValue)
+function Title:NameText(ReturnValue)
 	return "囊中羞涩";
 end
 

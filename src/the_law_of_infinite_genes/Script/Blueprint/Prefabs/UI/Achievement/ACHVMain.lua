@@ -2,6 +2,10 @@
 ---@field Bg UImage
 ---@field BgInner UImage
 ---@field Exit UButton
+---@field Image_0 UImage
+---@field Name UTextBlock
+---@field ReuseList2 ReuseList2_C
+---@field Set UButton
 --Edit Below--
 local ACHVMain = { bInitDoOnce = false } 
 
@@ -16,7 +20,8 @@ function ACHVMain:LuaInit()
 	self.bInitDoOnce = true;
     ACHVManager:RegisterMainUI(self);
 	self.Exit.OnClicked:Add(self.ExitOnClicked, self);
-
+	self.ReuseList2.OnUpdateItem:Add(self.ReuseList2Update, self);
+	self.ReuseList2:Reload(6);
 end
 
 -- function ACHVMain:Tick(MyGeometry, InDeltaTime)
@@ -29,6 +34,14 @@ end
 
 function ACHVMain:ExitOnClicked()
     ACHVManager:CloseMainUI();
+end
+
+function ACHVMain:ReuseList2Update(Item, Index)
+	if Item.Parent == nil then
+		Item.Parent = self;
+		Item.Index = Index;
+	end
+	Item:Refresh();
 end
 
 return ACHVMain
