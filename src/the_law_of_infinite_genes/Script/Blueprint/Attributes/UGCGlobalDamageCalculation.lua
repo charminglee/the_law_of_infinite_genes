@@ -1,9 +1,6 @@
 local UGCGlobalDamageCalculation = {}
 
 
-local GameState = UGCGameSystem.GetGameState()
-
-
 function UGCGlobalDamageCalculation:GetCalculationResult(Context, ExtraResult)
     local victim        = UGCAttributeSystem.GetVictimFromContext(Context)
     local causer        = UGCAttributeSystem.GetCauserFromContext(Context)
@@ -11,7 +8,7 @@ function UGCGlobalDamageCalculation:GetCalculationResult(Context, ExtraResult)
     local damage        = UGCAttributeSystem.GetSourceMagnitudeFromContext(Context)
 
     -- 猎尸狂涌：玩家减免受到怪物的所有伤害
-    if GameState.specialEvent == SpecialEvent.CorpseHuntingSurge and not instigator:IsPlayerController() then
+    if SpecialEventManager.currEvent == SpecialEvent.CorpseHuntingSurge and not instigator:IsPlayerController() then
         local mul = 1 - SpecialEventConfig[SpecialEvent.CorpseHuntingSurge].DefenseBuff
         damage = damage * mul
     end

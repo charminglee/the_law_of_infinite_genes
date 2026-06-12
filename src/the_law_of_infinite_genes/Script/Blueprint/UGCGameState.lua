@@ -3,17 +3,21 @@ local UGCGameState = {
     isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
     totalWaves = 10,    -- 总波数
     waveIndex = -1,     -- 当前波数
-    specialEvent = -1,  -- 当前特殊事件
 }
 
 
-UGCGameSystem.UGCRequire("Script.Common.ue_enum_custom")
+UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
 UGCGameSystem.UGCRequire("Script.Common.Const")
 UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Common")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
+
+
+local function InitScript()
+    UGCGameSystem.UGCRequire("Script.Manager.SpecialEventManager")
+end
 
 
 local function InitSubControl(mainUI)
@@ -25,7 +29,10 @@ end
 
 function UGCGameState:ReceiveBeginPlay()
     self.SuperClass.ReceiveBeginPlay(self)
-    TweenManager:Initialize();
+    GameState = self
+    InitScript()
+    TweenManager.Initialize()
+
     if self:HasAuthority() == true then 
         -- 只有客户端加载UI
     else
@@ -57,77 +64,32 @@ end
 -- end
 
 
----开始游戏
+---开始游戏。
 function UGCGameState:StartGame()
     self.isWaiting = false
 
-    if not self:HasAuthority() then
-        return
-    end
+    if self:HasAuthority() then
+        -- 传送所有玩家到关卡
+        local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.LevelStart)
+        local loc = levelStart:K2_GetActorLocation()
+        for _, controller in pairs(UGCGameSystem.GetAllPlayerController(false)) do
+            UGCPlayerControllerSystem.TeleportTo(controller, loc.X, loc.Y, loc.Z)
+        end
 
-    -- 传送所有玩家到关卡
-    local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.LevelStart)
-    local loc = levelStart:K2_GetActorLocation()
-    for _, controller in pairs(UGCGameSystem.GetAllPlayerController(false)) do
-        UGCPlayerControllerSystem.TeleportTo(controller, loc.X, loc.Y, loc.Z)
+        -- 启动刷怪
+        local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
+        sm:StartSpawnerManager()
     end
-
-    -- 启动刷怪
-    -- local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
-    -- sm:StartSpawnerManager()
 end
 
 
----结束游戏
+---结束游戏。
 function UGCGameState:EndGame()
     if self.isWaiting then
         return
     end
 
     self.isWaiting = true
-end
-
-
----触发特殊事件
-function UGCGameState:TriggerSpecialEvent(specialEvent, autoStop)
-    self.specialEvent = specialEvent
-    if autoStop then
-        -- 自动触发事件结束
-        local dur = SpecialEventConfig[specialEvent].Duration
-        local delegate = ObjectExtend.CreateDelegate(self, self.StopSpecialEvent)
-        KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, dur, false)
-    end
-
-    if not self:HasAuthority() then
-        return
-    end
-
-    -- 给玩家添加对应buff
-    local buffCls = ClassPath[specialEvent]
-    local allPlayers = UGCGameSystem.GetAllPlayerPawn()
-    for _, pawn in pairs(allPlayers) do
-        UGCPersistEffectSystem.AddBuffByClass(pawn, buffCls)
-    end
-
-    -- 腐秽瘴潮：所有怪物获得全属性加成
-    if specialEvent == SpecialEvent.PutridMiasma then
-        local buffCls = ClassPath[Buff.PutridMiasma_Monster]
-        local allMonsters = {}
-        GameplayStatics.GetAllActorsOfClass(self, UGCObjectUtility.LoadClass(ClassPath.MonsterTemplate), allMonsters)
-        for _, actor in pairs(allMonsters) do
-            UGCPersistEffectSystem.AddBuffByClass(actor, buffCls)
-        end
-    end
-end
-
-
----结束当前正在进行的特殊事件
-function UGCGameState:StopSpecialEvent()
-    if self.specialEvent == -1 then
-        return
-    end
-
-    self.specialEvent = -1
 end
 
 

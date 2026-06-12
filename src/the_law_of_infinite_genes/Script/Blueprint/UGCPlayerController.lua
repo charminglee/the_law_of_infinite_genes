@@ -7,41 +7,41 @@
 local UGCPlayerController = {}
 
 
-local GameState = UGCGameSystem.GetGameState()
-
-
 function UGCPlayerController:ReceiveBeginPlay()
-    UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
+    self.SuperClass.ReceiveBeginPlay(self)
+
     if not self:HasAuthority() then
-        return
-    end
+        LocalPlayerController = self
 
-    local delegate = ObjectExtend.CreateDelegate(
-        self, 
-        function()
-            -- 初始武器
-            local weaponId = 8310018
-            local bulletId = 301001
-            if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
-                UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
-                UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
-                UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
-                UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
+    else
+        local delegate = ObjectExtend.CreateDelegate(
+            self, 
+            function()
+                -- 初始武器
+                local weaponId = 8310018
+                local bulletId = 301001
+                if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
+                    UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
+                    UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
+                    UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
+                    UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
+                end
+
+                -- 测试
+                GameState:StartGame()
             end
+        )
+        KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)
 
-            -- 测试
-            GameState:StartGame()
-        end
-    )
-    KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)
-
-    -- local delegate = ObjectExtend.CreateDelegate(
-    --     self, 
-    --     function()
-    --         GameState:TriggerSpecialEvent(SpecialEvent.PutridMiasma)
-    --     end
-    -- )
-    -- KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 3, false)
+        local delegate = ObjectExtend.CreateDelegate(
+            self, 
+            function()
+                SpecialEventManager.TriggerSpecialEvent(SpecialEvent.PutridMiasma)
+                ugcprint("Cost_1: "..tostring(self.Cost_1))
+            end
+        )
+        KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 10, false)
+    end
 end
 
 

@@ -1,20 +1,29 @@
 ---@class UGCPlayerPawn_C:BP_UGCPlayerPawn_C
 --Edit Below--
-local UGCPlayerPawn = {}
+local UGCPlayerPawn = {
+    bVaultIsOpen = false,
+}
  
+
 function UGCPlayerPawn:ReceiveBeginPlay()
+    self.SuperClass.ReceiveBeginPlay(self)
+
+    if not self:HasAuthority() then
+        LocalPlayerPawn = self
+    end
+
     self.bVaultIsOpen = true
     UGCWidgetManagerSystem.AddObjectPositionUI(
         self, 
-UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/Prefabs/UI/Title.Title_C'),
+        UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/Prefabs/UI/Title.Title_C'),
         { X = 0, Y = 0, Z = 100 }, 
         true, 
         true, 
         false, 
         false
     )
-    self.SuperClass.ReceiveBeginPlay(self)
 end
+
 
 --[[
 function UGCPlayerPawn:ReceiveTick(DeltaTime)
@@ -22,17 +31,20 @@ function UGCPlayerPawn:ReceiveTick(DeltaTime)
 end
 --]]
 
+
 --[[
 function UGCPlayerPawn:ReceiveEndPlay()
     UGCPlayerPawn.SuperClass.ReceiveEndPlay(self) 
 end
 --]]
 
+
 --[[
 function UGCPlayerPawn:GetAvailableServerRPCs()
     return
 end
 --]]
+
 
 function UGCPlayerPawn:GetReplicatedProperties()
     return {"__SubObjectRepList", "Lazy"}

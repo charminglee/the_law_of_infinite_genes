@@ -2,75 +2,84 @@
 
 ## 全局类（单例）
 
-- `UGCGameMode`  
-  _Script.Blueprint.UGCGameMode.UGCGameMode_  
+- __GameMode__  
+  _Script.Blueprint.UGCGameMode_  
+  【仅服务端】
 
-- `UGCGameState`  
-  _Script.Blueprint.UGCGameState.UGCGameState_  
+- __GameState__  
+  _Script.Blueprint.UGCGameState_  
 
-- `Common`  
+- __LocalPlayerController__  
+  _Script.Blueprint.UGCPlayerController_  
+  【仅客户端】本地玩家的 `PlayerController` 实例。
+
+- __LocalPlayerPawn__  
+  _Script.Blueprint.UGCPlayerPawn_  
+  【仅客户端】本地玩家的 `PlayerPawn` 实例。
+
+- __Common__  
   _Script.Common.Common.Common_  
 
-- `CommonImpl`  
+- __CommonImpl__  
   _Script.Common.Common.CommonImpl_  
 
-- `EventSystem`  
+- __EventSystem__  
   _Script.Common.EventSystem.EventSystem_  
   事件系统。
 
-- `UGCLog`  
+- __UGCLog__  
   _Script.Common.UGCLog.UGCLog_  
 
-- `TweenManager`  
+- __TweenManager__  
   _Script.Common.TweenManager.TweenManager_  
   UGC Tween 动画库。
 
-- `SpecialEventManager`  
+- __SpecialEventManager__  
   _Script.Manager.SpecialEventManager.SpecialEventManager_  
   特殊事件管理器。
 
 ## 常量
 
-- `ClassPath`  
+- __ClassPath__  
   _Script.Common.Const.ClassPath_  
   类路径表。
 
-- `InstancePath`  
+- __InstancePath__  
   _Script.Common.Const.InstancePath_  
   实例路径表。
 
-- `Tag`  
+- __Tag__  
   _Script.Common.Const.Tag_  
   标签表。
 
 ## 配置
 
-- `SpecialEventConfig`  
+- __SpecialEventConfig__  
   _Script.Common.Config.SpecialEventConfig_  
   特殊事件管理器。
 
 ## 枚举
 
-- `ELotteryMainUIType`  
+- __ELotteryMainUIType__  
   _Script.Common.ue_enum_custom.ELotteryMainUIType_  
 
-- `Buff`  
+- __Buff__  
   _Script.Common.ue_enum_custom.Buff_  
 
-- `SpecialEvent`  
+- __SpecialEvent__  
   _Script.Common.ue_enum_custom.SpecialEvent_  
 
-- `ELotteryResetType`  
+- __ELotteryResetType__  
   _Script.Common.ue_enum_custom.ELotteryResetType_  
 
-- `UGCNativeGameAttributeType`  
+- __UGCNativeGameAttributeType__  
   _Script.GameAttribute.game_attribute_type.UGCNativeGameAttributeType_  
 
-- `UGCNativeGameAttributeTypeCommentMap`  
+- __UGCNativeGameAttributeTypeCommentMap__  
   _Script.GameAttribute.game_attribute_type.UGCNativeGameAttributeTypeCommentMap_  
 
-- `UGCCustomGameAttributeType`  
+- __UGCCustomGameAttributeType__  
   _Script.GameAttribute.game_attribute_type.UGCCustomGameAttributeType_  
 
-- `UGCCustomGameAttributeTypeCommentMap`  
+- __UGCCustomGameAttributeTypeCommentMap__  
   _Script.GameAttribute.game_attribute_type.UGCCustomGameAttributeTypeCommentMap_  
