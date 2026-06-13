@@ -18,6 +18,15 @@ function HomeMain:LuaInit()
 	self.bInitDoOnce = true;
     self.HomeToolBar.parent = self;
 	HomeManager:RegisterMainUI(self);
+	self:Listen();
 end
 
+
+function HomeMain:Listen()
+	self.Button_46.OnClicked:Add(self.Button_46_OnClicked, self);
+end
+
+function HomeMain:Button_46_OnClicked()
+	FightManager:OpenMainUI();
+end
 return HomeMain

@@ -1,7 +1,6 @@
 ---@class StoreRefinedPanel_C:UUserWidget
 ---@field Button_0 UButton
 ---@field Button_1 UButton
----@field Image_5 UImage
 ---@field Image_24 UImage
 ---@field Image_60 UImage
 ---@field Image_105 UImage

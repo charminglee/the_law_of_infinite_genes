@@ -1,4 +1,5 @@
 ---@class UGCGameState: ASTExtraGameStateBase
+UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 local UGCGameState = {
     isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
     totalWaves = 10,    -- 总波数

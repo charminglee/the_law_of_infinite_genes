@@ -3,11 +3,11 @@
 ---@field bg_01 UImage
 ---@field bg_02 UImage
 ---@field EquipSlotList ReuseList2_C
----@field Image_0 UImage
 ---@field Image_1 UImage
 ---@field Image_2 UImage
 ---@field Image_3 UImage
 ---@field Image_4 UImage
+---@field Image_5 UImage
 ---@field PorpertyList ReuseList2_C
 ---@field StoreBackpackTabList ReuseList2_C
 ---@field StoreRefinedPanel StoreRefinedPanel_C
