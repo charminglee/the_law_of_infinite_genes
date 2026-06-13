@@ -12,9 +12,9 @@ function Title:Construct()
 	
 end
 
-function Title:Tick(MyGeometry, InDeltaTime)
-    -- self.Icon:SetBrushFromTexturePath("Texture2D'/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_0.WealthTitle_0'")
-end
+-- function Title:Tick(MyGeometry, InDeltaTime)
+
+-- end
 
 -- function Title:Destruct()
 

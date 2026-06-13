@@ -1,11 +1,14 @@
 ---@class ACHVMain_C:UUserWidget
+---@field ACHVCategoryList CHVCategoryList_C
 ---@field Bg UImage
 ---@field BgInner UImage
+---@field Button_0 UButton
+---@field CircularThrobber_0 UCircularThrobber
 ---@field Exit UButton
 ---@field Image_0 UImage
----@field Name UTextBlock
+---@field Image_1 UImage
+---@field Image_2 UImage
 ---@field ReuseList2 ReuseList2_C
----@field Set UButton
 --Edit Below--
 local ACHVMain = { bInitDoOnce = false } 
 
