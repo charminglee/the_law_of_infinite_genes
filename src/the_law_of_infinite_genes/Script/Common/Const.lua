@@ -15,9 +15,13 @@ ClassPath = {
 InstancePath = {
     LevelStart          = "UGCmap.LevelStart_8",
     MobSpawnerManager   = "UGCmap.MobSpawnerManager_10",
+    MapStartLocation    = "UGCmap.MapStartLocation_8",
+    MapEndLocation      = "UGCmap.MapEndLocation_23",
 }
 
 
 Tag = {
     Monster = "Monster",
+    Elite   = "Elite",
+    Boss    = "Boss",
 }

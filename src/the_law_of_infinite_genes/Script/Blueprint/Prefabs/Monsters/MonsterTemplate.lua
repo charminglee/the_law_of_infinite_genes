@@ -20,6 +20,24 @@ function MonsterTemplate:BPDie(KillingDamage, EventInstigator, DamageCauser, Dam
     if self:HasAuthority() then
         -- 只有服务端才可以掉落
         self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
+
+		if EventInstigator:IsPlayerController() then
+			ugcprint(
+				"ActorHasTag: "
+				..self:ActorHasTag(Tag.Boss).." "
+				..self:ActorHasTag(Tag.Elite).." "
+				..self:ActorHasTag(Tag.Monster)
+			)
+			local config = ResourceConfig.Coin_0.MonsterLoot
+			if self:ActorHasTag(Tag.Boss) then 
+				local coin = config[3]
+			elseif self:ActorHasTag(Tag.Elite) then
+				local coin = config[2]
+			else
+				local coin = config[1]
+			end
+			EventInstigator:AddCoin(0, coin)
+		end
     end
 end
 

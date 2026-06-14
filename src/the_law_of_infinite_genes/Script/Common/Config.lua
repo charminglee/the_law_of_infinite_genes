@@ -1,3 +1,12 @@
+-- 资源配置
+ResourceConfig = {
+    -- 资源点配置
+    Coin_0 = {
+        MonsterLoot = {1, 10, 50},    -- 每只怪物掉落的资源点（对应三种怪物级别）
+    }
+}
+
+
 -- 特殊事件配置
 SpecialEventConfig = {
     -- 猎尸狂涌

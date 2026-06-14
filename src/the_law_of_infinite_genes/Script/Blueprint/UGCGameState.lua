@@ -14,6 +14,7 @@ UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Common")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
+UGCGameSystem.UGCRequire("Script.Common.EventSystem")
 
 
 local function InitScript()

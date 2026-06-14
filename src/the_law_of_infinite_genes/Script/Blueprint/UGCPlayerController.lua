@@ -7,7 +7,23 @@
 ---@field ShopV2Component ShopV2Component_C
 ---@field LotteryComponent LotteryComponent_C
 --Edit Below--
-local UGCPlayerController = {}
+local UGCPlayerController = {
+    Coin_0 = 0,
+    Coin_1 = 0,
+    Coin_2 = 0,
+    Coin_3 = 0,
+    Coin_4 = 0,
+}
+
+
+function UGCPlayerController:GetReplicatedProperties()
+    return
+    "Coin_0",
+    "Coin_1",
+    "Coin_2",
+    "Coin_3",
+    "Coin_4"
+end
 
 
 function UGCPlayerController:ReceiveBeginPlay()
@@ -48,6 +64,70 @@ function UGCPlayerController:ReceiveBeginPlay()
 end
 
 
+function UGCPlayerController:OnRep_Coin_0()
+    
+end
+
+
+function UGCPlayerController:OnRep_Coin_1()
+    
+end
+
+
+function UGCPlayerController:OnRep_Coin_2()
+    
+end
+
+
+function UGCPlayerController:OnRep_Coin_3()
+    
+end
+
+
+function UGCPlayerController:OnRep_Coin_4()
+    
+end
+
+
+---设置玩家货币数量。
+---@param type number 币种（0-4）
+---@param value number 设置数量
+function UGCPlayerController:SetCoin(type, value)
+    if not self:HasAuthority() then
+        return
+    end
+end
+
+
+---增加玩家货币数量。
+---@param type number 币种（0-4）
+---@param value number 增加数量
+function UGCPlayerController:AddCoin(type, value)
+    if not self:HasAuthority() then
+        return
+    end
+end
+
+
+---获取玩家货币数量。
+---@param type number 币种（0-4）
+---@return number 货币数量
+function UGCPlayerController:GetCoin(type)
+    if type == 0 then
+        return self.Coin_0
+    elseif type == 1 then
+        return self.Coin_1
+    elseif type == 2 then
+        return self.Coin_2
+    elseif type == 3 then
+        return self.Coin_3
+    elseif type == 4 then
+        return self.Coin_4
+    end
+    return -1
+end
+
+
 --[[
 function UGCPlayerController:ReceiveTick(DeltaTime)
     UGCPlayerController.SuperClass.ReceiveTick(self, DeltaTime)
@@ -58,13 +138,6 @@ end
 --[[
 function UGCPlayerController:ReceiveEndPlay()
     UGCPlayerController.SuperClass.ReceiveEndPlay(self) 
-end
---]]
-
-
---[[
-function UGCPlayerController:GetReplicatedProperties()
-    return
 end
 --]]
 
