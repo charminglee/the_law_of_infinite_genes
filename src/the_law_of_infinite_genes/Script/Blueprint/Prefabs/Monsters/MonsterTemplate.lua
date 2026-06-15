@@ -5,7 +5,7 @@ local MonsterTemplate = {}
 
 
 function MonsterTemplate:ReceiveBeginPlay()
-    self.SuperClass.ReceiveBeginPlay(self)
+    MonsterTemplate.SuperClass.ReceiveBeginPlay(self)
 end
 
 

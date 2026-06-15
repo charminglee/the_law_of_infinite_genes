@@ -30,7 +30,7 @@ end
 
 
 function UGCGameState:ReceiveBeginPlay()
-    self.SuperClass.ReceiveBeginPlay(self)
+    UGCGameState.SuperClass.ReceiveBeginPlay(self)
     GameState = self
     InitScript()
     TweenManager.Initialize()

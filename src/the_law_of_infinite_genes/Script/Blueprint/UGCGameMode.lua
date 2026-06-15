@@ -4,7 +4,7 @@ local UGCGameMode = {};
 
 
 function UGCGameMode:ReceiveBeginPlay()
-    self.SuperClass.ReceiveBeginPlay(self)
+    UGCGameMode.SuperClass.ReceiveBeginPlay(self)
     GameMode = self
 end
 
