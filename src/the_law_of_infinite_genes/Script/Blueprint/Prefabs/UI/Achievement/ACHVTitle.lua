@@ -1,7 +1,6 @@
 ---@class ACHVTitle_C:UUserWidget
 ---@field Frame UButton
 ---@field Icon UImage
----@field LockImg UImage
 ---@field Name UTextBlock
 ---@field PressedImg UImage
 --Edit Below--
