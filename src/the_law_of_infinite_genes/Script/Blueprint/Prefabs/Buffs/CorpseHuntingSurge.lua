@@ -11,6 +11,11 @@ end
 function CorpseHuntingSurge:SpeedBuffFormula()
 	return SpecialEventConfig[SpecialEvent.CorpseHuntingSurge].SpeedBuff
 end
+
+
+function CorpseHuntingSurge:DefenseBuffFormula()
+	return SpecialEventConfig[SpecialEvent.CorpseHuntingSurge].DefenseBuff
+end
  
 
 -- buff启动条件

@@ -24,6 +24,18 @@ function PutridMiasma_Monster:AllAttrBuffFormula_Health()
 end
 
 
+function PutridMiasma_Monster:AllAttrBuffFormula_Defence()
+	local mul = SpecialEventConfig[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
+	return mul
+end
+
+
+function PutridMiasma_Monster:AllAttrBuffFormula_DamageBoost()
+	local mul = SpecialEventConfig[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
+	return mul
+end
+
+
 -- buff启动条件
 --[[
 function PutridMiasma_Monster:CanApply_BP(OwnerActor)

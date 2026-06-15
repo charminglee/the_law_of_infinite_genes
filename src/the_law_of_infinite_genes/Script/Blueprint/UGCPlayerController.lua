@@ -27,7 +27,7 @@ end
 
 
 function UGCPlayerController:ReceiveBeginPlay()
-    self.SuperClass.ReceiveBeginPlay(self)
+    UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
 
     if not self:HasAuthority() then
         LocalPlayerController = self

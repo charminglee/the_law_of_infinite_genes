@@ -14,7 +14,7 @@ SpecialEventConfig = {
         Duration    = 45,   -- 持续时间（编辑器定义）
         AttackBuff  = 0.2,  -- 攻击伤害提升百分比
         SpeedBuff   = 0.2,  -- 移速提升百分比
-        DefenseBuff = 0.1,  -- 受到怪物所有伤害减免百分比
+        DefenseBuff = 0.1,  -- 防御加成百分比
     },
     -- 尸潮淘金
     [SpecialEvent.CorpseSurgeGoldRush] = {
@@ -37,4 +37,11 @@ SpecialEventConfig = {
         MiasmaInterval      = 2,    -- 毒气伤害间隔时间（编辑器定义）
         InfectedAllAttrBuff = 0.1,  -- 感染者全属性加成百分比
     },
+}
+
+
+-- 伤害配置
+DamageConfig = {
+    -- 全局防御力K值
+    DefenceK = 600
 }

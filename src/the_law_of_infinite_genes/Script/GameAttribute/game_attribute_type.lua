@@ -255,8 +255,35 @@ UGCNativeGameAttributeTypeCommentMap = {
 
 ---@enum UGCCustomGameAttributeType
 UGCCustomGameAttributeType = { 
+	--Character [防御穿透比例-BreakDefenceRatio],
+	UGCAttributeGroup_Character_BreakDefenceRatio = 'BreakDefenceRatio',
+	--Character [暴击几率-CritChance],
+	UGCAttributeGroup_Character_CritChance = 'CritChance',
+	--Character [暴击伤害-CritDamageBoost],
+	UGCAttributeGroup_Character_CritDamageBoost = 'CritDamageBoost',
+	--Character [防御-Defence],
+	UGCAttributeGroup_Character_Defence = 'Defence',
+	--Character [防御加成-DefenseBoost],
+	UGCAttributeGroup_Character_DefenseBoost = 'DefenseBoost',
+	--Character [吸血倍率-HealthStealRatio],
+	UGCAttributeGroup_Character_HealthStealRatio = 'HealthStealRatio',
+	--Character [反伤倍率-CounterAttackRatio],
+	UGCAttributeGroup_Character_CounterAttackRatio = 'CounterAttackRatio',
+	--Character [等级-Level],
+	UGCAttributeGroup_Character_Level = 'Level',
+	--Character [伤害加成-DamageBoost],
+	UGCAttributeGroup_Character_DamageBoost = 'DamageBoost',
 }; 
 
 UGCCustomGameAttributeTypeCommentMap = { 
+	['BreakDefenceRatio'] = 'Character [防御穿透比例-BreakDefenceRatio]', 
+	['CritChance'] = 'Character [暴击几率-CritChance]', 
+	['CritDamageBoost'] = 'Character [暴击伤害-CritDamageBoost]', 
+	['Defence'] = 'Character [防御-Defence]', 
+	['DefenseBoost'] = 'Character [防御加成-DefenseBoost]', 
+	['HealthStealRatio'] = 'Character [吸血倍率-HealthStealRatio]', 
+	['CounterAttackRatio'] = 'Character [反伤倍率-CounterAttackRatio]', 
+	['Level'] = 'Character [等级-Level]', 
+	['DamageBoost'] = 'Character [伤害加成-DamageBoost]', 
 }; 
 
