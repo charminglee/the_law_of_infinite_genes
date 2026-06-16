@@ -52,6 +52,10 @@
   _Script.Common.Const.Tag_  
   标签表。
 
+- __ItemId__  
+  _Script.Common.Const.ItemId_  
+  物品ID表。
+
 ## 配置
 
 - __SpecialEventConfig__  
