@@ -27,12 +27,12 @@ function ACHVManager:OpenMainUI()
     if self.MainUI == nil then
         return;
     end
-    self.MainUI:SetVisibility(ESlateVisibility.Visible);
+    self.MainUI:Open();
 end
 
 function ACHVManager:CloseMainUI()
     if self.MainUI == nil then
         return;
     end
-    self.MainUI:SetVisibility(ESlateVisibility.Collapsed);
+    self.MainUI:Close();
 end
