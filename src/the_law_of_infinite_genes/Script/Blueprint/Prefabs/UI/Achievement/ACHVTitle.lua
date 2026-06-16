@@ -6,16 +6,14 @@
 --Edit Below--
 local ACHVTitle = { 
     bInitDoOnce = false,
-    Parent = nil,
-    Index = 0,
-    NameLabel = {'囊中羞涩', '略有盈余', '小富即安', '盆满钵满', '腰缠万贯', '富甲一方'},
+    parent = nil,
+    index = 0,
+    nameLabel = {},
 } 
 
---[==[ Construct
 function ACHVTitle:Construct()
-	
+	self:LuaInit();
 end
--- Construct ]==]
 
 -- function ACHVTitle:Tick(MyGeometry, InDeltaTime)
 
@@ -24,17 +22,33 @@ end
 -- function ACHVTitle:Destruct()
 
 -- end
+function ACHVTitle:LuaInit()
+	if self.bInitDoOnce then
+		return;
+	end
+	self.bInitDoOnce = true;
+	self.Frame.OnClicked:Add(self.FrameClicked, self);
+end
 
 function ACHVTitle:Refresh()
-    UGCLog.Log(self.Index)
-    self.Name:SetText(self.NameLabel[self.Index + 1]);
+    self.Name:SetText(self.nameLabel[self.index + 1]);
     local path = LoadObject(string.format(
         '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-        self.Index, self.Index
+        self.index, self.index
     ))
-    UGCLog.Log(path)
     self.Icon:SetBrushFromTexture(path)
+end
 
+function ACHVTitle:Select()
+    self.PressedImg:SetVisibility(ESlateVisibility.Visible);
+end
+
+function ACHVTitle:Deselect()
+	self.PressedImg:SetVisibility(ESlateVisibility.Collapsed);
+end
+
+function ACHVTitle:FrameClicked()
+    self.parent:SelectTab(self.index);
 end
 
 return ACHVTitle
