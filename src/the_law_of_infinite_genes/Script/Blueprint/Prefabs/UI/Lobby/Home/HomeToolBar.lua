@@ -5,7 +5,7 @@
 local HomeToolBar = { 
     bInitDoOnce = false, 
     parent=nil,  
-    ToolBarButtonLabel = {'商城', '抽奖', '排行榜', '仓库', '组队'},
+    ToolBarButtonLabel = {'商城', '抽奖', '排行榜', '仓库', '成就'},
     selectIndex = 0,
 	aniState = false,
 	currentTween = nil
@@ -40,7 +40,7 @@ function HomeToolBar:HomeToolBarUpdate(Item, Index)
 		Item.Parent = self;
 		Item.Index = Index;
 	end
-	Item:SetText(self.ToolBarButtonLabel[Index+1]);
+	Item:Refresh();
 end
 
 function HomeToolBar:AnimBtnOnClicked()

@@ -8,7 +8,6 @@ local ACHVCategoryBtn = {
 	bInitDoOnce = false,
     parent = nil,
     index = 0,
-    nameLabel = {},
 	animDur = {
 		select = 0.2,
 		deselect = 0.2
@@ -39,7 +38,7 @@ function ACHVCategoryBtn:LuaInit()
 end
 
 function ACHVCategoryBtn:Refresh()
-    self.Name:SetText(self.nameLabel[self.index + 1]);
+    self.Name:SetText(self.parent.nameLabel[self.index + 1]);
 end
 
 function ACHVCategoryBtn:Select()

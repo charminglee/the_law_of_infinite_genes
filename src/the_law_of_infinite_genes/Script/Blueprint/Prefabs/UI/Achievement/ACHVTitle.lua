@@ -7,8 +7,7 @@
 local ACHVTitle = { 
     bInitDoOnce = false,
     parent = nil,
-    index = 0,
-    nameLabel = {},
+    index = 0
 } 
 
 function ACHVTitle:Construct()
@@ -31,7 +30,7 @@ function ACHVTitle:LuaInit()
 end
 
 function ACHVTitle:Refresh()
-    self.Name:SetText(self.nameLabel[self.index + 1]);
+    self.Name:SetText(self.parent.nameLabel[self.index + 1]);
     local path = LoadObject(string.format(
         '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
         self.index, self.index

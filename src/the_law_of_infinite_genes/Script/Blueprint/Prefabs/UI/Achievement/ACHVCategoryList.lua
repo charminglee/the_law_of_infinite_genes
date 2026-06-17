@@ -33,7 +33,6 @@ function ACHVCategoryList:ReuseList2Update(item, index)
 	if item.parent == nil then
 		item.parent = self;
 		item.index = index;
-		item.nameLabel = self.nameLabel;
 	end
 	if index == self.selectedTabID then
         item:Select();

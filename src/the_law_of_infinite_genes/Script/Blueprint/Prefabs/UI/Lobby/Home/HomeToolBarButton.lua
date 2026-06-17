@@ -45,9 +45,13 @@ function HomeToolBarButton:Button_0_Clicked()
 	end
 end
 
----@param text string
-function HomeToolBarButton:SetText(text)
-    self.TextBlock_0:SetText(text);
+function HomeToolBarButton:Refresh()
+    self.TextBlock_0:SetText(self.Parent.ToolBarButtonLabel[self.Index+1]);
+    local path = LoadObject(string.format(
+        '/the_law_of_infinite_genes/Asset/Texture/UI/Lobby/HomeToolBar_%d.HomeToolBar_%d',
+        self.Index, self.Index
+    ))
+    self.button_icon:SetBrushFromTexture(path)
 end
 
 return HomeToolBarButton

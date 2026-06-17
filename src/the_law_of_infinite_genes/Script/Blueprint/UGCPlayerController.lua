@@ -8,23 +8,21 @@
 ---@field LotteryComponent LotteryComponent_C
 --Edit Below--
 local UGCPlayerController = {
-    coinData = {
-        [ItemId.Coin_0] = 0,
-        [ItemId.Coin_1] = 0,
-        [ItemId.Coin_2] = 0,
-        [ItemId.Coin_3] = 0,
-        [ItemId.Coin_4] = 0,
-    },
+    Coin_0 = 0,
+    Coin_1 = 0,
+    Coin_2 = 0,
+    Coin_3 = 0,
+    Coin_4 = 0,
 }
 
 
 function UGCPlayerController:GetReplicatedProperties()
-    return "coinData"
-end
-
-
-function UGCPlayerController:OnRep_coinData()
-    
+    return
+    "Coin_0",
+    "Coin_1",
+    "Coin_2",
+    "Coin_3",
+    "Coin_4"
 end
 
 
@@ -66,40 +64,67 @@ function UGCPlayerController:ReceiveBeginPlay()
 end
 
 
+function UGCPlayerController:OnRep_Coin_0()
+    
+end
+
+
+function UGCPlayerController:OnRep_Coin_1()
+    
+end
+
+
+function UGCPlayerController:OnRep_Coin_2()
+    
+end
+
+
+function UGCPlayerController:OnRep_Coin_3()
+    
+end
+
+
+function UGCPlayerController:OnRep_Coin_4()
+    
+end
+
+
 ---设置玩家货币数量。
----@param id number 货币的物品ID
+---@param type number 币种（0-4）
 ---@param value number 设置数量
-function UGCPlayerController:SetCoin(id, value)
-    if not self:HasAuthority() or self.coinData[id] == nil then
+function UGCPlayerController:SetCoin(type, value)
+    if not self:HasAuthority() then
         return
     end
-    self.coinData[id] = value
 end
 
 
 ---增加玩家货币数量。
----@param id number 货币的物品ID
+---@param type number 币种（0-4）
 ---@param value number 增加数量
-function UGCPlayerController:AddCoin(id, value)
-    if not self:HasAuthority() or self.coinData[id] == nil then
+function UGCPlayerController:AddCoin(type, value)
+    if not self:HasAuthority() then
         return
     end
-
-    local mul = 1
-    -- 尸潮淘金：获得的资源点，金币×2
-    if SpecialEventManager.currEvent == SpecialEvent.CorpseSurgeGoldRush then
-        mul = 1 + SpecialEventConfig[SpecialEvent.CorpseSurgeGoldRush].ResourcePointBuff
-    end
-
-    self.coinData[id] = self.coinData[id] + value * mul
 end
 
 
 ---获取玩家货币数量。
----@param id number 货币的物品ID
+---@param type number 币种（0-4）
 ---@return number 货币数量
-function UGCPlayerController:GetCoin(id)
-    return self.coinData[id]
+function UGCPlayerController:GetCoin(type)
+    if type == 0 then
+        return self.Coin_0
+    elseif type == 1 then
+        return self.Coin_1
+    elseif type == 2 then
+        return self.Coin_2
+    elseif type == 3 then
+        return self.Coin_3
+    elseif type == 4 then
+        return self.Coin_4
+    end
+    return -1
 end
 
 
