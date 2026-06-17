@@ -2,9 +2,12 @@
 --Edit Below--
 local Elite_Speed = {}
 
--- function Elite_Speed:ReceiveBeginPlay()
---     Elite_Speed.SuperClass.ReceiveBeginPlay(self)
--- end
+
+function Elite_Speed:ReceiveBeginPlay()
+    Elite_Speed.SuperClass.ReceiveBeginPlay(self)
+	self:AddDynamicTag(Tag.Elite)
+end
+
 
 -- function Elite_Speed:ReceiveTick(DeltaTime)
 --     Elite_Speed.SuperClass.ReceiveTick(self, DeltaTime)

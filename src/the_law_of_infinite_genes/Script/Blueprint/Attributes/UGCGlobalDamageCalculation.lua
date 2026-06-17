@@ -55,7 +55,6 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     -- end
     
     -- 最终伤害
-    ugcprint("damage: "..tostring(damage).."critBoost: "..tostring(critBoost).."instiDamageBoost: "..tostring(instiDamageBoost).."damageDecreace: "..tostring(damageDecreace))
     local finalDamage = damage * (1 + critBoost) * (1 + instiDamageBoost) * (1 - damageDecreace)
     return finalDamage, extraResult
 end

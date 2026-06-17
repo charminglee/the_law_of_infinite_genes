@@ -2,9 +2,12 @@
 --Edit Below--
 local Boss_RottenArmor = {}
 
--- function Boss_RottenArmor:ReceiveBeginPlay()
---     Boss_RottenArmor.SuperClass.ReceiveBeginPlay(self)
--- end
+
+function Boss_RottenArmor:ReceiveBeginPlay()
+    Boss_RottenArmor.SuperClass.ReceiveBeginPlay(self)
+	self:AddDynamicTag(Tag.Boss)
+end
+
 
 -- function Boss_RottenArmor:ReceiveTick(DeltaTime)
 --     Boss_RottenArmor.SuperClass.ReceiveTick(self, DeltaTime)

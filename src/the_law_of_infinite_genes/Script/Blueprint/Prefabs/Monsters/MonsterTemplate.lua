@@ -1,3 +1,4 @@
+local Item = require("src.the_law_of_infinite_genes.Script.Blueprint.Prefabs.UI.Lobby.Store.StoreResultantPanel").Item
 ---@class MonsterTemplate_C:BP_UGC_GenericMobPawn_Base_C
 ---@field HitBox UCapsuleComponent
 --Edit Below--
@@ -6,6 +7,7 @@ local MonsterTemplate = {}
 
 function MonsterTemplate:ReceiveBeginPlay()
     MonsterTemplate.SuperClass.ReceiveBeginPlay(self)
+	self:AddDynamicTag(Tag.Monster)
 end
 
 
@@ -20,14 +22,9 @@ function MonsterTemplate:BPDie(KillingDamage, EventInstigator, DamageCauser, Dam
     if self:HasAuthority() then
         -- 只有服务端才可以掉落
         self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
-
+		
+		-- 资源点掉落
 		if EventInstigator:IsPlayerController() then
-			ugcprint(
-				"ActorHasTag: "
-				..self:ActorHasTag(Tag.Boss).." "
-				..self:ActorHasTag(Tag.Elite).." "
-				..self:ActorHasTag(Tag.Monster)
-			)
 			local config = ResourceConfig.Coin_0.MonsterLoot
 			if self:ActorHasTag(Tag.Boss) then 
 				local coin = config[3]
@@ -36,7 +33,7 @@ function MonsterTemplate:BPDie(KillingDamage, EventInstigator, DamageCauser, Dam
 			else
 				local coin = config[1]
 			end
-			EventInstigator:AddCoin(0, coin)
+			EventInstigator:addCoin(ItemId.Coin_0, coin)
 		end
     end
 end
