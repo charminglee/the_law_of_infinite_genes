@@ -5,7 +5,6 @@ local ACHVTitleList = {
 	bInitDoOnce = false,
 	tabButtons = {},
 	selectedTabID = 0,
-	nameLabel = {'囊中羞涩', '略有盈余', '小富即安', '盆满钵满', '腰缠万贯', '富甲一方'},
 } 
 
 function ACHVTitleList:Construct()
@@ -17,25 +16,23 @@ function ACHVTitleList:LuaInit()
 		return;
 	end
 	self.bInitDoOnce = true;
+	ACHVManager.TitleListUI = self;
     self.ReuseList2.OnUpdateItem:Add(self.ReuseList2Update, self);
-	self.ReuseList2:Reload(#self.nameLabel);
 end
 
--- function ACHVTitleList:Tick(MyGeometry, InDeltaTime)
-
--- end
-
--- function ACHVTitleList:Destruct()
-
--- end
+function ACHVTitleList:Reload()
+	self.ReuseList2:Reload(#ACHVManager.Config.TitleNameLabel[ACHVManager.CategoryListUI.selectedTabID + 1]);
+end
 
 function ACHVTitleList:ReuseList2Update(item, index)
 	if item.parent == nil then
 		item.parent = self;
-		item.index = index;
 	end
+	item.index = index;
 	if index == self.selectedTabID then
         item:Select();
+		ACHVManager.Preview:Refresh();
+		ACHVManager.RightContent:Refresh();
     else
         item:Deselect();
     end
@@ -51,6 +48,8 @@ function ACHVTitleList:SelectTab(index)
     self.tabButtons[index]:Select();
     self.tabButtons[self.selectedTabID]:Deselect();
     self.selectedTabID = index;
+	ACHVManager.Preview:Refresh();
+	ACHVManager.RightContent:Refresh();
 end
 
 return ACHVTitleList

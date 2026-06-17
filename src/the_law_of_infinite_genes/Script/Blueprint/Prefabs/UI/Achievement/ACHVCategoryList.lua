@@ -5,7 +5,6 @@ local ACHVCategoryList = {
 	bInitDoOnce = false,
 	tabButtons = {},
 	selectedTabID = 0,
-    nameLabel = {'财富称号', '充值称号', '赛季称号'},
 } 
 
 function ACHVCategoryList:Construct()
@@ -17,23 +16,20 @@ function ACHVCategoryList:LuaInit()
 		return;
 	end
 	self.bInitDoOnce = true;
+	ACHVManager.CategoryListUI = self;
 	self.ReuseList2.OnUpdateItem:Add(self.ReuseList2Update, self);
-	self.ReuseList2:Reload(#self.nameLabel);
 end
 
--- function ACHVCategoryList:Tick(MyGeometry, InDeltaTime)
+function ACHVCategoryList:Reload()
+	self.ReuseList2:Reload(#ACHVManager.Config.CategoryNameLabel);
+end
 
--- end
-
--- function ACHVCategoryList:Destruct()
-
--- end
 
 function ACHVCategoryList:ReuseList2Update(item, index)
 	if item.parent == nil then
 		item.parent = self;
-		item.index = index;
 	end
+	item.index = index;
 	if index == self.selectedTabID then
         item:Select();
     else
@@ -50,6 +46,7 @@ function ACHVCategoryList:SelectTab(index)
     self.tabButtons[index]:Select();
     self.tabButtons[self.selectedTabID]:Deselect();
     self.selectedTabID = index;
+	ACHVManager.TitleListUI:Reload();
 end
 
 return ACHVCategoryList

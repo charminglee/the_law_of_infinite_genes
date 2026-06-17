@@ -3,14 +3,10 @@
 ---@field ACHVRightContent CHVRightContent_C
 ---@field Bg UImage
 ---@field BgInner UImage
----@field BlurredBg UImage
+---@field Exit UButton
 --Edit Below--
 local ACHVMain = { 
 	bInitDoOnce = false,
-	animDur = {
-		openUI = 0.2,
-		closeUI = 0.2
-	}
 } 
 
 function ACHVMain:Construct()
@@ -23,6 +19,9 @@ function ACHVMain:LuaInit()
 	end
 	self.bInitDoOnce = true;
     ACHVManager:RegisterMainUI(self);
+    ACHVManager.CategoryListUI:Reload();
+    ACHVManager.TitleListUI:Reload();
+    self.Exit.OnClicked:Add(self.Close, self);
 end
 
 -- function ACHVMain:Tick(MyGeometry, InDeltaTime)
@@ -41,7 +40,7 @@ end
 function ACHVMain:Close()
 	UGCTimerUtility.CreateUETimer(
         function() self:SetVisibility(ESlateVisibility.Collapsed) end, 
-        self.animDur.closeUI, 
+        ACHVManager.Config.AnimDur.Out, 
         false
     )
     self:SetVisibleAnim(false);
@@ -52,11 +51,11 @@ function ACHVMain:SetVisibleAnim(isVisible)
     if isVisible then
         startColor = KismetMathLibrary.MakeColor(1,1,1,0)
         endColor   = KismetMathLibrary.MakeColor(1,1,1,1)
-		dur = self.animDur.openUI
+		dur = ACHVManager.Config.AnimDur.In
     else
         startColor = KismetMathLibrary.MakeColor(1,1,1,1)
         endColor   = KismetMathLibrary.MakeColor(1,1,1,0)
-		dur = self.animDur.closeUI
+		dur = ACHVManager.Config.AnimDur.Out
     end
     TweenManager.ColorAnim(
 		function(value) self:SetColorAndOpacity(value) end,

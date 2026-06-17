@@ -1,6 +1,7 @@
 ---@class ACHVTitle_C:UUserWidget
 ---@field Frame UButton
 ---@field Icon UImage
+---@field Lock UImage
 ---@field Name UTextBlock
 ---@field PressedImg UImage
 --Edit Below--
@@ -14,13 +15,6 @@ function ACHVTitle:Construct()
 	self:LuaInit();
 end
 
--- function ACHVTitle:Tick(MyGeometry, InDeltaTime)
-
--- end
-
--- function ACHVTitle:Destruct()
-
--- end
 function ACHVTitle:LuaInit()
 	if self.bInitDoOnce then
 		return;
@@ -30,16 +24,12 @@ function ACHVTitle:LuaInit()
 end
 
 function ACHVTitle:Refresh()
-    self.Name:SetText(self.parent.nameLabel[self.index + 1]);
-    local path = LoadObject(string.format(
-        '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-        self.index, self.index
-    ))
-    self.Icon:SetBrushFromTexture(path)
+    self.Name:SetText(ACHVManager.Config.TitleNameLabel[ACHVManager.CategoryListUI.selectedTabID + 1][self.index + 1]);
 end
 
 function ACHVTitle:Select()
     self.PressedImg:SetVisibility(ESlateVisibility.Visible);
+    self.Frame:SetIsEnabled(true)
 end
 
 function ACHVTitle:Deselect()

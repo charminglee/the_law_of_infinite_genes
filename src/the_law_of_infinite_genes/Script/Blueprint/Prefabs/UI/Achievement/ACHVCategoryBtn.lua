@@ -8,10 +8,6 @@ local ACHVCategoryBtn = {
 	bInitDoOnce = false,
     parent = nil,
     index = 0,
-	animDur = {
-		select = 0.2,
-		deselect = 0.2
-	}
 } 
 
 
@@ -19,16 +15,6 @@ function ACHVCategoryBtn:Construct()
 	self:LuaInit();
 end
 
-
--- function ACHVCategoryBtn:Tick(MyGeometry, InDeltaTime)
-
--- end
-
--- function ACHVCategoryBtn:Destruct()
-
--- end
-
--- [Editor Generated Lua] function define Begin:
 function ACHVCategoryBtn:LuaInit()
 	if self.bInitDoOnce then
 		return;
@@ -38,7 +24,7 @@ function ACHVCategoryBtn:LuaInit()
 end
 
 function ACHVCategoryBtn:Refresh()
-    self.Name:SetText(self.parent.nameLabel[self.index + 1]);
+    self.Name:SetText(ACHVManager.Config.CategoryNameLabel[self.index + 1]);
 end
 
 function ACHVCategoryBtn:Select()
@@ -56,11 +42,11 @@ function ACHVCategoryBtn:SelectAnim(isVisible)
     if isVisible then
         startVec = KismetMathLibrary.MakeVector2D(0, 1)
         endVec   = KismetMathLibrary.MakeVector2D(1, 1)
-		dur = self.animDur.select
+		dur = ACHVManager.Config.AnimDur.In
     else
         startVec = KismetMathLibrary.MakeVector2D(1, 1)
         endVec   = KismetMathLibrary.MakeVector2D(0, 1)
-		dur = self.animDur.deselect
+		dur = ACHVManager.Config.AnimDur.Out
     end
     TweenManager.VectorAnim(
 		function(value) self.AnimImg:SetRenderScale(KismetMathLibrary.MakeVector2D(value.x, value.y)) end,
