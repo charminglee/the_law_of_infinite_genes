@@ -19,7 +19,7 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
         return damage, extraResult
     end
     
-    local instigator                = UGCAttributeSystem.GetInstigatorFromContext(context):GetPawn()
+    local instigator                = UGCAttributeSystem.GetInstigatorFromContext(context):K2_GetPawn()
     local instiBreakDefenceRatio    = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCCustomGameAttributeType.UGCAttributeGroup_Character_BreakDefenceRatio)
     local instiCritChance           = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCCustomGameAttributeType.UGCAttributeGroup_Character_CritChance)
     local instiCritDamageBoost      = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCCustomGameAttributeType.UGCAttributeGroup_Character_CritDamageBoost)
@@ -55,6 +55,7 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     -- end
     
     -- 最终伤害
+    ugcprint("damage: "..tostring(damage).."critBoost: "..tostring(critBoost).."instiDamageBoost: "..tostring(instiDamageBoost).."damageDecreace: "..tostring(damageDecreace))
     local finalDamage = damage * (1 + critBoost) * (1 + instiDamageBoost) * (1 - damageDecreace)
     return finalDamage, extraResult
 end
