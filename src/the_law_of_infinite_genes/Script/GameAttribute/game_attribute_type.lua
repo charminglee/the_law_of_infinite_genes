@@ -273,6 +273,12 @@ UGCCustomGameAttributeType = {
 	UGCAttributeGroup_Character_Level = 'Level',
 	--Character [伤害加成-DamageBoost],
 	UGCAttributeGroup_Character_DamageBoost = 'DamageBoost',
+	--Character [普通怪伤害加成-NormalMonsterDamageBoost],
+	UGCAttributeGroup_Character_NormalMonsterDamageBoost = 'NormalMonsterDamageBoost',
+	--Character [精英怪伤害加成-EliteMonsterDamageBoost],
+	UGCAttributeGroup_Character_EliteMonsterDamageBoost = 'EliteMonsterDamageBoost',
+	--Character [Boss伤害加成-BossDamageBoost],
+	UGCAttributeGroup_Character_BossDamageBoost = 'BossDamageBoost',
 }; 
 
 UGCCustomGameAttributeTypeCommentMap = { 
@@ -285,5 +291,8 @@ UGCCustomGameAttributeTypeCommentMap = {
 	['CounterAttackRatio'] = 'Character [反伤倍率-CounterAttackRatio]', 
 	['Level'] = 'Character [等级-Level]', 
 	['DamageBoost'] = 'Character [伤害加成-DamageBoost]', 
+	['NormalMonsterDamageBoost'] = 'Character [普通怪伤害加成-NormalMonsterDamageBoost]', 
+	['EliteMonsterDamageBoost'] = 'Character [精英怪伤害加成-EliteMonsterDamageBoost]', 
+	['BossDamageBoost'] = 'Character [Boss伤害加成-BossDamageBoost]', 
 }; 
 
