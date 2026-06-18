@@ -1,4 +1,3 @@
-local Item = require("src.the_law_of_infinite_genes.Script.Blueprint.Prefabs.UI.Lobby.Store.StoreResultantPanel").Item
 ---@class MonsterTemplate_C:BP_UGC_GenericMobPawn_Base_C
 ---@field HitBox UCapsuleComponent
 --Edit Below--
@@ -25,7 +24,7 @@ function MonsterTemplate:BPDie(KillingDamage, EventInstigator, DamageCauser, Dam
 		
 		-- 资源点掉落
 		if EventInstigator:IsPlayerController() then
-			local config = ResourceConfig.Coin_0.MonsterLoot
+			local config = Config.Resource.Coin_0.MonsterLoot
 			if self:ActorHasTag(Tag.Boss) then 
 				local coin = config[3]
 			elseif self:ActorHasTag(Tag.Elite) then

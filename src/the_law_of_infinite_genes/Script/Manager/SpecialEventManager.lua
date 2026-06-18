@@ -10,7 +10,7 @@ function SpecialEventManager.TriggerSpecialEvent(specialEvent)
     SpecialEventManager.currEvent = specialEvent
 
     -- 持续时间结束后自动触发事件结束
-    local dur = SpecialEventConfig[specialEvent].Duration
+    local dur = Config.SpecialEvent[specialEvent].Duration
     UGCTimerUtility.CreateUETimer(SpecialEventManager.StopSpecialEvent, dur, false)
 
     if GameState:HasAuthority() then

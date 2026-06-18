@@ -35,7 +35,7 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     -- B.总防御 = B.防御 * (1 + B.防御加成比例)
     -- 防御减伤比 = B.总防御 * (1 - A.防御穿透百分比) / (B.总防御 + K)
     local totalDefence = vicDefence * (1 + vicDefenceBoost)
-    local damageDecreace = totalDefence * (1 - instiBreakDefenceRatio) / (totalDefence + DamageConfig.DefenceK)
+    local damageDecreace = totalDefence * (1 - instiBreakDefenceRatio) / (totalDefence + Config.Damage.DefenceK)
 
     -- 暴击
     local isCrit = (math.random() <= instiCritChance)
@@ -50,7 +50,7 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
 
     -- 猎尸狂涌：玩家减免受到怪物的所有伤害
     -- if SpecialEventManager.currEvent == SpecialEvent.CorpseHuntingSurge and not instigator:IsPlayerController() then
-    --     local mul = 1 - SpecialEventConfig[SpecialEvent.CorpseHuntingSurge].DefenseBuff
+    --     local mul = 1 - Config.SpecialEvent[SpecialEvent.CorpseHuntingSurge].DefenseBuff
     --     damage = damage * mul
     -- end
     

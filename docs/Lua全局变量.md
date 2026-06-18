@@ -58,9 +58,9 @@
 
 ## 配置
 
-- __SpecialEventConfig__  
-  _Script.Common.Config.SpecialEventConfig_  
-  特殊事件管理器。
+- __Config__  
+  _Script.Common.Config.Config_  
+  全局配置。
 
 ## 枚举
 

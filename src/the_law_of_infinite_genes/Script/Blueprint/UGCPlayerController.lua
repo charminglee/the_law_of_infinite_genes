@@ -37,8 +37,8 @@ function UGCPlayerController:ReceiveBeginPlay()
             self, 
             function()
                 -- 初始武器
-                local weaponId = 8310018
-                local bulletId = 301001
+                local weaponId = Config.InitialWeapon.weaponId
+                local bulletId = Config.InitialWeapon.bulletId
                 if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
                     UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
                     UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
@@ -99,7 +99,7 @@ function UGCPlayerController:addCoin(id, value)
     local mul = 1
     -- 尸潮淘金：获得的资源点，金币×2
     if SpecialEventManager.currEvent == SpecialEvent.CorpseSurgeGoldRush then
-        mul = 1 + SpecialEventConfig[SpecialEvent.CorpseSurgeGoldRush].ResourcePointBuff
+        mul = 1 + Config.SpecialEvent[SpecialEvent.CorpseSurgeGoldRush].ResourcePointBuff
     end
 
     self.coinData[id] = self.coinData[id] + value * mul
