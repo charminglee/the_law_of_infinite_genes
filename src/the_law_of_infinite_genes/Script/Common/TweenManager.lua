@@ -63,15 +63,16 @@ local function CreateDelegate(callback, selfObj)
 end
 
 -- 通用的 Canvas 槽位动画（偏移量基于基准值）
-local function createCanvasAnim(slot, baseValue, setterFunc, startOffset, endOffset, duration, easingType, config)
+local function CreateCanvasAnim(slot, baseValue, setterFunc, startOffset, endOffset, duration, easingType, config)
     if not slot then return nil end
     local delegate = CreateDelegate(function(value)
         local finalX = baseValue.X + value.X
         local finalY = baseValue.Y + value.Y
         setterFunc(slot, KismetMathLibrary.MakeVector2D(finalX, finalY))
     end)
+    local easing = easingType or TweenManager.EEasingType.Linear
     local cfg = config or TweenManager.DefaultConfig(0, 1, false, 0)
-    return _tweenLib.TweenVectorValue(_defaultContext, startOffset, endOffset, duration, easingType, delegate, cfg)
+    return _tweenLib.TweenVectorValue(_defaultContext, startOffset, endOffset, duration, easing, delegate, cfg)
 end
 
 -- ==================== 动画创建接口 ====================
@@ -81,15 +82,16 @@ end
 -- @param startColor: 起始颜色（FLinearColor）
 -- @param endColor: 目标颜色
 -- @param duration: 持续时间（秒）
--- @param easingType: 缓动类型（来自 TweenManager.EEasingType）
+-- @param easingType: 可选，缓动类型（来自 TweenManager.EEasingType）
 -- @param config: 可选，配置表（若不传则使用默认单次动画）
 -- @param selfObj: 可选，绑定 updateFunc 的 self
 -- @return tweenHandle 或 nil
 function TweenManager.ColorAnim(updateFunc, startColor, endColor, duration, easingType, config, selfObj)
     if type(updateFunc) ~= "function" then return nil end
+    local easing = easingType or TweenManager.EEasingType.Linear
     local delegate = CreateDelegate(updateFunc, selfObj)
     local cfg = config or TweenManager.DefaultConfig(0, 1, false, 0)
-    return _tweenLib.TweenColorValue(_defaultContext, startColor, endColor, duration, easingType, delegate, cfg)
+    return _tweenLib.TweenColorValue(_defaultContext, startColor, endColor, duration, easing, delegate, cfg)
 end
 
 -- 2. 向量动画（适用于任意需要 FVector 过渡的场景）
@@ -97,25 +99,42 @@ end
 -- @param startVec: 起始向量
 -- @param endVec: 目标向量
 -- @param duration: 持续时间
--- @param easingType: 缓动类型
+-- @param easingType: 可选，缓动类型
 -- @param config: 可选配置
 -- @param selfObj: 可选，绑定 updateFunc 的 self
 -- @return tweenHandle 或 nil
-function TweenManager.VectorAnim(widget, updateFunc, startVec, endVec, offsetVec, duration, aniType, easingType, config, selfObj)
+function TweenManager.VectorAnim(updateFunc, startVec, endVec, duration, easingType, config, selfObj)
     if type(updateFunc) ~= "function" then return nil end
+    local easing = easingType or TweenManager.EEasingType.Linear
     local delegate = CreateDelegate(updateFunc, selfObj)
     local cfg = config or TweenManager.DefaultConfig(0, 1, false, 0)
-    return _tweenLib.TweenVectorValue(_defaultContext, startVec, endVec, duration, easingType, delegate, cfg)
+    return _tweenLib.TweenVectorValue(_defaultContext, startVec, endVec, duration, easing, delegate, cfg)
 end
 
 -- 基于Canvas 槽位的位置动画
-function TweenManager.PositionAnim(slot, basePos, startOff, endOff, dur, easing, cfg)
-    return createCanvasAnim(slot, basePos, function(s, v) s:SetPosition(v) end, startOff, endOff, dur, easing, cfg)
+-- @param slot: Canvas 插槽来自（UGCWidgetManagerSystem.SlotAsCanvasSlot）
+-- @param basePos: 当前执行变化的位置
+-- @param startOffset: 起始数值
+-- @param endOffset: 结束数值
+-- @param dur: 持续时间
+-- @param easing: 可选，缓动类型
+-- @param cfg: 可选，配置表（若不传则使用默认单次动画）
+-- @return tweenHandle 或 nil
+function TweenManager.PositionAnim(slot, basePos, startOffset, endOffset, dur, easing, cfg)
+    return CreateCanvasAnim(slot, basePos, function(s, v) s:SetPosition(v) end, startOffset, endOffset, dur, easing, cfg)
 end
 
 -- 基于Canvas 槽位的尺寸动画
-function TweenManager.SizeAnim(slot, baseSize, startOff, endOff, dur, easing, cfg)
-    return createCanvasAnim(slot, baseSize, function(s, v) s:SetSize(v) end, startOff, endOff, dur, easing, cfg)
+-- @param slot: Canvas 插槽来自（UGCWidgetManagerSystem.SlotAsCanvasSlot）
+-- @param baseSize: 当前执行变化的尺寸
+-- @param startOffset: 起始数值
+-- @param endOffset: 结束数值
+-- @param dur: 持续时间
+-- @param easing: 可选，缓动类型
+-- @param cfg: 可选，配置表（若不传则使用默认单次动画）
+-- @return tweenHandle 或 nil
+function TweenManager.SizeAnim(slot, baseSize, startOffset, endOffset, dur, easing, cfg)
+    return CreateCanvasAnim(slot, baseSize, function(s, v) s:SetSize(v) end, startOffset, endOffset, dur, easing, cfg)
 end
 
 -- 3. 浮点数值动画（进度条、数值变化等）
@@ -123,15 +142,16 @@ end
 -- @param startValue: 起始数值
 -- @param endValue: 结束数值
 -- @param duration: 持续时间
--- @param easingType: 缓动类型
+-- @param easingType: 可选，缓动类型
 -- @param config: 可选配置
 -- @param selfObj: 可选，绑定 updateFunc 的 self
 -- @return tweenHandle 或 nil
 function TweenManager.FloatAnim(updateFunc, startValue, endValue, duration, easingType, config, selfObj)
     if type(updateFunc) ~= "function" then return nil end
+    local easing = easingType or TweenManager.EEasingType.Linear
     local delegate = CreateDelegate(updateFunc, selfObj)
     local cfg = config or TweenManager.DefaultConfig(0, 1, false, 0)
-    return _tweenLib.TweenFloatValue(_defaultContext, startValue, endValue, duration, easingType, delegate, cfg)
+    return _tweenLib.TweenFloatValue(_defaultContext, startValue, endValue, duration, easing, delegate, cfg)
 end
 
 -- 4. Actor 位置动画（直接移动 Actor）
@@ -139,15 +159,16 @@ end
 -- @param startValue: 起始数值
 -- @param endValue: 结束数值
 -- @param duration: 持续时间
--- @param easingType: 缓动类型
+-- @param easingType: 可选，缓动类型
 -- @param config: 可选配置
 -- @param selfObj: 可选，绑定 updateFunc 的 self
 -- @return tweenHandle 或 nil
 function TweenManager.ActorMove(updateFunc, startValue, endValue, duration, easingType, config, selfObj)
     if type(updateFunc) ~= "function" then return nil end
+    local easing = easingType or TweenManager.EEasingType.Linear
     local delegate = CreateDelegate(updateFunc, selfObj)
     local cfg = config or TweenManager.DefaultConfig(0, 1, false, 0)
-    return _tweenLib.TweenActorLocation(_defaultContext, actor, startValue, endValue, duration, easingType, delegate, cfg)
+    return _tweenLib.TweenActorLocation(_defaultContext, actor, startValue, endValue, duration, easing, delegate, cfg)
 end
 
 -- 5. Actor 旋转动画（直接旋转 Actor）
@@ -155,15 +176,16 @@ end
 -- @param startValue: 起始数值
 -- @param endValue: 结束数值
 -- @param duration: 持续时间
--- @param easingType: 缓动类型
+-- @param easingType: 可选，缓动类型
 -- @param config: 可选配置
 -- @param selfObj: 可选，绑定 updateFunc 的 self
 -- @return tweenHandle 或 nil
 function TweenManager.ActorRotate(updateFunc, startValue, endValue, duration, easingType, config, selfObj)
     if type(updateFunc) ~= "function" then return nil end
+    local easing = easingType or TweenManager.EEasingType.Linear
     local delegate = CreateDelegate(updateFunc, selfObj)
     local cfg = config or TweenManager.DefaultConfig(0, 1, false, 0)
-    return _tweenLib.TweenActorRotation(_defaultContext, actor, startValue, endValue, duration, easingType, delegate, cfg)
+    return _tweenLib.TweenActorRotation(_defaultContext, actor, startValue, endValue, duration, easing, delegate, cfg)
 end
 
 -- ==================== 动画控制接口 ====================

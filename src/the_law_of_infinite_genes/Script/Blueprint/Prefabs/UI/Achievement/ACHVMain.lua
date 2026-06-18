@@ -1,16 +1,13 @@
 ---@class ACHVMain_C:UUserWidget
----@field ACHVCategoryList CHVCategoryList_C
+---@field ACHVLeftContent CHVLeftContent_C
+---@field ACHVRightContent CHVRightContent_C
 ---@field Bg UImage
 ---@field BgInner UImage
----@field Button_0 UButton
----@field CircularThrobber_0 UCircularThrobber
 ---@field Exit UButton
----@field Image_0 UImage
----@field Image_1 UImage
----@field Image_2 UImage
----@field ReuseList2 ReuseList2_C
 --Edit Below--
-local ACHVMain = { bInitDoOnce = false } 
+local ACHVMain = { 
+	bInitDoOnce = false,
+} 
 
 function ACHVMain:Construct()
 	self:LuaInit();
@@ -22,9 +19,9 @@ function ACHVMain:LuaInit()
 	end
 	self.bInitDoOnce = true;
     ACHVManager:RegisterMainUI(self);
-	self.Exit.OnClicked:Add(self.ExitOnClicked, self);
-	self.ReuseList2.OnUpdateItem:Add(self.ReuseList2Update, self);
-	self.ReuseList2:Reload(6);
+    ACHVManager.CategoryListUI:Reload();
+    ACHVManager.TitleListUI:Reload();
+    self.Exit.OnClicked:Add(self.Close, self);
 end
 
 -- function ACHVMain:Tick(MyGeometry, InDeltaTime)
@@ -35,16 +32,35 @@ end
 
 -- end
 
-function ACHVMain:ExitOnClicked()
-    ACHVManager:CloseMainUI();
+function ACHVMain:Open()
+	self:SetVisibility(ESlateVisibility.Visible);
+    self:SetVisibleAnim(true);
 end
 
-function ACHVMain:ReuseList2Update(Item, Index)
-	if Item.Parent == nil then
-		Item.Parent = self;
-		Item.Index = Index;
-	end
-	Item:Refresh();
+function ACHVMain:Close()
+	UGCTimerUtility.CreateUETimer(
+        function() self:SetVisibility(ESlateVisibility.Collapsed) end, 
+        ACHVManager.Config.AnimDur.Out, 
+        false
+    )
+    self:SetVisibleAnim(false);
+end
+
+function ACHVMain:SetVisibleAnim(isVisible)
+    local startColor, endColor, dur
+    if isVisible then
+        startColor = KismetMathLibrary.MakeColor(1,1,1,0)
+        endColor   = KismetMathLibrary.MakeColor(1,1,1,1)
+		dur = ACHVManager.Config.AnimDur.In
+    else
+        startColor = KismetMathLibrary.MakeColor(1,1,1,1)
+        endColor   = KismetMathLibrary.MakeColor(1,1,1,0)
+		dur = ACHVManager.Config.AnimDur.Out
+    end
+    TweenManager.ColorAnim(
+		function(value) self:SetColorAndOpacity(value) end,
+        startColor, endColor, dur
+    )
 end
 
 return ACHVMain

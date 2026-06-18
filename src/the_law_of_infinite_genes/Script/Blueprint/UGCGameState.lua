@@ -1,12 +1,3 @@
----@class UGCGameState: ASTExtraGameStateBase
-UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
-local UGCGameState = {
-    isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
-    totalWaves = 10,    -- 总波数
-    waveIndex = -1,     -- 当前波数
-}
-
-
 UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
 UGCGameSystem.UGCRequire("Script.Common.Const")
@@ -14,6 +5,15 @@ UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Common")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
+UGCGameSystem.UGCRequire("Script.Common.EventSystem")
+
+
+---@class UGCGameState: ASTExtraGameStateBase
+local UGCGameState = {
+    isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
+    totalWaves = 10,    -- 总波数
+    waveIndex = -1,     -- 当前波数
+}
 
 
 local function InitScript()
@@ -29,7 +29,7 @@ end
 
 
 function UGCGameState:ReceiveBeginPlay()
-    self.SuperClass.ReceiveBeginPlay(self)
+    UGCGameState.SuperClass.ReceiveBeginPlay(self)
     GameState = self
     InitScript()
     TweenManager.Initialize()

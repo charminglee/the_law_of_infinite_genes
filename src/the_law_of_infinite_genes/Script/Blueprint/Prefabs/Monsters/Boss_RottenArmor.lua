@@ -2,9 +2,12 @@
 --Edit Below--
 local Boss_RottenArmor = {}
 
--- function Boss_RottenArmor:ReceiveBeginPlay()
---     Boss_RottenArmor.SuperClass.ReceiveBeginPlay(self)
--- end
+
+function Boss_RottenArmor:ReceiveBeginPlay()
+    Boss_RottenArmor.SuperClass.ReceiveBeginPlay(self)
+	self:AddDynamicTag(Tag.Boss)
+end
+
 
 -- function Boss_RottenArmor:ReceiveTick(DeltaTime)
 --     Boss_RottenArmor.SuperClass.ReceiveTick(self, DeltaTime)
@@ -68,6 +71,8 @@ local Boss_RottenArmor = {}
 ---@param FDamageEvent DamageEvent 伤害事件
 ---@param DamageTypeID int32 伤害类型
 function Boss_RottenArmor:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
+    Boss_RottenArmor.SuperClass.BPDie(self, KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
+    
     if self:HasAuthority() then
         -- 只有服务端才可以掉落
         self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})

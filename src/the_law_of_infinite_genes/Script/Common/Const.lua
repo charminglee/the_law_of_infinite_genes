@@ -15,9 +15,36 @@ ClassPath = {
 InstancePath = {
     LevelStart          = "UGCmap.LevelStart_8",
     MobSpawnerManager   = "UGCmap.MobSpawnerManager_10",
+    MapStartLocation    = "UGCmap.MapStartLocation_8",
+    MapEndLocation      = "UGCmap.MapEndLocation_23",
 }
 
 
 Tag = {
     Monster = "Monster",
+    Elite   = "Elite",
+    Boss    = "Boss",
+}
+
+
+ItemId = {
+    BossMaterial_0      = 8310013,
+    BossMaterial_1      = 8310014,
+    Coin_0              = 8310000,
+    Coin_1              = 8310001,
+    Coin_2              = 8310002,
+    Coin_3              = 8310003,
+    Coin_4              = 8310012,
+    EquipmentMaterial_0 = 8310004,
+    EquipmentMaterial_1 = 8310005,
+    EquipmentMaterial_2 = 8310006,
+    EquipmentMaterial_3 = 8310015,
+    EquipmentMaterial_4 = 8310016,
+    EquipmentMaterial_5 = 8310017,
+    HySuitBottom        = 8310008,
+    HySuitGloves        = 8310010,
+    HySuitHelmet        = 8310009,
+    HySuitShoes         = 8310011,
+    HySuitTop           = 8310007,
+    UZI                 = 8310018,
 }

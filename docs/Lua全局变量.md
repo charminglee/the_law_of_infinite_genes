@@ -52,11 +52,15 @@
   _Script.Common.Const.Tag_  
   标签表。
 
+- __ItemId__  
+  _Script.Common.Const.ItemId_  
+  物品ID表。
+
 ## 配置
 
-- __SpecialEventConfig__  
-  _Script.Common.Config.SpecialEventConfig_  
-  特殊事件管理器。
+- __Config__  
+  _Script.Common.Config.Config_  
+  全局配置。
 
 ## 枚举
 

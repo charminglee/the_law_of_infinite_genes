@@ -4,12 +4,17 @@ local CorpseHuntingSurge = {}
 
 
 function CorpseHuntingSurge:AttackBuffFormula()
-	return 1 + SpecialEventConfig[SpecialEvent.CorpseHuntingSurge].AttackBuff
+	return 1 + Config.SpecialEvent[SpecialEvent.CorpseHuntingSurge].AttackBuff
 end
 
 
 function CorpseHuntingSurge:SpeedBuffFormula()
-	return SpecialEventConfig[SpecialEvent.CorpseHuntingSurge].SpeedBuff
+	return Config.SpecialEvent[SpecialEvent.CorpseHuntingSurge].SpeedBuff
+end
+
+
+function CorpseHuntingSurge:DefenseBuffFormula()
+	return Config.SpecialEvent[SpecialEvent.CorpseHuntingSurge].DefenseBuff
 end
  
 

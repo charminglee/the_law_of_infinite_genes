@@ -8,22 +8,38 @@
 ---@field ShopV2Component ShopV2Component_C
 ---@field LotteryComponent LotteryComponent_C
 --Edit Below--
-local UGCPlayerController = {}
+local UGCPlayerController = {
+    coinData = {}
+}
+
+
+function UGCPlayerController:GetReplicatedProperties()
+    return {
+        {"coinData", "Lazy"}
+    }
+end
+
+
+function UGCPlayerController:OnRep_coinData()
+    
+end
 
 
 function UGCPlayerController:ReceiveBeginPlay()
-    self.SuperClass.ReceiveBeginPlay(self)
+    UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
 
     if not self:HasAuthority() then
         LocalPlayerController = self
 
     else
+        self:_initCoinData()
+
         local delegate = ObjectExtend.CreateDelegate(
             self, 
             function()
                 -- 初始武器
-                local weaponId = 8310018
-                local bulletId = 301001
+                local weaponId = Config.InitialWeapon.weaponId
+                local bulletId = Config.InitialWeapon.bulletId
                 if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
                     UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
                     UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
@@ -49,6 +65,57 @@ function UGCPlayerController:ReceiveBeginPlay()
 end
 
 
+function UGCPlayerController:_initCoinData()
+    self.coinData = {
+        [ItemId.Coin_0] = 0,
+        [ItemId.Coin_1] = 0,
+        [ItemId.Coin_2] = 0,
+        [ItemId.Coin_3] = 0,
+        [ItemId.Coin_4] = 0,
+    }
+    UnrealNetwork.RepLazyProperty(self, "coinData")
+end
+
+
+---设置玩家货币数量。
+---@param id number 货币的物品ID
+---@param value number 设置数量
+function UGCPlayerController:setCoin(id, value)
+    if not self:HasAuthority() or self.coinData[id] == nil then
+        return
+    end
+    self.coinData[id] = value
+    UnrealNetwork.RepLazyProperty(self, "coinData")
+end
+
+
+---增加玩家货币数量。
+---@param id number 货币的物品ID
+---@param value number 增加数量
+function UGCPlayerController:addCoin(id, value)
+    if not self:HasAuthority() or self.coinData[id] == nil then
+        return
+    end
+
+    local mul = 1
+    -- 尸潮淘金：获得的资源点，金币×2
+    if SpecialEventManager.currEvent == SpecialEvent.CorpseSurgeGoldRush then
+        mul = 1 + Config.SpecialEvent[SpecialEvent.CorpseSurgeGoldRush].ResourcePointBuff
+    end
+
+    self.coinData[id] = self.coinData[id] + value * mul
+    UnrealNetwork.RepLazyProperty(self, "coinData")
+end
+
+
+---获取玩家货币数量。
+---@param id number 货币的物品ID
+---@return number 货币数量
+function UGCPlayerController:getCoin(id)
+    return self.coinData[id]
+end
+
+
 --[[
 function UGCPlayerController:ReceiveTick(DeltaTime)
     UGCPlayerController.SuperClass.ReceiveTick(self, DeltaTime)
@@ -59,13 +126,6 @@ end
 --[[
 function UGCPlayerController:ReceiveEndPlay()
     UGCPlayerController.SuperClass.ReceiveEndPlay(self) 
-end
---]]
-
-
---[[
-function UGCPlayerController:GetReplicatedProperties()
-    return
 end
 --]]
 

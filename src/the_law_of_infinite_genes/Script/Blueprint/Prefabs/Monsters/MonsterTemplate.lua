@@ -5,7 +5,8 @@ local MonsterTemplate = {}
 
 
 function MonsterTemplate:ReceiveBeginPlay()
-    self.SuperClass.ReceiveBeginPlay(self)
+    MonsterTemplate.SuperClass.ReceiveBeginPlay(self)
+	self:AddDynamicTag(Tag.Monster)
 end
 
 
@@ -20,6 +21,19 @@ function MonsterTemplate:BPDie(KillingDamage, EventInstigator, DamageCauser, Dam
     if self:HasAuthority() then
         -- 只有服务端才可以掉落
         self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
+		
+		-- 资源点掉落
+		if EventInstigator:IsPlayerController() then
+			local config = Config.Resource.Coin_0.MonsterLoot
+			if self:ActorHasTag(Tag.Boss) then 
+				local coin = config[3]
+			elseif self:ActorHasTag(Tag.Elite) then
+				local coin = config[2]
+			else
+				local coin = config[1]
+			end
+			EventInstigator:addCoin(ItemId.Coin_0, coin)
+		end
     end
 end
 

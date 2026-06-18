@@ -1,41 +1,76 @@
 ---@class ACHVTitle_C:UUserWidget
 ---@field Frame UButton
----@field Icon UImage
----@field LockImg UImage
+---@field Lock UImage
+---@field LockBg UImage
 ---@field Name UTextBlock
+---@field PressedFrame UImage
 ---@field PressedImg UImage
+---@field State UTextBlock
 --Edit Below--
 local ACHVTitle = { 
     bInitDoOnce = false,
-    Parent = nil,
-    Index = 0,
-    NameLabel = {'囊中羞涩', '略有盈余', '小富即安', '盆满钵满', '腰缠万贯', '富甲一方'},
+    parent = nil,
+    index = 0
 } 
 
---[==[ Construct
 function ACHVTitle:Construct()
-	
+	self:LuaInit();
 end
--- Construct ]==]
 
--- function ACHVTitle:Tick(MyGeometry, InDeltaTime)
+function ACHVTitle:LuaInit()
+	if self.bInitDoOnce then
+		return;
+	end
+	self.bInitDoOnce = true;
+	self.Frame.OnClicked:Add(self.FrameClicked, self);
+end
+ 
+function ACHVTitle:GetUnlockState()
+    return ACHVManager.Config.UnlockState[ACHVManager.CategoryListUI.selectedTabID + 1][self.index + 1]
+end
 
--- end
+function ACHVTitle:GetUnlockStateText()
+    return ACHVManager.Config.UnlockStateText[self:GetUnlockState() + 1]
+end
 
--- function ACHVTitle:Destruct()
+function ACHVTitle:SetUnlockState(value)
+    -- ACHVManager.Config.UnlockState[ACHVManager.CategoryListUI.selectedTabID + 1][self.index + 1] = value
+end
 
--- end
+function ACHVTitle:Lock()
+    self.Lock:SetVisibility(ESlateVisibility.Visible);
+    self.LockBg:SetVisibility(ESlateVisibility.Visible);
+end
+
+function ACHVTitle:Unlock()
+    self.Lock:SetVisibility(ESlateVisibility.Collapsed);
+    self.LockBg:SetVisibility(ESlateVisibility.Collapsed);
+end
 
 function ACHVTitle:Refresh()
-    UGCLog.Log(self.Index)
-    self.Name:SetText(self.NameLabel[self.Index + 1]);
-    local path = LoadObject(string.format(
-        '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-        self.Index, self.Index
-    ))
-    UGCLog.Log(path)
-    self.Icon:SetBrushFromTexture(path)
+    self.Name:SetText(ACHVManager.Config.TitleNameLabel[ACHVManager.CategoryListUI.selectedTabID + 1][self.index + 1]);
+    self.State:SetText(self:GetUnlockStateText())
+    
+    -- local value = self:GetUnlockState();
+    -- if value == 0 then
+    --     self:Lock();
+    -- elseif value == 1 then
+    --     self:Unlock();
+    -- end
+end
 
+function ACHVTitle:Select()
+    self.PressedFrame:SetVisibility(ESlateVisibility.Visible);
+    self.PressedImg:SetVisibility(ESlateVisibility.Visible);
+end
+
+function ACHVTitle:Deselect()
+	self.PressedFrame:SetVisibility(ESlateVisibility.Collapsed);
+	self.PressedImg:SetVisibility(ESlateVisibility.Collapsed);
+end
+
+function ACHVTitle:FrameClicked()
+    self.parent:SelectTab(self.index);
 end
 
 return ACHVTitle
