@@ -4,6 +4,13 @@ FightManager = FightManager or
     MainUI = nil;
     LBPurchaseListSelectedIndex = nil;
     LTabListSelectedIndex = 0;
+    LTabIconList = {
+        {name='步枪', path='/Game/Arts/UI/TableIcons/ItemIcon/Weapon/Icon_WEP_M416.Icon_WEP_M416'},
+        {name='轻机枪', path='/Game/Arts/UI/TableIcons/ItemIcon/Weapon/Icon_WEP_M249.Icon_WEP_M249'},
+        {name='冲锋枪', path='/Game/Arts/UI/TableIcons/ItemIcon/Weapon/Icon_WEP_UMP45.Icon_WEP_UMP45'},
+        {name='狙击枪', path='/Game/Arts/UI/TableIcons/ItemIcon/Weapon/Icon_WEP_AWM.Icon_WEP_AWM'},
+        {name='手枪', path='/Game/Arts/UI/TableIcons/ItemIcon/Weapon/Icon_WEP_P1911.Icon_WEP_P1911'}
+    }
 }
 
 function FightManager:RegisterComponentClass(CompClass)
@@ -27,8 +34,6 @@ function FightManager:UnregisterMainUI()
 end
 
 function FightManager:OpenMainUI()
-    ugcprint('main ui is:'..tostring(self.MainUI));
-
     if self.MainUI == nil then
         return;
     end

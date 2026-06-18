@@ -27,6 +27,6 @@ function HomeMain:Listen()
 end
 
 function HomeMain:Button_46_OnClicked()
-	FightManager:OpenMainUI();
+	GachaManager:OpenMainUI();
 end
 return HomeMain

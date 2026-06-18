@@ -41,7 +41,6 @@ local FirearmPurchase = {
     bInitDoOnce = false, 
     LBPurchaseListSelectedIndex=nil, 
     LTabListSelectedIndex=nil,
-    LTabListSource = nil,
 }
 
 function FirearmPurchase:Construct()
@@ -51,15 +50,10 @@ end
 function FirearmPurchase:Tick(MyGeometry, InDeltaTime)
     if FightManager.LTabListSelectedIndex ~= self.LTabListSelectedIndex then
         self.LTabListSelectedIndex = FightManager.LTabListSelectedIndex;
-        ugcprint('source length is:'..tostring(#self.LTabListSource))
         self.LTabList:Reload(5);
     end
 end
 function FirearmPurchase:LuaInit()
-    if self.LTabListSource == nil then
-        self.LTabListSource = UGCGameSystem.GetTableData("Data/Table/Customized/FightTabIcon");
-        -- 'Asset/.../FightTabIcon.FightTabIcon'))
-    end
     if self.bInitDoOnce then
 		return;
 	end
@@ -88,7 +82,8 @@ end
 function FirearmPurchase:LTabListUpdate(Item, Index)
     if Item.Index == nil then
         Item.Index = Index;
-        Item:SetTabIcon(self.LTabListSource[Index].path);
+        Item:SetTabIcon(FightManager.LTabIconList[Index+1].path);
+        Item:SetText(FightManager.LTabIconList[Index+1].name);
     end
 
     if self.LTabListSelectedIndex == Index then

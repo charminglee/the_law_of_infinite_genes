@@ -5,10 +5,7 @@
 ---@field Image_4 UImage
 ---@field selected UCanvasPanel
 ---@field tabImage_0 UImage
----@field tabImage_1 UImage
----@field tabImage_2 UImage
----@field tabImage_3 UImage
----@field tabImage_4 UImage
+---@field TextBlock_43 UTextBlock
 --Edit Below--
 local FirearmPurchaseLTabItem = { 
     bInitDoOnce = false,
@@ -44,17 +41,13 @@ function FirearmPurchaseLTabItem:SetSelectedVisible(Visible)
     end
 end
 
-function FirearmPurchaseLTabItem:SetTabIcon(path)
-    -- self.tabImage_0:SetBrushFromTexture(path);
-    for i = 0, 4, 1 do
-        local ImageVar = 'tabImage_'..tostring(i);
-        ugcprint(ImageVar);
-        if self.Index == i then
-            self[ImageVar]:SetVisibility(ESlateVisibility.Visible);
-        else
-            self[ImageVar]:SetVisibility(ESlateVisibility.Collapsed);
-        end
-    end
+function FirearmPurchaseLTabItem:SetTabIcon(Path)
+    local Texture = LoadObject(Path);
+    self.tabImage_0:SetBrushFromTexture(Texture, true);
+end
+
+function FirearmPurchaseLTabItem:SetText(text)
+    self.TextBlock_43:SetText(text);
 end
 
 return FirearmPurchaseLTabItem
