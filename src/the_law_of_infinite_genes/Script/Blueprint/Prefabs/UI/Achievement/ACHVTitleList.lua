@@ -50,6 +50,7 @@ function ACHVTitleList:SelectTab(index)
     self.selectedTabID = index;
 	ACHVManager.Preview:Refresh();
 	ACHVManager.RightContent:Refresh();
+	self:Reload();
 end
 
 return ACHVTitleList

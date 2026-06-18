@@ -10,7 +10,6 @@ local ACHVCategoryBtn = {
     index = 0,
 } 
 
-
 function ACHVCategoryBtn:Construct()
 	self:LuaInit();
 end
