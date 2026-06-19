@@ -38,8 +38,8 @@ function UGCPlayerController:ReceiveBeginPlay()
             self, 
             function()
                 -- 初始武器
-                local weaponId = Config.InitialWeapon.weaponId
-                local bulletId = Config.InitialWeapon.bulletId
+                local weaponId = Config.InitialWeapon.WeaponId
+                local bulletId = Config.InitialWeapon.BulletId
                 if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
                     UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
                     UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
@@ -47,20 +47,12 @@ function UGCPlayerController:ReceiveBeginPlay()
                     UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
                 end
 
-                -- 测试
-                GameState:StartGame()
+                if Config.Debug.AutoStartGame then
+                    GameState:StartGame()
+                end
             end
         )
         KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)
-
-        local delegate = ObjectExtend.CreateDelegate(
-            self, 
-            function()
-                SpecialEventManager.TriggerSpecialEvent(SpecialEvent.PutridMiasma)
-                ugcprint("Cost_1: "..tostring(self.Cost_1))
-            end
-        )
-        KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 10, false)
     end
 end
 
@@ -136,6 +128,7 @@ function UGCPlayerController:GetAvailableServerRPCs()
 end
 --]]
 
+
 function UGCPlayerController:LuaInit()
 	if self.bInitDoOnce then
 		return;
@@ -147,8 +140,6 @@ function UGCPlayerController:LuaInit()
 	-- [Editor Generated Lua] BindingEvent Begin:
 	-- [Editor Generated Lua] BindingEvent End;
 end
-
-
 
 
 return UGCPlayerController

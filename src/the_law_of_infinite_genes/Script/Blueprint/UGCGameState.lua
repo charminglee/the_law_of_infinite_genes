@@ -1,3 +1,14 @@
+---@class UGCGameState_C:BP_UGCGameState_C
+---@field SpecialEventManager SpecialEventManager_C
+---@field CoinManager CoinManager_C
+--Edit Below--
+local UGCGameState = {
+    isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
+    totalWaves = 10,    -- 总波数
+    waveIndex = -1,     -- 当前波数
+}
+
+
 UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
 UGCGameSystem.UGCRequire("Script.Common.Const")
@@ -6,19 +17,6 @@ UGCGameSystem.UGCRequire("Script.Common.Common")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
 UGCGameSystem.UGCRequire("Script.Common.EventSystem")
-
-
----@class UGCGameState: ASTExtraGameStateBase
-local UGCGameState = {
-    isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
-    totalWaves = 10,    -- 总波数
-    waveIndex = -1,     -- 当前波数
-}
-
-
-local function InitScript()
-    UGCGameSystem.UGCRequire("Script.Manager.SpecialEventManager")
-end
 
 
 local function InitSubControl(mainUI)
@@ -31,7 +29,6 @@ end
 function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
     GameState = self
-    InitScript()
     TweenManager.Initialize()
 
     if self:HasAuthority() == true then 
@@ -65,28 +62,36 @@ end
 -- end
 
 
+function UGCGameState:_TpAllPlayers()
+    local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.LevelStart)
+    local loc = levelStart:K2_GetActorLocation()
+    for _, c in pairs(UGCGameSystem.GetAllPlayerController(false)) do
+        UGCPlayerControllerSystem.TeleportTo(c, loc.X, loc.Y, loc.Z)
+    end
+end
+
+
+function UGCGameState:_StartMobSpawnerManager()
+    local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
+    sm:StartSpawnerManager()
+end
+
+
 ---开始游戏。
 function UGCGameState:StartGame()
-    self.isWaiting = false
-
-    if self:HasAuthority() then
-        -- 传送所有玩家到关卡
-        local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.LevelStart)
-        local loc = levelStart:K2_GetActorLocation()
-        for _, controller in pairs(UGCGameSystem.GetAllPlayerController(false)) do
-            UGCPlayerControllerSystem.TeleportTo(controller, loc.X, loc.Y, loc.Z)
-        end
-
-        -- 启动刷怪
-        local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
-        sm:StartSpawnerManager()
+    if not self:HasAuthority() then
+        return
     end
+
+    self.isWaiting = false
+    self:_TpAllPlayers()
+    self:_StartMobSpawnerManager()
 end
 
 
 ---结束游戏。
 function UGCGameState:EndGame()
-    if self.isWaiting then
+    if not self:HasAuthority() or self.isWaiting then
         return
     end
 
