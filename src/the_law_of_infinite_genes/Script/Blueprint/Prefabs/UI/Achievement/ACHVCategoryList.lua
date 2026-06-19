@@ -21,7 +21,7 @@ function ACHVCategoryList:LuaInit()
 end
 
 function ACHVCategoryList:Reload()
-	self.ReuseList2:Reload(#ACHVManager.Config.CategoryNameLabel);
+	self.ReuseList2:Reload(#ACHVManager.Config.CategoryNameLabel + 1);
 end
 
 
