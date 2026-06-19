@@ -8,7 +8,7 @@ ClassPath = {
     [Buff.PutridMiasma]                     = root.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
     [Buff.PutridMiasma_Monster]             = root.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
 
-    MonsterTemplate                         = root.."Asset/Blueprint/Prefabs/Monsters/MonsterTemplate.MonsterTemplate_C",
+    BaseMonster                         = root.."Asset/Blueprint/Prefabs/Monsters/BaseMonster.BaseMonster_C",
 }
 
 
@@ -24,6 +24,17 @@ Tag = {
     Monster = "Monster",
     Elite   = "Elite",
     Boss    = "Boss",
+}
+
+
+GameplayTag = {
+    Damage = {
+        Type = {
+            Critical        = "Damage.Type.Critical",
+            Direct          = "Damage.Type.Direct",
+            CounterAttack   = "Damage.Type.CounterAttack",
+        },
+    }
 }
 
 

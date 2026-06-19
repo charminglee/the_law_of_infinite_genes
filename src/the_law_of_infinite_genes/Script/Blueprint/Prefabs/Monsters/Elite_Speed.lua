@@ -1,4 +1,4 @@
----@class Elite_Speed_C:MonsterTemplate_C
+---@class Elite_Speed_C:BaseMonster_C
 --Edit Below--
 local Elite_Speed = {}
 

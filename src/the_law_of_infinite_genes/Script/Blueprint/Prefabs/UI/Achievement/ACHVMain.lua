@@ -24,14 +24,6 @@ function ACHVMain:LuaInit()
     self.Exit.OnClicked:Add(self.Close, self);
 end
 
--- function ACHVMain:Tick(MyGeometry, InDeltaTime)
-
--- end
-
--- function ACHVMain:Destruct()
-
--- end
-
 function ACHVMain:Open()
 	self:SetVisibility(ESlateVisibility.Visible);
     self:SetVisibleAnim(true);
@@ -61,6 +53,16 @@ function ACHVMain:SetVisibleAnim(isVisible)
 		function(value) self:SetColorAndOpacity(value) end,
         startColor, endColor, dur
     )
+end
+
+-- 当前选中称号实例
+function ACHVMain:SelectedTitleObj()
+    return ACHVManager.TitleListUI.tabButtons[ACHVManager.TitleListUI.selectedTabID]
+end
+
+-- 当前选中称号数据表
+function ACHVMain:SelectedTitleData()
+    return ACHVManager.Config.TitleData[ACHVManager.CategoryListUI.selectedTabID][ACHVManager.TitleListUI.selectedTabID + 1]
 end
 
 return ACHVMain

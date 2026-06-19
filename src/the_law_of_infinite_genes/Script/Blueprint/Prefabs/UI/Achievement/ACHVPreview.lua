@@ -19,11 +19,9 @@ function ACHVPreview:LuaInit()
 end
 
 function ACHVPreview:Refresh()
-    local categoryListUISelected = ACHVManager.CategoryListUI.selectedTabID;
-    local titleListUISelected = ACHVManager.TitleListUI.selectedTabID;
-    self.Name:SetText(ACHVManager.Config.TitleNameLabel[categoryListUISelected + 1][titleListUISelected + 1]);
+    self.Name:SetText(ACHVManager.MainUI:SelectedTitleData().NameText);
     local path = LoadObject(string.format(
-        ACHVManager.Config.IconPath[categoryListUISelected + 1], titleListUISelected, titleListUISelected
+        ACHVManager.MainUI:SelectedTitleData().IconPath, ACHVManager.TitleListUI.selectedTabID, ACHVManager.TitleListUI.selectedTabID
     ))
     self.Icon:SetBrushFromTexture(path)
 end
