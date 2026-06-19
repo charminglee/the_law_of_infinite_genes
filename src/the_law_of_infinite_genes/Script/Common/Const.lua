@@ -27,6 +27,17 @@ Tag = {
 }
 
 
+GameplayTag = {
+    Damage = {
+        Type = {
+            Critical        = "Damage.Type.Critical",
+            Direct          = "Damage.Type.Direct",
+            CounterAttack   = "Damage.Type.CounterAttack",
+        },
+    }
+}
+
+
 ItemId = {
     BossMaterial_0      = 8310013,
     BossMaterial_1      = 8310014,
