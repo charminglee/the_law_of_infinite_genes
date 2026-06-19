@@ -1,11 +1,11 @@
----@class MonsterTemplate_C:BP_UGC_GenericMobPawn_Base_C
+---@class BaseMonster_C:BP_UGC_GenericMobPawn_Base_C
 ---@field HitBox UCapsuleComponent
 --Edit Below--
-local MonsterTemplate = {}
+local BaseMonster = {}
 
 
-function MonsterTemplate:ReceiveBeginPlay()
-    MonsterTemplate.SuperClass.ReceiveBeginPlay(self)
+function BaseMonster:ReceiveBeginPlay()
+    BaseMonster.SuperClass.ReceiveBeginPlay(self)
 	self:AddDynamicTag(Tag.Monster)
 end
 
@@ -17,7 +17,7 @@ end
 ---@param DamageCauser AActor 伤害来源
 ---@param FDamageEvent DamageEvent 伤害事件
 ---@param DamageTypeID int32 伤害类型
-function MonsterTemplate:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
+function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
     if self:HasAuthority() then
         -- 只有服务端才可以掉落
         self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
@@ -32,23 +32,23 @@ function MonsterTemplate:BPDie(KillingDamage, EventInstigator, DamageCauser, Dam
 			else
 				local coin = config[1]
 			end
-			EventInstigator:addCoin(ItemId.Coin_0, coin)
+			EventInstigator:AddCoin(ItemId.Coin_0, coin)
 		end
     end
 end
 
 
--- function MonsterTemplate:ReceiveTick(DeltaTime)
---     MonsterTemplate.SuperClass.ReceiveTick(self, DeltaTime)
+-- function BaseMonster:ReceiveTick(DeltaTime)
+--     BaseMonster.SuperClass.ReceiveTick(self, DeltaTime)
 -- end
 
 
--- function MonsterTemplate:ReceiveEndPlay()
---     MonsterTemplate.SuperClass.ReceiveEndPlay(self) 
+-- function BaseMonster:ReceiveEndPlay()
+--     BaseMonster.SuperClass.ReceiveEndPlay(self) 
 -- end
 
 
--- function MonsterTemplate:GetReplicatedProperties()
+-- function BaseMonster:GetReplicatedProperties()
 --     return
 -- end
 
@@ -59,7 +59,7 @@ end
 -- ---@param EventInstigator AController 伤害来源的Controller
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
--- function MonsterTemplate:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function BaseMonster:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
      
 -- end
 
@@ -70,7 +70,7 @@ end
 -- ---@param EventInstigator AController 伤害来源的Controller
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
--- function MonsterTemplate:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function BaseMonster:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
     
 -- end
 
@@ -82,7 +82,7 @@ end
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- ---@return float 修改后的伤害值
--- function MonsterTemplate:PreOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function BaseMonster:PreOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
 --     return Damage
 -- end
 
@@ -94,7 +94,7 @@ end
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- ---@return float 修改后的伤害值
--- function MonsterTemplate:PostOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function BaseMonster:PostOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
 --     return Damage
 -- end
 
@@ -102,7 +102,7 @@ end
 -- ---状态进入事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 进入的状态
--- function MonsterTemplate:OnEnterTagState_BP(DynamicState)
+-- function BaseMonster:OnEnterTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnEnterTagState_BP: ' .. Tag)
 -- end
@@ -111,7 +111,7 @@ end
 -- ---状态退出事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 退出的状态
--- function MonsterTemplate:OnLeaveTagState_BP(DynamicState)
+-- function BaseMonster:OnLeaveTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnLeaveTagState_BP: ' .. Tag)
 -- end
@@ -120,7 +120,7 @@ end
 -- ---状态打断事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 打断的状态
--- function MonsterTemplate:OnInterruptTagState_BP(DynamicState)
+-- function BaseMonster:OnInterruptTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnInterruptTagState_BP' .. Tag)
 -- end
@@ -129,7 +129,7 @@ end
 -- ---行为树消息
 -- ---生效范围：服务器
 -- ---@param NotifyMsg string 消息
--- function MonsterTemplate:OnBehaviorNotify_BP(NotifyMsg)
+-- function BaseMonster:OnBehaviorNotify_BP(NotifyMsg)
 --     ugcprint('OnBehaviorNotify_BP: ' .. NotifyMsg)
 -- end
 
@@ -138,13 +138,13 @@ end
 -- ---生效范围：服务器&客户端
 -- ---@param NewTarget AActor 新目标
 -- ---@param OldTarget AActor 旧目标
--- function MonsterTemplate:OnTargetChange_BP(NewTarget, OldTarget)
+-- function BaseMonster:OnTargetChange_BP(NewTarget, OldTarget)
     
 -- end
 
 
 -- [Editor Generated Lua] function define Begin:
-function MonsterTemplate:LuaInit()
+function BaseMonster:LuaInit()
 	if self.bInitDoOnce then
 		return;
 	end
@@ -158,10 +158,10 @@ function MonsterTemplate:LuaInit()
 end
 
 
--- function MonsterTemplate:UGCPresetCommonDropItemComponent_OnDropItem(ItemActor)
+-- function BaseMonster:UGCPresetCommonDropItemComponent_OnDropItem(ItemActor)
 -- 	return nil;
 -- end
 -- [Editor Generated Lua] function define End;
 
 
-return MonsterTemplate
+return BaseMonster

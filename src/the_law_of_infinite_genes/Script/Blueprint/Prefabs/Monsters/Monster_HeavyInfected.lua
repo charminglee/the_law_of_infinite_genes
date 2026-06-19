@@ -1,4 +1,4 @@
----@class Monster_HeavyInfected_C:MonsterTemplate_C
+---@class Monster_HeavyInfected_C:BaseMonster_C
 --Edit Below--
 local Monster_HeavyInfected = {}
 

@@ -1,4 +1,4 @@
----@class Monster_SpeedInfected_C:MonsterTemplate_C
+---@class Monster_SpeedInfected_C:BaseMonster_C
 --Edit Below--
 local Monster_SpeedInfected = {}
 

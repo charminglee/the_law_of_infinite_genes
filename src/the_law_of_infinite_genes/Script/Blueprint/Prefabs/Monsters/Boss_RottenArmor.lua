@@ -1,4 +1,4 @@
----@class Boss_RottenArmor_C:MonsterTemplate_C
+---@class Boss_RottenArmor_C:BaseMonster_C
 --Edit Below--
 local Boss_RottenArmor = {}
 
