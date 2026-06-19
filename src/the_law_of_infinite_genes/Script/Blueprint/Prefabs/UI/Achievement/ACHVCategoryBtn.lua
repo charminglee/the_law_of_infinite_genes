@@ -23,7 +23,7 @@ function ACHVCategoryBtn:LuaInit()
 end
 
 function ACHVCategoryBtn:Refresh()
-    self.Name:SetText(ACHVManager.Config.CategoryNameLabel[self.index + 1]);
+    self.Name:SetText(ACHVManager.Config.CategoryNameLabel[self.index]);
 end
 
 function ACHVCategoryBtn:Select()

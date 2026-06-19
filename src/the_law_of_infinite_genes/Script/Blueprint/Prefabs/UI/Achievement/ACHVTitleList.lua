@@ -21,7 +21,7 @@ function ACHVTitleList:LuaInit()
 end
 
 function ACHVTitleList:Reload()
-	self.ReuseList2:Reload(#ACHVManager.Config.TitleNameLabel[ACHVManager.CategoryListUI.selectedTabID + 1]);
+	self.ReuseList2:Reload(#ACHVManager.Config.TitleData[ACHVManager.CategoryListUI.selectedTabID]);
 end
 
 function ACHVTitleList:ReuseList2Update(item, index)
@@ -29,6 +29,7 @@ function ACHVTitleList:ReuseList2Update(item, index)
 		item.parent = self;
 	end
 	item.index = index;
+	self.tabButtons[index] = item;
 	if index == self.selectedTabID then
         item:Select();
 		ACHVManager.Preview:Refresh();
@@ -36,7 +37,6 @@ function ACHVTitleList:ReuseList2Update(item, index)
     else
         item:Deselect();
     end
-	self.tabButtons[index] = item;
 	item:Refresh();
 end
 

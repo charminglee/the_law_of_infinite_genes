@@ -1,7 +1,7 @@
 ---@class ACHVTitle_C:UUserWidget
 ---@field Frame UButton
----@field Lock UImage
 ---@field LockBg UImage
+---@field LockImg UImage
 ---@field Name UTextBlock
 ---@field PressedFrame UImage
 ---@field PressedImg UImage
@@ -26,37 +26,36 @@ function ACHVTitle:LuaInit()
 end
  
 function ACHVTitle:GetUnlockState()
-    return ACHVManager.Config.UnlockState[ACHVManager.CategoryListUI.selectedTabID + 1][self.index + 1]
+    return ACHVManager.Config.TitleData[ACHVManager.CategoryListUI.selectedTabID][self.index + 1].UnlockState
 end
 
 function ACHVTitle:GetUnlockStateText()
-    return ACHVManager.Config.UnlockStateText[self:GetUnlockState() + 1]
+    return ACHVManager.Config.UnlockStateText[self:GetUnlockState()]
 end
 
 function ACHVTitle:SetUnlockState(value)
-    -- ACHVManager.Config.UnlockState[ACHVManager.CategoryListUI.selectedTabID + 1][self.index + 1] = value
+    ACHVManager.Config.TitleData[ACHVManager.CategoryListUI.selectedTabID][self.index + 1].UnlockState = value
+    self:Refresh();
 end
 
-function ACHVTitle:Lock()
-    self.Lock:SetVisibility(ESlateVisibility.Visible);
-    self.LockBg:SetVisibility(ESlateVisibility.Visible);
+function ACHVTitle:ToggleState()
+    self:SetUnlockState(ACHVManager.Config.SetToggleState[self:GetUnlockState()])
 end
 
-function ACHVTitle:Unlock()
-    self.Lock:SetVisibility(ESlateVisibility.Collapsed);
-    self.LockBg:SetVisibility(ESlateVisibility.Collapsed);
+function ACHVTitle:SetLocked(locked)
+    if locked then
+        self.LockImg:SetVisibility(ESlateVisibility.Visible)
+        self.LockBg:SetVisibility(ESlateVisibility.Visible)
+    else
+        self.LockImg:SetVisibility(ESlateVisibility.Hidden)
+        self.LockBg:SetVisibility(ESlateVisibility.Collapsed)
+    end
 end
 
 function ACHVTitle:Refresh()
-    self.Name:SetText(ACHVManager.Config.TitleNameLabel[ACHVManager.CategoryListUI.selectedTabID + 1][self.index + 1]);
+    self.Name:SetText(ACHVManager.Config.TitleData[ACHVManager.CategoryListUI.selectedTabID][self.index + 1].NameText);
     self.State:SetText(self:GetUnlockStateText())
-    
-    -- local value = self:GetUnlockState();
-    -- if value == 0 then
-    --     self:Lock();
-    -- elseif value == 1 then
-    --     self:Unlock();
-    -- end
+    self:SetLocked(self:GetUnlockState() == 0)
 end
 
 function ACHVTitle:Select()
