@@ -30,8 +30,5 @@ function UGCAttributeGroup_Weapon:GetAvailableServerRPCs()
 end
 --]]
 
-function UGCAttributeGroup_Weapon:GetA_Override(OriginalValue, AttributeOwnerActor)
-	return OriginalValue;
-end
 
 return UGCAttributeGroup_Weapon

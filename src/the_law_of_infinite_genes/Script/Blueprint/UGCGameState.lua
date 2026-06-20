@@ -1,6 +1,5 @@
 ---@class UGCGameState_C:BP_UGCGameState_C
 ---@field SpecialEventManager SpecialEventManager_C
----@field CoinManager CoinManager_C
 --Edit Below--
 local UGCGameState = {
     isWaiting = true,   -- 在大厅等待阶段时为true，否则为false

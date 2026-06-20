@@ -69,11 +69,6 @@ local Monster_Infected = {}
 ---@param DamageTypeID int32 伤害类型
 function Monster_Infected:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
     Monster_Infected.SuperClass.BPDie(self, KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
-    
-    if self:HasAuthority() then
-        -- 只有服务端才可以掉落
-        self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
-    end
 end
 
 -- ---状态进入事件

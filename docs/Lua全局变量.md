@@ -71,14 +71,17 @@
 - __ELotteryMainUIType__  
   _Script.Common.ue_enum_custom.ELotteryMainUIType_  
 
+- __ELotteryResetType__  
+  _Script.Common.ue_enum_custom.ELotteryResetType_  
+
 - __Buff__  
   _Script.Common.ue_enum_custom.Buff_  
 
 - __SpecialEvent__  
   _Script.Common.ue_enum_custom.SpecialEvent_  
 
-- __ELotteryResetType__  
-  _Script.Common.ue_enum_custom.ELotteryResetType_  
+- __Statistics__  
+  _Script.Common.ue_enum_custom.Statistics_  
 
 - __UGCNativeGameAttributeType__  
   _Script.GameAttribute.game_attribute_type.UGCNativeGameAttributeType_  
