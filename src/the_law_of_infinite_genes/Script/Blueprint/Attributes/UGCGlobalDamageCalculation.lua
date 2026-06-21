@@ -1,7 +1,7 @@
 local UGCGlobalDamageCalculation = {}
 
 
-local function hasDamageTag(context, tag)
+local function HasDamageTag(context, tag)
     for _, t in pairs(context.DamageTypeTags) do
         if t == tag then
             return true
@@ -12,14 +12,15 @@ end
 
 
 function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
-    local damage = UGCAttributeSystem.GetSourceMagnitudeFromContext(context)
-
     -- 直伤/反伤
-    if hasDamageTag(context, GameplayTag.Damage.Type.Direct) or hasDamageTag(context, GameplayTag.Damage.Type.CounterAttack) then
+    if HasDamageTag(context, GameplayTag.Damage.Type.Direct) or HasDamageTag(context, GameplayTag.Damage.Type.CounterAttack) then
+        local damage = UGCAttributeSystem.GetSourceMagnitudeFromContext(context)
         return damage, extraResult
     end
     
     local instigator                = UGCAttributeSystem.GetInstigatorFromContext(context):K2_GetPawn()
+    local attackPower               = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCCustomGameAttributeType.UGCAttributeGroup_Character_AttackPower)
+    local attackPowerBoost          = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCCustomGameAttributeType.UGCAttributeGroup_Character_AttackPowerBoost)
     local breakDefenceRatio         = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCCustomGameAttributeType.UGCAttributeGroup_Character_BreakDefenceRatio)
     local critChance                = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCCustomGameAttributeType.UGCAttributeGroup_Character_CritChance)
     local critDamageBoost           = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCCustomGameAttributeType.UGCAttributeGroup_Character_CritDamageBoost)
@@ -34,6 +35,9 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     local damageDecreace    = UGCAttributeSystem.GetGameAttributeValue(victim, UGCCustomGameAttributeType.UGCAttributeGroup_Character_DamageDecreace)
     local damageDecreacePct = UGCAttributeSystem.GetGameAttributeValue(victim, UGCCustomGameAttributeType.UGCAttributeGroup_Character_DamageDecreacePct)
     
+    -- 攻击区
+    local atkArea = math.max(1, attackPower * (1 + attackPowerBoost))
+
     -- 暴击区
     local isCrit = (math.random() <= critChance)
     local critArea = 1
@@ -51,15 +55,15 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     -- 防御区
     local totalDefence = defence * (1 + defenceBoost)
     local defenceArea = 1 - totalDefence * (1 - breakDefenceRatio) / (totalDefence + Config.Damage.DefenceK)
-    defenceArea = math.min(math.max(defenceArea, 0), 1)
+    defenceArea = math.min(math.max(0, defenceArea), 1)
 
     -- 减伤区
     local damageDecreaceArea = 1 - damageDecreacePct
-    damageDecreaceArea = math.min(math.max(damageDecreaceArea, 0), 1)
+    damageDecreaceArea = math.min(math.max(0, damageDecreaceArea), 1)
 
     -- 最终伤害
-    local finalDamage = damage * critArea * damageBoostArea * defenceArea * damageDecreaceArea - damageDecreace
-    finalDamage = math.max(0, finalDamage)
+    local finalDamage = atkArea * critArea * damageBoostArea * defenceArea * damageDecreaceArea - damageDecreace
+    finalDamage = math.max(1, finalDamage)
     
     return finalDamage, extraResult
 end

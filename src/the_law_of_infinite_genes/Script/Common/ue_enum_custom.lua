@@ -11,15 +11,6 @@ ELotteryMainUIType = {
 }; 
 
 
----@enum ELotteryResetType
-ELotteryResetType = { 
-    NotReset = 0,
-    DailyReset = 1,
-    MonthlyReset = 2,
-    WeeklyReset = 3,
-}; 
-
-
 ---@enum Buff
 Buff = { 
     CorpseHuntingSurge = 0,
@@ -43,9 +34,18 @@ SpecialEvent = {
 Statistics = { 
     NormalMonsterKillCount = 0,
     EliteMonsterKillCount = 1,
-    BossKillCount  = 2,
+    BossKillCount = 2,
     NormalMonsterKillCountHealthAboveHalf = 3,
     EliteMonsterKillCountHealthAboveHalf = 4,
+}; 
+
+
+---@enum ELotteryResetType
+ELotteryResetType = { 
+    NotReset = 0,
+    DailyReset = 1,
+    MonthlyReset = 2,
+    WeeklyReset = 3,
 }; 
 
 

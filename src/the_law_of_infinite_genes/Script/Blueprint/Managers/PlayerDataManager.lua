@@ -4,6 +4,7 @@ local PlayerDataManager = {
     _data = {},
     _isLoaded = false,
     _uid = 0,
+    _tick = 0,
 }
 
 
@@ -20,16 +21,19 @@ end
 
 function PlayerDataManager:ReceiveBeginPlay()
     PlayerDataManager.SuperClass.ReceiveBeginPlay(self)
-    self._uid = self.owner.PlayerUID
+    self._uid = tonumber(self.owner.PlayerUID)
     self:_Load()
 end
 
 
---[[
 function PlayerDataManager:ReceiveTick(DeltaTime)
     PlayerDataManager.SuperClass.ReceiveTick(self, DeltaTime)
+    self._tick = self._tick + 1
+    if self._tick >= Config.Common.AutoSaveInterval then
+        self._tick = 0
+        self:Save()
+    end
 end
---]]
 
 
 function PlayerDataManager:ReceiveEndPlay()
@@ -104,7 +108,7 @@ end
 ---设置某个一级字段的值。
 ---@param key string 字段名
 ---@param value any 字段值
----@param sync? boolean 是否立即保存数据并同步，默认为true
+---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:Set(key, value, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -126,17 +130,12 @@ function PlayerDataManager:Save()
 end
 
 
----立即保存所有数据，并同步到客户端。
----@return boolean 是否成功
+---将数据同步到客户端。
 function PlayerDataManager:Sync()
     if not self:HasAuthority() or not self._isLoaded then
-        return false
+        return
     end
-    if self:Save() then
-        UnrealNetwork.RepLazyProperty(self, "_data")
-        return true
-    end
-    return false
+    UnrealNetwork.RepLazyProperty(self, "_data")
 end
 
 
@@ -154,7 +153,7 @@ end
 ---设置指定货币的数量。
 ---@param id number 货币ID
 ---@param value number 数量
----@param sync? boolean 是否立即保存数据并同步，默认为true
+---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:SetCoin(id, value, sync)
     local coin = self._data.coin
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil or coin[id] == value then
@@ -169,9 +168,10 @@ end
 
 ---增加指定货币的数量，支持负值扣除。
 ---@param id number 货币ID
----@param value number 增加数量
----@param sync? boolean 是否立即保存数据并同步，默认为true
+---@param value? number 增加数量，默认为1
+---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:AddCoin(id, value, sync)
+    value = value or 1
     local coin = self._data.coin
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil then
         return
@@ -196,7 +196,7 @@ end
 
 ---添加卡牌。
 ---@param id number 卡牌ID
----@param sync? boolean 是否立即保存数据并同步，默认为true
+---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:AddCard(id, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -210,7 +210,7 @@ end
 
 ---移除卡牌。
 ---@param id number 卡牌ID
----@param sync? boolean 是否立即保存数据并同步，默认为true
+---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:RemoveCard(id, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -235,9 +235,10 @@ end
 
 ---累加指定统计数据。
 ---@param name string 统计数据名称，请使用Statistics枚举值
----@param value number 增量
----@param sync? boolean 是否立即保存数据并同步，默认为true
+---@param value? number 增量，默认为1
+---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:AddStat(name, value, sync)
+    value = value or 1
     local stat = self._data.stat
     if not self:HasAuthority() or not self._isLoaded or stat[name] == nil then
         return

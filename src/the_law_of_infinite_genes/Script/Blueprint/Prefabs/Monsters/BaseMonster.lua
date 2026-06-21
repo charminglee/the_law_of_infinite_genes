@@ -18,23 +18,37 @@ end
 ---@param FDamageEvent DamageEvent 伤害事件
 ---@param DamageTypeID int32 伤害类型
 function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
-    if self:HasAuthority() then
-        -- 只有服务端才可以掉落
-        self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
-		
-		-- 资源点掉落
-		if EventInstigator:IsPlayerController() then
-			local config = Config.Resource.Coin_0.MonsterLoot
-			if self:ActorHasTag(Tag.Boss) then 
-				local coin = config[3]
-			elseif self:ActorHasTag(Tag.Elite) then
-				local coin = config[2]
-			else
-				local coin = config[1]
-			end
-			EventInstigator:AddCoin(ItemId.Coin_0, coin)
+    if not self:HasAuthority() or not EventInstigator:IsPlayerController() then
+		return
+	end
+
+	self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
+	
+	-- 资源点掉落/称号条件相关逻辑
+	local isBoss = self:ActorHasTag(Tag.Boss)
+	local isElite = self:ActorHasTag(Tag.Elite)
+	local mgr = EventInstigator.PlayerDataManager
+	local config = Config.Resource.Coin_0.MonsterLoot
+	local playerHealth = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_Health)
+	local playerHealthMax = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_HealthMax)
+	local playerHealthPct = playerHealth / playerHealthMax
+	if isBoss then 
+		mgr:AddCoin(ItemId.Coin_0, config[3], false)
+		mgr:AddStat(Statistics.BossKillCount, false)
+	elseif isElite then
+		mgr:AddCoin(ItemId.Coin_0, config[2], false)
+		mgr:AddStat(Statistics.EliteMonsterKillCount, false)
+		if playerHealthPct > 0.5 then
+			mgr:AddStat(Statistics.EliteMonsterKillCountHealthAboveHalf, false)
+		end
+	else
+		mgr:AddCoin(ItemId.Coin_0, config[1], false)
+		mgr:AddStat(Statistics.NormalMonsterKillCount, false)
+		if playerHealthPct > 0.5 then
+			mgr:AddStat(Statistics.NormalMonsterKillCountHealthAboveHalf, false)
 		end
     end
+	mgr:Sync()
 end
 
 

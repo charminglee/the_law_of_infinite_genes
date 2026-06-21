@@ -6,6 +6,11 @@ Config.Debug = {
 }
 
 
+Config.Common = {
+    AutoSaveInterval = 30,  -- 玩家数据自动保存间隔，单位秒
+}
+
+
 -- 资源配置
 Config.Resource = {
     -- 资源点配置
