@@ -9,9 +9,12 @@ ACHVManager = ACHVManager or
     TitleListUI = nil;
     Preview = nil;
     RightContent = nil;
+    PlayerPawnTitle = nil;
 
     -- ===== 静态配置（固定数据） =====
     Config = {
+        -- 玩家头顶称号界面路径
+        TitleClassPath = 'Asset/Blueprint/Prefabs/UI/Title.Title_C';
         -- 动画时长
         AnimDur = {
             In = 0.2,
@@ -58,10 +61,16 @@ ACHVManager = ACHVManager or
         };
         -- 设置按钮切换状态固定模式
         SetToggleState = {[0] = 1, [1] = 2, [2] = 1};
+        -- 目前已佩戴称号数据
+        EquippedTitleData = nil;
         -- 称号数据
         TitleData = {
             [0] = {
                 {
+                    -- 分类索引
+                    Category = 0,
+                    -- 索引
+                    Index = 1,
                     -- 标题文本
                     NameText = '囊中羞涩',
                     -- 图标路径
@@ -72,7 +81,7 @@ ACHVManager = ACHVManager or
                     CollectEffects = '金币结算加成1%',
                     -- 佩戴效果文本
                     WearEffects = '金币结算加成2%',
-                    -- 解锁状态
+                    -- 解锁状态，0为未解锁，1为已解锁，2为已佩戴
                     UnlockState = 0,
                     -- 解锁类型与值
                     UnlockType = {
@@ -80,6 +89,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 0,
+                    Index = 2,
                     NameText = '略有盈余',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
                     UnlockConditions = '达到金币100000',
@@ -91,6 +102,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 0,
+                    Index = 3,
                     NameText = '小富即安',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
                     UnlockConditions = '达到金币500000',
@@ -102,6 +115,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 0,
+                    Index = 4,
                     NameText = '盆满钵满',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
                     UnlockConditions = '达到金币1000000',
@@ -113,6 +128,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 0,
+                    Index = 5,
                     NameText = '腰缠万贯',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
                     UnlockConditions = '达到金币5000000',
@@ -124,6 +141,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 0,
+                    Index = 6,
                     NameText = '富甲一方',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
                     UnlockConditions = '达到金币10000000',
@@ -135,6 +154,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 0,
+                    Index = 7,
                     NameText = '富可敌国',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
                     UnlockConditions = '达到金币100000000',
@@ -148,6 +169,8 @@ ACHVManager = ACHVManager or
             },
             [1] = {
                 {
+                    Category = 1,
+                    Index = 1,
                     NameText = '首当其充',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
                     UnlockConditions = '首次充值',
@@ -159,6 +182,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 1,
+                    Index = 2,
                     NameText = '千金一掷',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
                     UnlockConditions = '累积充值689起源币',
@@ -170,6 +195,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 1,
+                    Index = 3,
                     NameText = '财大气粗',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
                     UnlockConditions = '累积充值1888起源币',
@@ -181,6 +208,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 1,
+                    Index = 4,
                     NameText = '不差钱',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
                     UnlockConditions = '累积充值5888起源币',
@@ -192,6 +221,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 1,
+                    Index = 5,
                     NameText = '马上有钱',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
                     UnlockConditions = '累积充值8888起源币',
@@ -203,6 +234,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 1,
+                    Index = 6,
                     NameText = '钱能通神',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
                     UnlockConditions = '累积充值16888起源币',
@@ -216,6 +249,8 @@ ACHVManager = ACHVManager or
             },
             [2] = {
                 {
+                    Category = 2,
+                    Index = 1,
                     NameText = '尸墟巡猎者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
                     UnlockConditions = '- 赛季等级达到10级\n- 累计击杀普通僵尸 500 只',
@@ -228,6 +263,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 2,
+                    Index = 2,
                     NameText = '腐潮肃清者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
                     UnlockConditions = '- 赛季等级达到20级\n- 累计击杀精英怪 150 只',
@@ -240,6 +277,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 2,
+                    Index = 3,
                     NameText = '无殇镇疫使',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
                     UnlockConditions = '- 赛季等级达到30级\n- 单局内击杀100普通僵尸，且全程生命值从未低于50%',
@@ -252,6 +291,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 2,
+                    Index = 4,
                     NameText = '荒城孤伐者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
                     UnlockConditions = '- 赛季等级达到40级\n- 单局内击杀30只精英怪，且全程生命值从未低于50%',
@@ -264,6 +305,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 2,
+                    Index = 5,
                     NameText = '疫首诛灭者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
                     UnlockConditions = '- 赛季等级达到50级\n- 累积击杀50次boss',
@@ -276,6 +319,8 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Category = 2,
+                    Index = 6,
                     NameText = '万尸归墟尊',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
                     UnlockConditions = '- 赛季等级达到100级\n- 无伤击败boss一次',
@@ -322,6 +367,50 @@ function ACHVManager:CloseMainUI()
         return;
     end
     self.MainUI:Close();
+end
+
+-- 当前选中称号实例
+function ACHVManager:SelectedTitleObj()
+    return self.TitleListUI.tabButtons[self.TitleListUI.selectedTabID]
+end
+
+-- 当前选中称号数据表
+function ACHVManager:SelectedTitleData()
+    return self.Config.TitleData[self.CategoryListUI.selectedTabID][self.TitleListUI.selectedTabID + 1]
+end
+
+-- 解锁称号
+function ACHVManager:Unlock()
+    -- 需解锁的条件
+    return true
+end
+
+-- 佩戴称号
+function ACHVManager:Equipped()
+    if self.Config.EquippedTitleData then
+        self.Config.TitleData[self.Config.EquippedTitleData.Category][self.Config.EquippedTitleData.Index].UnlockState = 1;
+        self.TitleListUI.tabButtons[self.Config.EquippedTitleData.Index - 1]:Refresh();
+        self:Unequipped();
+    end
+    self.Config.EquippedTitleData = self:SelectedTitleData();
+    self.PlayerPawnTitle = UGCWidgetManagerSystem.AddObjectPositionUI(
+        UGCGameSystem.GetLocalPlayerPawn(), 
+        UGCGameSystem.GetUGCResourcesFullPath(self.Config.TitleClassPath),
+        { X = 0, Y = 0, Z = 100 }, 
+        true, 
+        true, 
+        false, 
+        true
+    );
+    return true
+end
+
+-- 卸下称号
+function ACHVManager:Unequipped()
+    UGCWidgetManagerSystem.RemoveObjectPositionUI(UGCGameSystem.GetLocalPlayerPawn(), self.PlayerPawnTitle);
+    self.Config.EquippedTitleData = nil;
+    self.PlayerPawnTitle = nil;
+    return true
 end
 
 return ACHVManager

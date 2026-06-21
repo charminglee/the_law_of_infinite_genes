@@ -19,11 +19,13 @@ function ACHVPreview:LuaInit()
 end
 
 function ACHVPreview:Refresh()
-    self.Name:SetText(ACHVManager.MainUI:SelectedTitleData().NameText);
+    self.Name:SetText(ACHVManager:SelectedTitleData().NameText);
     local path = LoadObject(string.format(
-        ACHVManager.MainUI:SelectedTitleData().IconPath, ACHVManager.TitleListUI.selectedTabID, ACHVManager.TitleListUI.selectedTabID
-    ))
-    self.Icon:SetBrushFromTexture(path)
+        ACHVManager:SelectedTitleData().IconPath, 
+        ACHVManager.TitleListUI.selectedTabID, 
+        ACHVManager.TitleListUI.selectedTabID
+    ));
+    self.Icon:SetBrushFromTexture(path);
 end
 
 return ACHVPreview
