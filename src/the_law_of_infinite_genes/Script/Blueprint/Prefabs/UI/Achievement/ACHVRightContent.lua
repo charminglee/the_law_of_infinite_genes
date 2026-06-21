@@ -27,13 +27,13 @@ function ACHVRightContent:LuaInit()
 end
 
 function ACHVRightContent:Refresh()
-	self.Info_0:SetText(ACHVManager.MainUI:SelectedTitleData().UnlockConditions)
-	self.Info_1:SetText(ACHVManager.MainUI:SelectedTitleData().CollectEffects)
-	self.Info_2:SetText(ACHVManager.MainUI:SelectedTitleData().WearEffects)
-	self.SetBtnText:SetText(ACHVManager.Config.SetStateText[ACHVManager.MainUI:SelectedTitleData().UnlockState])
+	self.Info_0:SetText(ACHVManager:SelectedTitleData().UnlockConditions);
+	self.Info_1:SetText(ACHVManager:SelectedTitleData().CollectEffects);
+	self.Info_2:SetText(ACHVManager:SelectedTitleData().WearEffects);
+	self.SetBtnText:SetText(ACHVManager.Config.SetStateText[ACHVManager:SelectedTitleData().UnlockState]);
 end
 function ACHVRightContent:SetOnClicked()
-	ACHVManager.MainUI:SelectedTitleObj():ToggleState();
+	ACHVManager:SelectedTitleObj():ToggleState();
 	self:Refresh();
 end
 

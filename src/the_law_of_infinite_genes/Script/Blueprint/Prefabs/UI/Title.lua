@@ -4,35 +4,16 @@
 --Edit Below--
 local Title = { 
 	bInitDoOnce = false,
-} 
-
+}
 
 function Title:Construct()
-	self:LuaInit();
-	
+	self.Name:SetText(ACHVManager.Config.EquippedTitleData.NameText);
+	local path = LoadObject(string.format(
+        ACHVManager.Config.EquippedTitleData.IconPath, 
+		ACHVManager.Config.EquippedTitleData.Index - 1, 
+		ACHVManager.Config.EquippedTitleData.Index - 1
+    ));
+    self.Icon:SetBrushFromTexture(path);
 end
-
--- function Title:Tick(MyGeometry, InDeltaTime)
-
--- end
-
--- function Title:Destruct()
-
--- end
-
--- [Editor Generated Lua] function define Begin:
-function Title:LuaInit()
-	if self.bInitDoOnce then
-		return;
-	end
-	self.bInitDoOnce = true;
-	self.Name:BindingProperty("Text", self.NameText, self);
-end
-
-function Title:NameText(ReturnValue)
-	return "囊中羞涩";
-end
-
--- [Editor Generated Lua] function define End;
 
 return Title

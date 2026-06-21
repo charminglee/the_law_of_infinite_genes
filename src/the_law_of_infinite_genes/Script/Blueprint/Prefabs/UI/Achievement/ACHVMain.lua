@@ -55,14 +55,4 @@ function ACHVMain:SetVisibleAnim(isVisible)
     )
 end
 
--- 当前选中称号实例
-function ACHVMain:SelectedTitleObj()
-    return ACHVManager.TitleListUI.tabButtons[ACHVManager.TitleListUI.selectedTabID]
-end
-
--- 当前选中称号数据表
-function ACHVMain:SelectedTitleData()
-    return ACHVManager.Config.TitleData[ACHVManager.CategoryListUI.selectedTabID][ACHVManager.TitleListUI.selectedTabID + 1]
-end
-
 return ACHVMain
