@@ -1,6 +1,4 @@
 ---@class UGCPlayerController_C:BP_UGCPlayerController_C
----@field PlayerDataManager PlayerDataManager_C
----@field GachaComponent GachaComponent_C
 ---@field FightComponent FightComponent_C
 ---@field ACHVComponent CHVComponent_C
 ---@field StoreComponent StoreComponent_C

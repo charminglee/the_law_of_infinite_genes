@@ -21,7 +21,7 @@ end
 
 function PlayerDataManager:ReceiveBeginPlay()
     PlayerDataManager.SuperClass.ReceiveBeginPlay(self)
-    self._uid = tonumber(self.owner.PlayerUID)
+    self._uid = UGCGameSystem.GetUIDByPlayerState(self.owner)
     self:_Load()
 end
 

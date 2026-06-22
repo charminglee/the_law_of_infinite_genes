@@ -4,10 +4,11 @@
 
 - __GameMode__  
   _Script.Blueprint.UGCGameMode_  
-  【服务端】
+  【服务端】 `GameMode` 实例。
 
 - __GameState__  
   _Script.Blueprint.UGCGameState_  
+  `GameState` 实例。
 
 - __LocalPlayerController__  
   _Script.Blueprint.UGCPlayerController_  
@@ -16,6 +17,10 @@
 - __LocalPlayerPawn__  
   _Script.Blueprint.UGCPlayerPawn_  
   【客户端】本地玩家的 `PlayerPawn` 实例。
+
+- __LocalPlayerState__  
+  _Script.Blueprint.UGCPlayerState_  
+  【客户端】本地玩家的 `PlayerState` 实例。
 
 - __Common__  
   _Script.Common.Common.Common_  
