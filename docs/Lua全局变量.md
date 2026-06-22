@@ -4,18 +4,18 @@
 
 - __GameMode__  
   _Script.Blueprint.UGCGameMode_  
-  【仅服务端】
+  【服务端】
 
 - __GameState__  
   _Script.Blueprint.UGCGameState_  
 
 - __LocalPlayerController__  
   _Script.Blueprint.UGCPlayerController_  
-  【仅客户端】本地玩家的 `PlayerController` 实例。
+  【客户端】本地玩家的 `PlayerController` 实例。
 
 - __LocalPlayerPawn__  
   _Script.Blueprint.UGCPlayerPawn_  
-  【仅客户端】本地玩家的 `PlayerPawn` 实例。
+  【客户端】本地玩家的 `PlayerPawn` 实例。
 
 - __Common__  
   _Script.Common.Common.Common_  
@@ -33,10 +33,6 @@
 - __TweenManager__  
   _Script.Common.TweenManager.TweenManager_  
   UGC Tween 动画库。
-
-- __SpecialEventManager__  
-  _Script.Manager.SpecialEventManager.SpecialEventManager_  
-  特殊事件管理器。
 
 ## 常量
 
@@ -82,6 +78,9 @@
 
 - __Statistics__  
   _Script.Common.ue_enum_custom.Statistics_  
+
+- __Title__  
+  _Script.Common.ue_enum_custom.Title_  
 
 - __UGCNativeGameAttributeType__  
   _Script.GameAttribute.game_attribute_type.UGCNativeGameAttributeType_  

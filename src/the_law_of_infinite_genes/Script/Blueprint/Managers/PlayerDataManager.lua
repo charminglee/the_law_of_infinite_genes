@@ -58,7 +58,13 @@ function PlayerDataManager:_BuildDefaultData()
             [Statistics.BossKillCount] = 0,
             [Statistics.NormalMonsterKillCountHealthAboveHalf] = 0,
             [Statistics.EliteMonsterKillCountHealthAboveHalf] = 0,
+            [Statistics.HasPerfectBossFight] = 0,
         },
+        title = {
+            equipped = nil,
+            unlocked = {},
+        },
+        custom = {},
     }
 end
 
@@ -97,7 +103,7 @@ function PlayerDataManager:_Load()
 end
 
 
----获取某个一级字段的值。
+---【双端】获取某个一级字段的值。
 ---@param key string 字段名
 ---@return any 数据值
 function PlayerDataManager:Get(key)
@@ -105,7 +111,7 @@ function PlayerDataManager:Get(key)
 end
 
 
----设置某个一级字段的值。
+---【服务端】设置某个一级字段的值。
 ---@param key string 字段名
 ---@param value any 字段值
 ---@param sync? boolean 是否立即同步数据，默认为true
@@ -120,7 +126,7 @@ function PlayerDataManager:Set(key, value, sync)
 end
 
 
----立即保存所有数据。
+---【服务端】立即保存所有数据。
 ---@return boolean 是否成功
 function PlayerDataManager:Save()
     if not self:HasAuthority() or not self._isLoaded then
@@ -130,7 +136,7 @@ function PlayerDataManager:Save()
 end
 
 
----将数据同步到客户端。
+---【服务端】将数据同步到客户端。
 function PlayerDataManager:Sync()
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -139,10 +145,33 @@ function PlayerDataManager:Sync()
 end
 
 
+---【双端】获取自定义数据。
+---@param key string 数据键
+---@return any 数据值
+function PlayerDataManager:GetCustomData(key)
+    return (self._data.custom or {})[key]
+end
+
+
+---【服务端】存储自定义数据。
+---@param key string 数据键
+---@param value any 数据值
+---@param sync? boolean 是否立即同步数据，默认为true
+function PlayerDataManager:SaveCustomData(key, value, sync)
+    if not self:HasAuthority() or not self._isLoaded then
+        return
+    end
+    self._data.custom[key] = value
+    if sync ~= false then
+        self:Sync()
+    end
+end
+
+
 --===========================  货币  ===========================--
 
 
----获取指定货币的数量。
+---【双端】获取指定货币的数量。
 ---@param id number 货币ID
 ---@return number 货币数量
 function PlayerDataManager:GetCoin(id)
@@ -150,7 +179,7 @@ function PlayerDataManager:GetCoin(id)
 end
 
 
----设置指定货币的数量。
+---【服务端】设置指定货币的数量。
 ---@param id number 货币ID
 ---@param value number 数量
 ---@param sync? boolean 是否立即同步数据，默认为true
@@ -166,7 +195,7 @@ function PlayerDataManager:SetCoin(id, value, sync)
 end
 
 
----增加指定货币的数量，支持负值扣除。
+---【服务端】增加指定货币的数量，支持负值扣除。
 ---@param id number 货币ID
 ---@param value? number 增加数量，默认为1
 ---@param sync? boolean 是否立即同步数据，默认为true
@@ -186,36 +215,39 @@ end
 --===========================  卡牌  ===========================--
 
 
----判断是否拥有指定卡牌。
----@param id number 卡牌ID
+---【双端】判断是否拥有指定卡牌。
+---@param card number 卡牌ID
 ---@return boolean 是否拥有指定卡牌
-function PlayerDataManager:HasCard(id)
-    return self._data.card and self._data.card[id] ~= nil
+function PlayerDataManager:HasCard(card)
+    if self._data.card == nil then
+        return false
+    end
+    return self._data.card[card] ~= nil
 end
 
 
----添加卡牌。
----@param id number 卡牌ID
+---【服务端】添加卡牌。
+---@param card number 卡牌ID
 ---@param sync? boolean 是否立即同步数据，默认为true
-function PlayerDataManager:AddCard(id, sync)
+function PlayerDataManager:AddCard(card, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
-    self._data.card[id] = 1
+    self._data.card[card] = 1
     if sync ~= false then
         self:Sync()
     end
 end
 
 
----移除卡牌。
----@param id number 卡牌ID
+---【服务端】移除卡牌。
+---@param card number 卡牌ID
 ---@param sync? boolean 是否立即同步数据，默认为true
-function PlayerDataManager:RemoveCard(id, sync)
+function PlayerDataManager:RemoveCard(card, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
-    self._data.card[id] = nil
+    self._data.card[card] = nil
     if sync ~= false then
         self:Sync()
     end
@@ -225,16 +257,16 @@ end
 --===========================  统计  ===========================--
 
 
----获取指定统计数据。
----@param name string 统计数据名称，请使用Statistics枚举值
+---【双端】获取指定统计数据的值。
+---@param name Statistics 统计数据名称，请使用Statistics枚举值
 ---@return number 数据值
 function PlayerDataManager:GetStat(name)
     return (self._data.stat or {})[name] or -1
 end
 
 
----累加指定统计数据。
----@param name string 统计数据名称，请使用Statistics枚举值
+---【服务端】累加指定统计数据。
+---@param name Statistics 统计数据名称，请使用Statistics枚举值
 ---@param value? number 增量，默认为1
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:AddStat(name, value, sync)
@@ -244,6 +276,63 @@ function PlayerDataManager:AddStat(name, value, sync)
         return
     end
     stat[name] = stat[name] + value
+    if sync ~= false then
+        self:Sync()
+    end
+end
+
+
+--===========================  称号  ===========================--
+
+
+---【双端】获取当前佩戴的称号。
+---@return Title | nil Title枚举值，若无佩戴则返回nil
+function PlayerDataManager:GetEquippedTitle()
+    if not self._isLoaded then
+        return nil
+    end
+    return self._data.title.equipped
+end
+
+
+---【服务端】佩戴称号。
+---@param title Title | nil 称号ID，请使用Title枚举值，卸下称号可传nil
+---@param sync? boolean 是否立即同步数据，默认为true
+function PlayerDataManager:EquipTitle(title, sync)
+    if not self:HasAuthority() or not self._isLoaded then
+        return
+    end
+    self._data.title.equipped = title
+    if sync ~= false then
+        self:Sync()
+    end
+end
+
+
+---【双端】获取所有已解锁的称号。
+---@return Title[] 已解锁称号的列表
+function PlayerDataManager:GetUnlockedTitles()
+    if not self._isLoaded then
+        return {}
+    end
+    return self._data.title.unlocked
+end
+
+
+---【服务端】解锁称号。
+---@param title Title 称号ID，请使用Title枚举值
+---@param sync? boolean 是否立即同步数据，默认为true
+function PlayerDataManager:UnlockTitle(title, sync) 
+    if not self:HasAuthority() or not self._isLoaded then
+        return
+    end
+    local unlocked = self._data.title.unlocked
+    for _, i in pairs(unlocked) do
+        if i == title then
+            return
+        end
+    end
+    table.insert(unlocked, title)
     if sync ~= false then
         self:Sync()
     end
