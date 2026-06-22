@@ -1,8 +1,4 @@
 ---@class ACHVMain_C:UUserWidget
----@field ACHVLeftContent CHVLeftContent_C
----@field ACHVRightContent CHVRightContent_C
----@field Bg UImage
----@field BgInner UImage
 ---@field Exit UButton
 --Edit Below--
 local ACHVMain = { 
@@ -21,6 +17,7 @@ function ACHVMain:LuaInit()
     ACHVManager:RegisterMainUI(self);
     ACHVManager.CategoryListUI:Reload();
     ACHVManager.TitleListUI:Reload();
+    ACHVManager.RightContent:Reload();
     self.Exit.OnClicked:Add(self.Close, self);
 end
 

@@ -38,7 +38,7 @@ ACHVManager = ACHVManager or
             NormalMonsterKillCountHealthAboveHalf = 6,
             -- 全程生命值从未低于50%单局内精英怪物击杀数量'
             EliteMonsterKillCountHealthAboveHalf = 7,
-            -- 无伤击败头目怪
+            -- 无伤击败头目怪次数
             HasPerfectBossFight = 8
         };
         -- 称号类型文本
@@ -75,8 +75,6 @@ ACHVManager = ACHVManager or
                     NameText = '囊中羞涩',
                     -- 图标路径
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-                    -- 解锁条件文本
-                    UnlockConditions = '达到金币10000',
                     -- 收集效果文本
                     CollectEffects = '金币结算加成1%',
                     -- 佩戴效果文本
@@ -85,7 +83,11 @@ ACHVManager = ACHVManager or
                     UnlockState = 0,
                     -- 解锁类型与值
                     UnlockType = {
-                        [0] = 10000
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 10000,
+                            Text = '- 达到金币10000'
+                        }
                     }
                 },
                 {
@@ -93,12 +95,15 @@ ACHVManager = ACHVManager or
                     Index = 2,
                     NameText = '略有盈余',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-                    UnlockConditions = '达到金币100000',
                     CollectEffects = '金币结算加成3%',
                     WearEffects = '金币结算加成5%',
                     UnlockState = 0,
                     UnlockType = {
-                        [0] = 100000
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 100000,
+                            Text = '- 达到金币100000'
+                        }
                     }
                 },
                 {
@@ -106,12 +111,15 @@ ACHVManager = ACHVManager or
                     Index = 3,
                     NameText = '小富即安',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-                    UnlockConditions = '达到金币500000',
                     CollectEffects = '金币结算加成5%',
                     WearEffects = '金币结算加成8%',
                     UnlockState = 0,
                     UnlockType = {
-                        [0] = 500000
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 500000,
+                            Text = '- 达到金币500000'
+                        }
                     }
                 },
                 {
@@ -119,12 +127,15 @@ ACHVManager = ACHVManager or
                     Index = 4,
                     NameText = '盆满钵满',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-                    UnlockConditions = '达到金币1000000',
                     CollectEffects = '金币结算加成7%',
                     WearEffects = '金币结算加成10%',
                     UnlockState = 0,
                     UnlockType = {
-                        [0] = 1000000
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 1000000,
+                            Text = '- 达到金币1000000'
+                        }
                     }
                 },
                 {
@@ -132,12 +143,15 @@ ACHVManager = ACHVManager or
                     Index = 5,
                     NameText = '腰缠万贯',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-                    UnlockConditions = '达到金币5000000',
                     CollectEffects = '金币结算加成9%',
                     WearEffects = '金币结算加成12%',
                     UnlockState = 0,
                     UnlockType = {
-                        [0] = 5000000
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 5000000,
+                            Text = '- 达到金币5000000'
+                        }
                     }
                 },
                 {
@@ -145,12 +159,15 @@ ACHVManager = ACHVManager or
                     Index = 6,
                     NameText = '富甲一方',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-                    UnlockConditions = '达到金币10000000',
                     CollectEffects = '金币结算加成11%',
                     WearEffects = '金币结算加成14%',
                     UnlockState = 0,
                     UnlockType = {
-                        [0] = 10000000
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 10000000,
+                            Text = '- 达到金币10000000'
+                        }
                     }
                 },
                 {
@@ -158,12 +175,15 @@ ACHVManager = ACHVManager or
                     Index = 7,
                     NameText = '富可敌国',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
-                    UnlockConditions = '达到金币100000000',
                     CollectEffects = '金币结算加成13%',
                     WearEffects = '金币结算加成17%',
                     UnlockState = 0,
                     UnlockType = {
-                        [0] = 100000000
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 100000000,
+                            Text = '- 达到金币100000000'
+                        }
                     }
                 }
             },
@@ -173,12 +193,15 @@ ACHVManager = ACHVManager or
                     Index = 1,
                     NameText = '首当其充',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
-                    UnlockConditions = '首次充值',
                     CollectEffects = '金币结算加成8%',
                     WearEffects = '金币结算加成12%',
                     UnlockState = 0,
                     UnlockType = {
-                        [1] = 1
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 1,
+                            Text = '- 首次充值'
+                        }
                     }
                 },
                 {
@@ -186,12 +209,15 @@ ACHVManager = ACHVManager or
                     Index = 2,
                     NameText = '千金一掷',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
-                    UnlockConditions = '累积充值689起源币',
                     CollectEffects = '金币结算加成10%',
                     WearEffects = '金币结算加成14%',
                     UnlockState = 0,
                     UnlockType = {
-                        [1] = 689
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 689,
+                            Text = '- 累积充值689起源币'
+                        }
                     }
                 },
                 {
@@ -199,12 +225,15 @@ ACHVManager = ACHVManager or
                     Index = 3,
                     NameText = '财大气粗',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
-                    UnlockConditions = '累积充值1888起源币',
                     CollectEffects = '金币结算加成12%',
                     WearEffects = '金币结算加成16%',
                     UnlockState = 0,
                     UnlockType = {
-                        [1] = 1888
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 1888,
+                            Text = '- 累积充值1888起源币'
+                        }
                     }
                 },
                 {
@@ -212,12 +241,15 @@ ACHVManager = ACHVManager or
                     Index = 4,
                     NameText = '不差钱',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
-                    UnlockConditions = '累积充值5888起源币',
                     CollectEffects = '金币结算加成14%',
                     WearEffects = '金币结算加成18%',
                     UnlockState = 0,
                     UnlockType = {
-                        [1] = 5888
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 5888,
+                            Text = '- 累积充值5888起源币'
+                        }
                     }
                 },
                 {
@@ -225,12 +257,15 @@ ACHVManager = ACHVManager or
                     Index = 5,
                     NameText = '马上有钱',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
-                    UnlockConditions = '累积充值8888起源币',
                     CollectEffects = '金币结算加成16%',
                     WearEffects = '金币结算加成20%',
                     UnlockState = 0,
                     UnlockType = {
-                        [1] = 8888
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 8888,
+                            Text = '- 累积充值8888起源币'
+                        }
                     }
                 },
                 {
@@ -238,12 +273,15 @@ ACHVManager = ACHVManager or
                     Index = 6,
                     NameText = '钱能通神',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
-                    UnlockConditions = '累积充值16888起源币',
                     CollectEffects = '金币结算加成18%',
                     WearEffects = '金币结算加成25%',
                     UnlockState = 0,
                     UnlockType = {
-                        [1] = 16888
+                        [0] = {
+                            -- Condition = ItemId.Coin_0,
+                            Value = 16888,
+                            Text = '- 累积充值16888起源币'
+                        }
                     }
                 }
             },
@@ -253,13 +291,20 @@ ACHVManager = ACHVManager or
                     Index = 1,
                     NameText = '尸墟巡猎者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
-                    UnlockConditions = '- 赛季等级达到10级\n- 累计击杀普通僵尸 500 只',
                     CollectEffects = '',
                     WearEffects = '对普通僵尸伤害 +5%',
                     UnlockState = 0,
                     UnlockType = {
-                        [2] = 10,
-                        [3] = 500
+                        [0] = {
+                            -- Condition = Statistics.BossKillCount,
+                            Value = 10,
+                            Text = '- 赛季等级达到10级'
+                        },
+                        [1] = {
+                            -- Condition = Statistics.NormalMonsterKillCount,
+                            Value = 500,
+                            Text = '- 累计击杀普通僵尸 500 只'
+                        }
                     }
                 },
                 {
@@ -267,13 +312,20 @@ ACHVManager = ACHVManager or
                     Index = 2,
                     NameText = '腐潮肃清者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
-                    UnlockConditions = '- 赛季等级达到20级\n- 累计击杀精英怪 150 只',
                     CollectEffects = '',
                     WearEffects = '对精英僵尸伤害 +5%',
                     UnlockState = 0,
                     UnlockType = {
-                        [2] = 20,
-                        [4] = 150
+                        [0] = {
+                            -- Condition = Statistics.BossKillCount,
+                            Value = 20,
+                            Text = '- 赛季等级达到20级'
+                        },
+                        [1] = {
+                            -- Condition = Statistics.EliteMonsterKillCount,
+                            Value = 150,
+                            Text = '- 累计击杀精英怪 150 只'
+                        }
                     }
                 },
                 {
@@ -281,13 +333,20 @@ ACHVManager = ACHVManager or
                     Index = 3,
                     NameText = '无殇镇疫使',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
-                    UnlockConditions = '- 赛季等级达到30级\n- 单局内击杀100普通僵尸，且全程生命值从未低于50%',
                     CollectEffects = '',
                     WearEffects = '- 对普通僵尸伤害 +8%\n- 受到普通僵尸伤害 -3%',
                     UnlockState = 0,
                     UnlockType = {
-                        [2] = 30,
-                        [6] = 100
+                        [0] = {
+                            -- Condition = Statistics.BossKillCount,
+                            Value = 30,
+                            Text = '- 赛季等级达到30级'
+                        },
+                        [1] = {
+                            -- Condition = Statistics.NormalMonsterKillCountHealthAboveHalf,
+                            Value = 100,
+                            Text = '- 单局内击杀100普通僵尸，且全程生命值从未低于50%'
+                        }
                     }
                 },
                 {
@@ -295,13 +354,20 @@ ACHVManager = ACHVManager or
                     Index = 4,
                     NameText = '荒城孤伐者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
-                    UnlockConditions = '- 赛季等级达到40级\n- 单局内击杀30只精英怪，且全程生命值从未低于50%',
                     CollectEffects = '',
                     WearEffects = '- 对精英僵尸伤害 +8%\n- 受到精英僵尸伤害 -3%',
                     UnlockState = 0,
                     UnlockType = {
-                        [2] = 40,
-                        [7] = 30
+                        [0] = {
+                            -- Condition = Statistics.BossKillCount,
+                            Value = 40,
+                            Text = '- 赛季等级达到40级'
+                        },
+                        [1] = {
+                            -- Condition = Statistics.EliteMonsterKillCountHealthAboveHalf,
+                            Value = 30,
+                            Text = '- 单局内击杀30只精英怪，且全程生命值从未低于50%'
+                        }
                     }
                 },
                 {
@@ -309,13 +375,20 @@ ACHVManager = ACHVManager or
                     Index = 5,
                     NameText = '疫首诛灭者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
-                    UnlockConditions = '- 赛季等级达到50级\n- 累积击杀50次boss',
                     CollectEffects = '',
                     WearEffects = '- 全伤+10%\n- 伤害-5%\n- 暴击率+3%',
                     UnlockState = 0,
                     UnlockType = {
-                        [2] = 50,
-                        [5] = 50
+                        [0] = {
+                            -- Condition = Statistics.BossKillCount,
+                            Value = 50,
+                            Text = '- 赛季等级达到50级'
+                        },
+                        [1] = {
+                            -- Condition = Statistics.BossKillCount,
+                            Value = 50,
+                            Text = '- 累积击杀50次boss'
+                        }
                     }
                 },
                 {
@@ -323,13 +396,20 @@ ACHVManager = ACHVManager or
                     Index = 6,
                     NameText = '万尸归墟尊',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
-                    UnlockConditions = '- 赛季等级达到100级\n- 无伤击败boss一次',
                     CollectEffects = '',
                     WearEffects = '- 全伤+15%\n- 伤害-10%\n- 暴击率+5%\n- 第一次死亡时候无敌3秒，并且回复30%血量',
                     UnlockState = 0,
                     UnlockType = {
-                        [2] = 100,
-                        [8] = 1
+                        [0] = {
+                            -- Condition = Statistics.BossKillCount,
+                            Value = 100,
+                            Text = '- 赛季等级达到100级'
+                        },
+                        [1] = {
+                            -- Condition = Statistics.BossKillCount,
+                            Value = 1,
+                            Text = '- 无伤击败boss一次'
+                        }
                     }
                 }
             }
