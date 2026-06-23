@@ -20,11 +20,7 @@ end
 
 function ACHVPreview:Refresh()
     self.Name:SetText(ACHVManager:SelectedTitleData().NameText);
-    local path = LoadObject(string.format(
-        ACHVManager:SelectedTitleData().IconPath, 
-        ACHVManager.TitleListUI.selectedTabID, 
-        ACHVManager.TitleListUI.selectedTabID
-    ));
+    local path = LoadObject(ACHVManager:SelectedTitleData().IconPath);
     self.Icon:SetBrushFromTexture(path);
 end
 

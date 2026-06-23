@@ -18,7 +18,8 @@ ACHVManager = ACHVManager or
         -- 动画时长
         AnimDur = {
             In = 0.2,
-            Out = 0.2
+            Out = 0.2,
+            Set = 0.5
         };
         -- 条件类型枚举
         ConditionType = {
@@ -47,8 +48,8 @@ ACHVManager = ACHVManager or
             [1] = "充值称号",
             [2] = "赛季称号"
         };
-        -- 解锁状态文本
-        UnlockStateText = {
+        -- 称号状态文本
+        TitleStateText = {
             [0] = '未解锁',
             [1] = '已解锁',
             [2] = '已佩戴'
@@ -61,12 +62,12 @@ ACHVManager = ACHVManager or
         };
         -- 设置按钮切换状态固定模式
         SetToggleState = {[0] = 1, [1] = 2, [2] = 1};
-        -- 目前已佩戴称号数据
-        EquippedTitleData = nil;
         -- 称号数据
         TitleData = {
             [0] = {
                 {
+                    -- 称号ID（枚举排列在ue_enum_custom.Title）
+                    Id = 0,
                     -- 分类索引
                     Category = 0,
                     -- 索引
@@ -74,7 +75,7 @@ ACHVManager = ACHVManager or
                     -- 标题文本
                     NameText = '囊中羞涩',
                     -- 图标路径
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_0.WealthTitle_0',
                     -- 收集效果文本
                     CollectEffects = '金币结算加成1%',
                     -- 佩戴效果文本
@@ -91,10 +92,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 1,
                     Category = 0,
                     Index = 2,
                     NameText = '略有盈余',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_1.WealthTitle_1',
                     CollectEffects = '金币结算加成3%',
                     WearEffects = '金币结算加成5%',
                     UnlockState = 0,
@@ -107,10 +109,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 2,
                     Category = 0,
                     Index = 3,
                     NameText = '小富即安',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_2.WealthTitle_2',
                     CollectEffects = '金币结算加成5%',
                     WearEffects = '金币结算加成8%',
                     UnlockState = 0,
@@ -123,10 +126,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 3,
                     Category = 0,
                     Index = 4,
                     NameText = '盆满钵满',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_3.WealthTitle_3',
                     CollectEffects = '金币结算加成7%',
                     WearEffects = '金币结算加成10%',
                     UnlockState = 0,
@@ -139,10 +143,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 4,
                     Category = 0,
                     Index = 5,
                     NameText = '腰缠万贯',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_4.WealthTitle_4',
                     CollectEffects = '金币结算加成9%',
                     WearEffects = '金币结算加成12%',
                     UnlockState = 0,
@@ -155,10 +160,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 5,
                     Category = 0,
                     Index = 6,
                     NameText = '富甲一方',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_5.WealthTitle_5',
                     CollectEffects = '金币结算加成11%',
                     WearEffects = '金币结算加成14%',
                     UnlockState = 0,
@@ -171,10 +177,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 6,
                     Category = 0,
                     Index = 7,
                     NameText = '富可敌国',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_%d.WealthTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_6.WealthTitle_6',
                     CollectEffects = '金币结算加成13%',
                     WearEffects = '金币结算加成17%',
                     UnlockState = 0,
@@ -189,10 +196,11 @@ ACHVManager = ACHVManager or
             },
             [1] = {
                 {
+                    Id = 7,
                     Category = 1,
                     Index = 1,
                     NameText = '首当其充',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_0.TopUpTitle_0',
                     CollectEffects = '金币结算加成8%',
                     WearEffects = '金币结算加成12%',
                     UnlockState = 0,
@@ -205,10 +213,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 8,
                     Category = 1,
                     Index = 2,
                     NameText = '千金一掷',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_1.TopUpTitle_1',
                     CollectEffects = '金币结算加成10%',
                     WearEffects = '金币结算加成14%',
                     UnlockState = 0,
@@ -221,10 +230,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 9,
                     Category = 1,
                     Index = 3,
                     NameText = '财大气粗',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_2.TopUpTitle_2',
                     CollectEffects = '金币结算加成12%',
                     WearEffects = '金币结算加成16%',
                     UnlockState = 0,
@@ -237,10 +247,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 10,
                     Category = 1,
                     Index = 4,
                     NameText = '不差钱',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_3.TopUpTitle_3',
                     CollectEffects = '金币结算加成14%',
                     WearEffects = '金币结算加成18%',
                     UnlockState = 0,
@@ -253,10 +264,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 11,
                     Category = 1,
                     Index = 5,
                     NameText = '马上有钱',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_4.TopUpTitle_4',
                     CollectEffects = '金币结算加成16%',
                     WearEffects = '金币结算加成20%',
                     UnlockState = 0,
@@ -269,10 +281,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 12,
                     Category = 1,
                     Index = 6,
                     NameText = '钱能通神',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_%d.TopUpTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_5.TopUpTitle_5',
                     CollectEffects = '金币结算加成18%',
                     WearEffects = '金币结算加成25%',
                     UnlockState = 0,
@@ -287,10 +300,11 @@ ACHVManager = ACHVManager or
             },
             [2] = {
                 {
+                    Id = 13,
                     Category = 2,
                     Index = 1,
                     NameText = '尸墟巡猎者',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_0.SeasonTitle_0',
                     CollectEffects = '',
                     WearEffects = '对普通僵尸伤害 +5%',
                     UnlockState = 0,
@@ -308,10 +322,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 14,
                     Category = 2,
                     Index = 2,
                     NameText = '腐潮肃清者',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_1.SeasonTitle_1',
                     CollectEffects = '',
                     WearEffects = '对精英僵尸伤害 +5%',
                     UnlockState = 0,
@@ -329,10 +344,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 15,
                     Category = 2,
                     Index = 3,
                     NameText = '无殇镇疫使',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_2.SeasonTitle_2',
                     CollectEffects = '',
                     WearEffects = '- 对普通僵尸伤害 +8%\n- 受到普通僵尸伤害 -3%',
                     UnlockState = 0,
@@ -350,10 +366,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 16,
                     Category = 2,
                     Index = 4,
                     NameText = '荒城孤伐者',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_3.SeasonTitle_3',
                     CollectEffects = '',
                     WearEffects = '- 对精英僵尸伤害 +8%\n- 受到精英僵尸伤害 -3%',
                     UnlockState = 0,
@@ -371,10 +388,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 17,
                     Category = 2,
                     Index = 5,
                     NameText = '疫首诛灭者',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_4.SeasonTitle_4',
                     CollectEffects = '',
                     WearEffects = '- 全伤+10%\n- 伤害-5%\n- 暴击率+3%',
                     UnlockState = 0,
@@ -392,10 +410,11 @@ ACHVManager = ACHVManager or
                     }
                 },
                 {
+                    Id = 18,
                     Category = 2,
                     Index = 6,
                     NameText = '万尸归墟尊',
-                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_%d.SeasonTitle_%d',
+                    IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_5.SeasonTitle_5',
                     CollectEffects = '',
                     WearEffects = '- 全伤+15%\n- 伤害-10%\n- 暴击率+5%\n- 第一次死亡时候无敌3秒，并且回复30%血量',
                     UnlockState = 0,
@@ -449,6 +468,15 @@ function ACHVManager:CloseMainUI()
     self.MainUI:Close();
 end
 
+function ACHVManager:Construct()
+    self:LoadData();
+end
+
+-- 加载数据
+function ACHVManager:LoadData()
+
+end
+
 -- 当前选中称号实例
 function ACHVManager:SelectedTitleObj()
     return self.TitleListUI.tabButtons[self.TitleListUI.selectedTabID]
@@ -459,20 +487,24 @@ function ACHVManager:SelectedTitleData()
     return self.Config.TitleData[self.CategoryListUI.selectedTabID][self.TitleListUI.selectedTabID + 1]
 end
 
+-- 当前选中称号状态
+function ACHVManager:GetSelectedTitleState()
+    return LocalPlayerState.PlayerDataManager:GetTitleState(self:SelectedTitleData().Id)
+end
+
 -- 解锁称号
 function ACHVManager:Unlock()
     -- 需解锁的条件
+     LocalPlayerState.PlayerDataManager:UnlockTitle(self:SelectedTitleData().Id);
     return true
 end
 
 -- 佩戴称号
 function ACHVManager:Equipped()
-    if self.Config.EquippedTitleData then
-        self.Config.TitleData[self.Config.EquippedTitleData.Category][self.Config.EquippedTitleData.Index].UnlockState = 1;
-        self.TitleListUI.tabButtons[self.Config.EquippedTitleData.Index - 1]:Refresh();
+    if LocalPlayerState.PlayerDataManager:GetEquippedTitle() then
         self:Unequipped();
     end
-    self.Config.EquippedTitleData = self:SelectedTitleData();
+    LocalPlayerState.PlayerDataManager:EquipTitle(self:SelectedTitleData().Id);
     self.PlayerPawnTitle = UGCWidgetManagerSystem.AddObjectPositionUI(
         UGCGameSystem.GetLocalPlayerPawn(), 
         UGCGameSystem.GetUGCResourcesFullPath(self.Config.TitleClassPath),
@@ -487,9 +519,11 @@ end
 
 -- 卸下称号
 function ACHVManager:Unequipped()
+    local titleId = LocalPlayerState.PlayerDataManager:GetEquippedTitle();
     UGCWidgetManagerSystem.RemoveObjectPositionUI(UGCGameSystem.GetLocalPlayerPawn(), self.PlayerPawnTitle);
-    self.Config.EquippedTitleData = nil;
     self.PlayerPawnTitle = nil;
+    LocalPlayerState.PlayerDataManager:EquipTitle(nil);
+    self.TitleListUI.tabButtons[titleId]:Refresh();
     return true
 end
 

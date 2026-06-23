@@ -6,6 +6,7 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Achievement.ACHVManager");
 
 function ACHVComponent:ReceiveBeginPlay()
     ACHVComponent.SuperClass.ReceiveBeginPlay(self);
+    ACHVManager:Construct();
     if self:GetOwner():HasAuthority() == false then
         self:InitHomeUI(self.MainUIClassPath);
     end

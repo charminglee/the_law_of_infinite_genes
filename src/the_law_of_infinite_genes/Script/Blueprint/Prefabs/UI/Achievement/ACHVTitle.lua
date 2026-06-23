@@ -30,21 +30,19 @@ function ACHVTitle:TitleData()
     return ACHVManager.Config.TitleData[ACHVManager.CategoryListUI.selectedTabID][self.index + 1]
 end
 
-function ACHVTitle:GetUnlockState()
-    return self:TitleData().UnlockState
+-- 当前称号状态
+function ACHVTitle:GetTitleState()
+    UGCLog.Log('GetTitleState',LocalPlayerState.PlayerDataManager:GetTitleState(self:TitleData().Id))
+    return LocalPlayerState.PlayerDataManager:GetTitleState(self:TitleData().Id)
 end
 
-function ACHVTitle:GetUnlockStateText()
-    return ACHVManager.Config.UnlockStateText[self:GetUnlockState()]
-end
-
-function ACHVTitle:SetUnlockState(value)
-    self:TitleData().UnlockState = value;
-    self:Refresh();
+-- 当前称号状态文本
+function ACHVTitle:GetTitleStateText()
+    return ACHVManager.Config.TitleStateText[self:GetTitleState()]
 end
 
 function ACHVTitle:ToggleState()
-    local state = self:GetUnlockState();
+    local state = self:GetTitleState();
     local res
     if state == 0 then
         res = ACHVManager:Unlock();
@@ -53,9 +51,6 @@ function ACHVTitle:ToggleState()
     elseif state == 2 then
         res = ACHVManager:Unequipped();
     end
-    if not res then return nil end
-    local value = ACHVManager.Config.SetToggleState[state];
-    self:SetUnlockState(value);
 end
 
 function ACHVTitle:SetLocked(locked)
@@ -70,8 +65,8 @@ end
 
 function ACHVTitle:Refresh()
     self.Name:SetText(self:TitleData().NameText);
-    self.State:SetText(self:GetUnlockStateText());
-    self:SetLocked(self:GetUnlockState() == 0);
+    self.State:SetText(self:GetTitleStateText());
+    self:SetLocked(self:GetTitleState() == 0);
 end
 
 function ACHVTitle:Select()

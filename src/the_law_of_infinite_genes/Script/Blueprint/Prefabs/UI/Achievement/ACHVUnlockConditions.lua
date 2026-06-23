@@ -23,7 +23,7 @@ end
 
 function ACHVUnlockConditions:Refresh()
     local value, limit;
-    -- value = PlayerController.PlayerDataManager:GetStat(Statistics.BossKillCount);
+    -- value = LocalPlayerState.PlayerDataManager:GetStat(Statistics.BossKillCount);
     value = 1;
     limit = ACHVManager:SelectedTitleData().UnlockType[self.index].Value;
     self.Info:SetText(ACHVManager:SelectedTitleData().UnlockType[self.index].Text);
@@ -34,7 +34,7 @@ function ACHVUnlockConditions:Refresh()
     end
     TweenManager.FloatAnim(function(v)
         self.UnlockProgressBar:SetPercent(v)
-    end, 0, value / limit, 0.5)
+    end, 0, value / limit, ACHVManager.Config.AnimDur.Set)
 end
 
 return ACHVUnlockConditions
