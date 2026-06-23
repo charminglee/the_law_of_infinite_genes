@@ -61,11 +61,23 @@
   _Script.Common.Const.ItemId_  
   物品ID表。
 
+- __Attribute__  
+  _Script.Common.Const.Attribute_  
+  属性表。
+
+- __AttributeMate__  
+  _Script.Common.Const.AttributeMate_  
+  属性元数据表。
+
 ## 配置
 
 - __Config__  
   _Script.Common.Config.Config_  
   全局配置。
+
+- __Card__  
+  _Script.Common.Card.Card_  
+  卡牌配置。
 
 ## 枚举
 

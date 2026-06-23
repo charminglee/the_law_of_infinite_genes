@@ -271,7 +271,7 @@ UGCCustomGameAttributeType = {
 	UGCAttributeGroup_Character_CounterAttackRatio = 'CounterAttackRatio',
 	--Character [等级-Level],
 	UGCAttributeGroup_Character_Level = 'Level',
-	--Character [伤害加成-DamageBoost],
+	--Character [通用伤害加成-DamageBoost],
 	UGCAttributeGroup_Character_DamageBoost = 'DamageBoost',
 	--Character [普通怪伤害加成-NormalMonsterDamageBoost],
 	UGCAttributeGroup_Character_NormalMonsterDamageBoost = 'NormalMonsterDamageBoost',
@@ -289,6 +289,16 @@ UGCCustomGameAttributeType = {
 	UGCAttributeGroup_Character_AttackPower = 'AttackPower',
 	--Character [攻击力百分比-AttackPowerBoost],
 	UGCAttributeGroup_Character_AttackPowerBoost = 'AttackPowerBoost',
+	--Character [闪避率-DodgeChance],
+	UGCAttributeGroup_Character_DodgeChance = 'DodgeChance',
+	--Character [秒杀率-SeckillChance],
+	UGCAttributeGroup_Character_SeckillChance = 'SeckillChance',
+	--Character [后坐力百分比-RecoilPct],
+	UGCAttributeGroup_Character_RecoilPct = 'RecoilPct',
+	--Character [换弹时间百分比-ReloadTimePct],
+	UGCAttributeGroup_Character_ReloadTimePct = 'ReloadTimePct',
+	--Character [射速百分比-ShootSpeedScale],
+	UGCAttributeGroup_Character_ShootSpeedScale = 'ShootSpeedScale',
 }; 
 
 UGCCustomGameAttributeTypeCommentMap = { 
@@ -300,7 +310,7 @@ UGCCustomGameAttributeTypeCommentMap = {
 	['HealthStealRatio'] = 'Character [吸血倍率-HealthStealRatio]', 
 	['CounterAttackRatio'] = 'Character [反伤倍率-CounterAttackRatio]', 
 	['Level'] = 'Character [等级-Level]', 
-	['DamageBoost'] = 'Character [伤害加成-DamageBoost]', 
+	['DamageBoost'] = 'Character [通用伤害加成-DamageBoost]', 
 	['NormalMonsterDamageBoost'] = 'Character [普通怪伤害加成-NormalMonsterDamageBoost]', 
 	['EliteMonsterDamageBoost'] = 'Character [精英怪伤害加成-EliteMonsterDamageBoost]', 
 	['BossDamageBoost'] = 'Character [Boss伤害加成-BossDamageBoost]', 
@@ -309,5 +319,10 @@ UGCCustomGameAttributeTypeCommentMap = {
 	['DamageDecreacePct'] = 'Character [伤害减免百分比-DamageDecreacePct]', 
 	['AttackPower'] = 'Character [攻击力-AttackPower]', 
 	['AttackPowerBoost'] = 'Character [攻击力百分比-AttackPowerBoost]', 
+	['DodgeChance'] = 'Character [闪避率-DodgeChance]', 
+	['SeckillChance'] = 'Character [秒杀率-SeckillChance]', 
+	['RecoilPct'] = 'Character [后坐力百分比-RecoilPct]', 
+	['ReloadTimePct'] = 'Character [换弹时间百分比-ReloadTimePct]', 
+	['ShootSpeedScale'] = 'Character [射速百分比-ShootSpeedScale]', 
 }; 
 

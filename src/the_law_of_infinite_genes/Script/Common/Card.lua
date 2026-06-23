@@ -1,57 +1,7 @@
-Attribute = {
-    AttackPowerBoost = 1, ---攻击力加成
-    NormalMonsterDamageBoost = 2, ---普通怪物伤害加成
-    EliteMonsterDamageBoost = 3, ---精锐怪物伤害加成
-    BossDamageBoost = 4, ---首领怪物伤害加成
-    CritChance = 5, ---暴击率
-    CritDamageBoost = 6, ---暴击伤害
-    DefenseBoost = 7, ---防御加成
-    HealthStealRatio = 8, ---吸血率
-    DamageDecreacePct = 9, ---伤害减免
-    BreakDefenceRatio = 10, ---穿透率
-    HealthMaxBoost = 11, ---生命值加成
-    EpidemicToxinRatio = 12, ---疫毒触发概率
-    EpidemicToxinLevel = 13, ---疫毒等级
-    EpidemicToxinOverlyLimit = 14, ---疫毒叠加上限
-    UGCGeneralMoveSpeedScale = 15, ---移动速度
-    BurstShootCDWrapper =16, ---射击间隔
-    ReloadTime = 17, ---换弹间隔
-    SeckillRatio = 18, ---秒杀概率
-    IgnoreHarmRatio = 19, ---无视伤害概率
-    DodgeRatio = 20, ---闪避概率
-    EpidemicToxinSettleRatio = 21, --疫毒结算概率
-    InfiniteAmmo = 22, --无限子弹
-    Recoilless = 23, ---无后坐力
+Card = {}
 
-}
 
-AttributeMate = {
-    [Attribute.AttackPowerBoost] = {index=1, anno='攻击力加成'},
-    [Attribute.NormalMonsterDamageBoost] = {index=2, anno='普通怪物伤害加成'},
-    [Attribute.EliteMonsterDamageBoost] = {index=3, anno='精锐怪物伤害加成'},
-    [Attribute.BossDamageBoost] = {index=4, anno='首领怪物伤害加成'},
-    [Attribute.CritChance] = {index=5, anno='暴击率'},
-    [Attribute.CritDamageBoost] = {index=6, anno='暴击伤害'},
-    [Attribute.DefenseBoost] = {index=7, anno='防御加成'},
-    [Attribute.HealthStealRatio] = {index=8, anno='吸血率'},
-    [Attribute.DamageDecreacePct] = {index=9, anno='伤害减免'},
-    [Attribute.BreakDefenceRatio] = {index=10, anno='穿透率'},
-    [Attribute.HealthMaxBoost] = {index=11, anno='生命值加成'},
-    [Attribute.EpidemicToxinRatio] = {index=12, anno='疫毒触发概率'},
-    [Attribute.EpidemicToxinLevel] = {index=13, anno='疫毒 Lv'},
-    [Attribute.EpidemicToxinOverlyLimit] = {index=14, anno='疫毒叠加次数'},
-    [Attribute.UGCGeneralMoveSpeedScale] = {index=15, anno='移动速度'},
-    [Attribute.BurstShootCDWrapper] = {index=16, anno='射击间隔'},
-    [Attribute.ReloadTime] = {index=17, anno='换弹间隔'},
-    [Attribute.SeckillRatio] = {index=18, anno='秒杀概率'},
-    [Attribute.IgnoreHarmRatio] = {index=19, anno='无视伤害概率'},
-    [Attribute.DodgeRatio] = {index=20, anno='闪避率'},
-    [Attribute.EpidemicToxinSettleRatio] = {index=21, anno='疫毒结算概率'},
-    [Attribute.InfiniteAmmo] = {index=22, anno='无限子弹'},
-    [Attribute.Recoilless] = {index=23, anno='无后坐力'},
-}
-
-Grade = {
+Card.Grade = {
     [1] = {cost=50, HexColor='FFFFFF', anno='一费卡'},
     [2] = {cost=100, HexColor='00FF00', anno='二费卡'},
     [3] = {cost=200, HexColor='0000FF', anno='三费卡'},
@@ -59,21 +9,24 @@ Grade = {
     [5] = {cost=700, HexColor='FFA500', anno='五费卡'},
 }
 
-Group = {
+
+Card.Group = {
     [1] = {name='畸变猎手', HexColor='FF0000'},
     [2] = {name='腐甲防御者', HexColor='FFFF00'},
     [3] = {name='疫毒反噬者', HexColor='EE82EE'},
     [4] = {name='迅影突袭者', HexColor='1E90FF'},
 }
 
-Combo = {
+
+Card.Combo = {
     [1] = {name='4/12套装效果', HexColor='0DFF00'},
     [2] = {name='8/12套装效果', HexColor='FFD700'},
     [3] = {name='12/12套装效果', HexColor='FF424F'},
     [4] = {name='FullStar达成效果', HexColor='FF00FF'}
 }
 
-Suit = {
+
+Card.Suit = {
     [1] = {
         Group = 1,
         Combo = {
@@ -161,7 +114,8 @@ Suit = {
     }
 }
 
-Cards = {
+
+Card.Cards = {
     [1] = {
         suit = 1,
         star = 1,
@@ -1145,3 +1099,6 @@ Cards = {
         }
     },
 }
+
+
+return Card

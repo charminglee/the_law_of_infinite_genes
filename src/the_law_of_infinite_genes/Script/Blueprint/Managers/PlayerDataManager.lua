@@ -16,6 +16,7 @@ end
 
 
 function PlayerDataManager:OnRep__data()
+    self._isLoaded = true
 end
 
 
