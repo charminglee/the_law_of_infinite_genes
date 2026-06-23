@@ -345,9 +345,13 @@ function PlayerDataManager:GetTitleState(title)
     if not self._isLoaded then
         return nil
     end
-    if title == self._data.title.equipped then return 2 end
+    if title == self._data.title.equipped then 
+        return 2 
+    end
     for _, i in pairs(self._data.title.unlocked) do
-        if i == title then return 1 end
+        if i == title then 
+            return 1 
+        end
     end
     return 0
 end
