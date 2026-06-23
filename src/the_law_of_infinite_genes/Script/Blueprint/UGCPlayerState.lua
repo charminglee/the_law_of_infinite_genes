@@ -8,6 +8,7 @@ function UGCPlayerState:ReceiveBeginPlay()
     UGCPlayerState.SuperClass.ReceiveBeginPlay(self)
     if not self:HasAuthority() then
         LocalPlayerState = self
+    end
 end
 
 

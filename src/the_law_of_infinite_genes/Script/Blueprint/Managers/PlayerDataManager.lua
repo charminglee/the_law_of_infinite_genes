@@ -338,5 +338,18 @@ function PlayerDataManager:UnlockTitle(title, sync)
     end
 end
 
+---【双端】获取称号状态。0为未解锁，1为已解锁，2为已佩戴
+---@param title Title 称号ID，请使用Title枚举值
+---@return number 称号状态
+function PlayerDataManager:GetTitleState(title)
+    if not self._isLoaded then
+        return nil
+    end
+    if title == self._data.title.equipped then return 2 end
+    for _, i in pairs(self._data.title.unlocked) do
+        if i == title then return 1 end
+    end
+    return 0
+end
 
 return PlayerDataManager
