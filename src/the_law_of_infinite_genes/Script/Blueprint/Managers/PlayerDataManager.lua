@@ -5,12 +5,14 @@ local PlayerDataManager = {
     _isLoaded = false,
     _uid = 0,
     _tick = 0,
+    _card = {},
 }
 
 
 function PlayerDataManager:GetReplicatedProperties()
     return {
-        {"_data", "Lazy"}
+        {"_data", "Lazy"},
+        {"_card", "Lazy"},
     }
 end
 
@@ -24,6 +26,7 @@ function PlayerDataManager:ReceiveBeginPlay()
     PlayerDataManager.SuperClass.ReceiveBeginPlay(self)
     self._uid = UGCGameSystem.GetUIDByPlayerState(self.owner)
     self:_Load()
+    self:ResetCardData()
 end
 
 
@@ -52,7 +55,6 @@ function PlayerDataManager:_BuildDefaultData()
             [ItemId.Coin_3] = 0,
             [ItemId.Coin_4] = 0,
         },
-        card = {},
         stat = {
             [Statistics.NormalMonsterKillCount] = 0,
             [Statistics.EliteMonsterKillCount] = 0,
@@ -216,42 +218,249 @@ end
 --===========================  卡牌  ===========================--
 
 
+-- 卡牌按grade分组的id缓存，首次刷新商店时构建
+local cardsByGrade = nil
+local function _BuildCardsByGrade()
+    if cardsByGrade ~= nil then
+        return cardsByGrade
+    end
+    cardsByGrade = {}
+    for cardId, info in pairs(Card.Cards) do
+        local list = cardsByGrade[info.grade]
+        if list == nil then
+            list = {}
+            cardsByGrade[info.grade] = list
+        end
+        table.insert(list, cardId)
+    end
+    return cardsByGrade
+end
+
+
+---【服务端】重置卡牌数据。
+function PlayerDataManager:ResetCardData()
+    if not self:HasAuthority() then
+        return
+    end
+    self._card = {
+        shopLevel = 1,
+        store = table.pack(
+            nil, nil, nil, nil, nil,
+            nil, nil, nil, nil, nil,
+            nil, nil, nil, nil, nil,
+            nil, nil, nil, nil, nil
+        ),
+        shop = table.pack(
+            nil, nil, nil, nil, nil, nil
+        ),
+        equipped = table.pack(
+            nil, nil, nil, nil, nil, nil,
+            nil, nil, nil, nil, nil, nil
+        ),
+        refreshCount = 0,
+    }
+    UnrealNetwork.RepLazyProperty(self, "_card")
+end
+
+
 ---【双端】判断是否拥有指定卡牌。
----@param card number 卡牌ID
+---@param card table 卡牌，结构为{cardId, star}
 ---@return boolean 是否拥有指定卡牌
 function PlayerDataManager:HasCard(card)
-    if self._data.card == nil then
-        return false
+    for i = 1, self._card.store.n do
+        local c = self._card.store[i]
+        if c and c[1] == card[1] and c[2] == card[2] then
+            return true
+        end
     end
-    return self._data.card[card] ~= nil
+    for i = 1, self._card.equipped.n do
+        local c = self._card.equipped[i]
+        if c and c[1] == card[1] and c[2] == card[2] then
+            return true
+        end
+    end
+    return false
 end
 
 
----【服务端】添加卡牌。
----@param card number 卡牌ID
+function PlayerDataManager:_FindEmptySlot(list)
+    for i = 1, list.n do
+        if list[i] == nil then
+            return i
+        end
+    end
+    return nil
+end
+
+
+---【服务端】装备卡牌。
+---@param fromSlot number 仓库槽位索引 1-20
+---@param toSlot? number 卡牌槽位索引 1-12，默认为第一个空槽位
 ---@param sync? boolean 是否立即同步数据，默认为true
-function PlayerDataManager:AddCard(card, sync)
+function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
-    self._data.card[card] = 1
+    local store = self._card.store
+    local equipped = self._card.equipped
+    local card = store[fromSlot]
+    if card == nil then
+        return
+    end
+    if toSlot == nil then
+        toSlot = self:_FindEmptySlot(equipped)
+        if toSlot == nil then
+            -- 卡牌槽位已满
+            return
+        end
+    end
+    equipped[toSlot] = card
+    store[fromSlot] = nil
     if sync ~= false then
-        self:Sync()
+        UnrealNetwork.RepLazyProperty(self, "_card")
     end
 end
 
 
----【服务端】移除卡牌。
----@param card number 卡牌ID
+---【服务端】卸下卡牌。
+---@param fromSlot number 卡牌槽位索引 1-12
+---@param toSlot? number 仓库槽位索引 1-20，默认为第一个空槽位
 ---@param sync? boolean 是否立即同步数据，默认为true
-function PlayerDataManager:RemoveCard(card, sync)
+function PlayerDataManager:UnequipCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
-    self._data.card[card] = nil
-    if sync ~= false then
-        self:Sync()
+    local store = self._card.store
+    local equipped = self._card.equipped
+    local card = equipped[fromSlot]
+    if card == nil then
+        return
     end
+    if toSlot == nil then
+        toSlot = self:_FindEmptySlot(store)
+        if toSlot == nil then
+            -- 仓库已满
+            return
+        end
+    end
+    store[toSlot] = card
+    equipped[fromSlot] = nil
+    if sync ~= false then
+        UnrealNetwork.RepLazyProperty(self, "_card")
+    end
+end
+
+
+---【服务端】购买卡牌。
+---@param fromSlot number 商店槽位索引 1-6
+---@param toSlot? number 仓库槽位索引 1-20，默认为第一个空槽位
+---@param sync? boolean 是否立即同步数据，默认为true
+function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
+    if not self:HasAuthority() or not self._isLoaded then
+        return
+    end
+
+    local shop = self._card.shop
+    local card = shop[fromSlot]
+    if card == nil then
+        return
+    end
+
+    local store = self._card.store
+    if toSlot == nil then
+        toSlot = self:_FindEmptySlot(store)
+        if toSlot == nil then
+            -- 仓库已满
+            return  
+        end
+    end
+
+    local info = Card.Cards[card[1]]
+    local cost = Card.Grade[info.grade].cost
+    if self:GetCoin(ItemId.Coin_0) < cost then
+        -- 资源点不足
+        return  
+    end
+    self:AddCoin(ItemId.Coin_0, -cost)
+    store[toSlot] = card
+    shop[fromSlot] = nil
+
+    if sync ~= false then
+        UnrealNetwork.RepLazyProperty(self, "_card")
+    end
+end
+
+
+function PlayerDataManager:_SellCard(list, slot, sync)
+    if not self:HasAuthority() or not self._isLoaded then
+        return
+    end
+    local card = list[slot]
+    if card == nil then
+        return
+    end
+    local info = Card.Cards[card[1]]
+    local refund = math.floor(Card.Grade[info.grade].cost * Card.Common.SellRefundRatio)
+    self:AddCoin(ItemId.Coin_0, refund)
+    list[slot] = nil
+    if sync ~= false then
+        UnrealNetwork.RepLazyProperty(self, "_card")
+    end
+end
+
+
+---【服务端】出售仓库卡牌。
+---@param slot number 仓库槽位索引 1-20
+---@param sync? boolean 是否立即同步数据，默认为true
+function PlayerDataManager:SellCardFromStore(slot, sync)
+    self:_SellCard(self._card.store, slot, sync)
+end
+
+
+---【服务端】出售装备中的卡牌。
+---@param slot number 卡牌槽位索引 1-12
+---@param sync? boolean 是否立即同步数据，默认为true
+function PlayerDataManager:SellCardFromEquipped(slot, sync)
+    self:_SellCard(self._card.equipped, slot, sync)
+end
+
+
+---【服务端】刷新卡牌商店。
+function PlayerDataManager:RefreshCardShop()
+    if not self:HasAuthority() or not self._isLoaded then
+        return
+    end
+
+    local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
+    if self:GetCoin(ItemId.Coin_0) < cost then
+        -- 资源点不足
+        return  
+    end
+    self:AddCoin(ItemId.Coin_0, -cost)
+
+    local weights = Card.StoreWeight[self._card.shopLevel]
+    local byGrade = _BuildCardsByGrade()
+    local shop = self._card.shop
+    for i = 1, shop.n do
+        -- 随机挑选一种费用
+        local grade = 1
+        local r = math.random()
+        local acc = 0
+        for g = 1, 5 do
+            acc = acc + weights[g]
+            if r <= acc then
+                grade = g
+                break
+            end
+        end
+        -- 随机挑选该费用下的一张卡牌
+        local pool = byGrade[grade]
+        local cardId = pool[math.random(1, #pool)]
+        shop[i] = {cardId, 1}
+    end
+
+    self._card.refreshCount = self._card.refreshCount + 1
+    UnrealNetwork.RepLazyProperty(self, "_card")
 end
 
 
@@ -339,6 +548,7 @@ function PlayerDataManager:UnlockTitle(title, sync)
     end
 end
 
+
 ---【双端】获取称号状态。0为未解锁，1为已解锁，2为已佩戴
 ---@param title Title 称号ID，请使用Title枚举值
 ---@return number 称号状态
@@ -356,5 +566,6 @@ function PlayerDataManager:GetTitleState(title)
     end
     return 0
 end
+
 
 return PlayerDataManager
