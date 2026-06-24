@@ -1,8 +1,6 @@
 ---@class UGCPlayerPawn_C:BP_UGCPlayerPawn_C
 --Edit Below--
-local UGCPlayerPawn = {
-    bVaultIsOpen = false,
-}
+local UGCPlayerPawn = {}
  
 
 function UGCPlayerPawn:ReceiveBeginPlay()
@@ -12,7 +10,6 @@ function UGCPlayerPawn:ReceiveBeginPlay()
         LocalPlayerPawn = self
     end
 
-    self.bVaultIsOpen = true
 end
 
 

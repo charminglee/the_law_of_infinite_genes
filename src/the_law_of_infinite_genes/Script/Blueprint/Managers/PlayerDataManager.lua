@@ -10,10 +10,7 @@ local PlayerDataManager = {
 
 
 function PlayerDataManager:GetReplicatedProperties()
-    return {
-        {"_data", "Lazy"},
-        {"_card", "Lazy"},
-    }
+    return {"_data", "Lazy"}, {"_card", "Lazy"}
 end
 
 
