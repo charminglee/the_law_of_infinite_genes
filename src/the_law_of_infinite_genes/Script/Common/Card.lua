@@ -3,8 +3,8 @@ Card = {}
 
 Card.Common = {
     SellRefundRatio = 1,    -- 出售卡牌返还比例
-    RefreshBaseCost = 10,   -- 刷新商店的首次消耗
-    RefreshStepCost = 10,   -- 每次刷新相比上一次额外增加的消耗
+    RefreshBaseCost = 10,   -- 刷新商店的首次价格
+    RefreshStepCost = 10,   -- 每次刷新相比上一次的加价
 }
 
 
