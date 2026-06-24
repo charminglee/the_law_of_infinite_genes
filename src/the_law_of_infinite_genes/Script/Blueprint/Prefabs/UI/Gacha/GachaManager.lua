@@ -2,21 +2,12 @@
 GachaManager = GachaManager or
 {
     MainUI = nil;
+    ComponentClass = nil;
     PrevPressedItem= nil;
     CurrentPressedItem = nil;
     ClickFlag = 0;
     ClickIndex = 0;
-    GachaBuffer = {
-        SlotTable = {
-            [0] = nil,[1] = nil,[3] = nil,[4] = nil,[5] = nil,[6] = nil,[7] = nil,[8] = nil,[9] = nil,[10] = nil,[11] = nil,[12] = nil,
-        },
-        cacheTable = {
-            [0] = nil,[1] = nil,[2] = nil,[3] = nil,[4] = nil,[5] = nil,[6] = nil,[7] = nil,[8] = nil,[9] = nil,[10] = nil,[11] = nil,[12] = nil,[13] = nil,[14] = nil,[15] = nil,[16] = nil,[17] = nil,[18] = nil,[19] = nil,[20] = nil,
-        },
-        shopTable = {
-            [0] = {GachaItemId = 0},[1] = {GachaItemId = 0},[2] = {GachaItemId = 0},[3] = {GachaItemId = 0},[4] = {GachaItemId = 0},[5] = {GachaItemId = 0},
-        },
-    }
+    RefreshShopUI = false;
 }
 
 function GachaManager:RegisterComponentClass(CompClass)

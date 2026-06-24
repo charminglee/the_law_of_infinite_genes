@@ -34,10 +34,8 @@ end
 
 function GachaSlotItem:SetSelectedVisibility(Visible)
     if Visible == 0 then
-        ugcprint('0');
         self:SelectedStatus();
     elseif Visible == 1 then
-        ugcprint('1')
         self:UsedStatus();
     elseif Visible == 2 then
         self:EmptyStatus();
@@ -51,7 +49,6 @@ function GachaSlotItem:EmptyStatus()
 end
 
 function GachaSlotItem:SelectedStatus()
-    ugcprint('set selected');
     self.Empty:SetVisibility(ESlateVisibility.Collapsed);
     self.Used:SetVisibility(ESlateVisibility.Visible);
     self.selected:SetVisibility(ESlateVisibility.Visible);
@@ -62,8 +59,16 @@ function GachaSlotItem:UsedStatus()
     self.selected:SetVisibility(ESlateVisibility.Collapsed);
 end
 
--- function GachaSlotItem:Destruct()
+function GachaSlotItem:SetItemTexture(Index)
+    ugcprint('设置图标');
+    local _card = Card.Cards[Index];
+    local Texture = LoadObject(_card.texture);
+    self.GachaImage:SetBrushFromTexture(Texture);
+    local suitIndex = _card.suit;
+    local gradeIndex = _card.grade;
+    self.GachaImage:SetColorRGBStr(Card.Group[suitIndex].HexColor);
+    self.quality:SetColorRGBStr(Card.Grade[gradeIndex].HexColor)
+end
 
--- end
 
 return GachaSlotItem
