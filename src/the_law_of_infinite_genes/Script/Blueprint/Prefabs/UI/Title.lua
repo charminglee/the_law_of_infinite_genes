@@ -6,13 +6,24 @@ local Title = {
 	bInitDoOnce = false,
 }
 
+-- 获取数据
+function Title:GetData()
+	local equipped =  LocalPlayerState.PlayerDataManager:GetEquippedTitle();
+	for _, titles in pairs(ACHVManager.Config.TitleData) do
+		for k, data in pairs(titles) do
+			if data.Id == equipped then
+				return data
+			end		
+		end
+	end
+	return
+end
+
 function Title:Construct()
-	self.Name:SetText(ACHVManager.Config.EquippedTitleData.NameText);
-	local path = LoadObject(string.format(
-        ACHVManager.Config.EquippedTitleData.IconPath, 
-		ACHVManager.Config.EquippedTitleData.Index - 1, 
-		ACHVManager.Config.EquippedTitleData.Index - 1
-    ));
+	UGCLog.Log('Title:Construct')
+	local data = self:GetData();
+	local path = LoadObject(data.IconPath);
+	self.Name:SetText(data.NameText);
     self.Icon:SetBrushFromTexture(path);
 end
 
