@@ -10,6 +10,9 @@ ACHVManager = ACHVManager or
     Preview = nil;
     RightContent = nil;
     PlayerPawnTitle = nil;
+    CacheEquippedTitle = nil;
+    TitleTopUIByPlayerUID = {};
+
 
     -- ===== 静态配置（固定数据） =====
     Config = {
@@ -478,8 +481,9 @@ end
 
 --【客户端】佩戴称号
 function ACHVManager:Equipped()
-    if LocalPlayerState.PlayerDataManager:GetEquippedTitle() then
-        self:Unequipped();
+    local equipped = LocalPlayerState.PlayerDataManager:GetEquippedTitle();
+    if equipped then
+        self.TitleListUI.tabButtons[equipped]:ToggleState();
     end
     UnrealNetwork.CallUnrealRPC(
         LocalPlayerController, 

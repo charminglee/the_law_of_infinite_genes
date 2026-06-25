@@ -8,10 +8,9 @@ local Title = {
 
 -- 获取数据
 function Title:GetData()
-	local equipped =  LocalPlayerState.PlayerDataManager:GetEquippedTitle();
 	for _, titles in pairs(ACHVManager.Config.TitleData) do
 		for k, data in pairs(titles) do
-			if data.Id == equipped then
+			if data.Id == ACHVManager.CacheEquippedTitle then
 				return data
 			end		
 		end
@@ -20,7 +19,6 @@ function Title:GetData()
 end
 
 function Title:Construct()
-	UGCLog.Log('Title:Construct')
 	local data = self:GetData();
 	local path = LoadObject(data.IconPath);
 	self.Name:SetText(data.NameText);

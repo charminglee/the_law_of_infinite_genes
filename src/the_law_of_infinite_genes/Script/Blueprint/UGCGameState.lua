@@ -98,5 +98,9 @@ function UGCGameState:EndGame()
     self.isWaiting = true
 end
 
+--【客户端】佩戴称号广播事件
+function UGCGameState:MulticastRPC_EquippedTitle(uid, id)
+    ACHVManager.CacheEquippedTitle = id;
+end
 
 return UGCGameState
