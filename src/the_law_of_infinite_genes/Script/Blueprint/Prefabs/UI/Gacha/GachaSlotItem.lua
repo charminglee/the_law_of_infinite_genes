@@ -40,11 +40,14 @@ function GachaSlotItem:SetSelectedVisibility(Visible)
         self:UsedStatus();
     elseif Visible == 2 then
         self:EmptyStatus();
+    elseif Visible == 3 then
+        self:NilShopItem();
     end
 end
 
 function GachaSlotItem:EmptyStatus()
     self.Empty:SetVisibility(ESlateVisibility.Visible);
+    self.E1:SetVisibility(ESlateVisibility.Visible);
     self.Used:SetVisibility(ESlateVisibility.Collapsed);
     self.selected:SetVisibility(ESlateVisibility.Collapsed);
 end
@@ -52,14 +55,22 @@ end
 function GachaSlotItem:SelectedStatus()
     self.Empty:SetVisibility(ESlateVisibility.Collapsed);
     self.Used:SetVisibility(ESlateVisibility.Visible);
+    self.E1:SetVisibility(ESlateVisibility.Visible);
     self.selected:SetVisibility(ESlateVisibility.Visible);
 end
 function GachaSlotItem:UsedStatus()
     self.Empty:SetVisibility(ESlateVisibility.Collapsed);
     self.Used:SetVisibility(ESlateVisibility.Visible);
+    self.E1:SetVisibility(ESlateVisibility.Visible);
     self.selected:SetVisibility(ESlateVisibility.Collapsed);
 end
 
+function GachaSlotItem:NilShopItem()
+    self.Empty:SetVisibility(ESlateVisibility.Visible);
+    self.Used:SetVisibility(ESlateVisibility.Collapsed);
+    self.selected:SetVisibility(ESlateVisibility.Collapsed);
+    self.E1:SetVisibility(ESlateVisibility.Collapsed);
+end
 function GachaSlotItem:SetItemTexture(Slot)
     local SlotIndex = Slot[1]
     local star = Slot[2]

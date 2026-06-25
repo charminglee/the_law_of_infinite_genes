@@ -38,7 +38,6 @@ function GachaComponent:InitUI()
             MainUI:SetVisibility(ESlateVisibility.Collapsed);
         end
     );
-    
 end
 
 function GachaComponent:ResetCardData(PlayerKey)
@@ -56,8 +55,9 @@ end
 function GachaComponent:APurchaseCard(PlayerKey, fromSlot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    -- manager:PurchaseCard(fromSlot);
-    manager:RefreshCardShop();
+    ugcprint('fromSlot =='..tostring(fromSlot))
+    manager:PurchaseCard(fromSlot);
+    -- manager:RefreshCardShop();
 
 end
 
@@ -86,7 +86,6 @@ function GachaComponent:SellCardFromEquipped(PlayerKey)
 end
 
 function GachaComponent:RefreshShopUI()
-    ugcprint('刷新商店')
     GachaManager.RefreshShopUI = true;
 end
 

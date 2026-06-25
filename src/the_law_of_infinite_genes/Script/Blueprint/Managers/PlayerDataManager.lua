@@ -385,7 +385,7 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
     -- self:AddCoin(ItemId.Coin_0, -cost)
     store[toSlot] = card
     shop[fromSlot] = nil
-
+    UGCLog.Log('shopdata',shop);
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end

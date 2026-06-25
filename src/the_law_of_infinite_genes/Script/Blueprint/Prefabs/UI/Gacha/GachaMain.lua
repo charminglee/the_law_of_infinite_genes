@@ -63,25 +63,18 @@ end
 function GachaMain:Tick(MyGemetry,FGeometry)
     if GachaManager.RefreshUI then
         GachaManager.RefreshUI = false;
-        self.GachaCacheList:Reload(20);
-        self.GachaSlotList:Reload(12);
-        self.LBPurchaseList:Reload(6);
-        return nil;
+        self.CurrentPressedItem = -1;
+        GachaManager.CurrentPressedItem = nil;
+        GachaManager.PrevPressedItem = nil;
     end
     if GachaManager.CurrentPressedItem ~= self.CurrentPressedItem or GachaManager.CurrentPressedItem == nil then
         self.CurrentPressedItem = GachaManager.CurrentPressedItem;
         self.PrevPressedItem = GachaManager.PrevPressedItem;
-
+        self.RPMask:SetVisibility(ESlateVisibility.Visible);
+        self.RP:SetVisibility(ESlateVisibility.Collapsed);
         self.GachaCacheList:Reload(20);
         self.GachaSlotList:Reload(12);
         self.LBPurchaseList:Reload(6);
-        if self.CurrentPressedItem ~= nil then
-            self.RPMask:SetVisibility(ESlateVisibility.Collapsed);
-            self.RP:SetVisibility(ESlateVisibility.Visible);
-        else
-            self.RPMask:SetVisibility(ESlateVisibility.Visible);
-            self.RP:SetVisibility(ESlateVisibility.Collapsed);
-        end
     end
 end
 function GachaMain:LuaInit()
@@ -122,21 +115,22 @@ function GachaMain:GachaCacheListUpdate(Item, Index)
 end
 function GachaMain:LBPurchaseListUpdate(Item, Index)
     local slot = LocalPlayerState.PlayerDataManager._card.shop[Index+1];
-    if slot ~= nil then
-        Item.BufferSlot = slot;
-        Item.Index = Index;
-        Item:SetItemTexture(slot);
+    Item.BufferSlot = slot;
+    Item.Index = Index+1;
+    if slot == nil then
+        Item:SetSelectedVisibility(3);
+        return nil;
     end
+    Item:SetItemTexture(slot);
     if Item == self.CurrentPressedItem then
+        ugcprint('selected :'..tostring(Index+1));
         Item:SetSelectedVisibility(0);
         self:SetSelectItem(slot)
         return nil;
-    elseif Item == self.PrevPressedItem then
+    else
         Item:SetSelectedVisibility(1);
         return nil;
-    else
-        Item:SetSelectedVisibility(1)
-    end
+    end 
 end
 function GachaMain:GachaSlotListUpdate(Item, Index)
     if LocalPlayerState.PlayerDataManager._card.slot == nil then
@@ -178,6 +172,8 @@ function GachaMain:SetSelectItem(Slot)
     self.GachaSelectedItem:SetBrushFromTexture(Texture);
     local suitIndex = _card.suit;
     self.GachaSelectedItem:SetColorRGBStr(Card.Group[suitIndex].HexColor);
+    self.RPMask:SetVisibility(ESlateVisibility.Collapsed);
+    self.RP:SetVisibility(ESlateVisibility.Visible);
 end
 
 return GachaMain
