@@ -9,9 +9,9 @@ local GachaComponent = {}
 function GachaComponent:GetAvailableServerRPCs()
     return  
     "RefreshCardShop",
+    "APurchaseCard",
     "EquipCard",
     "UnequipCard",
-    "PurchaseCard",
     "SellCardFromStore",
     "SellCardFromEquipped",
     "ResetCardData"
@@ -45,13 +45,20 @@ function GachaComponent:ResetCardData(PlayerKey)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
     manager:ResetCardData();
-    UnrealNetwork.CallUnrealRPC(UGCGameSystem.GetPlayerControllerByPlayerKey(PlayerKey), self, "RefreshShopUI")
 end
 
 function GachaComponent:RefreshCardShop(PlayerKey)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
     manager:RefreshCardShop();
+end
+
+function GachaComponent:APurchaseCard(PlayerKey, fromSlot)
+    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
+    local manager = PlayerState.PlayerDataManager;
+    -- manager:PurchaseCard(fromSlot);
+    manager:RefreshCardShop();
+
 end
 
 function GachaComponent:EquipCard(PlayerKey)
@@ -64,12 +71,6 @@ function GachaComponent:UnequipCard(PlayerKey)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
     manager:UnequipCard();
-end
-
-function GachaComponent:PurchaseCard(PlayerKey)
-    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
-    local manager = PlayerState.PlayerDataManager;
-    manager:PurchaseCard();
 end
 
 function GachaComponent:SellCardFromStore(PlayerKey)

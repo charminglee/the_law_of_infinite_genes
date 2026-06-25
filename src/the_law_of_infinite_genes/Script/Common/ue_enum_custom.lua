@@ -11,17 +11,6 @@ ELotteryMainUIType = {
 }; 
 
 
----@enum Statistics
-Statistics = { 
-    NormalMonsterKillCount = 0,
-    EliteMonsterKillCount = 1,
-    BossKillCount  = 2,
-    NormalMonsterKillCountHealthAboveHalf = 3,
-    EliteMonsterKillCountHealthAboveHalf = 4,
-    HasPerfectBossFight = 5,
-}; 
-
-
 ---@enum Buff
 Buff = { 
     CorpseHuntingSurge = 0,
@@ -41,12 +30,14 @@ SpecialEvent = {
 }; 
 
 
----@enum ELotteryResetType
-ELotteryResetType = { 
-    NotReset = 0,
-    DailyReset = 1,
-    MonthlyReset = 2,
-    WeeklyReset = 3,
+---@enum Statistics
+Statistics = { 
+    NormalMonsterKillCount = 0,
+    EliteMonsterKillCount = 1,
+    BossKillCount  = 2,
+    NormalMonsterKillCountHealthAboveHalf = 3,
+    EliteMonsterKillCountHealthAboveHalf = 4,
+    HasPerfectBossFight = 5,
 }; 
 
 
@@ -71,6 +62,15 @@ Title = {
     TopUpTitle_3 = 16,
     TopUpTitle_4 = 17,
     TopUpTitle_5 = 18,
+}; 
+
+
+---@enum ELotteryResetType
+ELotteryResetType = { 
+    NotReset = 0,
+    DailyReset = 1,
+    MonthlyReset = 2,
+    WeeklyReset = 3,
 }; 
 
 

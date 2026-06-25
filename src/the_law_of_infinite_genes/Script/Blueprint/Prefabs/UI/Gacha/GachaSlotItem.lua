@@ -11,7 +11,7 @@
 ---@field selected UCanvasPanel
 ---@field Used UCanvasPanel
 --Edit Below--
-local GachaSlotItem = { bInitDoOnce = false} 
+local GachaSlotItem = { bInitDoOnce = false, BufferSlot=nil, Index=nil}; 
 
 function GachaSlotItem:Construct()
 	self:LuaInit();
@@ -63,11 +63,9 @@ end
 function GachaSlotItem:SetItemTexture(Slot)
     local SlotIndex = Slot[1]
     local star = Slot[2]
-    UGCLog.Log(Slot);
     local _card = Card.Cards[SlotIndex];
     self.GachaText:SetText(_card.name);
     local Texture = LoadObject(_card.texture);
-    ugcprint('texture is:'..tostring(_card.texture));
     self.GachaImage:SetBrushFromTexture(Texture);
     local suitIndex = _card.suit;
     local gradeIndex = _card.grade;

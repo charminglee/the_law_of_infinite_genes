@@ -357,6 +357,7 @@ end
 ---@param toSlot? number 仓库槽位索引 1-20，默认为第一个空槽位
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
+
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
@@ -372,17 +373,18 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
         toSlot = self:_FindEmptySlot(store)
         if toSlot == nil then
             -- 仓库已满
+            ugcprint('仓库已满')
             return  
         end
     end
 
-    local info = Card.Cards[card[1]]
-    local cost = Card.Grade[info.grade].cost
-    if self:GetCoin(ItemId.Coin_0) < cost then
-        -- 资源点不足
-        return  
-    end
-    self:AddCoin(ItemId.Coin_0, -cost)
+    -- local info = Card.Cards[card[1]]
+    -- local cost = Card.Grade[info.grade].cost
+    -- if self:GetCoin(ItemId.Coin_0) < cost then
+    --     -- 资源点不足
+    --     return  
+    -- end
+    -- self:AddCoin(ItemId.Coin_0, -cost)
     store[toSlot] = card
     shop[fromSlot] = nil
 
@@ -437,12 +439,12 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if isFirstRefresh then
         self._card.refreshCount = 0
     end
-    local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
-    if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
-        -- 资源点不足
-        return  
-    end
-    self:AddCoin(ItemId.Coin_0, -cost)
+    -- local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
+    -- if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
+    --     -- 资源点不足
+    --     return  
+    -- end
+    -- self:AddCoin(ItemId.Coin_0, -cost)
 
     local weights = Card.StoreWeight[self._card.shopLevel]
     local byGrade = _BuildCardsByGrade()
@@ -571,6 +573,10 @@ function PlayerDataManager:GetTitleState(title)
         end
     end
     return 0
+end
+
+function PlayerDataManager:OnRep__card()
+    GachaManager.RefreshUI = true;
 end
 
 

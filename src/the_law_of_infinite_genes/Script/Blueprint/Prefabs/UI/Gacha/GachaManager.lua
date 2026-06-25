@@ -7,7 +7,7 @@ GachaManager = GachaManager or
     CurrentPressedItem = nil;
     ClickFlag = 0;
     ClickIndex = 0;
-    RefreshShopUI = false;
+    RefreshUI = false;
 }
 
 function GachaManager:RegisterComponentClass(CompClass)

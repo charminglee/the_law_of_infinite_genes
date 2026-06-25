@@ -10,12 +10,15 @@
 ---@field GachaDescText UTextBlock
 ---@field GachaSelectedItem UImage
 ---@field GachaSlotList ReuseList2_C
+---@field Image_0 UImage
 ---@field Image_1 UImage
 ---@field Image_2 UImage
 ---@field Image_3 UImage
 ---@field Image_4 UImage
+---@field Image_5 UImage
 ---@field Image_6 UImage
 ---@field Image_7 UImage
+---@field Image_8 UImage
 ---@field Image_35 UImage
 ---@field Image_36 UImage
 ---@field Image_37 UImage
@@ -29,6 +32,8 @@
 ---@field PBG UImage
 ---@field RefreshBg UImage
 ---@field RefreshButton UButton
+---@field RP UCanvasPanel
+---@field RPMask USizeBox
 ---@field RPurchaseButton UButton
 ---@field stripe0 UImage
 ---@field stripe1 UImage
@@ -56,18 +61,26 @@ function GachaMain:Construct()
 end
 
 function GachaMain:Tick(MyGemetry,FGeometry)
-    if GachaManager.RefreshShopUI then
-        GachaManager.RefreshShopUI = false;
+    if GachaManager.RefreshUI then
+        GachaManager.RefreshUI = false;
+        self.GachaCacheList:Reload(20);
+        self.GachaSlotList:Reload(12);
         self.LBPurchaseList:Reload(6);
+        return nil;
     end
     if GachaManager.CurrentPressedItem ~= self.CurrentPressedItem or GachaManager.CurrentPressedItem == nil then
         self.CurrentPressedItem = GachaManager.CurrentPressedItem;
         self.PrevPressedItem = GachaManager.PrevPressedItem;
+
         self.GachaCacheList:Reload(20);
         self.GachaSlotList:Reload(12);
         self.LBPurchaseList:Reload(6);
         if self.CurrentPressedItem ~= nil then
-            self:SetSelectItem('测试', '/Game/UGC/Repository/Icon/Skill/Icon_Skill_14.Icon_Skill_14')
+            self.RPMask:SetVisibility(ESlateVisibility.Collapsed);
+            self.RP:SetVisibility(ESlateVisibility.Visible);
+        else
+            self.RPMask:SetVisibility(ESlateVisibility.Visible);
+            self.RP:SetVisibility(ESlateVisibility.Collapsed);
         end
     end
 end
@@ -110,10 +123,13 @@ end
 function GachaMain:LBPurchaseListUpdate(Item, Index)
     local slot = LocalPlayerState.PlayerDataManager._card.shop[Index+1];
     if slot ~= nil then
+        Item.BufferSlot = slot;
+        Item.Index = Index;
         Item:SetItemTexture(slot);
     end
     if Item == self.CurrentPressedItem then
         Item:SetSelectedVisibility(0);
+        self:SetSelectItem(slot)
         return nil;
     elseif Item == self.PrevPressedItem then
         Item:SetSelectedVisibility(1);
@@ -144,23 +160,24 @@ end
 function GachaMain:LevelUpButtonClicked()
 end
 function GachaMain:RPurchaseButtonClicked()
-
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "APurchaseCard", LocalPlayerController.PlayerKey, GachaManager.CurrentPressedItem.Index);
 end
 function GachaMain:RefreshButtonClicked()
-    ugcprint('发送客户端消息');
     UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "RefreshCardShop", LocalPlayerController.PlayerKey);
-    ugcprint('发送完成')
 end
 function GachaMain:Exit()
     GachaManager:CloseMainUI()
 end
 
----@param descripute string
----@param ImagePath string
-function GachaMain:SetSelectItem(descripute, ImagePath)
-    self.GachaDescText:SetText(descripute);
-    local Texture = LoadObject(ImagePath);
+function GachaMain:SetSelectItem(Slot)
+    local SlotIndex = Slot[1]
+    local star = Slot[2]
+    local _card = Card.Cards[SlotIndex];
+    self.GachaDescText:SetText(_card.name);
+    local Texture = LoadObject(_card.texture);
     self.GachaSelectedItem:SetBrushFromTexture(Texture);
+    local suitIndex = _card.suit;
+    self.GachaSelectedItem:SetColorRGBStr(Card.Group[suitIndex].HexColor);
 end
 
 return GachaMain
