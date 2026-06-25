@@ -19,6 +19,10 @@ function PlayerDataManager:OnRep__data()
 end
 
 
+function PlayerDataManager:OnRep__card()
+end
+
+
 function PlayerDataManager:ReceiveBeginPlay()
     PlayerDataManager.SuperClass.ReceiveBeginPlay(self)
     self._uid = UGCGameSystem.GetUIDByPlayerState(self.owner)
@@ -423,17 +427,22 @@ end
 
 
 ---【服务端】刷新卡牌商店。
-function PlayerDataManager:RefreshCardShop()
+---@param useCoin? boolean 是否使用资源点刷新，默认为true
+---@param isFirstRefresh? boolean 是否为首次刷新，若为首次刷新，则刷新价格为首次价格；默认为false
+function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
 
-    -- local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
-    -- if self:GetCoin(ItemId.Coin_0) < cost then
-    --     -- 资源点不足
-    --     return  
-    -- end
-    -- self:AddCoin(ItemId.Coin_0, -cost)
+    if isFirstRefresh then
+        self._card.refreshCount = 0
+    end
+    local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
+    if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
+        -- 资源点不足
+        return  
+    end
+    self:AddCoin(ItemId.Coin_0, -cost)
 
     local weights = Card.StoreWeight[self._card.shopLevel]
     local byGrade = _BuildCardsByGrade()
