@@ -45,13 +45,13 @@ function GachaComponent:ResetCardData(PlayerKey)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
     manager:ResetCardData();
+    UnrealNetwork.CallUnrealRPC(UGCGameSystem.GetPlayerControllerByPlayerKey(PlayerKey), self, "RefreshShopUI")
 end
 
 function GachaComponent:RefreshCardShop(PlayerKey)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
     manager:RefreshCardShop();
-    UnrealNetwork.CallUnrealRPC(UGCGameSystem.GetPlayerControllerByPlayerKey(PlayerKey), self, "RefreshShopUI")
 end
 
 function GachaComponent:EquipCard(PlayerKey)

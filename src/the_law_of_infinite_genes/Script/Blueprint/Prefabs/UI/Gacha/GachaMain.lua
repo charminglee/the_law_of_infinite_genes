@@ -108,16 +108,10 @@ function GachaMain:GachaCacheListUpdate(Item, Index)
     end
 end
 function GachaMain:LBPurchaseListUpdate(Item, Index)
-    ugcprint('update item');
-    local state = LocalPlayerState;
-    local manager = state.PlayerDataManager;
-    local c = manager._card;
-    local shop = c.shop;
-    local sidx = shop[Index+1];
-    -- local slotIndex = LocalPlayerState.PlayerDataManager._card.shop[Index+1];
-    -- if slotIndex ~= nil then
-    --     Item:SetItemTexture(slotIndex);
-    -- end
+    local slot = LocalPlayerState.PlayerDataManager._card.shop[Index+1];
+    if slot ~= nil then
+        Item:SetItemTexture(slot);
+    end
     if Item == self.CurrentPressedItem then
         Item:SetSelectedVisibility(0);
         return nil;

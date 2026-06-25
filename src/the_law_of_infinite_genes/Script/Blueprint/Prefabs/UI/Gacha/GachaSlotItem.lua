@@ -6,6 +6,7 @@
 ---@field E1 UImage
 ---@field Empty UCanvasPanel
 ---@field GachaImage UImage
+---@field GachaText UTextBlock
 ---@field quality UImage
 ---@field selected UCanvasPanel
 ---@field Used UCanvasPanel
@@ -59,10 +60,14 @@ function GachaSlotItem:UsedStatus()
     self.selected:SetVisibility(ESlateVisibility.Collapsed);
 end
 
-function GachaSlotItem:SetItemTexture(Index)
-    ugcprint('设置图标');
-    local _card = Card.Cards[Index];
+function GachaSlotItem:SetItemTexture(Slot)
+    local SlotIndex = Slot[1]
+    local star = Slot[2]
+    UGCLog.Log(Slot);
+    local _card = Card.Cards[SlotIndex];
+    self.GachaText:SetText(_card.name);
     local Texture = LoadObject(_card.texture);
+    ugcprint('texture is:'..tostring(_card.texture));
     self.GachaImage:SetBrushFromTexture(Texture);
     local suitIndex = _card.suit;
     local gradeIndex = _card.grade;

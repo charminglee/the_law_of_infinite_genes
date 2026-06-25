@@ -428,12 +428,12 @@ function PlayerDataManager:RefreshCardShop()
         return
     end
 
-    local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
-    if self:GetCoin(ItemId.Coin_0) < cost then
-        -- 资源点不足
-        return  
-    end
-    self:AddCoin(ItemId.Coin_0, -cost)
+    -- local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
+    -- if self:GetCoin(ItemId.Coin_0) < cost then
+    --     -- 资源点不足
+    --     return  
+    -- end
+    -- self:AddCoin(ItemId.Coin_0, -cost)
 
     local weights = Card.StoreWeight[self._card.shopLevel]
     local byGrade = _BuildCardsByGrade()
