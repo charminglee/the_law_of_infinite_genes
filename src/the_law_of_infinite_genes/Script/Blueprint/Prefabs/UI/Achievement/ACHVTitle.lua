@@ -32,7 +32,6 @@ end
 
 -- 当前称号状态
 function ACHVTitle:GetTitleState()
-    UGCLog.Log('GetTitleState',LocalPlayerState.PlayerDataManager:GetTitleState(self:TitleData().Id))
     return LocalPlayerState.PlayerDataManager:GetTitleState(self:TitleData().Id)
 end
 
@@ -51,6 +50,11 @@ function ACHVTitle:ToggleState()
     elseif state == 2 then
         res = ACHVManager:Unequipped();
     end
+    UGCTimerUtility.CreateUETimer(
+        function() self:Refresh(); ACHVManager.RightContent:Refresh() end, 
+        ACHVManager.Config.AnimDur.In, 
+        false
+    );
 end
 
 function ACHVTitle:SetLocked(locked)

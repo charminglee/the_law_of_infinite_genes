@@ -448,15 +448,6 @@ function ACHVManager:CloseMainUI()
     self.MainUI:Close();
 end
 
-function ACHVManager:Construct()
-    self:LoadData();
-end
-
--- 加载数据
-function ACHVManager:LoadData()
-
-end
-
 -- 当前选中称号实例
 function ACHVManager:SelectedTitleObj()
     return self.TitleListUI.tabButtons[self.TitleListUI.selectedTabID]
@@ -472,38 +463,43 @@ function ACHVManager:GetSelectedTitleState()
     return LocalPlayerState.PlayerDataManager:GetTitleState(self:SelectedTitleData().Id)
 end
 
--- 解锁称号
+--【客户端】解锁称号
 function ACHVManager:Unlock()
     -- 需解锁的条件
-     LocalPlayerState.PlayerDataManager:UnlockTitle(self:SelectedTitleData().Id);
-    return true
-end
-
--- 佩戴称号
-function ACHVManager:Equipped()
-    if LocalPlayerState.PlayerDataManager:GetEquippedTitle() then
-        self:Unequipped();
-    end
-    LocalPlayerState.PlayerDataManager:EquipTitle(self:SelectedTitleData().Id);
-    self.PlayerPawnTitle = UGCWidgetManagerSystem.AddObjectPositionUI(
-        UGCGameSystem.GetLocalPlayerPawn(), 
-        UGCGameSystem.GetUGCResourcesFullPath(self.Config.TitleClassPath),
-        { X = 0, Y = 0, Z = 100 }, 
-        true, 
-        true, 
-        false, 
-        true
+    UnrealNetwork.CallUnrealRPC(
+        LocalPlayerController, 
+        self.ComponentClass, 
+        self.ComponentClass._Event.ServerRPC.UnlockTitle, 
+        LocalPlayerController.PlayerUID,
+        self:SelectedTitleData().Id
     );
     return true
 end
 
--- 卸下称号
+--【客户端】佩戴称号
+function ACHVManager:Equipped()
+    if LocalPlayerState.PlayerDataManager:GetEquippedTitle() then
+        self:Unequipped();
+    end
+    UnrealNetwork.CallUnrealRPC(
+        LocalPlayerController, 
+        self.ComponentClass, 
+        self.ComponentClass._Event.ServerRPC.EquippedTitle, 
+        LocalPlayerController.PlayerUID,
+        self:SelectedTitleData().Id
+    );
+    return true
+end
+
+--【客户端】卸下称号
 function ACHVManager:Unequipped()
-    local titleId = LocalPlayerState.PlayerDataManager:GetEquippedTitle();
-    UGCWidgetManagerSystem.RemoveObjectPositionUI(UGCGameSystem.GetLocalPlayerPawn(), self.PlayerPawnTitle);
-    self.PlayerPawnTitle = nil;
-    LocalPlayerState.PlayerDataManager:EquipTitle(nil);
-    self.TitleListUI.tabButtons[titleId]:Refresh();
+    UnrealNetwork.CallUnrealRPC(
+        LocalPlayerController, 
+        self.ComponentClass, 
+        self.ComponentClass._Event.ServerRPC.UnequippedTitle, 
+        LocalPlayerController.PlayerUID,
+        self:SelectedTitleData().Id
+    );    
     return true
 end
 
