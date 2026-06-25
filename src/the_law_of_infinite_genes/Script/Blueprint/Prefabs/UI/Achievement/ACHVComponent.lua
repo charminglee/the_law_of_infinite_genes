@@ -1,9 +1,7 @@
 ---@class ACHVComponent_C:ActorComponent
 ---@field MainUIClassPath FSoftClassPath
 --Edit Below--
-local ACHVComponent = {
-    TitleTopUIByPlayerUID = {}
-}
+local ACHVComponent = {}
 
 -- 监听事件名
 local _Event = {
@@ -11,6 +9,9 @@ local _Event = {
         UnlockTitle = 'ServerRPC_UnlockTitle',
         EquippedTitle = 'ServerRPC_EquippedTitle',
         UnequippedTitle = 'ServerRPC_UnequippedTitle',
+    },
+    MulticastRPC = {
+        EquippedTitle = 'MulticastRPC_EquippedTitle',
     }
 }
 
@@ -51,7 +52,8 @@ end
 --【服务端】申请佩戴称号
 function ACHVComponent:ServerRPC_EquippedTitle(uid, id)
     UGCGameSystem.GetPlayerStateByUID(uid).PlayerDataManager:EquipTitle(id);
-    self.TitleTopUIByPlayerUID[uid] = UGCWidgetManagerSystem.AddObjectPositionUI(
+    UnrealNetwork.CallUnrealRPC_Multicast(GameState,_Event.MulticastRPC.EquippedTitle, uid, id);
+    ACHVManager.TitleTopUIByPlayerUID[uid] = UGCWidgetManagerSystem.AddObjectPositionUI(
         UGCGameSystem.GetPlayerPawnByUID(uid), 
         UGCGameSystem.GetUGCResourcesFullPath(ACHVManager.Config.TitleClassPath),
         { X = 0, Y = 0, Z = 100 }, 
@@ -65,8 +67,11 @@ end
 --【服务端】申请卸下称号
 function ACHVComponent:ServerRPC_UnequippedTitle(uid, id)
     UGCGameSystem.GetPlayerStateByUID(uid).PlayerDataManager:EquipTitle(nil);
-    UGCWidgetManagerSystem.RemoveObjectPositionUI(UGCGameSystem.GetPlayerPawnByUID(uid), self.TitleTopUIByPlayerUID[uid]);
-    self.TitleTopUIByPlayerUID[uid] = nil;
+    UGCWidgetManagerSystem.RemoveObjectPositionUI(
+        UGCGameSystem.GetPlayerPawnByUID(uid), 
+        ACHVManager.TitleTopUIByPlayerUID[uid]
+    );
+    ACHVManager.TitleTopUIByPlayerUID[uid] = nil;
 end
 
 return ACHVComponent
