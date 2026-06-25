@@ -2,12 +2,12 @@
 ---@field PlayerDataManager PlayerDataManager_C
 --Edit Below--
 local UGCPlayerState = {}
- 
+
 
 function UGCPlayerState:ReceiveBeginPlay()
     UGCPlayerState.SuperClass.ReceiveBeginPlay(self)
     if not self:HasAuthority() then
-        LocalPlayerState = self
+        LocalPlayerState = LocalPlayerState or self
     end
 end
 

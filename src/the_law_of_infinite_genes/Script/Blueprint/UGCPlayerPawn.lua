@@ -6,11 +6,9 @@ local UGCPlayerPawn = {}
 
 function UGCPlayerPawn:ReceiveBeginPlay()
     UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self)
-
     if not self:HasAuthority() then
-        LocalPlayerPawn = self
+        LocalPlayerPawn = LocalPlayerPawn or self
     end
-
 end
 
 
