@@ -34,18 +34,18 @@ function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageE
 	local playerHealthPct = playerHealth / playerHealthMax
 	if isBoss then 
 		mgr:AddCoin(ItemId.Coin_0, config[3], false)
-		mgr:AddStat(Statistics.BossKillCount, false)
+		mgr:AddStat(Statistics.BossKillCount, 1, false)
 	elseif isElite then
 		mgr:AddCoin(ItemId.Coin_0, config[2], false)
-		mgr:AddStat(Statistics.EliteMonsterKillCount, false)
+		mgr:AddStat(Statistics.EliteMonsterKillCount, 1, false)
 		if playerHealthPct > 0.5 then
-			mgr:AddStat(Statistics.EliteMonsterKillCountHealthAboveHalf, false)
+			mgr:AddStat(Statistics.EliteMonsterKillCountHealthAboveHalf, 1, false)
 		end
 	else
 		mgr:AddCoin(ItemId.Coin_0, config[1], false)
-		mgr:AddStat(Statistics.NormalMonsterKillCount, false)
+		mgr:AddStat(Statistics.NormalMonsterKillCount, 1, false)
 		if playerHealthPct > 0.5 then
-			mgr:AddStat(Statistics.NormalMonsterKillCountHealthAboveHalf, false)
+			mgr:AddStat(Statistics.NormalMonsterKillCountHealthAboveHalf, 1, false)
 		end
     end
 	mgr:Sync()

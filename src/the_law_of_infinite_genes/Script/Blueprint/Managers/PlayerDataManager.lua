@@ -3,7 +3,6 @@
 local PlayerDataManager = {
     _data = {},
     _isLoaded = false,
-    _uid = 0,
     _tick = 0,
     _card = {},
 }
@@ -25,7 +24,6 @@ end
 
 function PlayerDataManager:ReceiveBeginPlay()
     PlayerDataManager.SuperClass.ReceiveBeginPlay(self)
-    self._uid = UGCGameSystem.GetUIDByPlayerState(self.owner)
     self:_Load()
     self:ResetCardData()
 end
@@ -94,7 +92,7 @@ function PlayerDataManager:_Load()
         return
     end
 
-    local data = UGCPlayerStateSystem.GetPlayerArchiveData(self._uid)
+    local data = UGCPlayerStateSystem.GetPlayerArchiveData(self.owner.UID)
     if data == nil then
         data = self:_BuildDefaultData()
     else
@@ -136,7 +134,7 @@ function PlayerDataManager:Save()
     if not self:HasAuthority() or not self._isLoaded then
         return false
     end
-    return UGCPlayerStateSystem.SavePlayerArchiveData(self._uid, self._data)
+    return UGCPlayerStateSystem.SavePlayerArchiveData(self.owner.UID, self._data)
 end
 
 
@@ -466,7 +464,9 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     end
 
     self._card.refreshCount = self._card.refreshCount + 1
+
     UnrealNetwork.RepLazyProperty(self, "_card")
+    Lib.EventSystem.Emit(ServerEvent.OnCardShopRefreshAfter, Lib.EventSystem.EmitType.Both, shop)
 end
 
 
