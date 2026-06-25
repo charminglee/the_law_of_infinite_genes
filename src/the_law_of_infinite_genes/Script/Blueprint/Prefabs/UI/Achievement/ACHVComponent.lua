@@ -45,9 +45,7 @@ end
 
 --【服务端】申请解锁称号
 function ACHVComponent:ServerRPC_UnlockTitle(uid, id)
-    UGCLog.Log('玩家uid:', uid)
-    UGCLog.Log('PlayerDataManager玩家uid:', UGCGameSystem.GetPlayerStateByUID(uid).PlayerDataManager._uid)
-    -- UGCGameSystem.GetPlayerStateByUID(uid).PlayerDataManager:UnlockTitle(id);
+    UGCGameSystem.GetPlayerStateByUID(uid).PlayerDataManager:UnlockTitle(id);
 end
 
 --【服务端】申请佩戴称号
