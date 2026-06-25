@@ -1,6 +1,19 @@
 local root = UGCMapInfoLib.GetRootLongPackagePath()
 
 
+ServerEvent = {
+    OnCardShopRefreshAfter = "OnCardShopRefreshAfter",
+    OnCardEquipAfter       = "OnCardEquipAfter",
+    OnCardUnequipAfter     = "OnCardUnequipAfter",
+    OnCardPurchaseAfter    = "OnCardPurchaseAfter",
+    OnCardSellAfter        = "OnCardSellAfter",
+}
+
+
+ClientEvent = {
+}
+
+
 ClassPath = {
     [Buff.CorpseHuntingSurge]               = root.."Asset/Blueprint/Prefabs/Buffs/CorpseHuntingSurge.CorpseHuntingSurge_C",
     [Buff.CorpseSurgeGoldRush]              = root.."Asset/Blueprint/Prefabs/Buffs/CorpseSurgeGoldRush.CorpseSurgeGoldRush_C",
@@ -8,7 +21,7 @@ ClassPath = {
     [Buff.PutridMiasma]                     = root.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
     [Buff.PutridMiasma_Monster]             = root.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
 
-    BaseMonster                         = root.."Asset/Blueprint/Prefabs/Monsters/BaseMonster.BaseMonster_C",
+    BaseMonster                             = root.."Asset/Blueprint/Prefabs/Monsters/BaseMonster.BaseMonster_C",
 }
 
 

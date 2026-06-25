@@ -1,4 +1,5 @@
 ---@class UGCPlayerController_C:BP_UGCPlayerController_C
+---@field GlobalEventComponent GlobalEventComponent_C
 ---@field GachaComponent GachaComponent_C
 ---@field FightComponent FightComponent_C
 ---@field ACHVComponent CHVComponent_C
@@ -51,13 +52,6 @@ end
 --[[
 function UGCPlayerController:ReceiveEndPlay()
     UGCPlayerController.SuperClass.ReceiveEndPlay(self) 
-end
---]]
-
-
---[[
-function UGCPlayerController:GetAvailableServerRPCs()
-    return
 end
 --]]
 

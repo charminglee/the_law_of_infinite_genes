@@ -10,13 +10,13 @@ local UGCGameState = {
 
 UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
+UGCGameSystem.UGCRequire("Script.Lib.Lib")
 UGCGameSystem.UGCRequire("Script.Common.Const")
 UGCGameSystem.UGCRequire("Script.Common.Common")
 UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Card")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
-UGCGameSystem.UGCRequire("Script.Common.EventSystem")
 
 
 local function InitSubControl(mainUI)
@@ -98,9 +98,11 @@ function UGCGameState:EndGame()
     self.isWaiting = true
 end
 
+
 --【客户端】佩戴称号广播事件
 function UGCGameState:MulticastRPC_EquippedTitle(uid, id)
     ACHVManager.CacheEquippedTitle = id;
 end
+
 
 return UGCGameState

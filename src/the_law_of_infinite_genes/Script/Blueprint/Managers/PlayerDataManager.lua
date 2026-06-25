@@ -300,12 +300,14 @@ function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
+
     local store = self._card.store
     local equipped = self._card.equipped
     local card = store[fromSlot]
     if card == nil then
         return
     end
+
     if toSlot == nil then
         toSlot = self:_FindEmptySlot(equipped)
         if toSlot == nil then
@@ -313,11 +315,14 @@ function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
             return
         end
     end
+
     equipped[toSlot] = card
     store[fromSlot] = nil
+
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end
+    Lib.EventSystem.Emit(ServerEvent.OnCardEquipAfter, Lib.EventSystem.EmitType.Both, fromSlot, toSlot, card)
 end
 
 
@@ -329,12 +334,14 @@ function PlayerDataManager:UnequipCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
+
     local store = self._card.store
     local equipped = self._card.equipped
     local card = equipped[fromSlot]
     if card == nil then
         return
     end
+
     if toSlot == nil then
         toSlot = self:_FindEmptySlot(store)
         if toSlot == nil then
@@ -342,11 +349,14 @@ function PlayerDataManager:UnequipCard(fromSlot, toSlot, sync)
             return
         end
     end
+
     store[toSlot] = card
     equipped[fromSlot] = nil
+
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end
+    Lib.EventSystem.Emit(ServerEvent.OnCardUnequipAfter, Lib.EventSystem.EmitType.Both, fromSlot, toSlot, card)
 end
 
 
@@ -355,7 +365,6 @@ end
 ---@param toSlot? number 仓库槽位索引 1-20，默认为第一个空槽位
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
-
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
@@ -371,24 +380,25 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
         toSlot = self:_FindEmptySlot(store)
         if toSlot == nil then
             -- 仓库已满
-            ugcprint('仓库已满')
             return  
         end
     end
 
-    -- local info = Card.Cards[card[1]]
-    -- local cost = Card.Grade[info.grade].cost
-    -- if self:GetCoin(ItemId.Coin_0) < cost then
-    --     -- 资源点不足
-    --     return  
-    -- end
-    -- self:AddCoin(ItemId.Coin_0, -cost)
+    local info = Card.Cards[card[1]]
+    local cost = Card.Grade[info.grade].cost
+    if self:GetCoin(ItemId.Coin_0) < cost then
+        -- 资源点不足
+        return  
+    end
+    self:AddCoin(ItemId.Coin_0, -cost)
+
     store[toSlot] = card
     shop[fromSlot] = nil
-    UGCLog.Log('shopdata',shop);
+
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end
+    Lib.EventSystem.Emit(ServerEvent.OnCardPurchaseAfter, Lib.EventSystem.EmitType.Both, fromSlot, toSlot, card, cost)
 end
 
 
@@ -415,6 +425,11 @@ end
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:SellCardFromStore(slot, sync)
     self:_SellCard(self._card.store, slot, sync)
+    Lib.EventSystem.Emit(
+        ServerEvent.OnCardSellAfter, 
+        Lib.EventSystem.EmitType.Both, 
+        "store", slot, card, refund
+    )
 end
 
 
@@ -423,6 +438,11 @@ end
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:SellCardFromEquipped(slot, sync)
     self:_SellCard(self._card.equipped, slot, sync)
+    Lib.EventSystem.Emit(
+        ServerEvent.OnCardSellAfter, 
+        Lib.EventSystem.EmitType.Both, 
+        "equipped", slot, card, refund
+    )
 end
 
 
@@ -437,12 +457,12 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if isFirstRefresh then
         self._card.refreshCount = 0
     end
-    -- local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
-    -- if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
-    --     -- 资源点不足
-    --     return  
-    -- end
-    -- self:AddCoin(ItemId.Coin_0, -cost)
+    local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
+    if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
+        -- 资源点不足
+        return  
+    end
+    self:AddCoin(ItemId.Coin_0, -cost)
 
     local weights = Card.StoreWeight[self._card.shopLevel]
     local byGrade = _BuildCardsByGrade()
@@ -573,10 +593,6 @@ function PlayerDataManager:GetTitleState(title)
         end
     end
     return 0
-end
-
-function PlayerDataManager:OnRep__card()
-    GachaManager.RefreshUI = true;
 end
 
 

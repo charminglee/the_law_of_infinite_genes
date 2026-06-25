@@ -1,6 +1,6 @@
 # Lua全局变量
 
-## 全局类（单例）
+## 全局类（单例）/模块
 
 - __GameMode__  
   _Script.Blueprint.UGCGameMode_  
@@ -22,15 +22,14 @@
   _Script.Blueprint.UGCPlayerState_  
   【客户端】本地玩家的 `PlayerState` 实例。
 
+- __Lib__  
+  _Script.Lib.Lib_  
+
 - __Common__  
   _Script.Common.Common.Common_  
 
 - __CommonImpl__  
   _Script.Common.Common.CommonImpl_  
-
-- __EventSystem__  
-  _Script.Common.EventSystem.EventSystem_  
-  事件系统。
 
 - __UGCLog__  
   _Script.Common.UGCLog.UGCLog_  
