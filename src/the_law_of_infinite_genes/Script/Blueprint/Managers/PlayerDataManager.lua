@@ -190,10 +190,13 @@ function PlayerDataManager:SetCoin(id, value, sync)
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil or coin[id] == value then
         return
     end
-    coin[id] = math.max(0, value)
+    local old = coin[id]
+    local new = math.max(0, value)
+    coin[id] = new
     if sync ~= false then
         self:Sync()
     end
+    Lib.EventSystem.Emit(ServerEvent.OnCoinChangeAfter, Lib.EventSystem.EmitType.Both, id, old, new)
 end
 
 
@@ -207,10 +210,13 @@ function PlayerDataManager:AddCoin(id, value, sync)
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil then
         return
     end
-    coin[id] = math.max(0, coin[id] + value)
+    local old = coin[id]
+    local new = math.max(0, old + value)
+    coin[id] = new
     if sync ~= false then
         self:Sync()
     end
+    Lib.EventSystem.Emit(ServerEvent.OnCoinChangeAfter, Lib.EventSystem.EmitType.Both, id, old, new)
 end
 
 
@@ -402,10 +408,11 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
 end
 
 
-function PlayerDataManager:_SellCard(list, slot, sync)
+function PlayerDataManager:_SellCard(from, slot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
+    local list = self._card[from]
     local card = list[slot]
     if card == nil then
         return
@@ -417,6 +424,7 @@ function PlayerDataManager:_SellCard(list, slot, sync)
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end
+    Lib.EventSystem.Emit(ServerEvent.OnCardSellAfter, Lib.EventSystem.EmitType.Both, from, slot, card, refund)
 end
 
 
@@ -424,12 +432,7 @@ end
 ---@param slot number 仓库槽位索引 1-20
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:SellCardFromStore(slot, sync)
-    self:_SellCard(self._card.store, slot, sync)
-    Lib.EventSystem.Emit(
-        ServerEvent.OnCardSellAfter, 
-        Lib.EventSystem.EmitType.Both, 
-        "store", slot, card, refund
-    )
+    self:_SellCard("store", slot, sync)
 end
 
 
@@ -437,12 +440,7 @@ end
 ---@param slot number 卡牌槽位索引 1-12
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:SellCardFromEquipped(slot, sync)
-    self:_SellCard(self._card.equipped, slot, sync)
-    Lib.EventSystem.Emit(
-        ServerEvent.OnCardSellAfter, 
-        Lib.EventSystem.EmitType.Both, 
-        "equipped", slot, card, refund
-    )
+    self:_SellCard("equipped", slot, sync)
 end
 
 
@@ -544,6 +542,7 @@ function PlayerDataManager:EquipTitle(title, sync)
     if sync ~= false then
         self:Sync()
     end
+    Lib.EventSystem.Emit(ServerEvent.OnTitleEquipAfter, Lib.EventSystem.EmitType.Both, title)
 end
 
 
@@ -574,6 +573,7 @@ function PlayerDataManager:UnlockTitle(title, sync)
     if sync ~= false then
         self:Sync()
     end
+    Lib.EventSystem.Emit(ServerEvent.OnTitleUnlockAfter, Lib.EventSystem.EmitType.Both, title)
 end
 
 

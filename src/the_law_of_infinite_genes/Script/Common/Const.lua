@@ -7,6 +7,9 @@ ServerEvent = {
     OnCardUnequipAfter     = "OnCardUnequipAfter",
     OnCardPurchaseAfter    = "OnCardPurchaseAfter",
     OnCardSellAfter        = "OnCardSellAfter",
+    OnCoinChangeAfter      = "OnCoinChangeAfter",
+    OnTitleEquipAfter      = "OnTitleEquipAfter",
+    OnTitleUnlockAfter     = "OnTitleUnlockAfter",
 }
 
 

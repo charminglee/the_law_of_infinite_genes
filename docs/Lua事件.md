@@ -95,3 +95,35 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
     | 2 | slot | number | 出售槽位索引 |
     | 3 | card | table | 出售的卡牌 `{cardId, star}` |
     | 4 | refund | number | 返还的资源点数量 |
+
+### OnCoinChangeAfter
+
+【双端】货币数量变化后触发。
+
+- 参数：
+
+    | 序号 | 参数 | 类型 | 说明 |
+    | --- | --- | --- | --- |
+    | 1 | id | number | 货币ID |
+    | 2 | old | number | 变化前的数量 |
+    | 3 | new | number | 变化后的数量 |
+
+### OnTitleEquipAfter
+
+【双端】佩戴或卸下称号后触发。
+
+- 参数：
+
+    | 序号 | 参数 | 类型 | 说明 |
+    | --- | --- | --- | --- |
+    | 1 | title | Title \| nil | 当前佩戴的称号；`nil` 表示卸下 |
+
+### OnTitleUnlockAfter
+
+【双端】解锁称号后触发。
+
+- 参数：
+
+    | 序号 | 参数 | 类型 | 说明 |
+    | --- | --- | --- | --- |
+    | 1 | title | Title | 解锁的称号 |
