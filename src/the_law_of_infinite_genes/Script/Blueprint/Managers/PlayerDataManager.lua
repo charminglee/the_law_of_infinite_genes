@@ -522,7 +522,7 @@ end
 
 
 ---【双端】获取当前佩戴的称号。
----@return Title | nil Title枚举值，若无佩戴则返回nil
+---@return Title|nil Title枚举值，若无佩戴则返回nil
 function PlayerDataManager:GetEquippedTitle()
     if not self._isLoaded then
         return nil
@@ -532,7 +532,7 @@ end
 
 
 ---【服务端】佩戴称号。
----@param title Title | nil 称号ID，请使用Title枚举值，卸下称号可传nil
+---@param title Title|nil 称号ID，请使用Title枚举值，卸下称号可传nil
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerDataManager:EquipTitle(title, sync)
     if not self:HasAuthority() or not self._isLoaded then
