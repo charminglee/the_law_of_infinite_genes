@@ -24,7 +24,6 @@ function ACHVComponent:ReceiveBeginPlay()
     if self:GetOwner():HasAuthority() == false then
         self:InitHomeUI();
     end
-
 end
 
 -- 注册界面
@@ -65,7 +64,7 @@ function ACHVComponent:ServerRPC_EquippedTitle(uid, id)
 end
 
 --【服务端】申请卸下称号
-function ACHVComponent:ServerRPC_UnequippedTitle(uid, id)
+function ACHVComponent:ServerRPC_UnequippedTitle(uid)
     UGCGameSystem.GetPlayerStateByUID(uid).PlayerDataManager:EquipTitle(nil);
     UGCWidgetManagerSystem.RemoveObjectPositionUI(
         UGCGameSystem.GetPlayerPawnByUID(uid), 
