@@ -5,7 +5,7 @@
 local HomeToolBar = { 
     bInitDoOnce = false, 
     parent=nil,  
-    ToolBarButtonLabel = {'商城', '抽奖', '排行榜', '仓库', '成就'},
+    ToolBarButtonLabel = {'商城', '抽奖', '排行榜', '仓库', '成就', '通行证', '基因树'},
     selectIndex = 0,
 	aniState = false,
 	currentTween = nil
@@ -45,8 +45,9 @@ end
 
 function HomeToolBar:AnimBtnOnClicked()
     self.aniState = not self.aniState
-    local slot = UGCWidgetManagerSystem.SlotAsCanvasSlot(self.ReuseList2)
-    local currentSize = slot:GetSize()
+    local slot = UGCWidgetManagerSystem.SlotAsCanvasSlot(self.ReuseList2);
+    local originalSize = {X = 330, Y = 125};
+    local currentSize = slot:GetSize();
     -- 停止正在播放的动画（避免同时多个动画冲突）
     if self.currentTween then
         TweenManager.Stop(self.currentTween)
@@ -54,17 +55,17 @@ function HomeToolBar:AnimBtnOnClicked()
     end
     self.currentTween = TweenManager.SizeAnim(
         slot,
-        KismetMathLibrary.MakeVector2D(0, 60),
+        KismetMathLibrary.MakeVector2D(0, originalSize.Y),
         KismetMathLibrary.MakeVector(currentSize.X, 0, 0),
-        KismetMathLibrary.MakeVector(self.aniState and 0 or 500 , 0, 0),
+        KismetMathLibrary.MakeVector(self.aniState and 0 or originalSize.X , 0, 0),
         0.5,
         self.aniState and TweenManager.EEasingType.QuartInOut or TweenManager.EEasingType.QuartOut
-    )
+    );
     -- 动画结束后清除句柄
     if self.currentTween then
         TweenManager.OnComplete(self.currentTween, function()
             self.currentTween = nil
-        end)
+        end);
     end
 end
 
