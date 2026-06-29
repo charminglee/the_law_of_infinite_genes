@@ -12,10 +12,10 @@ end
 
 ---角色死亡事件
 ---生效范围：服务器&客户端
----@param Damage float 伤害值
+---@param KillingDamage float 伤害值
 ---@param EventInstigator AController 伤害来源的Controller
 ---@param DamageCauser AActor 伤害来源
----@param FDamageEvent DamageEvent 伤害事件
+---@param DamageEvent DamageEvent 伤害事件
 ---@param DamageTypeID int32 伤害类型
 function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
     if not self:HasAuthority() or not EventInstigator:IsPlayerController() then

@@ -2,7 +2,7 @@
 ---@field GlobalEventComponent GlobalEventComponent_C
 ---@field GachaComponent GachaComponent_C
 ---@field FightComponent FightComponent_C
----@field ACHVComponent CHVComponent_C
+---@field ACHVComponent ACHVComponent_C
 ---@field StoreComponent StoreComponent_C
 ---@field HomeComponent HomeComponent_C
 ---@field RankingListComponent RankingListComponent_C
@@ -26,7 +26,7 @@ function UGCPlayerController:ReceiveBeginPlay()
                 local weaponId = Config.InitialWeapon.WeaponId
                 local bulletId = Config.InitialWeapon.BulletId
                 if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
-                    UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
+                    UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)  
                     UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
                     UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
                     UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)

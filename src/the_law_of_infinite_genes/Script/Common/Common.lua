@@ -102,7 +102,7 @@ function Common.LoadObjectWithSoftPathAsync(SoftObjectPath, CallBack)
     STExtraBlueprintFunctionLibrary.GetAssetByAssetReferenceAsync(SoftObjectPath, UGCGameSystem.GameState.AsyncDelegate[AsyncDelegateIndex], true)
 end
 
----@return osdate
+---@return std.osdate
 function Common.GetCurrentDate()
     
     return os.date("*t", Common.GetCurrentTime());

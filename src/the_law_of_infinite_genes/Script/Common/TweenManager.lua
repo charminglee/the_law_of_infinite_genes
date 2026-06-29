@@ -7,8 +7,8 @@
 TweenManager = TweenManager or {}
 
 -- 私有变量：TweenLibrary 实例和默认上下文（本地玩家控制器）
-local _tweenLib = nil
-local _defaultContext = nil
+local _tweenLib = nil ---@type __UnrealTweenBlueprintLibrary
+local _defaultContext = nil ---@type PlayerController
 
 -- 缓动类型常量（方便引用，可根据实际环境调整）
 TweenManager.EEasingType = {

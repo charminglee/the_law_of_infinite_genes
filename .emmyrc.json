@@ -8,16 +8,23 @@
   },
   "diagnostics": {
     "disable": [
+      "type-not-found",
+      "iter-variable-reassign",
+      "assign-type-mismatch",
+      "need-check-nil",
+      "access-invisible",
+      "global-in-non-module",
+      "undefined-field",
+      "missing-parameter",
       "undefined-global",
       "unnecessary-if"
     ],
-    "enable": false
+    "enable": true
   },
   "completion": {
     "autoRequire": false,
     "autoRequireFunction": "UGCGameSystem.UGCRequire",
-    "callSnippet": false,
-    "postfix": "@"
+    "callSnippet": false
   },
   "doc": {
     "syntax": "md",

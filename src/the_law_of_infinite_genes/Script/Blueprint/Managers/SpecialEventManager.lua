@@ -6,9 +6,7 @@ local SpecialEventManager = {
 
 
 function SpecialEventManager:GetReplicatedProperties()
-    return {
-        {"currEvent", "Lazy"}
-    }
+    return {"currEvent", "Lazy"}
 end
 
 
@@ -59,7 +57,7 @@ function SpecialEventManager:TriggerSpecialEvent(specialEvent)
     )
 
     -- 给玩家添加对应buff
-    local buffCls = ClassPath[specialEvent]
+    local buffCls = ClassPath[specialEvent] ---@type string
     for _, i in pairs(UGCGameSystem.GetAllPlayerPawn()) do
         UGCPersistEffectSystem.AddBuffByClass(i, buffCls)
     end
