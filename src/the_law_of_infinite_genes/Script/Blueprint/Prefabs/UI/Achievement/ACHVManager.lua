@@ -73,6 +73,8 @@ ACHVManager = ACHVManager or
                     Id = 0,
                     -- 分类索引
                     Category = 0,
+                    -- 类别中的索引
+                    Index = 1,
                     -- 标题文本
                     NameText = '囊中羞涩',
                     -- 图标路径
@@ -95,6 +97,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 1,
                     Category = 0,
+                    Index = 2,
                     NameText = '略有盈余',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_1.WealthTitle_1',
                     CollectEffects = '金币结算加成3%',
@@ -111,6 +114,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 2,
                     Category = 0,
+                    Index = 3,
                     NameText = '小富即安',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_2.WealthTitle_2',
                     CollectEffects = '金币结算加成5%',
@@ -127,6 +131,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 3,
                     Category = 0,
+                    Index = 4,
                     NameText = '盆满钵满',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_3.WealthTitle_3',
                     CollectEffects = '金币结算加成7%',
@@ -143,6 +148,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 4,
                     Category = 0,
+                    Index = 5,
                     NameText = '腰缠万贯',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_4.WealthTitle_4',
                     CollectEffects = '金币结算加成9%',
@@ -159,6 +165,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 5,
                     Category = 0,
+                    Index = 6,
                     NameText = '富甲一方',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_5.WealthTitle_5',
                     CollectEffects = '金币结算加成11%',
@@ -175,6 +182,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 6,
                     Category = 0,
+                    Index = 7,
                     NameText = '富可敌国',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_6.WealthTitle_6',
                     CollectEffects = '金币结算加成13%',
@@ -193,6 +201,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 7,
                     Category = 1,
+                    Index = 1,
                     NameText = '首当其充',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_0.TopUpTitle_0',
                     CollectEffects = '金币结算加成8%',
@@ -209,6 +218,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 8,
                     Category = 1,
+                    Index = 2,
                     NameText = '千金一掷',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_1.TopUpTitle_1',
                     CollectEffects = '金币结算加成10%',
@@ -225,6 +235,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 9,
                     Category = 1,
+                    Index = 3,
                     NameText = '财大气粗',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_2.TopUpTitle_2',
                     CollectEffects = '金币结算加成12%',
@@ -241,6 +252,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 10,
                     Category = 1,
+                    Index = 4,
                     NameText = '不差钱',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_3.TopUpTitle_3',
                     CollectEffects = '金币结算加成14%',
@@ -257,6 +269,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 11,
                     Category = 1,
+                    Index = 5,
                     NameText = '马上有钱',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_4.TopUpTitle_4',
                     CollectEffects = '金币结算加成16%',
@@ -273,6 +286,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 12,
                     Category = 1,
+                    Index = 6,
                     NameText = '钱能通神',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/TopUpTitle_5.TopUpTitle_5',
                     CollectEffects = '金币结算加成18%',
@@ -291,6 +305,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 13,
                     Category = 2,
+                    Index = 1,
                     NameText = '尸墟巡猎者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_0.SeasonTitle_0',
                     CollectEffects = '',
@@ -312,6 +327,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 14,
                     Category = 2,
+                    Index = 2,
                     NameText = '腐潮肃清者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_1.SeasonTitle_1',
                     CollectEffects = '',
@@ -333,6 +349,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 15,
                     Category = 2,
+                    Index = 3,
                     NameText = '无殇镇疫使',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_2.SeasonTitle_2',
                     CollectEffects = '',
@@ -354,6 +371,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 16,
                     Category = 2,
+                    Index = 4,
                     NameText = '荒城孤伐者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_3.SeasonTitle_3',
                     CollectEffects = '',
@@ -375,6 +393,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 17,
                     Category = 2,
+                    Index = 5,
                     NameText = '疫首诛灭者',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_4.SeasonTitle_4',
                     CollectEffects = '',
@@ -396,6 +415,7 @@ ACHVManager = ACHVManager or
                 {
                     Id = 18,
                     Category = 2,
+                    Index = 6,
                     NameText = '万尸归墟尊',
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/SeasonTitle_5.SeasonTitle_5',
                     CollectEffects = '',
@@ -451,6 +471,18 @@ function ACHVManager:CloseMainUI()
     self.MainUI:Close();
 end
 
+-- 根据称号ID获取数据
+function ACHVManager:GetData(title)
+	for _, titles in pairs(self.Config.TitleData) do
+		for k, data in pairs(titles) do
+			if data.Id == title then
+				return data
+			end		
+		end
+	end
+	return
+end
+
 -- 当前选中称号实例
 function ACHVManager:SelectedTitleObj()
     return self.TitleListUI.tabButtons[self.TitleListUI.selectedTabID]
@@ -481,9 +513,10 @@ end
 
 --【客户端】佩戴称号
 function ACHVManager:Equipped()
-    local equipped = LocalPlayerState.PlayerDataManager:GetEquippedTitle();
-    if equipped then
-        self.TitleListUI.tabButtons[equipped]:ToggleState();
+    local titleId = LocalPlayerState.PlayerDataManager:GetEquippedTitle();
+    if titleId then
+        self:Unequipped();
+        -- self.TitleListUI.tabButtons[self:GetData(titleId).Index].Refresh();
     end
     UnrealNetwork.CallUnrealRPC(
         LocalPlayerController, 
@@ -501,9 +534,8 @@ function ACHVManager:Unequipped()
         LocalPlayerController, 
         self.ComponentClass, 
         self.ComponentClass._Event.ServerRPC.UnequippedTitle, 
-        LocalPlayerController.PlayerUID,
-        self:SelectedTitleData().Id
-    );    
+        LocalPlayerController.PlayerUID
+    );
     return true
 end
 

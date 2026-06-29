@@ -120,7 +120,7 @@ end
 
 
 ---汇总指定属性在所有命名加成源中的加成总和。
----@param attrType UGCNativeGameAttributeType | UGCCustomGameAttributeType 属性枚举
+---@param attrType UGCNativeGameAttributeType|UGCCustomGameAttributeType 属性枚举
 ---@return number 加成总和
 function PlayerAttrManager:_BonusTotal(attrType)
     local total = 0
@@ -132,7 +132,7 @@ end
 
 
 ---把指定属性的基础值+加成推送到 GAS（self.owner 即 Pawn 本身）。
----@param attrType UGCNativeGameAttributeType | UGCCustomGameAttributeType 属性枚举
+---@param attrType UGCNativeGameAttributeType|UGCCustomGameAttributeType 属性枚举
 function PlayerAttrManager:_Push(attrType)
     local value = (self._base[attrType] or 0) + self:_BonusTotal(attrType)
     UGCAttributeSystem.SetGameAttributeValue(self.owner, attrType, value)
@@ -184,7 +184,7 @@ end
 
 
 ---【双端】获取属性当前值（含加成与 Buff，来自 GAS，由引擎自动同步）。
----@param attrType UGCNativeGameAttributeType | UGCCustomGameAttributeType 属性枚举
+---@param attrType UGCNativeGameAttributeType|UGCCustomGameAttributeType 属性枚举
 ---@return number 当前值
 function PlayerAttrManager:Get(attrType)
     return UGCAttributeSystem.GetGameAttributeValue(self.owner, attrType)
@@ -192,7 +192,7 @@ end
 
 
 ---【双端】获取属性最大值。
----@param attrType UGCNativeGameAttributeType | UGCCustomGameAttributeType 属性枚举
+---@param attrType UGCNativeGameAttributeType|UGCCustomGameAttributeType 属性枚举
 ---@return number 最大值
 function PlayerAttrManager:GetMax(attrType)
     return UGCAttributeSystem.GetGameAttributeValueMax(self.owner, attrType)
@@ -200,7 +200,7 @@ end
 
 
 ---【双端】获取属性最小值。
----@param attrType UGCNativeGameAttributeType | UGCCustomGameAttributeType 属性枚举
+---@param attrType UGCNativeGameAttributeType|UGCCustomGameAttributeType 属性枚举
 ---@return number 最小值
 function PlayerAttrManager:GetMin(attrType)
     return UGCAttributeSystem.GetGameAttributeValueMin(self.owner, attrType)
@@ -208,7 +208,7 @@ end
 
 
 ---【双端】获取管理器计算的基础值（默认+成长+手动修改，不含加成与 Buff）。
----@param attrType UGCNativeGameAttributeType | UGCCustomGameAttributeType 属性枚举
+---@param attrType UGCNativeGameAttributeType|UGCCustomGameAttributeType 属性枚举
 ---@return number 基础值
 function PlayerAttrManager:GetBase(attrType)
     return self._base[attrType] or 0
@@ -226,7 +226,7 @@ end
 
 
 ---【服务端】覆盖某属性的基础值。
----@param attrType UGCNativeGameAttributeType | UGCCustomGameAttributeType 属性枚举
+---@param attrType UGCNativeGameAttributeType|UGCCustomGameAttributeType 属性枚举
 ---@param value number 基础值
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerAttrManager:SetBase(attrType, value, sync)
@@ -242,7 +242,7 @@ end
 
 
 ---【服务端】在当前基础值上叠加增量。
----@param attrType UGCNativeGameAttributeType | UGCCustomGameAttributeType 属性枚举
+---@param attrType UGCNativeGameAttributeType|UGCCustomGameAttributeType 属性枚举
 ---@param delta number 增量
 ---@param sync? boolean 是否立即同步数据，默认为true
 function PlayerAttrManager:AddBase(attrType, delta, sync)

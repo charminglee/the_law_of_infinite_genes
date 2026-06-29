@@ -1,15 +1,35 @@
 {
+  "$schema": "https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json",
+  "runtime": {
+    "version": "LuaLatest",
+    "requireLikeFunction": [
+      "UGCGameSystem.UGCRequire"
+    ]
+  },
   "diagnostics": {
     "disable": [
-      "need-check-nil",
-      "undefined-global",
-      "annotation-usage-error",
-      "doc-syntax-error",
-      "undefined-field",
-      "unnecessary-if",
+      "type-not-found",
+      "iter-variable-reassign",
       "assign-type-mismatch",
-      "undefined-doc-param"
+      "need-check-nil",
+      "access-invisible",
+      "global-in-non-module",
+      "undefined-field",
+      "missing-parameter",
+      "undefined-global",
+      "unnecessary-if"
     ],
-    "enable":false
+    "enable": true
+  },
+  "completion": {
+    "autoRequire": false,
+    "autoRequireFunction": "UGCGameSystem.UGCRequire",
+    "callSnippet": false
+  },
+  "doc": {
+    "syntax": "md",
+    "privateName": [
+      "_*"
+    ]
   }
 }

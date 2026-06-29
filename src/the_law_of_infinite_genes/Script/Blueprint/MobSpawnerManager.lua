@@ -2,8 +2,8 @@
 local MobSpawnerManager = {}
 
 
----每波刷怪数量 = (20 + 波次) * 存活玩家数
 local function SpawnCountFormula(n)
+    -- 每波刷怪数量 = (20 + 波次) * 存活玩家数
     local survivors = 0
     local playerKeys = UGCGameSystem.GetAllPlayerKey(false)
     for _, k in pairs(playerKeys) do
