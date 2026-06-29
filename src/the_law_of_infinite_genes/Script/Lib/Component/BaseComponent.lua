@@ -4,7 +4,7 @@
 ---@class BaseComponent_C:ActorComponent
 --Edit Below--
 local BaseComponent = {
-    owner = nil, ---@type Actor 属主Actor
+    owner = nil, ---@type Actor @属主Actor
 }
 
 
@@ -16,7 +16,7 @@ end
 
 
 ---检查当前对象是否运行在服务器端。
----@return boolean 是否运行在服务器端
+---@return boolean @是否运行在服务器端
 function BaseComponent:HasAuthority()
     return self.owner and self.owner:HasAuthority()
 end

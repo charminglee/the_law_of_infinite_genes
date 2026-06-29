@@ -37,7 +37,7 @@ end
 
 
 ---触发特殊事件。
----@param specialEvent number SpecialEvent枚举值
+---@param specialEvent SpecialEvent @SpecialEvent枚举值
 function SpecialEventManager:TriggerSpecialEvent(specialEvent)
     if not self:HasAuthority() then
         return

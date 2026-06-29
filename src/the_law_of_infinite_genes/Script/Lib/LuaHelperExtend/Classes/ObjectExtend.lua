@@ -5,13 +5,11 @@
 ObjectExtend = {}
 
 
----@param obj any
----@param func function
----@return __Delegate
-function ObjectExtend.CreateDelegate(obj, func) end
+---@param Object any
+---@param CallBackFunc function
+---@return ULuaSingleDelegate
+function ObjectExtend.CreateDelegate(Object, CallBackFunc) end
 
 
----@param obj any
----@param func function
----@return __Delegate
-function ObjectExtend.DestroyDelegate(obj, func) end
+---@param Delegate ULuaSingleDelegate
+function ObjectExtend.DestroyDelegate(Delegate) end

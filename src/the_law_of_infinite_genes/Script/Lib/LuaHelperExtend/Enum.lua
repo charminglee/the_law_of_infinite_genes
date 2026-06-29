@@ -1,4 +1,6 @@
----@diagnostic disable-next-line: annotation-usage-error
+---@meta
+
+
 ---@enum ESlateVisibility
 ---@field Visible number @Default widget visibility - visible and can interact with the cursor
 ---@field Collapsed number @Not visible and takes up no space in the layout; can never be clicked on because it takes up no space.

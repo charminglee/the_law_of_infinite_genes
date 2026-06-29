@@ -6,7 +6,7 @@ Lib = {
 
 
 ---判断当前环境是否是服务端。
----@return boolean 是否是服务端
+---@return boolean @是否是服务端
 function Lib.IsServer()
     if GameState then 
         return GameState:HasAuthority()
