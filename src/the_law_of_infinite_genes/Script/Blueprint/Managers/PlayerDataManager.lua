@@ -7,6 +7,8 @@ local PlayerDataManager = {
     _card = {},
 }
 
+local MAX_CARD_SLOT_LEVEL = 12
+
 
 function PlayerDataManager:GetReplicatedProperties()
     return {"_data", "Lazy"}, {"_card", "Lazy"}
@@ -19,6 +21,8 @@ end
 
 
 function PlayerDataManager:OnRep__card()
+    GachaManager.RefreshUI = true;
+    GachaManager.PreviewDAT = nil;
 end
 
 
@@ -268,6 +272,32 @@ function PlayerDataManager:ResetCardData()
 end
 
 
+---【双端】获取已解锁的卡牌穿戴槽数量。
+---@return number 已解锁槽位数
+function PlayerDataManager:GetUnlockedCardSlotCount()
+    return math.min(MAX_CARD_SLOT_LEVEL, math.max(1, self._card.shopLevel or 1))
+end
+
+
+---【服务端】提升卡牌槽位等级，每级解锁一个穿戴槽，最高12级。
+---@param sync? boolean 是否立即同步数据，默认为true
+function PlayerDataManager:LevelUpCardSlot(sync)
+    if not self:HasAuthority() or not self._isLoaded then
+        return
+    end
+
+    local level = self:GetUnlockedCardSlotCount()
+    if level >= MAX_CARD_SLOT_LEVEL then
+        return
+    end
+
+    self._card.shopLevel = level + 1
+    if sync ~= false then
+        UnrealNetwork.RepLazyProperty(self, "_card")
+    end
+end
+
+
 ---【双端】判断是否拥有指定卡牌。
 ---@param card table 卡牌，结构为{cardId, star}
 ---@return boolean 是否拥有指定卡牌
@@ -288,8 +318,9 @@ function PlayerDataManager:HasCard(card)
 end
 
 
-function PlayerDataManager:_FindEmptySlot(list)
-    for i = 1, list.n do
+function PlayerDataManager:_FindEmptySlot(list, maxSlot)
+    maxSlot = maxSlot or list.n
+    for i = 1, math.min(list.n, maxSlot) do
         if list[i] == nil then
             return i
         end
@@ -314,8 +345,14 @@ function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
         return
     end
 
+    local unlockedSlotCount = self:GetUnlockedCardSlotCount()
+    if toSlot ~= nil and toSlot > unlockedSlotCount then
+        -- 目标槽位未解锁
+        return
+    end
+
     if toSlot == nil then
-        toSlot = self:_FindEmptySlot(equipped)
+        toSlot = self:_FindEmptySlot(equipped, unlockedSlotCount)
         if toSlot == nil then
             -- 卡牌槽位已满
             return
@@ -390,13 +427,13 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
         end
     end
 
-    local info = Card.Cards[card[1]]
-    local cost = Card.Grade[info.grade].cost
-    if self:GetCoin(ItemId.Coin_0) < cost then
-        -- 资源点不足
-        return  
-    end
-    self:AddCoin(ItemId.Coin_0, -cost)
+    -- local info = Card.Cards[card[1]]
+    -- local cost = Card.Grade[info.grade].cost
+    -- if self:GetCoin(ItemId.Coin_0) < cost then
+    --     -- 资源点不足
+    --     return  
+    -- end
+    -- self:AddCoin(ItemId.Coin_0, -cost)
 
     store[toSlot] = card
     shop[fromSlot] = nil
@@ -452,15 +489,15 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
         return
     end
 
-    if isFirstRefresh then
-        self._card.refreshCount = 0
-    end
-    local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
-    if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
-        -- 资源点不足
-        return  
-    end
-    self:AddCoin(ItemId.Coin_0, -cost)
+    -- if isFirstRefresh then
+    --     self._card.refreshCount = 0
+    -- end
+    -- local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
+    -- if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
+    --     -- 资源点不足
+    --     return  
+    -- end
+    -- self:AddCoin(ItemId.Coin_0, -cost)
 
     local weights = Card.StoreWeight[self._card.shopLevel]
     local byGrade = _BuildCardsByGrade()

@@ -1,4 +1,4 @@
----@class GachaComponent_C:BaseManager_C
+---@class GachaComponent_C:ActorComponent
 ---@field GachaMainPath FSoftClassPath
 --Edit Below--
 
@@ -7,13 +7,14 @@ local GachaComponent = {}
 
 
 function GachaComponent:GetAvailableServerRPCs()
-    return  
+    return
     "RefreshCardShop",
     "APurchaseCard",
     "EquipCard",
     "UnequipCard",
     "SellCardFromStore",
     "SellCardFromEquipped",
+    "LevelUpCardSlot",
     "ResetCardData"
 end
 
@@ -55,38 +56,37 @@ end
 function GachaComponent:APurchaseCard(PlayerKey, fromSlot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    ugcprint('fromSlot =='..tostring(fromSlot))
     manager:PurchaseCard(fromSlot);
-    -- manager:RefreshCardShop();
-
 end
 
-function GachaComponent:EquipCard(PlayerKey)
+function GachaComponent:EquipCard(PlayerKey, fromSlot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    manager:EquipCard();
+    manager:EquipCard(fromSlot);
 end
 
-function GachaComponent:UnequipCard(PlayerKey)
+function GachaComponent:UnequipCard(PlayerKey, fromSlot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    manager:UnequipCard();
+    manager:UnequipCard(fromSlot);
 end
 
-function GachaComponent:SellCardFromStore(PlayerKey)
+function GachaComponent:SellCardFromStore(PlayerKey, slot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    manager:SellCardFromStore();
+    manager:SellCardFromStore(slot);
 end
 
-function GachaComponent:SellCardFromEquipped(PlayerKey)
+function GachaComponent:SellCardFromEquipped(PlayerKey, slot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    manager:SellCardFromEquipped();
+    manager:SellCardFromEquipped(slot);
 end
 
-function GachaComponent:RefreshShopUI()
-    GachaManager.RefreshShopUI = true;
+function GachaComponent:LevelUpCardSlot(PlayerKey)
+    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
+    local manager = PlayerState.PlayerDataManager;
+    manager:LevelUpCardSlot();
 end
 
 return GachaComponent

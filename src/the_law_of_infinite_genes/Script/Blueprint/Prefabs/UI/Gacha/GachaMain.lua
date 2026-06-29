@@ -1,82 +1,73 @@
 ---@class GachaMain_C:UUserWidget
----@field backgroundImage UImage
----@field borderImage UImage
+---@field DescributeList ReuseList2_C
+---@field EquipCardButton UButton
 ---@field ExitButton UButton
----@field FirearnPurchaseDesc0_215 FirearnPurchaseDesc0_C
----@field FirearnPurchaseDesc0_220 FirearnPurchaseDesc0_C
----@field GachaAttributeBg UImage
----@field GachaAttributeList ReuseList2_C
----@field GachaCacheList ReuseList2_C
----@field GachaDescText UTextBlock
----@field GachaSelectedItem UImage
----@field GachaSlotList ReuseList2_C
----@field Image_0 UImage
----@field Image_1 UImage
----@field Image_2 UImage
----@field Image_3 UImage
----@field Image_4 UImage
----@field Image_5 UImage
----@field Image_6 UImage
----@field Image_7 UImage
----@field Image_8 UImage
----@field Image_35 UImage
----@field Image_36 UImage
----@field Image_37 UImage
----@field Image_38 UImage
----@field Image_39 UImage
----@field Image_40 UImage
----@field Image_42 UImage
----@field LBPurchaseList ReuseList2_C
 ---@field LevelUpButton UButton
----@field OutSideExitButton UButton
----@field PBG UImage
----@field RefreshBg UImage
+---@field NilPreview UCanvasPanel
+---@field OuterExitButton UButton
+---@field PreviewItem UImage
+---@field PreviewItemName UTextBlock
+---@field PreviewStar UTextBlock
+---@field PreviewTop UImage
+---@field PurchaseButton UButton
 ---@field RefreshButton UButton
----@field RP UCanvasPanel
----@field RPMask USizeBox
----@field RPurchaseButton UButton
----@field stripe0 UImage
----@field stripe1 UImage
----@field stripe2 UImage
----@field stripe3 UImage
----@field stripe4 UImage
----@field stripe5 UImage
----@field stripe6 UImage
----@field stripe7 UImage
----@field TH_0 UImage
----@field TH_1 UImage
----@field TH_2 UImage
----@field TH_3 UImage
----@field TH_4 UImage
----@field TH_5 UImage
+---@field ResourceCoinIcon UImage
+---@field SelectedPreview UCanvasPanel
+---@field SellButton UButton
+---@field ShopLevel UTextBlock
+---@field ShopList ReuseList2_C
+---@field SlotCount UTextBlock
+---@field SlotList ReuseList2_C
+---@field StoreCount UTextBlock
+---@field StoreList ReuseList2_C
+---@field UnequipCardButton UButton
 --Edit Below--
 local GachaMain = { 
     bInitDoOnce = false,
-    ListFlag = nil,
-    PrevPressedItem = nil,
-    CurrentPressedItem = nil,
+    SelectTag = nil,
+    SelectIndex = nil,
 } 
+
+local SelectTag = {
+    Shop = 1,
+    Equipped = 2,
+    Store = 3,
+}
+
+local MAX_CARD_SLOT_LEVEL = 12
+
+local function SetButtonVisible(button, visible)
+    if button == nil then
+        return
+    end
+    button:SetVisibility(visible and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
+end
+
 function GachaMain:Construct()
     self:LuaInit();
 end
 
 function GachaMain:Tick(MyGemetry,FGeometry)
-    if GachaManager.RefreshUI then
-        GachaManager.RefreshUI = false;
-        self.CurrentPressedItem = -1;
-        GachaManager.CurrentPressedItem = nil;
-        GachaManager.PrevPressedItem = nil;
+    if self.SelectIndex ~= GachaManager.SelectIndex or self.SelectTag ~= GachaManager.SelectTag then
+        GachaManager.RefreshUI = true;
     end
-    if GachaManager.CurrentPressedItem ~= self.CurrentPressedItem or GachaManager.CurrentPressedItem == nil then
-        self.CurrentPressedItem = GachaManager.CurrentPressedItem;
-        self.PrevPressedItem = GachaManager.PrevPressedItem;
-        self.RPMask:SetVisibility(ESlateVisibility.Visible);
-        self.RP:SetVisibility(ESlateVisibility.Collapsed);
-        self.GachaCacheList:Reload(20);
-        self.GachaSlotList:Reload(12);
-        self.LBPurchaseList:Reload(6);
+    if GachaManager.RefreshUI then
+        GachaManager.RefreshUI = false;   
+        self.SelectIndex = GachaManager.SelectIndex;
+        self.SelectTag = GachaManager.SelectTag;
+        GachaManager.PreviewDAT = nil;
+        GachaManager.RefreshPreviewUI = false;
+        self:ReloadList();
+        self:SetPreview(GachaManager.PreviewDAT ~= nil);
+        GachaManager.RefreshPreviewUI = false;
+        return;
+    end
+    if GachaManager.RefreshPreviewUI then
+        GachaManager.RefreshPreviewUI = false;
+        self:SetPreview(GachaManager.PreviewDAT ~= nil);
     end
 end
+
 function GachaMain:LuaInit()
     if self.bInitDoOnce then
 		return;
@@ -84,96 +75,202 @@ function GachaMain:LuaInit()
 	self.bInitDoOnce = true;
     GachaManager:RegisterMainUI(self);
     self:Listen();
-    self.GachaCacheList:Reload(20);
-    self.GachaSlotList:Reload(12);
-    self.LBPurchaseList:Reload(6);
+    self:ReloadList();
+    self:SetPreview(false);
 end
+
 function GachaMain:Listen()
-    self.GachaCacheList.OnUpdateItem:Add(self.GachaCacheListUpdate, self);
-    self.LBPurchaseList.OnUpdateItem:Add(self.LBPurchaseListUpdate, self);
-    self.GachaSlotList.OnUpdateItem:Add(self.GachaSlotListUpdate, self);
-    self.GachaAttributeList.OnUpdateItem:Add(self.GachaAttributeListUpdate, self);
-    self.LevelUpButton.OnClicked:Add(self.LevelUpButtonClicked, self);
-    self.OutSideExitButton.OnClicked:Add(self.Exit, self);
     self.ExitButton.OnClicked:Add(self.Exit, self);
-    self.RPurchaseButton.OnClicked:Add(self.RPurchaseButtonClicked, self);
-    self.RefreshButton.OnClicked:Add(self.RefreshButtonClicked, self);
-end
-function GachaMain:GachaCacheListUpdate(Item, Index)
-    local tempItem = nil;
-    if tempItem == nil then
-        Item:SetSelectedVisibility(2);
-        return nil;
+    self.OuterExitButton.OnClicked:Add(self.Exit, self);
+    self.RefreshButton.OnClicked:Add(self.Refresh, self);
+    if self.LevelUpButton ~= nil then
+        self.LevelUpButton.OnClicked:Add(self.LevelUp, self);
     end
-    if Item == self.CurrentPressedItem then
-        Item:SetSelectedVisibility(0);
-    elseif Item == self.PrevPressedItem then
-        Item:SetSelectedVisibility(1);
-    else
-        Item:SetSelectedVisibility(2)
+    if self.EquipCardButton ~= nil then
+        self.EquipCardButton.OnClicked:Add(self.EquipCard, self);
     end
-end
-function GachaMain:LBPurchaseListUpdate(Item, Index)
-    local slot = LocalPlayerState.PlayerDataManager._card.shop[Index+1];
-    Item.BufferSlot = slot;
-    Item.Index = Index+1;
-    if slot == nil then
-        Item:SetSelectedVisibility(3);
-        return nil;
+    if self.UnequipCardButton ~= nil then
+        self.UnequipCardButton.OnClicked:Add(self.UnequipCard, self);
     end
-    Item:SetItemTexture(slot);
-    if Item == self.CurrentPressedItem then
-        ugcprint('selected :'..tostring(Index+1));
-        Item:SetSelectedVisibility(0);
-        self:SetSelectItem(slot)
-        return nil;
-    else
-        Item:SetSelectedVisibility(1);
-        return nil;
-    end 
-end
-function GachaMain:GachaSlotListUpdate(Item, Index)
-    if LocalPlayerState.PlayerDataManager._card.slot == nil then
-        Item:SetSelectedVisibility(2);
-        return nil;
+    if self.PurchaseButton ~= nil then
+        self.PurchaseButton.OnClicked:Add(self.Purchase, self);
     end
-    if LocalPlayerState.PlayerDataManager._card.slot[Index+1] == nil then
-        Item:SetSelectedVisibility(2)
-        return nil;
+    if self.SellButton ~= nil then
+        self.SellButton.OnClicked:Add(self.Sell, self);
     end
-    if Item == self.CurrentPressedItem then
-        Item:SetSelectedVisibility(0);
-    elseif Item == self.PrevPressedItem then
-        Item:SetSelectedVisibility(1);
-    else
-        Item:SetSelectedVisibility(2)
+    self.ShopList.OnUpdateItem:Add(self.ShopListUpdate, self);
+    self.SlotList.OnUpdateItem:Add(self.SlotListUpdate, self);
+    self.StoreList.OnUpdateItem:Add(self.StoreListUpdate, self);
+    
+end
+
+function GachaMain:ReloadList()
+    self.ShopList:Reload(6);
+    self.StoreList:Reload(20);
+    self.SlotList:Reload(12);
+    self:RefreshInfo();
+end
+
+function GachaMain:_SelectedSlot()
+    if GachaManager.SelectIndex == nil then
+        return nil
     end
+    return GachaManager.SelectIndex + 1
 end
-function GachaMain:GachaAttributeListUpdate(Item, Index)
+
+function GachaMain:_CardData()
+    local playerState = LocalPlayerState
+    local manager = playerState and playerState.PlayerDataManager
+    return manager and manager._card or nil
 end
-function GachaMain:LevelUpButtonClicked()
+
+function GachaMain:_UnlockedSlotCount()
+    local card = self:_CardData()
+    local level = card and card.shopLevel or 1
+    return math.min(MAX_CARD_SLOT_LEVEL, math.max(1, level))
 end
-function GachaMain:RPurchaseButtonClicked()
-    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "APurchaseCard", LocalPlayerController.PlayerKey, GachaManager.CurrentPressedItem.Index);
+
+function GachaMain:_CountUsed(list)
+    if list == nil then
+        return 0
+    end
+
+    local count = 0
+    local n = list.n or #list
+    for i = 1, n do
+        if list[i] ~= nil then
+            count = count + 1
+        end
+    end
+    return count
 end
-function GachaMain:RefreshButtonClicked()
-    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "RefreshCardShop", LocalPlayerController.PlayerKey);
+
+function GachaMain:RefreshInfo()
+    local card = self:_CardData()
+    if card == nil then
+        SetButtonVisible(self.LevelUpButton, false);
+        return
+    end
+
+    local level = self:_UnlockedSlotCount()
+    if self.ShopLevel ~= nil then
+        self.ShopLevel:SetText(tostring(level));
+    end
+    if self.SlotCount ~= nil then
+        self.SlotCount:SetText(tostring(level) .. "/" .. tostring(MAX_CARD_SLOT_LEVEL));
+    end
+    if self.StoreCount ~= nil then
+        local storeMax = card.store and (card.store.n or #card.store) or 0
+        self.StoreCount:SetText(tostring(self:_CountUsed(card.store)) .. "/" .. tostring(storeMax));
+    end
+    SetButtonVisible(self.LevelUpButton, level < MAX_CARD_SLOT_LEVEL);
 end
+
+function GachaMain:_RefreshActionButtons(hasPreview)
+    local tag = GachaManager.SelectTag;
+
+    SetButtonVisible(self.PurchaseButton, hasPreview and tag == SelectTag.Shop);
+    SetButtonVisible(self.EquipCardButton, hasPreview and tag == SelectTag.Store);
+    SetButtonVisible(self.UnequipCardButton, hasPreview and tag == SelectTag.Equipped);
+    SetButtonVisible(self.SellButton, hasPreview and (tag == SelectTag.Store or tag == SelectTag.Equipped));
+end
+
 function GachaMain:Exit()
     GachaManager:CloseMainUI()
 end
 
-function GachaMain:SetSelectItem(Slot)
-    local SlotIndex = Slot[1]
-    local star = Slot[2]
-    local _card = Card.Cards[SlotIndex];
-    self.GachaDescText:SetText(_card.name);
-    local Texture = LoadObject(_card.texture);
-    self.GachaSelectedItem:SetBrushFromTexture(Texture);
-    local suitIndex = _card.suit;
-    self.GachaSelectedItem:SetColorRGBStr(Card.Group[suitIndex].HexColor);
-    self.RPMask:SetVisibility(ESlateVisibility.Collapsed);
-    self.RP:SetVisibility(ESlateVisibility.Visible);
+function GachaMain:Refresh()
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "RefreshCardShop", LocalPlayerController.PlayerKey);
 end
+
+function GachaMain:LevelUp()
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "LevelUpCardSlot", LocalPlayerController.PlayerKey);
+end
+
+function GachaMain:EquipCard()
+    local slot = self:_SelectedSlot();
+    if slot == nil or GachaManager.SelectTag ~= SelectTag.Store then
+        return
+    end
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "EquipCard", LocalPlayerController.PlayerKey, slot);
+end
+
+function GachaMain:UnequipCard()
+    local slot = self:_SelectedSlot();
+    if slot == nil or GachaManager.SelectTag ~= SelectTag.Equipped then
+        return
+    end
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "UnequipCard", LocalPlayerController.PlayerKey, slot);
+end
+
+function GachaMain:Purchase()
+    local slot = self:_SelectedSlot();
+    if slot == nil or GachaManager.SelectTag ~= SelectTag.Shop then
+        return
+    end
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "APurchaseCard", LocalPlayerController.PlayerKey, slot);
+end
+
+function GachaMain:Sell()
+    local slot = self:_SelectedSlot();
+    if slot == nil then
+        return
+    end
+
+    if GachaManager.SelectTag == SelectTag.Store then
+        UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "SellCardFromStore", LocalPlayerController.PlayerKey, slot);
+    elseif GachaManager.SelectTag == SelectTag.Equipped then
+        UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "SellCardFromEquipped", LocalPlayerController.PlayerKey, slot);
+    end
+end
+
+function GachaMain:ShopListUpdate(Item, Index)
+    Item.Index = Index;
+    Item.Tag = SelectTag.Shop;
+    Item:ShopUpdate();
+end
+
+function GachaMain:SlotListUpdate(Item, Index)
+    Item.Index = Index;
+    Item.Tag = SelectTag.Equipped;
+    Item:SlotUpdate();
+end
+
+function GachaMain:StoreListUpdate(Item, Index)
+    Item.Index = Index;
+    Item.Tag = SelectTag.Store;
+    Item:StoreUpdate();
+end
+
+function GachaMain:SetPreview(isShow)
+    local data = GachaManager.PreviewDAT;
+    local cardIndex = data and data[1];
+    local Fcard = cardIndex and Card.Cards[cardIndex];
+    if not isShow or data == nil or Fcard == nil then
+        self.SelectedPreview:SetVisibility(ESlateVisibility.Collapsed);
+        self.NilPreview:SetVisibility(ESlateVisibility.Visible);
+        self:_RefreshActionButtons(false);
+        return;
+    end
+
+    self.SelectedPreview:SetVisibility(ESlateVisibility.Visible);
+    self.NilPreview:SetVisibility(ESlateVisibility.Collapsed);
+
+    local Texture = LoadObject(Fcard.texture);
+    local ItemName = Fcard.name;
+    local StarText = GachaManager:GetStarText(data[2]);
+    local suit = Card.Suit[Fcard.suit];
+    local ItemColor = Card.Group[suit.Group].HexColor;
+    local grade = Fcard.grade;
+    local QualityColor = Card.Grade[grade].HexColor;
+    self.PreviewItem:SetBrushFromTexture(Texture);
+    self.PreviewItem:SetColorRGBStr(ItemColor);
+    self.PreviewTop:SetColorRGBStr(QualityColor);
+    self.PreviewStar:SetText(StarText);
+    self.PreviewItemName:SetText(ItemName);
+    self:_RefreshActionButtons(true);
+end
+
+
 
 return GachaMain
