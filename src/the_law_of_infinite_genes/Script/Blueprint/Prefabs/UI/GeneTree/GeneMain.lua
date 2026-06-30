@@ -14,15 +14,15 @@ function GeneMain:LuaInit()
 	end
 	self.bInitDoOnce = true;
     GeneManager:RegisterMainUI(self);
+    self.Exit.OnClicked:Add(self.Close, self);
 end
 
 function GeneMain:Open()
-    UGCLog.Log('GeneMainAAAAAAAAAAAAAAAAAA')
 	self:SetVisibility(ESlateVisibility.Visible);
 end
 
 function GeneMain:Close()
-    self:SetVisibleAnim(ESlateVisibility.Collapsed);
+    self:SetVisibility(ESlateVisibility.Collapsed);
 end
 
 return GeneMain
