@@ -3,7 +3,7 @@
 ---@field GlobalEventComponent GlobalEventComponent_C
 ---@field GachaComponent GachaComponent_C
 ---@field FightComponent FightComponent_C
----@field ACHVComponent CHVComponent_C
+---@field ACHVComponent ACHVComponent_C
 ---@field StoreComponent StoreComponent_C
 ---@field HomeComponent HomeComponent_C
 ---@field RankingListComponent RankingListComponent_C
