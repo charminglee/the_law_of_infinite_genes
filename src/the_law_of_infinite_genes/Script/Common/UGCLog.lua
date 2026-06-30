@@ -12,11 +12,17 @@ function UGCLog.IsServer()
     return UGCLog.IsServerCached;
 end
 
+-- 处理服务端换行符截断问题
+local function line_break_handing(line_break_text, no_line_break_text)
+    return tostring(UGCLog.IsServer() and no_line_break_text or line_break_text)
+end
 
 local function tostringex(v, len)
     if len == nil then len = 0 end
     local pre = string.rep('\t', len)
-    local ret = ""
+    local ret = ''
+    local line_break_text = '\n'
+    local no_line_break_text = ''
     if type(v) == "table" then
         if len > 5 then return "\t{ ... }" end
         local t = ""
@@ -28,30 +34,30 @@ local function tostringex(v, len)
         for k, v1 in pairs(keys) do
             k = v1
             v1 = v[k]
-            t = t .. "\n\t" .. pre .. tostring(k) .. ":"
+            t = t .. line_break_handing(line_break_text, no_line_break_text) .. "\t" .. pre .. tostring(k) .. ":"
             t = t .. tostringex(v1, len + 1)
         end
 
         if t == "" then
-            ret = ret .. pre .. "\n{ }\t(" .. tostring(v) .. ")"
+            ret = ret .. pre .. line_break_handing(line_break_text, no_line_break_text) .. "{ }\t(" .. tostring(v) .. ")"
         else
             if len > 0 then
-                ret = ret .. "\t(" .. tostring(v) .. ")\n"  
+                ret = ret .. "\t(" .. tostring(v) .. ')' .. line_break_handing(line_break_text, no_line_break_text)
             else
-                ret = ret .. "\n(" .. tostring(v) .. ")"    
+                ret = ret .. line_break_handing(line_break_text, no_line_break_text) .. '(' .. tostring(v) .. ")"    
             end
-
+            
             if len == 0 then
-                ret = ret .. "\n" .. pre .. "{" .. t .. "\n" .. pre .. "}"  
+                ret = ret .. line_break_handing(line_break_text, no_line_break_text) .. pre .. "{" .. t .. line_break_handing(line_break_text, no_line_break_text) .. pre .. "}"  
             else
-                ret = ret .. pre .. "{" .. t .. "\n" .. pre .. "}"  
+                ret = ret .. pre .. "{" .. t .. line_break_handing(line_break_text, no_line_break_text) .. pre .. "}"  
             end
         end
     elseif type(v) == "userdata" then
         if UE.IsValid(v) then
             local Nextpre = string.rep('\t', len+1)
             ret = ret .. pre .. tostring(UE.ToTable(v)) .. "\t(" .. type(v) .. ")"
-            ret = ret .. "\n" .. pre .. "{\n" .. Nextpre .. "ClassAndPath:\t" .. UE.GetFullName(v) .. "\n" .. pre .. "}"
+            ret = ret .. line_break_handing(line_break_text, no_line_break_text) .. pre .. "{" .. line_break_handing(line_break_text, no_line_break_text) .. Nextpre .. "ClassAndPath:\t" .. UE.GetFullName(v) .. line_break_handing(line_break_text, no_line_break_text) .. pre .. "}"
         elseif v ~= nil then
             ret = ret .. pre .. tostring(UE.ToTable(v)) .. "\t(" .. type(v) .. ")"
         else
@@ -65,8 +71,10 @@ local function tostringex(v, len)
 end
 
 local function GetName(Actor)
+    local line_break_text = '\n'
+    local no_line_break_text = ''
     if UE.IsValid(Actor) then
-        return string.format("\n%s:\n{\n ClassAndPath:\t%s\n}", tostring(UE.ToTable(Actor)), UE.GetFullName(Actor))
+        return string.format(tostring(v) .. ')' .. line_break_handing(line_break_text, no_line_break_text) .. "%s:" .. tostring(v) .. ')' .. line_break_handing(line_break_text, no_line_break_text) .. "{" .. tostring(v) .. ')' .. line_break_handing(line_break_text, no_line_break_text) .. " ClassAndPath:\t%s".. tostring(v) .. ')' .. line_break_handing(line_break_text, no_line_break_text) .. "}", tostring(UE.ToTable(Actor)), UE.GetFullName(Actor))
     elseif Actor ~= nil then
         return type(Actor)
     end
