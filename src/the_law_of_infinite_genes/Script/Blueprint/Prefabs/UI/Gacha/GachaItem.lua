@@ -10,18 +10,6 @@
 ---@field Selected UCanvasPanel
 ---@field Star UTextBlock
 ---@field ValidItem UCanvasPanel
----@class GachaItem_C:UUserWidget
----@field Button_0 UButton
----@field Empty UCanvasPanel
----@field ItemImage UImage
----@field ItemName UTextBlock
----@field Lock UCanvasPanel
----@field NilItem UCanvasPanel
----@field NotSelected UCanvasPanel
----@field Quality UImage
----@field Selected UCanvasPanel
----@field Star UTextBlock
----@field ValidItem UCanvasPanel
 local GachaItem = { 
     bInitDoOnce = false,
     Index=nil, 
