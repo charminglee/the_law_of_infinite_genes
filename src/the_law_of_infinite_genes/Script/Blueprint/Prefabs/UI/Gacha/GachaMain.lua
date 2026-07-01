@@ -27,6 +27,8 @@ local GachaMain = {
     bInitDoOnce = false,
     SelectTag = nil,
     SelectIndex = nil,
+    DescribeTextList = {},
+    AttributeCountTextList = {},
 } 
 local SelectTag = {
     Shop = 1,
@@ -34,11 +36,49 @@ local SelectTag = {
     Store = 3,
 }
 local MAX_CARD_SLOT_LEVEL = 12
+local DEFAULT_ATTRIBUTE_TEXT_COLOR = 'FFFFFF'
 local function SetButtonVisible(button, visible)
     if button == nil then
         return
     end
     button:SetVisibility(visible and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
+end
+local function ReloadReuseList(list, count)
+    if list == nil then
+        return
+    end
+    list:Reload(count);
+end
+local function AddAttributeText(list, text, HexColor)
+    if text == nil then
+        return
+    end
+    table.insert(list, {
+        Text = text,
+        HexColor = HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR,
+    });
+end
+local function AddAttributeTotal(totals, entry)
+    if entry == nil or entry.property == nil or type(entry.value) ~= "number" then
+        return
+    end
+    totals[entry.property] = (totals[entry.property] or 0) + entry.value;
+end
+local function TrimNumberText(value)
+    local text = string.format("%.2f", value);
+    text = string.gsub(text, "0+$", "");
+    text = string.gsub(text, "%.$", "");
+    return text;
+end
+local function FormatAttributeValue(value)
+    if type(value) ~= "number" then
+        return tostring(value);
+    end
+    local sign = value > 0 and "+" or "";
+    if value ~= 0 and math.abs(value) < 1 then
+        return sign .. TrimNumberText(value * 100) .. "%";
+    end
+    return sign .. TrimNumberText(value);
 end
 function GachaMain:Construct()
     self:LuaInit();
@@ -108,6 +148,7 @@ function GachaMain:ReloadList()
     self.StoreList:Reload(20);
     self.SlotList:Reload(12);
     self:RefreshInfo();
+    self:RefreshAttributeCountList();
 end
 function GachaMain:_SelectedSlot()
     if GachaManager.SelectIndex == nil then
@@ -163,6 +204,228 @@ function GachaMain:_RefreshActionButtons(hasPreview)
     SetButtonVisible(self.EquipCardButton, hasPreview and tag == SelectTag.Store);
     SetButtonVisible(self.UnequipCardButton, hasPreview and tag == SelectTag.Equipped);
     SetButtonVisible(self.SellButton, hasPreview and (tag == SelectTag.Store or tag == SelectTag.Equipped));
+end
+function GachaMain:_AttributeName(property)
+    if property == nil then
+        return "未知属性";
+    end
+    local meta = AttributeMate and AttributeMate[property];
+    if meta ~= nil and meta.anno ~= nil then
+        return meta.anno;
+    end
+    local attr = Attribute;
+    if attr ~= nil then
+        if attr.DodgeRatio ~= nil and property == attr.DodgeRatio then
+            return "闪避率";
+        elseif attr.SeckillRatio ~= nil and property == attr.SeckillRatio then
+            return "秒杀率";
+        elseif attr.Recoilless ~= nil and property == attr.Recoilless then
+            return "无后坐力";
+        elseif attr.ReloadTime ~= nil and property == attr.ReloadTime then
+            return "换弹时间";
+        elseif attr.BurstShootCDWrapper ~= nil and property == attr.BurstShootCDWrapper then
+            return "连发间隔";
+        end
+    end
+    return tostring(property);
+end
+function GachaMain:_AttributeLine(entry, prefix)
+    if entry == nil then
+        return nil;
+    end
+    return (prefix or "") .. self:_AttributeName(entry.property) .. " " .. FormatAttributeValue(entry.value);
+end
+function GachaMain:BuildAttributeTextList(data)
+    local list = {};
+    local cardIndex = data and data[1];
+    local Fcard = cardIndex and Card.Cards[cardIndex];
+    if Fcard == nil then
+        return list;
+    end
+    local suit = Card.Suit and Card.Suit[Fcard.suit];
+    local group = suit and Card.Group and Card.Group[suit.Group];
+    if group ~= nil then
+        AddAttributeText(list, group.name, group.HexColor);
+    end
+    local star = data[2] or 1;
+    local bonusList = Fcard.bonus and (Fcard.bonus[star] or Fcard.bonus[1]);
+    if bonusList ~= nil then
+        for _, entry in ipairs(bonusList) do
+            AddAttributeText(list, self:_AttributeLine(entry), DEFAULT_ATTRIBUTE_TEXT_COLOR);
+        end
+    end
+    local comboList = suit and suit.Combo;
+    if comboList ~= nil then
+        local comboKeys = {};
+        for comboIndex in pairs(comboList) do
+            table.insert(comboKeys, comboIndex);
+        end
+        table.sort(comboKeys);
+        for _, comboIndex in ipairs(comboKeys) do
+            local combo = Card.Combo and Card.Combo[comboIndex];
+            local title = combo and combo.name or ("[" .. tostring(comboIndex) .. "]套效果");
+            AddAttributeText(list, title, combo and combo.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR);
+            for _, entry in ipairs(comboList[comboIndex]) do
+                AddAttributeText(list, self:_AttributeLine(entry, "  "), DEFAULT_ATTRIBUTE_TEXT_COLOR);
+            end
+        end
+    end
+    return list;
+end
+function GachaMain:_ComboActive(comboIndex, count, fullStarCount)
+    if comboIndex == 1 then
+        return count >= 4;
+    elseif comboIndex == 2 then
+        return count >= 8;
+    elseif comboIndex == 3 then
+        return count >= 12;
+    elseif comboIndex == 4 then
+        return count >= 12 and fullStarCount >= count;
+    end
+    return false;
+end
+function GachaMain:_AddAttributeEntryListTotal(totals, entryList)
+    if entryList == nil then
+        return
+    end
+    for _, entry in ipairs(entryList) do
+        AddAttributeTotal(totals, entry);
+    end
+end
+function GachaMain:_SortedAttributeKeys(totals)
+    local keys = {};
+    for property in pairs(totals) do
+        table.insert(keys, property);
+    end
+    table.sort(keys, function(a, b)
+        local aMeta = AttributeMate and AttributeMate[a];
+        local bMeta = AttributeMate and AttributeMate[b];
+        local aIndex = aMeta and aMeta.index or 9999;
+        local bIndex = bMeta and bMeta.index or 9999;
+        if aIndex ~= bIndex then
+            return aIndex < bIndex;
+        end
+        return tostring(a) < tostring(b);
+    end);
+    return keys;
+end
+function GachaMain:_SortedNumberKeys(source)
+    local keys = {};
+    if source == nil then
+        return keys;
+    end
+    for key in pairs(source) do
+        table.insert(keys, key);
+    end
+    table.sort(keys);
+    return keys;
+end
+function GachaMain:_AddActiveSuitText(list, activeSuitList)
+    if activeSuitList == nil or #activeSuitList <= 0 then
+        return
+    end
+    AddAttributeText(list, "\229\183\178\230\191\128\230\180\187\229\165\151\232\163\133", DEFAULT_ATTRIBUTE_TEXT_COLOR);
+    for _, activeSuit in ipairs(activeSuitList) do
+        AddAttributeText(list, activeSuit.SuitName, activeSuit.SuitColor);
+        for _, comboIndex in ipairs(activeSuit.ComboKeys) do
+            local combo = Card.Combo and Card.Combo[comboIndex];
+            local title = combo and combo.name or ("[" .. tostring(comboIndex) .. "]\229\165\151\230\149\136\230\158\156");
+            AddAttributeText(list, title, combo and combo.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR);
+            local entryList = activeSuit.ComboList and activeSuit.ComboList[comboIndex];
+            if entryList ~= nil then
+                for _, entry in ipairs(entryList) do
+                    AddAttributeText(list, self:_AttributeLine(entry, "  "), DEFAULT_ATTRIBUTE_TEXT_COLOR);
+                end
+            end
+        end
+    end
+end
+function GachaMain:BuildAttributeCountTextList()
+    local list = {};
+    local totals = {};
+    local suitCounts = {};
+    local suitFullStarCounts = {};
+    local activeSuitList = {};
+    local card = self:_CardData();
+    local equipped = card and card.equipped;
+    if equipped == nil then
+        return list;
+    end
+    local count = equipped.n or #equipped;
+    for i = 1, count do
+        local data = equipped[i];
+        local cardIndex = data and data[1];
+        local Fcard = cardIndex and Card.Cards[cardIndex];
+        if Fcard ~= nil then
+            local star = data[2] or 1;
+            local bonusList = Fcard.bonus and (Fcard.bonus[star] or Fcard.bonus[1]);
+            self:_AddAttributeEntryListTotal(totals, bonusList);
+            local suitId = Fcard.suit;
+            if suitId ~= nil then
+                suitCounts[suitId] = (suitCounts[suitId] or 0) + 1;
+                if star >= 3 then
+                    suitFullStarCounts[suitId] = (suitFullStarCounts[suitId] or 0) + 1;
+                end
+            end
+        end
+    end
+    for _, suitId in ipairs(self:_SortedNumberKeys(suitCounts)) do
+        local suitCount = suitCounts[suitId];
+        local suit = Card.Suit and Card.Suit[suitId];
+        local comboList = suit and suit.Combo;
+        if comboList ~= nil then
+            local activeComboKeys = {};
+            for _, comboIndex in ipairs(self:_SortedNumberKeys(comboList)) do
+                local entryList = comboList[comboIndex];
+                if self:_ComboActive(comboIndex, suitCount, suitFullStarCounts[suitId] or 0) then
+                    self:_AddAttributeEntryListTotal(totals, entryList);
+                    table.insert(activeComboKeys, comboIndex);
+                end
+            end
+            if #activeComboKeys > 0 then
+                local group = suit.Group and Card.Group and Card.Group[suit.Group];
+                table.insert(activeSuitList, {
+                    SuitName = group and group.name or ("\229\165\151\232\163\133" .. tostring(suitId)),
+                    SuitColor = group and group.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR,
+                    ComboKeys = activeComboKeys,
+                    ComboList = comboList,
+                });
+            end
+        end
+    end
+    self:_AddActiveSuitText(list, activeSuitList);
+    local keys = self:_SortedAttributeKeys(totals);
+    if #keys > 0 and #list > 0 then
+        AddAttributeText(list, "\230\128\187\229\177\158\230\128\167", DEFAULT_ATTRIBUTE_TEXT_COLOR);
+    end
+    for _, property in ipairs(keys) do
+        AddAttributeText(list, self:_AttributeName(property) .. " " .. FormatAttributeValue(totals[property]), DEFAULT_ATTRIBUTE_TEXT_COLOR);
+    end
+    return list;
+end
+function GachaMain:RefreshAttributeCountList()
+    self.AttributeCountTextList = self:BuildAttributeCountTextList();
+    ReloadReuseList(self.AttributeCountList, #self.AttributeCountTextList);
+end
+function GachaMain:_RefreshDescribeTextList(data)
+    self.DescribeTextList = self:BuildAttributeTextList(data);
+    ReloadReuseList(self.DescributeList, #self.DescribeTextList);
+end
+function GachaMain:_UpdateAttributeTextItem(Item, Index, textList)
+    Item.Index = Index;
+    local data = textList and textList[Index + 1];
+    if data == nil then
+        if Item.SetText ~= nil then
+            Item:SetText("", DEFAULT_ATTRIBUTE_TEXT_COLOR);
+        end
+        return;
+    end
+    if Item.SetText ~= nil then
+        Item:SetText(data.Text, data.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR);
+    elseif Item.Text ~= nil then
+        Item.Text:SetText(data.Text);
+        Item.Text:SetColorRGBStr(data.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR);
+    end
 end
 function GachaMain:Exit()
     GachaManager:CloseMainUI()
@@ -224,11 +487,11 @@ function GachaMain:StoreListUpdate(Item, Index)
 end
 
 function GachaMain:AttributeCountListUpdate(Item, Index)
-    Item.Index = Index;
+    self:_UpdateAttributeTextItem(Item, Index, self.AttributeCountTextList);
 end
 
 function GachaMain:DescributeListUpdate(Item, Index)
-    Item.Index = Index;
+    self:_UpdateAttributeTextItem(Item, Index, self.DescribeTextList);
 end
 function GachaMain:SetPreview(isShow)
     local data = GachaManager.PreviewDAT;
@@ -238,6 +501,7 @@ function GachaMain:SetPreview(isShow)
         self.SelectedPreview:SetVisibility(ESlateVisibility.Collapsed);
         self.NilPreview:SetVisibility(ESlateVisibility.Visible);
         self:_RefreshActionButtons(false);
+        self:_RefreshDescribeTextList(nil);
         return;
     end
     self.SelectedPreview:SetVisibility(ESlateVisibility.Visible);
@@ -254,6 +518,7 @@ function GachaMain:SetPreview(isShow)
     self.PreviewTop:SetColorRGBStr(QualityColor);
     self.PreviewStar:SetText(StarText);
     self.PreviewItemName:SetText(ItemName);
+    self:_RefreshDescribeTextList(data);
     self:_RefreshActionButtons(true);
 end
 

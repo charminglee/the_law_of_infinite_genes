@@ -10,7 +10,6 @@
 ---@field Selected UCanvasPanel
 ---@field Star UTextBlock
 ---@field ValidItem UCanvasPanel
---Edit Below--
 ---@class GachaItem_C:UUserWidget
 ---@field Button_0 UButton
 ---@field Empty UCanvasPanel
@@ -28,6 +27,15 @@ local GachaItem = {
     Index=nil, 
     Tag=nil,
 }; 
+local MAX_CARD_SLOT_LEVEL = 12
+
+local function UnlockedSlotCount()
+    local playerState = LocalPlayerState
+    local manager = playerState and playerState.PlayerDataManager
+    local card = manager and manager._card
+    local level = card and card.shopLevel or 1
+    return math.min(MAX_CARD_SLOT_LEVEL, math.max(1, level))
+end
 
 function GachaItem:Construct()
 	self:LuaInit();
@@ -133,6 +141,11 @@ function GachaItem:StoreUpdate()
 end
 
 function GachaItem:SlotUpdate()
+    if self.Index + 1 > UnlockedSlotCount() then
+        self:_ShowEmpty(self.Lock);
+        return;
+    end
+
     local data = LocalPlayerState.PlayerDataManager._card.equipped[self.Index+1];
     if data == nil then
         self:_ShowEmpty(self.Empty);

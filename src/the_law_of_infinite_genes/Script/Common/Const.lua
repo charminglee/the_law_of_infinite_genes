@@ -107,6 +107,13 @@ Attribute = {
     EpidemicToxinSettleRatio    = 26, -- 疫毒结算概率
     InfiniteAmmo                = 27, -- 无限子弹
     IgnoreHarmRatio             = 28, -- 无视伤害率
+    DodgeRatio                  = 29,
+    SeckillRatio                = 30,
+    Recoilless                  = 31,
+    HealthMaxBoost              = 32,
+    UGCGeneralMoveSpeedScale    = UGCNativeGameAttributeType.Character_UGCGeneralMoveSpeedScale,
+    ReloadTime                  = UGCNativeGameAttributeType.Weapon_ReloadTime,
+    BurstShootCDWrapper         = UGCNativeGameAttributeType.Weapon_BurstShootCDWrapper,
 }
 
 
@@ -140,4 +147,11 @@ AttributeMate = {
     [Attribute.EpidemicToxinSettleRatio]    = {index=26, anno="疫毒结算概率"},
     [Attribute.InfiniteAmmo]                = {index=27, anno="无限子弹"},
     [Attribute.IgnoreHarmRatio]             = {index=28, anno="无视伤害率"},
+    [Attribute.HealthMaxBoost]              = {index=29, anno="生命值百分比"},
+    [Attribute.DodgeRatio]                  = {index=30, anno="闪避率"},
+    [Attribute.SeckillRatio]                = {index=31, anno="秒杀率"},
+    [Attribute.Recoilless]                  = {index=32, anno="无后坐力"},
+    [Attribute.UGCGeneralMoveSpeedScale]    = {index=33, anno="移速百分比"},
+    [Attribute.ReloadTime]                  = {index=34, anno="换弹时间"},
+    [Attribute.BurstShootCDWrapper]         = {index=35, anno="连发间隔"},
 }

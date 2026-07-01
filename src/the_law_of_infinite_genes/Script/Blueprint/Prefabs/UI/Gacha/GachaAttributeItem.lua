@@ -1,19 +1,19 @@
 ---@class GachaAttributeItem_C:UAEUserWidget
---Edit Below--
+---@field Text UTextBlock
 local GachaAttributeItem = { bInitDoOnce = false } 
 
---[==[ Construct
-function GachaAttributeItem:Construct()
-	
+function GachaAttributeItem:LuaInit()
+    if self.bInitDoOnce then
+        return
+    end
+    self.bInitDoOnce = true;
 end
--- Construct ]==]
 
--- function GachaAttributeItem:Tick(MyGeometry, InDeltaTime)
-
--- end
-
--- function GachaAttributeItem:Destruct()
-
--- end
+---@param text string
+---@param HexColor string
+function GachaAttributeItem:SetText(text,HexColor)
+    self.Text:SetText(text);
+    self.Text:SetColorRGBStr(HexColor);
+end
 
 return GachaAttributeItem
