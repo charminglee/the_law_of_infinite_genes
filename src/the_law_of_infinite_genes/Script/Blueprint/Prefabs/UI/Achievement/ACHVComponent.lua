@@ -28,7 +28,7 @@ end
 
 -- 注册界面
 function ACHVComponent:InitHomeUI()
-        local MainUI = UE.LoadClass( UGCMapInfoLib.GetRootLongPackagePath().. "Asset/Blueprint/Prefabs/UI/Achievement/ACHVMain.ACHVMain_C");
+        local MainUI = UE.LoadClass(UGCMapInfoLib.GetRootLongPackagePath() .. "Asset/Blueprint/Prefabs/UI/Achievement/ACHVMain.ACHVMain_C");
         local MainUI_BP = UserWidget.NewWidgetObjectBP(self:GetOwner(), MainUI);
         MainUI_BP:AddToViewport(10000);
         MainUI_BP:SetVisibility(ESlateVisibility.Collapsed);

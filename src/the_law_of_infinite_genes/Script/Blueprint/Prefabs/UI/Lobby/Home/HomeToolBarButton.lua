@@ -30,17 +30,23 @@ function HomeToolBarButton:Button_0_Clicked()
     if self.Index == 0 then
 		ShopV2Manager:OpenMainUI();
         return nil;
-	elseif self.Index  == 1 then
+	elseif self.Index == 1 then
 		LotteryManager:OpenLotteryPanel();
         return nil;
-	elseif self.Index  == 2 then
+	elseif self.Index == 2 then
 		RankingListManager:OpenRankingList();
         return nil;
-	elseif self.Index  == 3 then
+	elseif self.Index == 3 then
         StoreManager:OpenMainUI();
         return nil;
-    elseif self.Index  == 4 then
+    elseif self.Index == 4 then
         ACHVManager:OpenMainUI();
+        return nil;
+    elseif self.Index == 5 then
+        PassManager:OpenMainUI();
+        return nil;
+    elseif self.Index == 6 then
+        GeneManager:OpenMainUI();
         return nil;
 	end
 end

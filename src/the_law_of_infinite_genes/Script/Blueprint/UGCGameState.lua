@@ -1,4 +1,5 @@
 ---@class UGCGameState_C:BP_UGCGameState_C
+---@field GlobalEventComponent GlobalEventComponent_C
 ---@field SpecialEventManager SpecialEventManager_C
 --Edit Below--
 local UGCGameState = {
@@ -53,12 +54,10 @@ end
 
 
 -- function UGCGameState:ReceiveTick(DeltaTime)
-
 -- end
 
 
 -- function UGCGameState:ReceiveEndPlay()
- 
 -- end
 
 
@@ -99,7 +98,7 @@ function UGCGameState:EndGame()
 end
 
 
---【客户端】佩戴称号广播事件
+--【客户端】佩戴称号广播事件。
 function UGCGameState:MulticastRPC_EquippedTitle(uid, id)
     ACHVManager.CacheEquippedTitle = id;
 end
