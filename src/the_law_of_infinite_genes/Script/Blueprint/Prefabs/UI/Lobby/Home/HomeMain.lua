@@ -28,6 +28,6 @@ end
 
 function HomeMain:Button_46_OnClicked()
 	UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "ResetCardData", LocalPlayerController.PlayerKey);
-	GachaManager:OpenMainUI();
+	RaidInstanceManager:OpenMainUI();
 end
 return HomeMain

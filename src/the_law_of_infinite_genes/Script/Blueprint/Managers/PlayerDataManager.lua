@@ -488,7 +488,7 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
-
+    ugcprint('刷新卡牌')
     -- if isFirstRefresh then
     --     self._card.refreshCount = 0
     -- end

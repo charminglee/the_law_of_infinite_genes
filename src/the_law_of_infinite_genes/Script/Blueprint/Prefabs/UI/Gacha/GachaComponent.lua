@@ -48,6 +48,7 @@ function GachaComponent:ResetCardData(PlayerKey)
 end
 
 function GachaComponent:RefreshCardShop(PlayerKey)
+    ugcprint('接收商店刷新请求');
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
     manager:RefreshCardShop();

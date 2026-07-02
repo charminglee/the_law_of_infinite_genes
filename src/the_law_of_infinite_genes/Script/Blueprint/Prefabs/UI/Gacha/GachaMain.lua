@@ -432,8 +432,10 @@ function GachaMain:Exit()
 end
 
 function GachaMain:Refresh()
+    ugcprint('客户端点击商店刷新')
+    ugcprint('compclass is:'..tostring(GachaManager.ComponentClass));
     UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "RefreshCardShop", LocalPlayerController.PlayerKey);
-end
+end 
 
 function GachaMain:LevelUp()
     UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "LevelUpCardSlot", LocalPlayerController.PlayerKey);
