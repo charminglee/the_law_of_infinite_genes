@@ -1,15 +1,16 @@
-local root = UGCMapInfoLib.GetRootLongPackagePath()
+local ROOT = UGCMapInfoLib.GetRootLongPackagePath()
 
 
 ServerEvent = {
-    OnCardShopRefreshAfter = "OnCardShopRefreshAfter",
-    OnCardEquipAfter       = "OnCardEquipAfter",
-    OnCardUnequipAfter     = "OnCardUnequipAfter",
-    OnCardPurchaseAfter    = "OnCardPurchaseAfter",
-    OnCardSellAfter        = "OnCardSellAfter",
-    OnCoinChangeAfter      = "OnCoinChangeAfter",
-    OnTitleEquipAfter      = "OnTitleEquipAfter",
-    OnTitleUnlockAfter     = "OnTitleUnlockAfter",
+    OnRepCardData           = "OnRepCardData",
+    OnCardShopRefreshAfter  = "OnCardShopRefreshAfter",
+    OnCardEquipAfter        = "OnCardEquipAfter",
+    OnCardUnequipAfter      = "OnCardUnequipAfter",
+    OnCardPurchaseAfter     = "OnCardPurchaseAfter",
+    OnCardSellAfter         = "OnCardSellAfter",
+    OnCoinChangeAfter       = "OnCoinChangeAfter",
+    OnTitleEquipAfter       = "OnTitleEquipAfter",
+    OnTitleUnlockAfter      = "OnTitleUnlockAfter",
 }
 
 
@@ -18,13 +19,13 @@ ClientEvent = {
 
 
 ClassPath = {
-    [Buff.CorpseHuntingSurge]               = root.."Asset/Blueprint/Prefabs/Buffs/CorpseHuntingSurge.CorpseHuntingSurge_C",
-    [Buff.CorpseSurgeGoldRush]              = root.."Asset/Blueprint/Prefabs/Buffs/CorpseSurgeGoldRush.CorpseSurgeGoldRush_C",
-    [Buff.HeavenPunishmentThunderStrike]    = root.."Asset/Blueprint/Prefabs/Buffs/HeavenPunishmentThunderStrike.HeavenPunishmentThunderStrike_C",
-    [Buff.PutridMiasma]                     = root.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
-    [Buff.PutridMiasma_Monster]             = root.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
+    [Buff.CorpseHuntingSurge]               = ROOT.."Asset/Blueprint/Prefabs/Buffs/CorpseHuntingSurge.CorpseHuntingSurge_C",
+    [Buff.CorpseSurgeGoldRush]              = ROOT.."Asset/Blueprint/Prefabs/Buffs/CorpseSurgeGoldRush.CorpseSurgeGoldRush_C",
+    [Buff.HeavenPunishmentThunderStrike]    = ROOT.."Asset/Blueprint/Prefabs/Buffs/HeavenPunishmentThunderStrike.HeavenPunishmentThunderStrike_C",
+    [Buff.PutridMiasma]                     = ROOT.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
+    [Buff.PutridMiasma_Monster]             = ROOT.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
 
-    BaseMonster                             = root.."Asset/Blueprint/Prefabs/Monsters/BaseMonster.BaseMonster_C",
+    BaseMonster                             = ROOT.."Asset/Blueprint/Prefabs/Monsters/BaseMonster.BaseMonster_C",
 }
 
 

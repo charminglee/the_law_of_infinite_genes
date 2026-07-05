@@ -110,17 +110,17 @@ end
 
 
 ---【双端】获取某个一级字段的值。
----@param key string 字段名
----@return any 数据值
+---@param key string @字段名
+---@return any @数据值
 function PlayerDataManager:Get(key)
     return self._data[key]
 end
 
 
 ---【服务端】设置某个一级字段的值。
----@param key string 字段名
----@param value any 字段值
----@param sync? boolean 是否立即同步数据，默认为true
+---@param key string @字段名
+---@param value any @字段值
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:Set(key, value, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -133,7 +133,7 @@ end
 
 
 ---【服务端】立即保存所有数据。
----@return boolean 是否成功
+---@return boolean @是否成功
 function PlayerDataManager:Save()
     if not self:HasAuthority() or not self._isLoaded then
         return false
@@ -152,17 +152,17 @@ end
 
 
 ---【双端】获取自定义数据。
----@param key string 数据键
----@return any 数据值
+---@param key string @数据键
+---@return any @数据值
 function PlayerDataManager:GetCustomData(key)
     return (self._data.custom or {})[key]
 end
 
 
 ---【服务端】存储自定义数据。
----@param key string 数据键
----@param value any 数据值
----@param sync? boolean 是否立即同步数据，默认为true
+---@param key string @数据键
+---@param value any @数据值
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:SaveCustomData(key, value, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -178,17 +178,17 @@ end
 
 
 ---【双端】获取指定货币的数量。
----@param id number 货币ID
----@return number 货币数量
+---@param id number @货币ID
+---@return number @货币数量
 function PlayerDataManager:GetCoin(id)
     return (self._data.coin or {})[id] or -1
 end
 
 
 ---【服务端】设置指定货币的数量。
----@param id number 货币ID
----@param value number 数量
----@param sync? boolean 是否立即同步数据，默认为true
+---@param id number @货币ID
+---@param value number @数量
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:SetCoin(id, value, sync)
     local coin = self._data.coin
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil or coin[id] == value then
@@ -200,14 +200,14 @@ function PlayerDataManager:SetCoin(id, value, sync)
     if sync ~= false then
         self:Sync()
     end
-    Lib.EventSystem.Emit(ServerEvent.OnCoinChangeAfter, Lib.EventSystem.EmitType.Both, id, old, new)
+    Lib.EventSystem.Broadcast(ServerEvent.OnCoinChangeAfter, self.owner.UID, id, old, new)
 end
 
 
 ---【服务端】增加指定货币的数量，支持负值扣除。
----@param id number 货币ID
----@param value? number 增加数量，默认为1
----@param sync? boolean 是否立即同步数据，默认为true
+---@param id number @货币ID
+---@param value? number @增加数量，默认为1
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:AddCoin(id, value, sync)
     value = value or 1
     local coin = self._data.coin
@@ -220,7 +220,7 @@ function PlayerDataManager:AddCoin(id, value, sync)
     if sync ~= false then
         self:Sync()
     end
-    Lib.EventSystem.Emit(ServerEvent.OnCoinChangeAfter, Lib.EventSystem.EmitType.Both, id, old, new)
+    Lib.EventSystem.Broadcast(ServerEvent.OnCoinChangeAfter, self.owner.UID, id, old, new)
 end
 
 
@@ -299,8 +299,8 @@ end
 
 
 ---【双端】判断是否拥有指定卡牌。
----@param card table 卡牌，结构为{cardId, star}
----@return boolean 是否拥有指定卡牌
+---@param card table @卡牌，结构为{cardId, star}
+---@return boolean @是否拥有指定卡牌
 function PlayerDataManager:HasCard(card)
     for i = 1, self._card.store.n do
         local c = self._card.store[i]
@@ -330,9 +330,9 @@ end
 
 
 ---【服务端】装备卡牌。
----@param fromSlot number 仓库槽位索引 1-20
----@param toSlot? number 卡牌槽位索引 1-12，默认为第一个空槽位
----@param sync? boolean 是否立即同步数据，默认为true
+---@param fromSlot number @仓库槽位索引 1-20
+---@param toSlot? number @卡牌槽位索引 1-12，默认为第一个空槽位
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -365,14 +365,14 @@ function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end
-    Lib.EventSystem.Emit(ServerEvent.OnCardEquipAfter, Lib.EventSystem.EmitType.Both, fromSlot, toSlot, card)
+    Lib.EventSystem.Broadcast(ServerEvent.OnCardEquipAfter, self.owner.UID, fromSlot, toSlot, card)
 end
 
 
 ---【服务端】卸下卡牌。
----@param fromSlot number 卡牌槽位索引 1-12
----@param toSlot? number 仓库槽位索引 1-20，默认为第一个空槽位
----@param sync? boolean 是否立即同步数据，默认为true
+---@param fromSlot number @卡牌槽位索引 1-12
+---@param toSlot? number @仓库槽位索引 1-20，默认为第一个空槽位
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:UnequipCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -399,14 +399,14 @@ function PlayerDataManager:UnequipCard(fromSlot, toSlot, sync)
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end
-    Lib.EventSystem.Emit(ServerEvent.OnCardUnequipAfter, Lib.EventSystem.EmitType.Both, fromSlot, toSlot, card)
+    Lib.EventSystem.Broadcast(ServerEvent.OnCardUnequipAfter, self.owner.UID, fromSlot, toSlot, card)
 end
 
 
 ---【服务端】购买卡牌。
----@param fromSlot number 商店槽位索引 1-6
----@param toSlot? number 仓库槽位索引 1-20，默认为第一个空槽位
----@param sync? boolean 是否立即同步数据，默认为true
+---@param fromSlot number @商店槽位索引 1-6
+---@param toSlot? number @仓库槽位索引 1-20，默认为第一个空槽位
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -441,7 +441,7 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end
-    Lib.EventSystem.Emit(ServerEvent.OnCardPurchaseAfter, Lib.EventSystem.EmitType.Both, fromSlot, toSlot, card, cost)
+    Lib.EventSystem.Broadcast(ServerEvent.OnCardPurchaseAfter, self.owner.UID, fromSlot, toSlot, card, cost)
 end
 
 
@@ -461,29 +461,29 @@ function PlayerDataManager:_SellCard(from, slot, sync)
     if sync ~= false then
         UnrealNetwork.RepLazyProperty(self, "_card")
     end
-    Lib.EventSystem.Emit(ServerEvent.OnCardSellAfter, Lib.EventSystem.EmitType.Both, from, slot, card, refund)
+    Lib.EventSystem.Broadcast(ServerEvent.OnCardSellAfter, self.owner.UID, from, slot, card, refund)
 end
 
 
 ---【服务端】出售仓库卡牌。
----@param slot number 仓库槽位索引 1-20
----@param sync? boolean 是否立即同步数据，默认为true
+---@param slot number @仓库槽位索引 1-20
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:SellCardFromStore(slot, sync)
     self:_SellCard("store", slot, sync)
 end
 
 
 ---【服务端】出售装备中的卡牌。
----@param slot number 卡牌槽位索引 1-12
----@param sync? boolean 是否立即同步数据，默认为true
+---@param slot number @卡牌槽位索引 1-12
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:SellCardFromEquipped(slot, sync)
     self:_SellCard("equipped", slot, sync)
 end
 
 
 ---【服务端】刷新卡牌商店。
----@param useCoin? boolean 是否使用资源点刷新，默认为true
----@param isFirstRefresh? boolean 是否为首次刷新，若为首次刷新，则刷新价格为首次价格；默认为false
+---@param useCoin? boolean @是否使用资源点刷新，默认为true
+---@param isFirstRefresh? boolean @是否为首次刷新，若为首次刷新，则刷新价格为首次价格；默认为false
 function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -523,7 +523,7 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     self._card.refreshCount = self._card.refreshCount + 1
 
     UnrealNetwork.RepLazyProperty(self, "_card")
-    Lib.EventSystem.Emit(ServerEvent.OnCardShopRefreshAfter, Lib.EventSystem.EmitType.Both, shop)
+    Lib.EventSystem.Broadcast(ServerEvent.OnCardShopRefreshAfter, self.owner.UID, shop)
 end
 
 
@@ -531,17 +531,17 @@ end
 
 
 ---【双端】获取指定统计数据的值。
----@param name Statistics 统计数据名称，请使用Statistics枚举值
----@return number 数据值
+---@param name Statistics @统计数据名称，请使用Statistics枚举值
+---@return number @数据值
 function PlayerDataManager:GetStat(name)
     return (self._data.stat or {})[name] or -1
 end
 
 
 ---【服务端】累加指定统计数据。
----@param name Statistics 统计数据名称，请使用Statistics枚举值
----@param value? number 增量，默认为1
----@param sync? boolean 是否立即同步数据，默认为true
+---@param name Statistics @统计数据名称，请使用Statistics枚举值
+---@param value? number @增量，默认为1
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:AddStat(name, value, sync)
     value = value or 1
     local stat = self._data.stat
@@ -559,7 +559,7 @@ end
 
 
 ---【双端】获取当前佩戴的称号。
----@return Title|nil Title枚举值，若无佩戴则返回nil
+---@return Title|nil @Title枚举值，若无佩戴则返回nil
 function PlayerDataManager:GetEquippedTitle()
     if not self._isLoaded then
         return nil
@@ -569,8 +569,8 @@ end
 
 
 ---【服务端】佩戴称号。
----@param title Title|nil 称号ID，请使用Title枚举值，卸下称号可传nil
----@param sync? boolean 是否立即同步数据，默认为true
+---@param title Title|nil @称号ID，请使用Title枚举值，卸下称号可传nil
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:EquipTitle(title, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -579,12 +579,12 @@ function PlayerDataManager:EquipTitle(title, sync)
     if sync ~= false then
         self:Sync()
     end
-    Lib.EventSystem.Emit(ServerEvent.OnTitleEquipAfter, Lib.EventSystem.EmitType.Both, title)
+    Lib.EventSystem.Broadcast(ServerEvent.OnTitleEquipAfter, self.owner.UID, title)
 end
 
 
 ---【双端】获取所有已解锁的称号。
----@return Title[] 已解锁称号的列表
+---@return Title[] @已解锁称号的列表
 function PlayerDataManager:GetUnlockedTitles()
     if not self._isLoaded then
         return {}
@@ -594,8 +594,8 @@ end
 
 
 ---【服务端】解锁称号。
----@param title Title 称号ID，请使用Title枚举值
----@param sync? boolean 是否立即同步数据，默认为true
+---@param title Title @称号ID，请使用Title枚举值
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:UnlockTitle(title, sync) 
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -610,16 +610,16 @@ function PlayerDataManager:UnlockTitle(title, sync)
     if sync ~= false then
         self:Sync()
     end
-    Lib.EventSystem.Emit(ServerEvent.OnTitleUnlockAfter, Lib.EventSystem.EmitType.Both, title)
+    Lib.EventSystem.Broadcast(ServerEvent.OnTitleUnlockAfter, self.owner.UID, title)
 end
 
 
----【双端】获取称号状态。0为未解锁，1为已解锁，2为已佩戴
----@param title Title 称号ID，请使用Title枚举值
----@return number 称号状态
+---【双端】获取称号状态。0为未解锁，1为已解锁，2为已佩戴。
+---@param title Title @称号ID，请使用Title枚举值
+---@return number @称号状态
 function PlayerDataManager:GetTitleState(title)
     if not self._isLoaded then
-        return nil
+        return 0
     end
     if title == self._data.title.equipped then 
         return 2 

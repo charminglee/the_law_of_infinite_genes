@@ -15,4 +15,45 @@ function Lib.IsServer()
 end
 
 
+local _ROOT = UGCMapInfoLib.GetRootLongPackagePath()
+local _PC_CLS_PATH = "Asset/Blueprint/UGCPlayerController.UGCPlayerController_C"
+local _PS_CLS_PATH = "Asset/Blueprint/UGCPlayerState.UGCPlayerState_C"
+local _PP_CLS_PATH = "Asset/Blueprint/UGCPlayerPawn.UGCPlayerPawn_C"
+
+
+local _clsCache = {}
+
+
+---获取一个类。
+---@param clsPath string @类路径（由 "Asset/" 开始）
+---@return UClass|nil @类
+function Lib.GetClass(clsPath)
+    if not _clsCache[clsPath] then
+        _clsCache[clsPath] = LoadClass(_ROOT..clsPath)
+    end
+    return _clsCache[clsPath]
+end
+
+
+---获取 PlayerController 类。
+---@return UClass|nil @PlayerController 类
+function Lib.GetPlayerControllerClass()
+    return Lib.GetClass(_PC_CLS_PATH)
+end
+
+
+---获取 PlayerState 类。
+---@return UClass|nil @PlayerState 类
+function Lib.GetPlayerStateClass()
+    return Lib.GetClass(_PS_CLS_PATH)
+end
+
+
+---获取 PlayerPawn 类。
+---@return UClass|nil @PlayerPawn 类
+function Lib.GetPlayerPawnClass()
+    return Lib.GetClass(_PP_CLS_PATH)
+end
+
+
 return Lib
