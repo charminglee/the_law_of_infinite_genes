@@ -8,9 +8,19 @@ local Title = {
 
 function Title:Construct()
 	local data = ACHVManager:GetData(ACHVManager.CacheEquippedTitle);
-	local path = LoadObject(data.IconPath);
+	self.Icon:SetBrushFromTexture(UGCObjectUtility.LoadObject(data.IconPath));
 	self.Name:SetText(data.NameText);
-    self.Icon:SetBrushFromTexture(path);
+	self.Name:SetColorAndOpacity({SpecifiedColor = data.TextParam.SpecifiedColor});
+	self.Name:SetRenderShear(data.TextParam.RenderShear);
+	self.Name:SetShadowOffset(data.TextParam.ShadowOffset);
+	self.Name:SetShadowColorAndOpacity(data.TextParam.ShadowColorAndOpacity);
+	local font = self.Name.Font;
+	font.FontMaterial = UGCObjectUtility.LoadObject(data.TextParam.FontMaterial);
+	local outline = font.OutlineSettings;
+	outline.OutlineSize = data.TextParam.OutlineSize;
+	outline.OutlineColor = data.TextParam.OutlineColor;
+	font.OutlineSettings = outline;
+	self.Name:SetFont(font);
 end
 
 return Title
