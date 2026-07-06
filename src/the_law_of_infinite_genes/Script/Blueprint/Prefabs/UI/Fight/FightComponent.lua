@@ -1,5 +1,5 @@
 ---@class FightComponent_C:ActorComponent
----@field FirearmPurchasePath FSoftClassPath
+---@field FirearmMainPath FSoftClassPath
 --Edit Below--
 local FightComponent = {}
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Fight.FightManager");
@@ -14,7 +14,7 @@ end
 
 
 function FightComponent:InitUI()
-    Common.LoadObjectWithSoftPathAsync(self.FirearmPurchasePath, 
+    Common.LoadObjectWithSoftPathAsync(self.FirearmMainPath, 
         function (UIClass)
             if self == nil or UIClass == nil then
                 return;

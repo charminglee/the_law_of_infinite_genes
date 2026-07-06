@@ -1,16 +1,12 @@
 ---@class FirearmPurchaseLTabItem_C:UUserWidget
 ---@field Button_0 UButton
----@field Image_2 UImage
----@field Image_3 UImage
----@field Image_4 UImage
+---@field Item UImage
 ---@field selected UCanvasPanel
----@field tabImage_0 UImage
----@field TextBlock_43 UTextBlock
 --Edit Below--
 local FirearmPurchaseLTabItem = { 
     bInitDoOnce = false,
-     Index=nil,
-     } 
+    Index=nil,
+}
 
 function FirearmPurchaseLTabItem:Construct()
 	self:LuaInit();
@@ -29,25 +25,17 @@ function FirearmPurchaseLTabItem:Listen()
 end
 
 function FirearmPurchaseLTabItem:Button_0_Clicked()
-    ugcprint('clicked index is:'..tostring(self.Index));
-    FightManager.LTabListSelectedIndex = self.Index;
+    FightManager.TabSelectIndex = self.Index;
 end
 
-function FirearmPurchaseLTabItem:SetSelectedVisible(Visible)
-    if Visible == true then
-        self.selected:SetVisibility(ESlateVisibility.Visible);
-    else
-        self.selected:SetVisibility(ESlateVisibility.Collapsed);
-    end
+function FirearmPurchaseLTabItem:SetSelected(Visible)
+    self.selected:SetVisibility(Visible);
 end
 
-function FirearmPurchaseLTabItem:SetTabIcon(Path)
-    local Texture = LoadObject(Path);
-    self.tabImage_0:SetBrushFromTexture(Texture, true);
-end
-
-function FirearmPurchaseLTabItem:SetText(text)
-    self.TextBlock_43:SetText(text);
+function FirearmPurchaseLTabItem:SetIcon()
+    local path = FightManager.LTabIconList[self.Index+1].path;
+    local Texture = LoadObject(path);
+    self.Item:SetBrushFromTexture(Texture);
 end
 
 return FirearmPurchaseLTabItem
