@@ -1,99 +1,196 @@
----@class EventSystem_C
-local EventSystem = {}
-
-
----事件触发方式枚举。
-EventSystem.EmitType = {
-    ---本地触发（服务端触发的事件，仅服务端可收到；客户端触发的事件，仅当前客户端可收到）。
-    Local = 0,
-    ---跨端触发（服务端触发的事件，所有客户端可收到；客户端触发的事件，仅服务端可收到）。
-    Across = 1,
-    ---双端触发（本端与对端同时收到：服务端发→服务端与所有客户端；客户端发→本客户端与服务端）。
-    Both = 2,
+---事件系统，提供事件监听与触发功能。
+---@class EventSystem
+local EventSystem = {
+    _pools = {}, ---@type table<string, EventSystem.Listener[]>
 }
 
 
-local eventPools = {}
+---@class EventSystem.Listener
+---@field func function @回调函数
+---@field obj any @回调函数所在对象（通常为self）
+---@field alive boolean @是否活跃
 
 
-local function IsServer()
-    return GameState ~= nil and GameState:HasAuthority()
-end
-
-
----添加监听。
----@param eventName string 事件名
----@param func function 回调函数
----@param obj any 回调函数所在对象（通常为self，非实例方法可忽略该参数）
+---【双端】添加监听。
+---@param eventName string @事件名
+---@param func function @回调函数
+---@param obj? any @回调函数所在对象（通常为self，非实例方法可忽略该参数）
 function EventSystem.Listen(eventName, func, obj)
-    local data = { func = func, obj = obj }
-    if eventPools[eventName] == nil then
-        eventPools[eventName] = {}
-    end
-    table.insert(eventPools[eventName], data)
-end
-
-
----移除监听。
----@param eventName string 事件名
----@param func function 回调函数
----@param obj any 回调函数所在对象（通常为self，非实例方法可忽略该参数）
-function EventSystem.Unlisten(eventName, func, obj)
-    local pool = eventPools[eventName]
+    local pool = EventSystem._pools[eventName]
     if pool == nil then
-        return
-    end
-    for i, data in pairs(pool) do
-        if data.func == func and data.obj == obj then
-            pool[i] = nil
-        end
-    end
-end
-
-
----移除所有事件监听。
-function EventSystem.UnlistenAll()
-    eventPools = {}
-end
-
-
-function EventSystem._EmitLocal(eventName, ...)
-    local pool = eventPools[eventName]
-    if pool == nil then
-        return
-    end
-    for _, data in pairs(pool) do
-        if data.obj ~= nil then
-            data.func(data.obj, ...)
-        else
-            data.func(...)
-        end
-    end
-end
-
-
-function EventSystem._EmitAcross(eventName, ...)
-    if IsServer() then
-        UnrealNetwork.CallUnrealRPC_Multicast(GameState, "ServerRPC_OnEmitAcross", eventName, ...)
+        pool = {}
+        EventSystem._pools[eventName] = pool
     else
-        local comp = LocalPlayerController.GlobalEventComponent
-        UnrealNetwork.CallUnrealRPC(comp, comp, "ServerRPC_OnEmitAcross", eventName, ...)
+        for _, l in pairs(pool) do
+            -- 去重
+            if l.func == func and l.obj == obj then
+                return
+            end
+        end
+    end
+    local listener = { 
+        func = func,
+        obj = obj, 
+        alive = true,
+    }
+    table.insert(pool, listener)
+end
+
+
+---【双端】移除监听。
+---@param eventName string @事件名
+---@param func function @回调函数
+---@param obj? any @回调函数所在对象（通常为self，非实例方法可忽略该参数）
+function EventSystem.Unlisten(eventName, func, obj)
+    local pool = EventSystem._pools[eventName]
+    if pool == nil then
+        return
+    end
+    for i = #pool, 1, -1 do
+        local l = pool[i]
+        if l.func == func and l.obj == obj then
+            l.alive = false
+            table.remove(pool, i)
+        end
     end
 end
 
 
----触发指定事件。
----@param eventName string 事件名
----@param emitType number 触发方式，请使用EventSystem.EmitType枚举值
----@param ... any 回调参数
-function EventSystem.Emit(eventName, emitType, ...)
-    if emitType == EventSystem.EmitType.Local then
-        EventSystem._EmitLocal(eventName, ...)
-    elseif emitType == EventSystem.EmitType.Across then
-        EventSystem._EmitAcross(eventName, ...)
-    elseif emitType == EventSystem.EmitType.Both then
-        EventSystem._EmitLocal(eventName, ...)
-        EventSystem._EmitAcross(eventName, ...)
+---【双端】移除指定对象绑定的所有监听。
+---@param obj any @回调函数所在对象（通常为self）
+function EventSystem.UnlistenByOwner(obj)
+    for _, pool in pairs(EventSystem._pools) do
+        for i = #pool, 1, -1 do
+            local l = pool[i]
+            if l.obj == obj then
+                l.alive = false
+                table.remove(pool, i)
+            end
+        end
+    end
+end
+
+
+---【双端】移除所有事件监听。
+function EventSystem.UnlistenAll()
+    EventSystem._pools = {}
+end
+
+
+---【双端】本地调用指定事件的所有回调函数。
+---@param eventName string @事件名
+---@param ... any @事件参数
+function EventSystem.Dispatch(eventName, ...)
+    local pool = EventSystem._pools[eventName]
+    if pool == nil then
+        return
+    end
+
+    -- 先做浅拷贝快照，派发期间增删监听不影响本次遍历，新加入者也不在本次触发
+    local snapshot = {} ---@type EventSystem.Listener[]
+    for i = 1, #pool do
+        snapshot[i] = pool[i]
+    end
+
+    for i = 1, #snapshot do
+        local l = snapshot[i]
+        if l.alive then
+            local ok, err
+            if l.obj ~= nil then
+                ok, err = pcall(l.func, l.obj, ...)
+            else
+                ok, err = pcall(l.func, ...)
+            end
+            if not ok then
+                print("[EventSystem] 执行事件 '"..eventName.."' 的回调函数时出现异常：\n"..tostring(err))
+            end
+        end
+    end
+end
+
+
+---【服务端】发送事件到指定客户端。
+---@param player UGCPlayerController|UGCPlayerState|UGCPlayerPawn @目标玩家的PlayerController/PlayerState/PlayerPawn
+---@param eventName string @事件名
+---@param ... any @事件参数
+function EventSystem.SendToClient(player, eventName, ...)
+    if not Lib.IsServer() or not UE.IsValid(player) then
+        return
+    end
+
+    local pc
+    if UE.IsA(player, Lib.GetPlayerControllerClass()) then
+        pc = player
+    elseif UE.IsA(player, Lib.GetPlayerStateClass()) then
+        pc = UGCGameSystem.GetPlayerControllerByPlayerState(player)
+    elseif UE.IsA(player, Lib.GetPlayerPawnClass()) then
+        pc = UGCGameSystem.GetPlayerControllerByPlayerPawn(player)
+    end
+    if not pc then
+        return
+    end
+
+    UnrealNetwork.CallUnrealRPC(
+        pc, 
+        pc.GlobalEventComponent, 
+        "ClientRPC_FromEventSystem", 
+        eventName, ...
+    )
+end
+
+
+---【服务端】发送事件到所有客户端。
+---@param eventName string @事件名
+---@param ... any @事件参数
+function EventSystem.SendToAllClients(eventName, ...)
+    if not Lib.IsServer() then
+        return
+    end
+    for _, pc in ipairs(UGCGameSystem.GetAllPlayerController(false)) do
+        UnrealNetwork.CallUnrealRPC(
+            pc, 
+            pc.GlobalEventComponent, 
+            "ClientRPC_FromEventSystem", 
+            eventName, ...
+        )
+    end
+    -- UnrealNetwork.CallUnrealRPC_Multicast(
+    --     UGCGameSystem.GetGameState(), 
+    --     "Multicast_FromEventSystem", 
+    --     eventName, ...
+    -- )
+end
+
+
+---【客户端】发送事件到服务端。
+---@param eventName string @事件名
+---@param ... any @事件参数
+function EventSystem.SendToServer(eventName, ...)
+    if Lib.IsServer() then
+        return
+    end
+    local pc = LocalPlayerController
+    if not UE.IsValid(pc) then
+        return
+    end
+    UnrealNetwork.CallUnrealRPC(
+        pc, 
+        pc.GlobalEventComponent, 
+        "ServerRPC_FromEventSystem", 
+        eventName, ...
+    )
+end
+
+
+---【双端】广播事件到所有客户端和服务端。
+---@param eventName string @事件名
+---@param ... any @事件参数
+function EventSystem.Broadcast(eventName, ...)
+    EventSystem.Dispatch(eventName, ...)
+    if Lib.IsServer() then
+        EventSystem.SendToAllClients(eventName, ...)
+    else
+        EventSystem.SendToServer(eventName, ...)
     end
 end
 

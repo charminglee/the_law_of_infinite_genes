@@ -5,7 +5,15 @@ GeneManager = GeneManager or
     -- ===== 运行时变量 =====
     PlayerId = nil;
     MainUI = nil;
-
+    -- ===== 静态配置（固定数据） =====
+    Config = {
+        -- 动画时长
+        AnimDur = {
+            In = 0.2,
+            Out = 0.2,
+            Set = 0.5
+        };
+    }
 }
 
 function GeneManager:RegisterComponentClass(CompClass)

@@ -1,4 +1,5 @@
 ---@class GeneMain_C:UAEUserWidget
+---@field Bg UImage
 ---@field BgInner UImage
 ---@field Exit UButton
 --Edit Below--
@@ -19,10 +20,33 @@ end
 
 function GeneMain:Open()
 	self:SetVisibility(ESlateVisibility.Visible);
+	self:SetVisibleAnim(true);
 end
 
 function GeneMain:Close()
-    self:SetVisibility(ESlateVisibility.Collapsed);
+    UGCTimerUtility.CreateUETimer(
+        function() self:SetVisibility(ESlateVisibility.Collapsed) end, 
+        GeneManager.Config.AnimDur.Out, 
+        false
+    )
+    self:SetVisibleAnim(false);
+end
+
+function GeneMain:SetVisibleAnim(isVisible)
+    local startColor, endColor, dur
+    if isVisible then
+        startColor = KismetMathLibrary.MakeColor(1,1,1,0)
+        endColor   = KismetMathLibrary.MakeColor(1,1,1,1)
+		dur = GeneManager.Config.AnimDur.In
+    else
+        startColor = KismetMathLibrary.MakeColor(1,1,1,1)
+        endColor   = KismetMathLibrary.MakeColor(1,1,1,0)
+		dur = GeneManager.Config.AnimDur.Out
+    end
+    TweenManager.ColorAnim(
+		function(value) self:SetColorAndOpacity(value) end,
+        startColor, endColor, dur
+    )
 end
 
 return GeneMain

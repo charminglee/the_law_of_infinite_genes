@@ -36,13 +36,20 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 ## 事件列表
 
+### OnRepCardData
+
+【客户端】接收到来自服务端的卡牌数据更新时触发。
+
+无参数。
+
 ### OnCardShopRefreshAfter
 
 【双端】刷新卡牌商店后触发。
 
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | shop | table | 刷新后的卡牌列表，每个元素为 `{cardId, star}` |
+| 1 | uid | number | 玩家 UID |
+| 2 | shop | table | 刷新后的卡牌列表，每个元素为 `{cardId, star}` |
 
 ### OnCardEquipAfter
 
@@ -50,9 +57,10 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | fromSlot | number | 仓库槽位索引 |
-| 2 | toSlot | number | 卡牌槽位索引 |
-| 3 | card | table | 装备的卡牌 `{cardId, star}` |
+| 1 | uid | number | 玩家 UID |
+| 2 | fromSlot | number | 仓库槽位索引 |
+| 3 | toSlot | number | 卡牌槽位索引 |
+| 4 | card | table | 装备的卡牌 `{cardId, star}` |
 
 ### OnCardUnequipAfter
 
@@ -60,9 +68,10 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | fromSlot | number | 卡牌槽位索引 |
-| 2 | toSlot | number | 仓库槽位索引 |
-| 3 | card | table | 卸下的卡牌 `{cardId, star}` |
+| 1 | uid | number | 玩家 UID |
+| 2 | fromSlot | number | 卡牌槽位索引 |
+| 3 | toSlot | number | 仓库槽位索引 |
+| 4 | card | table | 卸下的卡牌 `{cardId, star}` |
 
 ### OnCardPurchaseAfter
 
@@ -70,10 +79,11 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | fromSlot | number | 商店槽位索引 |
-| 2 | toSlot | number | 仓库槽位索引 |
-| 3 | card | table | 购买的卡牌 `{cardId, star}` |
-| 4 | cost | number | 花费的资源点数量 |
+| 1 | uid | number | 玩家 UID |
+| 2 | fromSlot | number | 商店槽位索引 |
+| 3 | toSlot | number | 仓库槽位索引 |
+| 4 | card | table | 购买的卡牌 `{cardId, star}` |
+| 5 | cost | number | 花费的资源点数量 |
 
 ### OnCardSellAfter
 
@@ -81,10 +91,11 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | from | string | 出售来源：`"store"`（仓库）或 `"equipped"`（卡牌槽） |
-| 2 | slot | number | 出售槽位索引 |
-| 3 | card | table | 出售的卡牌 `{cardId, star}` |
-| 4 | refund | number | 返还的资源点数量 |
+| 1 | uid | number | 玩家 UID |
+| 2 | from | string | 出售来源：`"store"`（仓库）或 `"equipped"`（卡牌槽） |
+| 3 | slot | number | 出售槽位索引 |
+| 4 | card | table | 出售的卡牌 `{cardId, star}` |
+| 5 | refund | number | 返还的资源点数量 |
 
 ### OnCoinChangeAfter
 
@@ -92,9 +103,10 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | id | number | 货币ID |
-| 2 | old | number | 变化前的数量 |
-| 3 | new | number | 变化后的数量 |
+| 1 | uid | number | 玩家 UID |
+| 2 | id | number | 货币 ID |
+| 3 | old | number | 变化前的数量 |
+| 4 | new | number | 变化后的数量 |
 
 ### OnTitleEquipAfter
 
@@ -102,7 +114,8 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | title | Title \| nil | 当前佩戴的称号；`nil` 表示卸下 |
+| 1 | uid | number | 玩家 UID |
+| 2 | title | Title\|nil | 当前佩戴的称号；`nil` 表示卸下 |
 
 ### OnTitleUnlockAfter
 
@@ -110,4 +123,5 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
-| 1 | title | Title | 解锁的称号 |
+| 1 | uid | number | 玩家 UID |
+| 2 | title | Title | 解锁的称号 |

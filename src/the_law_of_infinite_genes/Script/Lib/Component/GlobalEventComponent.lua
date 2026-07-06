@@ -3,20 +3,28 @@ local GlobalEventComponent = {}
 
 
 function GlobalEventComponent:GetAvailableServerRPCs()
-    return "ServerRPC_OnEmitAcross"
+    return "ServerRPC_FromEventSystem"
 end
 
 
-function GlobalEventComponent:ServerRPC_OnEmitAcross(...)
-    Lib.EventSystem._EmitLocal(...)
+function GlobalEventComponent:ClientRPC_FromEventSystem(...)
+    Lib.EventSystem.Dispatch(...)
+end
+
+
+function GlobalEventComponent:ServerRPC_FromEventSystem(...)
+    Lib.EventSystem.Dispatch(...)
+end
+
+
+function GlobalEventComponent:Multicast_FromEventSystem(...)
+    Lib.EventSystem.Dispatch(...)
 end
  
 
---[[
-function GlobalEventComponent:ReceiveBeginPlay()
-    GlobalEventComponent.SuperClass.ReceiveBeginPlay(self)
-end
---]]
+-- function GlobalEventComponent:ReceiveBeginPlay()
+--     GlobalEventComponent.SuperClass.ReceiveBeginPlay(self)
+-- end
 
 
 --[[

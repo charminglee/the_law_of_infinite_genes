@@ -8,6 +8,7 @@
   },
   "diagnostics": {
     "disable": [
+      "param-type-mismatch",
       "call-non-callable",
       "type-not-found",
       "iter-variable-reassign",
