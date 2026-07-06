@@ -1,4 +1,4 @@
----@class GeneSkill_C:UAEUserWidget
+---@class GeneSkillBranch_C:UAEUserWidget
 --Edit Below--
 local GeneSkillBranch = { bInitDoOnce = false } 
 

@@ -1,6 +1,6 @@
 ---@class GeneSkillNode_C:UAEUserWidget
 ---@field Frame UButton
----@field Image_0 UImage
+---@field Icon UImage
 ---@field LockBg UImage
 ---@field LockImg UImage
 ---@field PressedFrame UImage

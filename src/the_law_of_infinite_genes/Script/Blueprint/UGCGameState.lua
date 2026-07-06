@@ -64,9 +64,9 @@ end
 function UGCGameState:_TpAllPlayers()
     local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.LevelStart)
     local loc = levelStart:K2_GetActorLocation()
-    -- for _, c in pairs(UGCGameSystem.GetAllPlayerController(false)) do
-    --     UGCPlayerControllerSystem.TeleportTo(c, loc.X, loc.Y, loc.Z)
-    -- end
+    for _, c in pairs(UGCGameSystem.GetAllPlayerController(false)) do
+        UGCPlayerControllerSystem.TeleportTo(c, loc.X, loc.Y, loc.Z)
+    end
 end
 
 
