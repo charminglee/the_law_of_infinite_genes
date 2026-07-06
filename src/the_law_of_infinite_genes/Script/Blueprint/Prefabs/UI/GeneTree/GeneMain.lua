@@ -1,6 +1,7 @@
 ---@class GeneMain_C:UAEUserWidget
 ---@field Bg UImage
 ---@field BgInner UImage
+---@field Button_0 UButton
 ---@field Exit UButton
 --Edit Below--
 local GeneMain = { bInitDoOnce = false } 
