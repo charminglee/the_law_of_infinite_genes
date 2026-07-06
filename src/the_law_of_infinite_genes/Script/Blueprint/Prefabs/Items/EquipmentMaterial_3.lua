@@ -1,4 +1,4 @@
----@class equipment_material_3_C:Template_ItemHandle_C
+---@class EquipmentMaterial_3_C:Template_ItemHandle_C
 --Edit Below--
 local EquipmentMaterial_3 = {} 
 

@@ -1,4 +1,4 @@
----@class hy_suit_shoes_C:Template_Equipment_C
+---@class HySuitShoes_C:Template_Equipment_C
 --Edit Below--
 local HySuitShoes = {} 
 

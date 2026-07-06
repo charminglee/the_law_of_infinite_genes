@@ -1,4 +1,4 @@
----@class hy_suit_top_C:Template_Equipment_Armor_C
+---@class HySuitTop_C:Template_Equipment_Armor_C
 --Edit Below--
 local HySuitTop = {} 
 

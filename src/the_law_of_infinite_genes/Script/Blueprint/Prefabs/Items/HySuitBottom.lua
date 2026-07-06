@@ -1,4 +1,4 @@
----@class hy_suit_bottom_C:Template_Equipment_Kneepad_C
+---@class HySuitBottom_C:Template_Equipment_Kneepad_C
 --Edit Below--
 local HySuitBottom = {} 
 

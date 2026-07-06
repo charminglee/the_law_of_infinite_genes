@@ -1,4 +1,4 @@
----@class boss_material_1_C:Template_ItemHandle_C
+---@class BossMaterial_1_C:Template_ItemHandle_C
 --Edit Below--
 local BossMaterial_1 = {} 
 

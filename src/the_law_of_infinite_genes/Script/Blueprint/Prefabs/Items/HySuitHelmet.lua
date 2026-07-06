@@ -1,4 +1,4 @@
----@class hy_suit_helmet_C:Template_Equipment_Helmet_C
+---@class HySuitHelmet_C:Template_Equipment_Helmet_C
 --Edit Below--
 local HySuitHelmet = {} 
 
