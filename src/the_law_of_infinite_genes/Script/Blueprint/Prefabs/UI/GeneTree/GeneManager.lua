@@ -5,6 +5,9 @@ GeneManager = GeneManager or
     -- ===== 运行时变量 =====
     PlayerId = nil;
     MainUI = nil;
+    Content = nil;
+    SkillBranch = nil;
+
     -- ===== 静态配置（固定数据） =====
     Config = {
         -- 动画时长

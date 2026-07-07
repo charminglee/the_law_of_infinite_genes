@@ -1,3 +1,6 @@
+---@class GeneInfoBar_C:UAEUserWidget
+---@field AttributeBonusesBg_0 UImage
+--Edit Below--
 local GeneInfoBar = { bInitDoOnce = false } 
 
 --[==[ Construct

@@ -40,7 +40,6 @@ function ACHVTitleList:ReuseList2Update(item, index)
 	item:Refresh();
 end
 
-
 function ACHVTitleList:SelectTab(index)
     if index == self.selectedTabID then
         return;

@@ -1,8 +1,12 @@
 ---@class GeneMain_C:UAEUserWidget
 ---@field Bg UImage
 ---@field BgInner UImage
----@field Button_0 UButton
+---@field Degrade UButton
 ---@field Exit UButton
+---@field ExitBtn UButton
+---@field GeneContent GeneContent_C
+---@field GeneReset GeneReset_C
+---@field Upgrade UButton
 --Edit Below--
 local GeneMain = { bInitDoOnce = false } 
 
@@ -16,7 +20,9 @@ function GeneMain:LuaInit()
 	end
 	self.bInitDoOnce = true;
     GeneManager:RegisterMainUI(self);
+    GeneManager.Content:Reload();
     self.Exit.OnClicked:Add(self.Close, self);
+    self.ExitBtn.OnClicked:Add(self.Close, self);
 end
 
 function GeneMain:Open()
