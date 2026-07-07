@@ -4,9 +4,7 @@
 local GeneSkillBranch = { 
     bInitDoOnce = false,
     parent = nil,
-    index = 0,
-    tabButtons = {},
-	selectedTabID = 0,
+    index = 0
 } 
 
 function GeneSkillBranch:Construct()
@@ -34,9 +32,10 @@ function GeneSkillBranch:ReuseList2Update(item, index)
 	if item.parent == nil then
 		item.parent = self;
 	end
-	item.index = index;
-	self.tabButtons[index] = item;
-	if index == self.selectedTabID then
+    local tabIndex = 3 * self.index + index;
+	item.index = tabIndex;
+	self.parent.tabButtons[tabIndex] = item;
+	if tabIndex == self.parent.selectedTabID then
         item:Select();
     else
         item:Deselect();
@@ -45,12 +44,12 @@ function GeneSkillBranch:ReuseList2Update(item, index)
 end
 
 function GeneSkillBranch:SelectTab(index)
-    if index == self.selectedTabID then
+    if index == self.parent.selectedTabID then
         return;
     end
-    self.tabButtons[index]:Select();
-    self.tabButtons[self.selectedTabID]:Deselect();
-    self.selectedTabID = index;
+    self.parent.tabButtons[index]:Select();
+    self.parent.tabButtons[self.parent.selectedTabID]:Deselect();
+    self.parent.selectedTabID = index;
 	self:Reload();
 end
 

@@ -26,7 +26,9 @@ function GeneSkillNode:LuaInit()
 end
 
 function GeneSkillNode:Refresh()
-    
+	if self.index % 3 == 2 then
+		self.Arrow:SetVisibility(ESlateVisibility.Collapsed);
+	end
 end
 
 function GeneSkillNode:Select()

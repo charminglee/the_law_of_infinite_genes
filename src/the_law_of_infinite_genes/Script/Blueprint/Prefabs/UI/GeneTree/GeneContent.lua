@@ -1,11 +1,12 @@
 ---@class GeneContent_C:UAEUserWidget
----@field ExpandableArea_0 UExpandableArea
 ---@field GeneInfoBar GeneInfoBar_C
 ---@field ReuseList2 ReuseList2_C
+---@field SidebarBtn UButton
 --Edit Below--
 local GeneContent = { 
     bInitDoOnce = false,
-    tabButtons = {}
+    tabButtons = {},
+	selectedTabID = 0
 } 
 
 function GeneContent:Construct()
@@ -30,7 +31,6 @@ function GeneContent:ReuseList2Update(item, index)
 		item.parent = self;
 	end
 	item.index = index;
-	self.tabButtons[index] = item;
     GeneManager.SkillBranch:Reload();
 	item:Refresh();
 end
