@@ -1,6 +1,14 @@
 ---@class GeneInfoBar_C:UAEUserWidget
+---@field Add UButton
+---@field Highest UButton
+---@field Info_0 UTextBlock
+---@field Info_1 UTextBlock
 ---@field InfoBg UImage
+---@field InfoBg_0 UImage
+---@field InfoBg_1 UImage
 ---@field InfoPanel UCanvasPanel
+---@field Lowest UButton
+---@field Reduce UButton
 ---@field SidebarBtn UButton
 --Edit Below--
 local GeneInfoBar = { bInitDoOnce = false } 
