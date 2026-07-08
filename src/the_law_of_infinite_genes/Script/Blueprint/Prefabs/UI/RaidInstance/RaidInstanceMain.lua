@@ -28,7 +28,8 @@ function RaidInstanceMain:Listen()
 end
 
 function RaidInstanceMain:OpenCardUI()
-    GachaManager:OpenMainUI();    
+    GachaManager:OpenMainUI();
+        
 end
 
 function RaidInstanceMain:Exit()

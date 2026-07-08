@@ -69,7 +69,6 @@ end
 
 function FirearmMain:TabListUpdate(Item, Index)
     Item.Index = Index;
-    Item:SetIcon()
     if self.TabSelectIndex == Index then
         Item:SetSelected(ESlateVisibility.Visible);
     else
@@ -80,6 +79,8 @@ end
 
 function FirearmMain:FirearmListUpdate(Item, Index)
     Item.Index = Index; 
+    local ItemId = 8310018;
+    Item:SetItemData(ItemId);
     if self.PurchaseSelectIndex == Index then
         Item:SetSelected(ESlateVisibility.Visible);
     else        

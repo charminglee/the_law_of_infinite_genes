@@ -35,4 +35,12 @@ function FirearmPurchaseLBItem:SetSelected(Visible)
     self.Selected:SetVisibility(Visible);
 end
 
+function FirearmPurchaseLBItem:SetItemData(ItemId)
+    local ImagePath = UGCItemSystemV2.GetItemIconTextureV2(ItemId);
+    local ItemName = UGCItemSystemV2.GetItemNameV2(ItemId);
+    local Texture = LoadObject(ImagePath.AssetPathName);
+    self.Item:SetBrushFromTexture(Texture);
+    self.ItemName:SetText(ItemName);
+end
+
 return FirearmPurchaseLBItem

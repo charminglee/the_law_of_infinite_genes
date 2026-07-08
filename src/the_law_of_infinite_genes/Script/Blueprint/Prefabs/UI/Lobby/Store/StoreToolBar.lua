@@ -1,5 +1,4 @@
 ---@class StoreToolBar_C:UUserWidget
----@field background UImage
 ---@field Button_1 UButton
 ---@field Image_0 UImage
 --Edit Below--
