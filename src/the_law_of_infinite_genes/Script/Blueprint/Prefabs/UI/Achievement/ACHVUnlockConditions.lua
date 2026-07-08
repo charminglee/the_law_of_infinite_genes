@@ -32,7 +32,7 @@ function ACHVUnlockConditions:Refresh()
     if value > limit then
         value = limit
     end
-    TweenManager.FloatAnim(function(v)
+    TweenManager.FloatAnim(function(Object, v)
         self.UnlockProgressBar:SetPercent(v)
     end, 0, value / limit, ACHVManager.Config.AnimDur.Set)
 end

@@ -51,7 +51,7 @@ function GeneMain:SetVisibleAnim(isVisible)
 		dur = GeneManager.Config.AnimDur.Out
     end
     TweenManager.ColorAnim(
-		function(value) self:SetColorAndOpacity(value) end,
+		function(Object, value) self:SetColorAndOpacity(value) end,
         startColor, endColor, dur
     )
 end

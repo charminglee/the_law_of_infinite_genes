@@ -48,7 +48,7 @@ function ACHVCategoryBtn:SelectAnim(isVisible)
 		dur = ACHVManager.Config.AnimDur.Out
     end
     TweenManager.VectorAnim(
-		function(value) self.AnimImg:SetRenderScale(KismetMathLibrary.MakeVector2D(value.x, value.y)) end,
+		function(Object, value) self.AnimImg:SetRenderScale(KismetMathLibrary.MakeVector2D(value.x, value.y)) end,
         startVec, endVec, dur
     )
 end

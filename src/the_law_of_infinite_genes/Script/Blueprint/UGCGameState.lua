@@ -30,7 +30,6 @@ end
 function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
     GameState = self
-    TweenManager.Initialize()
 
     if self:HasAuthority() == true then 
         -- 只有客户端加载UI
