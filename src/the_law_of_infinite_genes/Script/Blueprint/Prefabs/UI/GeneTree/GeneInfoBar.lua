@@ -1,20 +1,24 @@
 ---@class GeneInfoBar_C:UAEUserWidget
----@field AttributeBonusesBg_0 UImage
+---@field InfoBg UImage
+---@field InfoPanel UCanvasPanel
+---@field SidebarBtn UButton
 --Edit Below--
 local GeneInfoBar = { bInitDoOnce = false } 
 
---[==[ Construct
 function GeneInfoBar:Construct()
-	
+	self:LuaInit();
 end
--- Construct ]==]
 
--- function GeneInfoBar:Tick(MyGeometry, InDeltaTime)
+function GeneInfoBar:LuaInit()
+    if self.bInitDoOnce then
+		return;
+	end
+	self.bInitDoOnce = true;
+	self.SidebarBtn.OnClicked:Add(self.SidebarBtnClicked, self);
+end
 
--- end
-
--- function GeneInfoBar:Destruct()
-
--- end
+function GeneInfoBar:SidebarBtnClicked()
+    GeneManager.Content:PlayAnim();
+end
 
 return GeneInfoBar
