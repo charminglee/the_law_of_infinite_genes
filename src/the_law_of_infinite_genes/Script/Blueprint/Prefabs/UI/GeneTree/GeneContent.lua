@@ -24,8 +24,12 @@ function GeneContent:LuaInit()
     self.ReuseList2.OnUpdateItem:Add(self.ReuseList2Update, self);
 end
 
+function GeneContent:SelectedTab()
+    return self.tabButtons[self.selectedTabID]
+end
+
 function GeneContent:Reload()
-	self.ReuseList2:Reload(5);
+	self.ReuseList2:Reload(#GeneManager.Config.SkillData + 1);
 end
 
 function GeneContent:ReuseList2Update(item, index)

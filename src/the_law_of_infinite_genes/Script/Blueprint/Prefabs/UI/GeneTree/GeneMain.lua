@@ -1,6 +1,4 @@
 ---@class GeneMain_C:UAEUserWidget
----@field Bg UImage
----@field BgInner UImage
 ---@field Degrade UButton
 ---@field Exit UButton
 ---@field ExitBtn UButton
