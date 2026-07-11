@@ -111,13 +111,13 @@ ACHVManager = ACHVManager or
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/Titles/WealthTitle_1.WealthTitle_1',
                     NameText = '略有盈余',
                     TextParam = {
-                        SpecifiedColor = KismetMathLibrary.MakeColor(0.955974, 0.83077, 0.577581, 1),
+                        SpecifiedColor = KismetMathLibrary.MakeColor(0.672443, 0.376262, 0.06301, 1),
                         RenderShear = KismetMathLibrary.MakeVector2D(-10, 0),
-                        ShadowOffset = KismetMathLibrary.MakeVector2D(2, 2),
-                        ShadowColorAndOpacity = KismetMathLibrary.MakeColor(0.097587, 0.017642, 0.01033, 1),
+                        ShadowOffset = KismetMathLibrary.MakeVector2D(3, 2),
+                        ShadowColorAndOpacity = KismetMathLibrary.MakeColor(0.571125, 0.270498, 0.066626, 1),
                         FontMaterial = '/the_law_of_infinite_genes/Asset/Texture/TextGradient.TextGradient',
                         OutlineSize = 1,
-                        OutlineColor = KismetMathLibrary.MakeColor(0.527115, 0.072272, 0.027321, 1)
+                        OutlineColor = KismetMathLibrary.MakeColor(0.028426, 0.01096, 0.001518, 1)
                     },
                     CollectEffects = '金币结算加成3%',
                     WearEffects = '金币结算加成5%',
