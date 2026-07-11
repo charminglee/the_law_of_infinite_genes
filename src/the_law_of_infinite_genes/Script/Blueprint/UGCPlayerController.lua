@@ -1,4 +1,5 @@
 ---@class UGCPlayerController_C:BP_UGCPlayerController_C
+---@field ComposeComponent ComposeComponent_C
 ---@field RaidInstanceComponent RaidInstanceComponent_C
 ---@field PassComponent PassComponent_C
 ---@field GeneComponent GeneComponent_C

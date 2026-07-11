@@ -4,20 +4,29 @@
 ---@field ItemName UTextBlock
 ---@field quality UImage
 --Edit Below--
-local ComposeGoodsItem = { bInitDoOnce = false } 
+local ComposeGoodsItem = {
+    bInitDoOnce = false,
+    Index = nil,
+}
 
---[==[ Construct
 function ComposeGoodsItem:Construct()
-	
+    self:LuaInit();
 end
--- Construct ]==]
 
--- function ComposeGoodsItem:Tick(MyGeometry, InDeltaTime)
+function ComposeGoodsItem:LuaInit()
+    if self.bInitDoOnce then
+        return;
+    end
+    self.bInitDoOnce = true;
+    self:Listen();
+end
 
--- end
+function ComposeGoodsItem:Listen()
+    self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
+end
 
--- function ComposeGoodsItem:Destruct()
-
--- end
+function ComposeGoodsItem:Button_0_Clicked()
+    ComposeManager.SelectedIndex = self.Index;
+end
 
 return ComposeGoodsItem

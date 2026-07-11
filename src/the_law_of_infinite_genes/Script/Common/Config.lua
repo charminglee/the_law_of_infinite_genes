@@ -66,5 +66,9 @@ Config.InitialWeapon = {
     BulletId = 301001,
 }
 
+Config.Formula = {
+
+}
+
 
 return Config
