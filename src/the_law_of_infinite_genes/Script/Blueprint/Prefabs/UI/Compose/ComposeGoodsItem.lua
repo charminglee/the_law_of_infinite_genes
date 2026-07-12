@@ -29,4 +29,9 @@ function ComposeGoodsItem:Button_0_Clicked()
     ComposeManager.SelectedIndex = self.Index;
 end
 
+function ComposeGoodsItem:SetItem(ItemId)
+    local formula = Config.Formula[ItemId];
+
+end
+
 return ComposeGoodsItem

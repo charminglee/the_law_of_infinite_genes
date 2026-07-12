@@ -69,7 +69,7 @@ function StoreMain:InitUI()
     self.StoreTabList:Reload(#self.TabLabelList);
     self.BackpackList:Reload(100);
     self.EquipSlotList:Reload(5);
-    self.StoreBackpackTabList:Reload(#self.StoreBackpackTabLabel);
+    self.StoreBackpackTabList:Reload(#Config.ItemType);
 end
 
 function StoreMain:StoreTabListUpdate(Item, Index)

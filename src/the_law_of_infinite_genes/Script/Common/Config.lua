@@ -59,15 +59,168 @@ Config.Damage = {
     DefenceK = 600
 }
 
+-- 物品类型配置
+Config.ItemType = {
+    [1] = '装备',
+    [2] = '消耗品',
+    [3] = '材料',
+    [4] = '其他'
+}
+
+-- 物品品质配置
+Config.ItemQuality = {
+    [1] = {path='Asset/Texture/UI/Image_BigQualityBg_1.Image_BigQualityBg_1', name='普通'},
+    [2] = {path='Asset/Texture/UI/Image_BigQualityBg_2.Image_BigQualityBg_2', name='平凡'},
+    [3] = {path='Asset/Texture/UI/Image_BigQualityBg_3.Image_BigQualityBg_3', name='精良'},
+    [4] = {path='Asset/Texture/UI/Image_BigQualityBg_4.Image_BigQualityBg_4', name='稀有'},
+    [5] = {path='Asset/Texture/UI/Image_BigQualityBg_5.Image_BigQualityBg_5', name='传说'},
+    [6] = {path='Asset/Texture/UI/Image_BigQualityBg_6.Image_BigQualityBg_6', name='史诗'},
+    [7] = {path='Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话'}
+}
 
 -- 初始武器
 Config.InitialWeapon = {
     WeaponId = 8310018,
     BulletId = 301001,
 }
-
+-- 合成表 材料ID {8310014 = 领主之眼, 8310015 = 腐化布料, 8310016 = 硬化骨片, 8310017 = 变异粘液}
 Config.Formula = {
-
+    -- 基础套装
+    -- 基础工装长裤
+    [8310019] = {
+        [1]={ItemId=8310017, number=10},
+        [2]={ItemId=8310015, number=5},
+        [3]={ItemId=8310014, number=1},
+    },
+    -- 基础方形眼镜
+    [8310020] = {
+        [1]={ItemId=8310017, number=10},
+        [2]={ItemId=8310015, number=5},
+        [3]={ItemId=8310014, number=1},
+    },
+    -- 基础遮阳棒球帽
+    [8310021] = {
+        [1]={ItemId=8310017, number=10},
+        [2]={ItemId=8310015, number=5},
+        [3]={ItemId=8310014, number=1},
+    },
+    --- 基础防滑鞋
+    [8310022] = {
+        [1]={ItemId=8310017, number=10},
+        [2]={ItemId=8310015, number=5},
+        [3]={ItemId=8310014, number=1},
+    },
+    --- 基础透气亨利衫
+    [8310023] = {
+        [1]={ItemId=8310017, number=10},
+        [2]={ItemId=8310015, number=5},
+        [3]={ItemId=8310014, number=1},
+    },
+    --- 赤锋突击工装裤
+    [8310024] = {
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310019, number=1},
+    },
+    --- 赤锋突击面罩
+    [8310025] = {
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
+    },
+    --- 赤锋突击头盔
+    [8310026] = {
+        [1]={ItemId=8310017, number=35, aux=1},
+        [2]={ItemId=8310015, number=25, aux=1},
+        [3]={ItemId=8310014, number=4, aux=4},
+        [4]={ItemId=8310021, number=1, aux=4},
+    },
+    --- 赤锋突击战靴
+    [8310027] = {
+        [1]={ItemId=8310017, number=35, aux=1},
+        [2]={ItemId=8310015, number=25, aux=1},
+        [3]={ItemId=8310014, number=4, aux=4},
+        [4]={ItemId=8310021, number=1, aux=4},
+    },
+    --- 赤锋突击外套
+    [8310028] = {
+        [1]={ItemId=8310017, number=35, aux=1},
+        [2]={ItemId=8310015, number=25, aux=1},
+        [3]={ItemId=8310014, number=4, aux=4},
+        [4]={ItemId=8310021, number=1, aux=4},
+    },
+    --- 荒土耐磨工装裤
+    [8310029] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒土防毒面罩
+    [8310030] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒土战术帽
+    [8310031] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒土战术靴
+    [8310032] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒土迷彩外套
+    [8310033] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒原·残戍夹克
+    [8310007] = {
+        [1]={ItemId=8310017, number=35},
+        [2]={ItemId=8310015, number=25},
+        [3]={ItemId=8310014, number=4},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒原·工装长裤
+    [8310008] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒原·破雾面罩
+    [8310009] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒原·皮质手套
+    [8310010] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
+    --- 荒原·踏尘战靴
+    [8310011] = {
+        [1]={ItemId=0, number=1},
+        [2]={ItemId=0, number=1},
+        [3]={ItemId=0, number=1},
+        [4]={ItemId=0, number=1},
+    },
 }
 
 
