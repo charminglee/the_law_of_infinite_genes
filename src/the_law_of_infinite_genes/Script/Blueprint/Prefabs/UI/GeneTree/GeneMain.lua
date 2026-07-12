@@ -6,7 +6,12 @@
 ---@field GeneReset GeneReset_C
 ---@field Upgrade UButton
 --Edit Below--
-local GeneMain = { bInitDoOnce = false } 
+local GeneMain = { 
+    bInitDoOnce = false,
+	tips = {
+		NeedToUnlock = '需要先解锁基因'
+	}
+} 
 
 function GeneMain:Construct()
 	self:LuaInit();
@@ -21,6 +26,8 @@ function GeneMain:LuaInit()
     GeneManager.Content:Reload();
     self.Exit.OnClicked:Add(self.Close, self);
     self.ExitBtn.OnClicked:Add(self.Close, self);
+    self.Degrade.OnClicked:Add(self.DegradeClicked, self);
+    self.Upgrade.OnClicked:Add(self.UpgradeClicked, self);
 end
 
 function GeneMain:Open()
@@ -33,7 +40,7 @@ function GeneMain:Close()
         function() self:SetVisibility(ESlateVisibility.Collapsed) end, 
         GeneManager.Config.AnimDur.Out, 
         false
-    )
+    );
     self:SetVisibleAnim(false);
 end
 
@@ -51,7 +58,19 @@ function GeneMain:SetVisibleAnim(isVisible)
     TweenManager.ColorAnim(
 		function(Object, value) self:SetColorAndOpacity(value) end,
         startColor, endColor, dur
-    )
+    );
+end
+
+function GeneMain:DegradeClicked()
+    if not GeneManager.Content:SelectedTab():SelectedNode().Unlocked then
+        UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
+    end
+end
+
+function GeneMain:UpgradeClicked()
+    if not GeneManager.Content:SelectedTab():SelectedNode().Unlocked then
+        UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
+    end
 end
 
 return GeneMain
