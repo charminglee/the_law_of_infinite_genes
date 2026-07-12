@@ -62,15 +62,33 @@ function GeneMain:SetVisibleAnim(isVisible)
 end
 
 function GeneMain:DegradeClicked()
-    if not GeneManager.Content:SelectedTab():SelectedNode().Unlocked then
-        UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
+    local tabBtn = GeneManager.Content:SelectedTab();
+	local selected = tabBtn:SelectedNode();
+    if not selected.Unlocked then
+        return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
+    local lv = selected.Lv;
+    local res = lv - GeneManager.InfoBar.point;
+    if res < 0 then
+        return
+    end
+    selected.Lv = res;
+    tabBtn:RefreshLevel();
 end
 
 function GeneMain:UpgradeClicked()
-    if not GeneManager.Content:SelectedTab():SelectedNode().Unlocked then
-        UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
+	local tabBtn = GeneManager.Content:SelectedTab();
+	local selected = tabBtn:SelectedNode();
+    if not selected.Unlocked then
+        return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
+    local lv = selected.Lv;
+    local res = lv + GeneManager.InfoBar.point;
+    if res > #selected.ConditionText then
+        return
+    end
+    selected.Lv = res;
+    tabBtn:RefreshLevel();
 end
 
 return GeneMain

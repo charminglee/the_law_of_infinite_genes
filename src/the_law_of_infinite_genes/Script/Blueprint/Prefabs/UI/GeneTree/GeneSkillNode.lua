@@ -67,10 +67,10 @@ function GeneSkillNode:CheckUnlockCondition()
 	return true
 end
 
-function GeneSkillNode:SetLocked(locked)
-	self.LockImg:SetVisibility(locked and ESlateVisibility.Collapsed or ESlateVisibility.Visible);
-	self.LockBg:SetVisibility(locked and ESlateVisibility.Collapsed or ESlateVisibility.Visible);
-	self.LevelPanel:SetVisibility(locked and ESlateVisibility.Collapsed or ESlateVisibility.HitTestInvisible);
+function GeneSkillNode:SetLocked(unlocked)
+	self.LockImg:SetVisibility(unlocked and ESlateVisibility.Collapsed or ESlateVisibility.Visible);
+	self.LockBg:SetVisibility(unlocked and ESlateVisibility.Collapsed or ESlateVisibility.Visible);
+	self.LevelPanel:SetVisibility(unlocked and ESlateVisibility.HitTestInvisible or ESlateVisibility.Collapsed);
 end
 
 function GeneSkillNode:Refresh()
@@ -80,6 +80,10 @@ function GeneSkillNode:Refresh()
 	if self.index == #self.parent:LoadBranch() - 1 then
 		self.Arrow:SetVisibility(ESlateVisibility.Collapsed);
 	end
+end
+
+function GeneSkillNode:RefreshLevel()
+	self.Level:SetText(self:SelectedNode().Lv);
 end
 
 function GeneSkillNode:Select()
