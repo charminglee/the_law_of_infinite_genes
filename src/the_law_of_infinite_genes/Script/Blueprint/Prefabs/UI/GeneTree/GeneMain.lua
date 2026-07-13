@@ -70,6 +70,7 @@ function GeneMain:DegradeClicked()
         end
     end
     GeneManager.Content:SelectedBranch():Reload();
+    GeneManager.InfoBar:Refresh();
 end
 
 return GeneMain

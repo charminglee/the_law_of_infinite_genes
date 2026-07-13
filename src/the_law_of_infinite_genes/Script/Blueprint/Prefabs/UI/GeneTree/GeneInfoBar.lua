@@ -15,7 +15,8 @@ local GeneInfoBar = {
 		NeedToUnlock = '需要先解锁基因',
 		ReachedTheHighest = '基因已达到上限',
 		ReachedTheLowest = '基因已达到下限',
-		Prohibited = '下一级基因已解锁，禁止降低等级，请重铸基因'
+		ProhibitedLower = '下一级基因已进化，禁止降低等级，请重铸基因',
+		ProhibitedHigher = '上一级基因未进化至上限，禁止增加等级'
 	}
 } 
 
@@ -61,14 +62,15 @@ function GeneInfoBar:LowestClicked()
 	if not data.Unlocked then
         return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
-	if tab:NextData().Unlocked then
-		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.Prohibited);
+	if tab:NextData() ~= nil and tab:NextData().Lv > 0 then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ProhibitedLower);
 	end
 	if data.Lv == 0 then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheLowest);
 	end
 	data.Lv = 0;
     tab:Refresh();
+	self:Refresh();
 end
 
 function GeneInfoBar:ReduceClicked()
@@ -77,8 +79,8 @@ function GeneInfoBar:ReduceClicked()
 	if not data.Unlocked then
         return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
-	if tab:NextData() ~= nil and tab:NextData().Unlocked then
-		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.Prohibited);
+	if tab:NextData() ~= nil and tab:NextData().Lv > 0 then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ProhibitedLower);
 	end
 	local value = data.Lv - 1;
 	if not self:Executable(value) then
@@ -86,6 +88,7 @@ function GeneInfoBar:ReduceClicked()
 	end
 	data.Lv = value;
     tab:Refresh();
+	self:Refresh();
 end
 
 function GeneInfoBar:AddClicked()
@@ -94,12 +97,17 @@ function GeneInfoBar:AddClicked()
 	if not data.Unlocked then
         return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
+	local previousData = tab:PreviousData();
+	if previousData ~= nil and previousData.Lv < #previousData.ConditionText - 1 then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ProhibitedHigher);
+	end
 	local value = data.Lv + 1;
 	if not self:Executable(value) then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheHighest);
 	end
 	data.Lv = value;
     tab:Refresh();
+	self:Refresh();
 end
 
 function GeneInfoBar:HighestClicked()
@@ -108,12 +116,17 @@ function GeneInfoBar:HighestClicked()
 	if not data.Unlocked then
         return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
+	local previousData = tab:PreviousData();
+	if previousData ~= nil and previousData.Lv < #previousData.ConditionText - 1 then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ProhibitedHigher);
+	end
 	local limit = GeneManager.Content:SelectedNodeLvLimit();
 	if data.Lv == limit then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheHighest);
 	end
 	data.Lv = limit;
     tab:Refresh();
+	self:Refresh();
 end
 
 return GeneInfoBar

@@ -55,7 +55,7 @@ function GeneSkillNode:PreviousData()
 end
 
 function GeneSkillNode:NextData()
-	if self.index + 2 >= #GeneManager.Content:SelectedBranchDataList() then
+	if self.index + 2 > #GeneManager.Content:SelectedBranchDataList() then
 		return nil
 	end
 	return GeneManager.Config.SkillData[self.branchId][self.index + 2]
@@ -107,6 +107,9 @@ function GeneSkillNode:FrameClicked()
 		if self:CheckUnlockCondition() then
 			self:Data().Unlocked = true;
 			self:Refresh();
+			if self.nodeId == GeneManager.Content.selectedTabID and not GeneManager.Content.aniState then
+				GeneManager.InfoBar:SidebarBtnClicked();
+			end
 			tip = self.tips.UnlockedSuccessfully;
 		else
 			tip = self:PreviousData().SkillText .. self.tips.GeneMustBeHighestLevel;
