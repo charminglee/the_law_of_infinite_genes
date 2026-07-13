@@ -4,8 +4,10 @@
 --Edit Below--
 local GeneContent = { 
     bInitDoOnce = false,
+    branchs = {},
     tabButtons = {},
-	selectedTabID = 0,
+    selectedBranchID = 0,
+    selectedTabID = 0,
     aniState = false,
 	posAnim_0 = nil,
 	posAnim_1 = nil
@@ -24,8 +26,24 @@ function GeneContent:LuaInit()
     self.ReuseList2.OnUpdateItem:Add(self.ReuseList2Update, self);
 end
 
+function GeneContent:SelectedBranch()
+	return self.branchs[self.selectedBranchID]
+end
+
 function GeneContent:SelectedTab()
     return self.tabButtons[self.selectedTabID]
+end
+
+function GeneContent:SelectedBranchDataList()
+	return self:SelectedBranch():DataList()
+end
+
+function GeneContent:SelectedNodeData()
+    return self:SelectedTab():Data()
+end
+
+function GeneContent:SelectedNodeLvLimit()
+    return #self:SelectedNodeData().ConditionText - 1
 end
 
 function GeneContent:Reload()
@@ -37,8 +55,20 @@ function GeneContent:ReuseList2Update(item, index)
 		item.parent = self;
 	end
 	item.index = index;
+    self.branchs[index] = item;
     GeneManager.SkillBranch:Reload();
 	item:Refresh();
+end
+
+function GeneContent:SelectTab(branchId, nodeId)
+    if nodeId == self.selectedTabID then
+        return;
+    end
+    self.tabButtons[nodeId]:Select();
+    self.tabButtons[self.selectedTabID]:Deselect();
+    self.selectedTabID = nodeId;
+    self.selectedBranchID = branchId;
+    GeneManager.InfoBar:Refresh();
 end
 
 function GeneContent:PlayAnim()

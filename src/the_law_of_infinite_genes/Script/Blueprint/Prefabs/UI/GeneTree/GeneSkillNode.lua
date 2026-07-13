@@ -43,23 +43,26 @@ function GeneSkillNode:LuaInit()
 	self.Frame.OnClicked:Add(self.FrameClicked, self);
 end
 
-function GeneSkillNode:LoadNode()
-    return self.parent:LoadBranch()[self.index + 1]
+function GeneSkillNode:Data()
+    return GeneManager.Config.SkillData[self.branchId][self.index + 1]
 end
 
-function GeneSkillNode:PreviousNode()
+function GeneSkillNode:PreviousData()
 	if self.index == 0 then
 		return nil
 	end
 	return GeneManager.Config.SkillData[self.branchId][self.index]
 end
 
-function GeneSkillNode:SelectedNode()
-    return GeneManager.Config.SkillData[self.branchId][self.index + 1]
+function GeneSkillNode:NextData()
+	if self.index + 2 >= #GeneManager.Content:SelectedBranchDataList() then
+		return nil
+	end
+	return GeneManager.Config.SkillData[self.branchId][self.index + 2]
 end
 
 function GeneSkillNode:CheckUnlockCondition()
-	local pn = self:PreviousNode();
+	local pn = self:PreviousData();
 	if pn == nil then return true end
 	if pn.Lv < #pn.ConditionText - 1 then
 		return false
@@ -74,16 +77,12 @@ function GeneSkillNode:SetLocked(unlocked)
 end
 
 function GeneSkillNode:Refresh()
- 	self:SetLocked(self:LoadNode().Unlocked);
-	self.Level:SetText(self:LoadNode().Lv);
-	self.Icon:SetBrushFromTexture(UGCObjectUtility.LoadObject(self:LoadNode().IconPath));
-	if self.index == #self.parent:LoadBranch() - 1 then
+ 	self:SetLocked(self:Data().Unlocked);
+	self.Level:SetText(self:Data().Lv);
+	self.Icon:SetBrushFromTexture(UGCObjectUtility.LoadObject(self:Data().IconPath));
+	if self.index == #self.parent:DataList() - 1 then
 		self.Arrow:SetVisibility(ESlateVisibility.Collapsed);
 	end
-end
-
-function GeneSkillNode:RefreshLevel()
-	self.Level:SetText(self:SelectedNode().Lv);
 end
 
 function GeneSkillNode:Select()
@@ -104,17 +103,22 @@ end
 function GeneSkillNode:FrameClicked()
 	local tip;
 	if self.delay >= self.pressAndHoldDelay then
-		if self:SelectedNode().Unlocked then return end
+		if self:Data().Unlocked then return end
 		if self:CheckUnlockCondition() then
-			self:SelectedNode().Unlocked = true;
-			self.parent:Reload();
+			self:Data().Unlocked = true;
+			self:Refresh();
 			tip = self.tips.UnlockedSuccessfully;
 		else
-			tip = self:PreviousNode().SkillText .. self.tips.GeneMustBeHighestLevel;
+			tip = self:PreviousData().SkillText .. self.tips.GeneMustBeHighestLevel;
 		end
 	else
-		self.parent:SelectTab(self.nodeId);
-		if self:SelectedNode().Unlocked then return end
+		GeneManager.Content:SelectTab(self.branchId, self.nodeId);
+		if self:Data().Unlocked then 
+			if not GeneManager.Content.aniState then
+				GeneManager.InfoBar:SidebarBtnClicked()
+			end
+			return
+		end
 		tip = self.tips.NeedToPressAndHold;
 	end
 	UGCWidgetManagerSystem.ShowTipsUI(tip);

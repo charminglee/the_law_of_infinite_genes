@@ -21,12 +21,12 @@ function GeneSkillBranch:LuaInit()
     self.ReuseList2.OnUpdateItem:Add(self.ReuseList2Update, self);
 end
 
-function GeneSkillBranch:LoadBranch()
+function GeneSkillBranch:DataList()
     return GeneManager.Config.SkillData[self.index]
 end
 
 function GeneSkillBranch:Reload()
-	self.ReuseList2:Reload(#self:LoadBranch());
+	self.ReuseList2:Reload(#self:DataList());
 end
 
 function GeneSkillBranch:Refresh()
@@ -39,7 +39,7 @@ function GeneSkillBranch:ReuseList2Update(item, index)
 	end
     item.index = index;
     item.branchId = self.index;
-    item.nodeId = item:LoadNode().Id;
+    item.nodeId = item:Data().Id;
 	self.parent.tabButtons[item.nodeId] = item;
 	if item.nodeId == self.parent.selectedTabID then
         item:Select();
@@ -47,16 +47,6 @@ function GeneSkillBranch:ReuseList2Update(item, index)
         item:Deselect();
     end
 	item:Refresh();
-end
-
-function GeneSkillBranch:SelectTab(nodeId)
-    if nodeId == self.parent.selectedTabID then
-        return;
-    end
-    self.parent.tabButtons[nodeId]:Select();
-    self.parent.tabButtons[self.parent.selectedTabID]:Deselect();
-    self.parent.selectedTabID = nodeId;
-    GeneManager.InfoBar:Refresh();
 end
 
 return GeneSkillBranch

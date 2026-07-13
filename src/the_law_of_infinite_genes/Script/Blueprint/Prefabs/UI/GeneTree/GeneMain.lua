@@ -4,7 +4,6 @@
 ---@field ExitBtn UButton
 ---@field GeneContent GeneContent_C
 ---@field GeneReset GeneReset_C
----@field Upgrade UButton
 --Edit Below--
 local GeneMain = { 
     bInitDoOnce = false,
@@ -27,7 +26,6 @@ function GeneMain:LuaInit()
     self.Exit.OnClicked:Add(self.Close, self);
     self.ExitBtn.OnClicked:Add(self.Close, self);
     self.Degrade.OnClicked:Add(self.DegradeClicked, self);
-    self.Upgrade.OnClicked:Add(self.UpgradeClicked, self);
 end
 
 function GeneMain:Open()
@@ -62,33 +60,16 @@ function GeneMain:SetVisibleAnim(isVisible)
 end
 
 function GeneMain:DegradeClicked()
-    local tabBtn = GeneManager.Content:SelectedTab();
-	local selected = tabBtn:SelectedNode();
-    if not selected.Unlocked then
+    local tab = GeneManager.Content:SelectedTab();
+    if not tab:Data().Unlocked then
         return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
-    local lv = selected.Lv;
-    local res = lv - GeneManager.InfoBar.point;
-    if res < 0 then
-        return
+    for i, data in pairs(GeneManager.Content:SelectedBranchDataList()) do
+        if i - 1 >= tab.index then
+            data.Lv = 0;
+        end
     end
-    selected.Lv = res;
-    tabBtn:RefreshLevel();
-end
-
-function GeneMain:UpgradeClicked()
-	local tabBtn = GeneManager.Content:SelectedTab();
-	local selected = tabBtn:SelectedNode();
-    if not selected.Unlocked then
-        return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
-    end
-    local lv = selected.Lv;
-    local res = lv + GeneManager.InfoBar.point;
-    if res > #selected.ConditionText then
-        return
-    end
-    selected.Lv = res;
-    tabBtn:RefreshLevel();
+    GeneManager.Content:SelectedBranch():Reload();
 end
 
 return GeneMain

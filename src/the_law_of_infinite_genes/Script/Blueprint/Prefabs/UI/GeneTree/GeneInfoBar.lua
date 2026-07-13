@@ -6,11 +6,18 @@
 ---@field InfoPanel UCanvasPanel
 ---@field Lowest UButton
 ---@field Name UTextBlock
----@field PointText UTextBlock
 ---@field Reduce UButton
 ---@field SidebarBtn UButton
 --Edit Below--
-local GeneInfoBar = { bInitDoOnce = false } 
+local GeneInfoBar = { 
+	bInitDoOnce = false,
+	tips = {
+		NeedToUnlock = '需要先解锁基因',
+		ReachedTheHighest = '基因已达到上限',
+		ReachedTheLowest = '基因已达到下限',
+		Prohibited = '下一级基因已解锁，禁止降低等级，请重铸基因'
+	}
+} 
 
 function GeneInfoBar:Construct()
 	self:LuaInit();
@@ -22,7 +29,6 @@ function GeneInfoBar:LuaInit()
 	end
 	self.bInitDoOnce = true;
 	GeneManager.InfoBar = self;
-	self.point = 0
 	self.SidebarBtn.OnClicked:Add(self.SidebarBtnClicked, self);
 	self.Lowest.OnClicked:Add(self.LowestClicked, self);
 	self.Reduce.OnClicked:Add(self.ReduceClicked, self);
@@ -31,10 +37,10 @@ function GeneInfoBar:LuaInit()
 end
 
 function GeneInfoBar:Refresh()
-	local selected = GeneManager.Content:SelectedTab():SelectedNode();
-	self.Name:SetText(selected.SkillText);
-	self.Info_0:SetText(selected.EffectText[selected.Lv + 1]);
-	self.Info_1:SetText(selected.ConditionText[selected.Lv + 1]);
+	local data = GeneManager.Content:SelectedNodeData();
+	self.Name:SetText(data.SkillText);
+	self.Info_0:SetText(data.EffectText[data.Lv + 1]);
+	self.Info_1:SetText(data.ConditionText[data.Lv + 1]);
 end
 
 function GeneInfoBar:SidebarBtnClicked()
@@ -42,32 +48,72 @@ function GeneInfoBar:SidebarBtnClicked()
 	self:Refresh();
 end
 
+function GeneInfoBar:Executable(value)
+	if value < 0 or value > GeneManager.Content:SelectedNodeLvLimit() then
+		return false
+	end
+	return true
+end
+
 function GeneInfoBar:LowestClicked()
-	self.point = 1;
-	self.PointText:SetText(self.point);
+	local tab = GeneManager.Content:SelectedTab();
+	local data = tab:Data();
+	if not data.Unlocked then
+        return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
+    end
+	if tab:NextData().Unlocked then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.Prohibited);
+	end
+	if data.Lv == 0 then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheLowest);
+	end
+	data.Lv = 0;
+    tab:Refresh();
 end
 
 function GeneInfoBar:ReduceClicked()
-	if self.point <= 1 then
-		return
+	local tab = GeneManager.Content:SelectedTab();
+	local data = tab:Data();
+	if not data.Unlocked then
+        return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
+    end
+	if tab:NextData() ~= nil and tab:NextData().Unlocked then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.Prohibited);
 	end
-	self.point = self.point - 1;
-	self.PointText:SetText(self.point);
+	local value = data.Lv - 1;
+	if not self:Executable(value) then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheLowest);
+	end
+	data.Lv = value;
+    tab:Refresh();
 end
 
 function GeneInfoBar:AddClicked()
-	local selected = GeneManager.Content:SelectedTab():SelectedNode();
-	if self.point >= #selected.ConditionText - selected.Lv then
-		return
+	local tab = GeneManager.Content:SelectedTab();
+	local data = tab:Data();
+	if not data.Unlocked then
+        return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
+    end
+	local value = data.Lv + 1;
+	if not self:Executable(value) then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheHighest);
 	end
-	self.point = self.point + 1;
-	self.PointText:SetText(self.point);
+	data.Lv = value;
+    tab:Refresh();
 end
 
 function GeneInfoBar:HighestClicked()
-	local selected = GeneManager.Content:SelectedTab():SelectedNode();
-	self.point = #selected.ConditionText - selected.Lv
-	self.PointText:SetText(self.point);
+	local tab = GeneManager.Content:SelectedTab();
+	local data = tab:Data();
+	if not data.Unlocked then
+        return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
+    end
+	local limit = GeneManager.Content:SelectedNodeLvLimit();
+	if data.Lv == limit then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheHighest);
+	end
+	data.Lv = limit;
+    tab:Refresh();
 end
 
 return GeneInfoBar
