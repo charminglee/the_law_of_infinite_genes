@@ -43,7 +43,7 @@ function GeneContent:SelectedNodeData()
 end
 
 function GeneContent:SelectedNodeLvLimit()
-    return #self:SelectedNodeData().ConditionText - 1
+    return self:SelectedNodeData().LvHighest
 end
 
 function GeneContent:Reload()
@@ -114,6 +114,24 @@ function GeneContent:PlayAnim()
             self.GeneInfoBar.InfoPanel:SetVisibility(self.aniState and ESlateVisibility.Visible or ESlateVisibility.Hidden);
         end);
     end
+end
+
+function GeneContent:ResetBranch()
+    for i, data in pairs(self:SelectedBranchDataList()) do
+        if i - 1 >= self:SelectedTab().index then
+            data.Lv = 0;
+        end
+    end
+    self:SelectedBranch():Reload();
+    GeneManager.InfoBar:Refresh();
+end
+
+function GeneContent:ResetAll()
+    for _, node in pairs(self.tabButtons) do
+        node:Data().Lv = 0
+        node:Refresh();
+    end
+    GeneManager.InfoBar:Refresh();
 end
 
 return GeneContent

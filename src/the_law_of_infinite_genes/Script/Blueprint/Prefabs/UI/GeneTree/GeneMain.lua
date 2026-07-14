@@ -45,12 +45,12 @@ end
 function GeneMain:SetVisibleAnim(isVisible)
     local startColor, endColor, dur
     if isVisible then
-        startColor = KismetMathLibrary.MakeColor(1,1,1,0)
-        endColor   = KismetMathLibrary.MakeColor(1,1,1,1)
+        startColor = KismetMathLibrary.MakeColor(1, 1, 1, 0)
+        endColor   = KismetMathLibrary.MakeColor(1, 1, 1, 1)
 		dur = GeneManager.Config.AnimDur.In
     else
-        startColor = KismetMathLibrary.MakeColor(1,1,1,1)
-        endColor   = KismetMathLibrary.MakeColor(1,1,1,0)
+        startColor = KismetMathLibrary.MakeColor(1, 1, 1, 1)
+        endColor   = KismetMathLibrary.MakeColor(1, 1, 1, 0)
 		dur = GeneManager.Config.AnimDur.Out
     end
     TweenManager.ColorAnim(
@@ -60,17 +60,10 @@ function GeneMain:SetVisibleAnim(isVisible)
 end
 
 function GeneMain:DegradeClicked()
-    local tab = GeneManager.Content:SelectedTab();
-    if not tab:Data().Unlocked then
+    if not GeneManager.Content:SelectedTab():Data().Unlocked then
         return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
-    for i, data in pairs(GeneManager.Content:SelectedBranchDataList()) do
-        if i - 1 >= tab.index then
-            data.Lv = 0;
-        end
-    end
-    GeneManager.Content:SelectedBranch():Reload();
-    GeneManager.InfoBar:Refresh();
+    GeneManager.Content:ResetBranch();
 end
 
 return GeneMain

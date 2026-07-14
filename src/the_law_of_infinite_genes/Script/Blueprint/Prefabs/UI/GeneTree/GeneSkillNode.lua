@@ -64,7 +64,7 @@ end
 function GeneSkillNode:CheckUnlockCondition()
 	local pn = self:PreviousData();
 	if pn == nil then return true end
-	if pn.Lv < #pn.ConditionText - 1 then
+	if pn.Lv < pn.LvHighest then
 		return false
 	end
 	return true

@@ -12,8 +12,11 @@ GeneManager = GeneManager or
 
     -- ===== 静态配置（固定数据） =====
     Config = {
+        -- 初始化提示路径
+        TipPath = 'Asset/Blueprint/Prefabs/UI/GeneTree/GeneResetTip.GeneResetTip_C',
         -- 动画时长
         AnimDur = {
+            Reset = 0.1,
             In = 0.2,
             Out = 0.2,
             Set = 0.5
@@ -36,6 +39,10 @@ GeneManager = GeneManager or
                     BranchId = 0,
                     -- 技能文本
                     SkillText = '尸骸破击',
+                    -- 最高等级
+                    LvHighest = 10,
+                    -- 等级文本
+                    LvText = '最高等级10级',
                     -- 效果文本
                     EffectText = {
                         '暂无',
@@ -50,20 +57,6 @@ GeneManager = GeneManager or
                         '攻击伤害累计增加 0.09',
                         '攻击伤害累计增加 0.10',
                     },
-                    -- 条件文本
-                    ConditionText = {
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '已成功解锁所有等级'
-                    },
                     -- 图标路径
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_0/Skill_0.Skill_0',
                     -- 是否解锁
@@ -75,6 +68,8 @@ GeneManager = GeneManager or
                     Id = 1,
                     BranchId = 0,
                     SkillText = '致命洞悉',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '暴击率累计增加 0.03',
@@ -82,14 +77,6 @@ GeneManager = GeneManager or
                         '暴击率累计增加 0.09',
                         '暴击率累计增加 0.12',
                         '暴击率累计增加 0.20'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_0/Skill_1.Skill_1',
                     Unlocked = false,
@@ -99,6 +86,8 @@ GeneManager = GeneManager or
                     Id = 2,
                     BranchId = 0,
                     SkillText = '残灭重击',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '暴击伤害累计增加 0.05',
@@ -106,14 +95,6 @@ GeneManager = GeneManager or
                         '暴击伤害累计增加 0.15',
                         '暴击伤害累计增加 0.20',
                         '暴击伤害累计增加 0.30'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_0/Skill_2.Skill_2',
                     Unlocked = false,
@@ -125,6 +106,8 @@ GeneManager = GeneManager or
                     Id = 3,
                     BranchId = 1,
                     SkillText = '体魄强化',
+                    LvHighest = 10,
+                    LvText = '最高等级10级',
                     EffectText = {
                         '暂无',
                         '最大生命值累计增加 0.01',
@@ -138,19 +121,6 @@ GeneManager = GeneManager or
                         '最大生命值累计增加 0.09',
                         '最大生命值累计增加 0.10'
                     },
-                    ConditionText = {
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '已成功解锁所有等级'
-                    },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_1/Skill_0.Skill_0',
                     Unlocked = false,
                     Lv = 0
@@ -159,6 +129,8 @@ GeneManager = GeneManager or
                     Id = 4,
                     BranchId = 1,
                     SkillText = '坚盾格挡',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '格挡率累计增加 0.03',
@@ -166,14 +138,6 @@ GeneManager = GeneManager or
                         '格挡率累计增加 0.09',
                         '格挡率累计增加 0.12',
                         '格挡率累计增加 0.20'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_1/Skill_1.Skill_1',
                     Unlocked = false,
@@ -183,6 +147,8 @@ GeneManager = GeneManager or
                     Id = 5,
                     BranchId = 1,
                     SkillText = '铁壁守护',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '减伤累计增加 0.03',
@@ -190,14 +156,6 @@ GeneManager = GeneManager or
                         '减伤累计增加 0.09',
                         '减伤累计增加 0.12',
                         '减伤累计增加 0.20'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_1/Skill_2.Skill_2',
                     Unlocked = false,
@@ -209,6 +167,8 @@ GeneManager = GeneManager or
                     Id = 6,
                     BranchId = 2,
                     SkillText = '尸血回生',
+                    LvHighest = 10,
+                    LvText = '最高等级10级',
                     EffectText = {
                         '暂无',
                         '每6秒回复生命值累计增加 0.003',
@@ -222,19 +182,6 @@ GeneManager = GeneManager or
                         '每6秒回复生命值累计增加 0.027',
                         '每6秒回复生命值累计增加 0.030'
                     },
-                    ConditionText = {
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '已成功解锁所有等级'
-                    },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_2/Skill_0.Skill_0',
                     Unlocked = false,
                     Lv = 0
@@ -243,6 +190,8 @@ GeneManager = GeneManager or
                     Id = 7,
                     BranchId = 2,
                     SkillText = '速效施救',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '药品效率累计增加 0.03',
@@ -250,14 +199,6 @@ GeneManager = GeneManager or
                         '药品效率累计增加 0.09',
                         '药品效率累计增加 0.12',
                         '药品效率累计增加 0.20'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_2/Skill_1.Skill_1',
                     Unlocked = false,
@@ -267,6 +208,8 @@ GeneManager = GeneManager or
                     Id = 8,
                     BranchId = 2,
                     SkillText = '血噬觉醒',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '枪械吸血累计增加 0.003',
@@ -274,14 +217,6 @@ GeneManager = GeneManager or
                         '枪械吸血累计增加 0.009',
                         '枪械吸血累计增加 0.012',
                         '枪械吸血累计增加 0.020'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_2/Skill_2.Skill_2',
                     Unlocked = false,
@@ -293,6 +228,8 @@ GeneManager = GeneManager or
                     Id = 9,
                     BranchId = 3,
                     SkillText = '扩容精通',
+                    LvHighest = 10,
+                    LvText = '最高等级10级',
                     EffectText = {
                         '暂无',
                         '弹夹容量累计增加 0.05',
@@ -306,19 +243,6 @@ GeneManager = GeneManager or
                         '弹夹容量累计增加 0.45',
                         '弹夹容量累计增加 0.50'
                     },
-                    ConditionText = {
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '已成功解锁所有等级'
-                    },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_3/Skill_0.Skill_0',
                     Unlocked = false,
                     Lv = 0
@@ -327,6 +251,8 @@ GeneManager = GeneManager or
                     Id = 10,
                     BranchId = 3,
                     SkillText = '极速连射',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '射击速度累计增加 0.03',
@@ -334,14 +260,6 @@ GeneManager = GeneManager or
                         '射击速度累计增加 0.09',
                         '射击速度累计增加 0.12',
                         '射击速度累计增加 0.20'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_3/Skill_1.Skill_1',
                     Unlocked = false,
@@ -351,6 +269,8 @@ GeneManager = GeneManager or
                     Id = 11,
                     BranchId = 3,
                     SkillText = '战术换弹',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '换弹速度累计增加 0.05',
@@ -358,14 +278,6 @@ GeneManager = GeneManager or
                         '换弹速度累计增加 0.15',
                         '换弹速度累计增加 0.20',
                         '换弹速度累计增加 0.30'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_3/Skill_2.Skill_2',
                     Unlocked = false,
@@ -377,6 +289,8 @@ GeneManager = GeneManager or
                     Id = 12,
                     BranchId = 4,
                     SkillText = '疾风步法',
+                    LvHighest = 10,
+                    LvText = '最高等级10级',
                     EffectText = {
                         '暂无',
                         '移动速度累计增加 0.02',
@@ -390,19 +304,6 @@ GeneManager = GeneManager or
                         '移动速度累计增加 0.18',
                         '移动速度累计增加 0.20'
                     },
-                    ConditionText = {
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '下一级进化所需金币 1000',
-                        '已成功解锁所有等级'
-                    },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_4/Skill_0.Skill_0',
                     Unlocked = false,
                     Lv = 0
@@ -411,6 +312,8 @@ GeneManager = GeneManager or
                     Id = 13,
                     BranchId = 4,
                     SkillText = '幻影闪避',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '闪避率累计增加 0.03',
@@ -418,14 +321,6 @@ GeneManager = GeneManager or
                         '闪避率累计增加 0.09',
                         '闪避率累计增加 0.12',
                         '闪避率累计增加 0.20'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '下一级进化所需金币 2500',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_4/Skill_1.Skill_1',
                     Unlocked = false,
@@ -435,6 +330,8 @@ GeneManager = GeneManager or
                     Id = 14,
                     BranchId = 4,
                     SkillText = '不屈意志',
+                    LvHighest = 5,
+                    LvText = '最高等级5级',
                     EffectText = {
                         '暂无',
                         '减免负面效果时间累计增加 0.03',
@@ -442,14 +339,6 @@ GeneManager = GeneManager or
                         '减免负面效果时间累计增加 0.09',
                         '减免负面效果时间累计增加 0.12',
                         '减免负面效果时间累计增加 0.20'
-                    },
-                    ConditionText = {
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '下一级进化所需金币 6000',
-                        '已成功解锁所有等级'
                     },
                     IconPath = '/the_law_of_infinite_genes/Asset/Texture/UI/GeneTree/Branch_4/Skill_2.Skill_2',
                     Unlocked = false,

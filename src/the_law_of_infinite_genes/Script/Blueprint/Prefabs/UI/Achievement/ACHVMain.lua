@@ -38,12 +38,12 @@ end
 function ACHVMain:SetVisibleAnim(isVisible)
     local startColor, endColor, dur
     if isVisible then
-        startColor = KismetMathLibrary.MakeColor(1,1,1,0)
-        endColor   = KismetMathLibrary.MakeColor(1,1,1,1)
+        startColor = KismetMathLibrary.MakeColor(1, 1, 1, 0)
+        endColor   = KismetMathLibrary.MakeColor(1, 1, 1, 1)
 		dur = ACHVManager.Config.AnimDur.In
     else
-        startColor = KismetMathLibrary.MakeColor(1,1,1,1)
-        endColor   = KismetMathLibrary.MakeColor(1,1,1,0)
+        startColor = KismetMathLibrary.MakeColor(1, 1, 1, 1)
+        endColor   = KismetMathLibrary.MakeColor(1, 1, 1, 0)
 		dur = ACHVManager.Config.AnimDur.Out
     end
     TweenManager.ColorAnim(

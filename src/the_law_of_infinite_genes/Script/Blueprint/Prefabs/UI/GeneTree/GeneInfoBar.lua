@@ -40,8 +40,8 @@ end
 function GeneInfoBar:Refresh()
 	local data = GeneManager.Content:SelectedNodeData();
 	self.Name:SetText(data.SkillText);
-	self.Info_0:SetText(data.EffectText[data.Lv + 1]);
-	self.Info_1:SetText(data.ConditionText[data.Lv + 1]);
+	self.Info_0:SetText(data.LvText);
+	self.Info_1:SetText(data.EffectText[data.Lv + 1]);
 end
 
 function GeneInfoBar:SidebarBtnClicked()
@@ -98,7 +98,7 @@ function GeneInfoBar:AddClicked()
         return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
 	local previousData = tab:PreviousData();
-	if previousData ~= nil and previousData.Lv < #previousData.ConditionText - 1 then
+	if previousData ~= nil and previousData.Lv < previousData.LvHighest then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ProhibitedHigher);
 	end
 	local value = data.Lv + 1;
@@ -117,7 +117,7 @@ function GeneInfoBar:HighestClicked()
         return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NeedToUnlock)
     end
 	local previousData = tab:PreviousData();
-	if previousData ~= nil and previousData.Lv < #previousData.ConditionText - 1 then
+	if previousData ~= nil and previousData.Lv < previousData.LvHighest then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ProhibitedHigher);
 	end
 	local limit = GeneManager.Content:SelectedNodeLvLimit();
