@@ -1,6 +1,7 @@
 ---@class GeneSkillNode_C:UAEUserWidget
 ---@field Arrow UImage
 ---@field Frame UButton
+---@field GeneProgressBar GeneProgressBar_C
 ---@field Icon UImage
 ---@field Level UTextBlock
 ---@field LevelPanel UCanvasPanel
@@ -41,6 +42,7 @@ function GeneSkillNode:LuaInit()
 	GeneManager.SkillNode = self;
 	self.Frame.OnPressed:Add(self.FramePressed, self);
 	self.Frame.OnClicked:Add(self.FrameClicked, self);
+	self.Frame.OnReleased:Add(self.FrameReleased, self);
 end
 
 function GeneSkillNode:Data()
@@ -98,9 +100,18 @@ end
 function GeneSkillNode:FramePressed()
 	self.tick = 0;
 	self.delay = 0;
+	if not self:Data().Unlocked then
+		self.GeneProgressBar:SetDuration(self.pressAndHoldDelay);
+		self.GeneProgressBar:SetVisibility(ESlateVisibility.Visible);
+	end
+end
+
+function GeneSkillNode:FrameReleased()
+	self.GeneProgressBar:SetVisibility(ESlateVisibility.Collapsed);
 end
 
 function GeneSkillNode:FrameClicked()
+	self.GeneProgressBar:SetVisibility(ESlateVisibility.Collapsed);
 	local tip;
 	if self.delay >= self.pressAndHoldDelay then
 		if self:Data().Unlocked then return end
