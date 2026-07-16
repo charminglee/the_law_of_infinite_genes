@@ -1,7 +1,9 @@
 ---@class Lib
----@field EventSystem EventSystem
 Lib = {
-    EventSystem = UGCGameSystem.UGCRequire("Script.Lib.EventSystem"),
+    ---@type EventSystem
+    EventSystem = UGCGameSystem.UGCRequire("Script.Lib.Utils.EventSystem"),
+    ---@type Table
+    Table = UGCGameSystem.UGCRequire("Script.Lib.Utils.Table"),
 }
 
 

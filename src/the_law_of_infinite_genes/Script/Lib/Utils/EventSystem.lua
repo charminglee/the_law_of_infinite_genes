@@ -1,7 +1,8 @@
 ---事件系统，提供事件监听与触发功能。
 ---@class EventSystem
 local EventSystem = {
-    _pools = {}, ---@type table<string, EventSystem.Listener[]>
+    ---@type table<string, EventSystem.Listener[]>
+    _pools = {}, 
 }
 
 
@@ -192,6 +193,15 @@ function EventSystem.Broadcast(eventName, ...)
     else
         EventSystem.SendToServer(eventName, ...)
     end
+end
+
+
+---【双端】发送事件到指定对象的另一端。
+---@param obj any @对象
+---@param eventName string @事件名
+---@param ... any @事件参数
+function EventSystem.Send(obj, eventName, ...)
+    
 end
 
 
