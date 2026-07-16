@@ -4,10 +4,10 @@ local PlayerDataManager = {
     _data = {},
     _isLoaded = false,
     _tick = 0,
+    ---@alias Card {number, number}
+    ---@type { shopLevel: number, store: table<number, Card>, shop: table<number, Card>, equipped: table<number, Card>, refreshCount: number }
     _card = {},
 }
-
-local MAX_CARD_SLOT_LEVEL = 12
 
 
 function PlayerDataManager:GetReplicatedProperties()
@@ -174,7 +174,7 @@ function PlayerDataManager:SaveCustomData(key, value, sync)
 end
 
 
---===========================  货币  ===========================--
+-- region: 货币 ==================================================
 
 
 ---【双端】获取指定货币的数量。
@@ -224,25 +224,30 @@ function PlayerDataManager:AddCoin(id, value, sync)
 end
 
 
---===========================  卡牌  ===========================--
+-- endregion
 
 
--- 卡牌按grade分组的id缓存，首次刷新商店时构建
-local cardsByGrade = nil
+-- region: 卡牌 ==================================================
+
+
+local _cardsByGrade = nil
+
+
+---卡牌按grade分组的id缓存，首次刷新商店时构建。
 local function _BuildCardsByGrade()
-    if cardsByGrade ~= nil then
-        return cardsByGrade
+    if _cardsByGrade ~= nil then
+        return _cardsByGrade
     end
-    cardsByGrade = {}
+    _cardsByGrade = {}
     for cardId, info in pairs(Card.Cards) do
-        local list = cardsByGrade[info.grade]
+        local list = _cardsByGrade[info.grade]
         if list == nil then
             list = {}
-            cardsByGrade[info.grade] = list
+            _cardsByGrade[info.grade] = list
         end
         table.insert(list, cardId)
     end
-    return cardsByGrade
+    return _cardsByGrade
 end
 
 
@@ -273,21 +278,21 @@ end
 
 
 ---【双端】获取已解锁的卡牌穿戴槽数量。
----@return number 已解锁槽位数
+---@return number @已解锁槽位数
 function PlayerDataManager:GetUnlockedCardSlotCount()
-    return math.min(MAX_CARD_SLOT_LEVEL, math.max(1, self._card.shopLevel or 1))
+    return math.min(Card.Common.MaxCardSlotLevel, self._card.shopLevel)
 end
 
 
 ---【服务端】提升卡牌槽位等级，每级解锁一个穿戴槽，最高12级。
----@param sync? boolean 是否立即同步数据，默认为true
+---@param sync? boolean @是否立即同步数据，默认为true
 function PlayerDataManager:LevelUpCardSlot(sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
 
     local level = self:GetUnlockedCardSlotCount()
-    if level >= MAX_CARD_SLOT_LEVEL then
+    if level >= Card.Common.MaxCardSlotLevel then
         return
     end
 
@@ -298,8 +303,15 @@ function PlayerDataManager:LevelUpCardSlot(sync)
 end
 
 
+---【双端】获取玩家所有已装备的卡牌。
+---@return table<number, Card> @所有已装备的卡牌，结构为：{ index: {cardId, star} }
+function PlayerDataManager:GetAllEquippedCards()
+    return Lib.Table.DeepCopy(self._card.equipped)
+end
+
+
 ---【双端】判断是否拥有指定卡牌。
----@param card table @卡牌，结构为{cardId, star}
+---@param card Card @卡牌，结构为{cardId, star}
 ---@return boolean @是否拥有指定卡牌
 function PlayerDataManager:HasCard(card)
     for i = 1, self._card.store.n do
@@ -482,13 +494,12 @@ end
 
 
 ---【服务端】刷新卡牌商店。
----@param useCoin? boolean @是否使用资源点刷新，默认为true
+---@param useCoin? boolean @是否消耗资源点，默认为true
 ---@param isFirstRefresh? boolean @是否为首次刷新，若为首次刷新，则刷新价格为首次价格；默认为false
 function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
-    ugcprint('刷新卡牌')
     -- if isFirstRefresh then
     --     self._card.refreshCount = 0
     -- end
@@ -527,7 +538,10 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
 end
 
 
---===========================  统计  ===========================--
+-- endregion
+
+
+-- region: 统计 ==================================================
 
 
 ---【双端】获取指定统计数据的值。
@@ -555,7 +569,10 @@ function PlayerDataManager:AddStat(name, value, sync)
 end
 
 
---===========================  称号  ===========================--
+-- endregion
+
+
+-- region: 称号 ==================================================
 
 
 ---【双端】获取当前佩戴的称号。
@@ -631,6 +648,9 @@ function PlayerDataManager:GetTitleState(title)
     end
     return 0
 end
+
+
+-- endregion
 
 
 return PlayerDataManager

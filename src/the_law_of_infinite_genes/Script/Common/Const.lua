@@ -1,6 +1,7 @@
 local ROOT = UGCMapInfoLib.GetRootLongPackagePath()
 
 
+---@enum ServerEvent
 ServerEvent = {
     OnRepCardData           = "OnRepCardData",
     OnCardShopRefreshAfter  = "OnCardShopRefreshAfter",
@@ -14,6 +15,7 @@ ServerEvent = {
 }
 
 
+---@enum ClientEvent
 ClientEvent = {
 }
 
@@ -37,6 +39,7 @@ InstancePath = {
 }
 
 
+---@enum Tag
 Tag = {
     Monster = "Monster",
     Elite   = "Elite",
@@ -55,6 +58,7 @@ GameplayTag = {
 }
 
 
+---@enum ItemId
 ItemId = {
     BossMaterial_0      = 8310013,
     BossMaterial_1      = 8310014,
@@ -78,40 +82,41 @@ ItemId = {
 }
 
 
+---@enum Attribute
 Attribute = {
-    AttackPower                 = UGCCustomGameAttributeType.UGCAttributeGroup_Character_AttackPower, -- 攻击力
-    AttackPowerBoost            = UGCCustomGameAttributeType.UGCAttributeGroup_Character_AttackPowerBoost, -- 攻击力百分比
-    DamageBoost                 = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DamageBoost, -- 通用伤害加成
-    NormalMonsterDamageBoost    = UGCCustomGameAttributeType.UGCAttributeGroup_Character_NormalMonsterDamageBoost, -- 普通怪伤害加成
-    EliteMonsterDamageBoost     = UGCCustomGameAttributeType.UGCAttributeGroup_Character_EliteMonsterDamageBoost, -- 精英怪伤害加成
-    BossDamageBoost             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_BossDamageBoost, -- Boss伤害加成
-    CritChance                  = UGCCustomGameAttributeType.UGCAttributeGroup_Character_CritChance, -- 暴击几率
-    CritDamageBoost             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_CritDamageBoost, -- 暴击伤害
-    Defence                     = UGCCustomGameAttributeType.UGCAttributeGroup_Character_Defence, -- 防御力
-    DefenseBoost                = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DefenseBoost, -- 防御力百分比
-    HealthStealRatio            = UGCCustomGameAttributeType.UGCAttributeGroup_Character_HealthStealRatio, -- 吸血倍率
-    CounterAttackRatio          = UGCCustomGameAttributeType.UGCAttributeGroup_Character_CounterAttackRatio, -- 反伤倍率
-    DamageDecreace              = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DamageDecreace, -- 伤害减免
-    DamageDecreacePct           = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DamageDecreacePct, -- 伤害减免百分比
-    BreakDefenceRatio           = UGCCustomGameAttributeType.UGCAttributeGroup_Character_BreakDefenceRatio, -- 防御穿透百分比
-    RecoilPct                   = UGCCustomGameAttributeType.UGCAttributeGroup_Character_RecoilPct, -- 后坐力百分比
-    ReloadTimePct               = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ReloadTimePct, -- 换弹时间百分比
-    DodgeChance                 = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DodgeChance, -- 闪避率
-    SeckillChance               = UGCCustomGameAttributeType.UGCAttributeGroup_Character_SeckillChance, -- 秒杀率
-    HealthMax                   = UGCNativeGameAttributeType.Character_HealthMax, -- 生命值
-    MoveSpeedScale              = UGCNativeGameAttributeType.Character_UGCGeneralMoveSpeedScale, -- 移速百分比
-    ShootSpeedScale             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ShootSpeedScale, -- 射速百分比
+    AttackPower                 = UGCCustomGameAttributeType.UGCAttributeGroup_Character_AttackPower,               -- 攻击力
+    AttackPowerBoost            = UGCCustomGameAttributeType.UGCAttributeGroup_Character_AttackPowerBoost,          -- 攻击力百分比
+    DamageBoost                 = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DamageBoost,               -- 通用伤害加成
+    NormalMonsterDamageBoost    = UGCCustomGameAttributeType.UGCAttributeGroup_Character_NormalMonsterDamageBoost,  -- 普通怪伤害加成
+    EliteMonsterDamageBoost     = UGCCustomGameAttributeType.UGCAttributeGroup_Character_EliteMonsterDamageBoost,   -- 精英怪伤害加成
+    BossDamageBoost             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_BossDamageBoost,           -- Boss伤害加成
+    CritChance                  = UGCCustomGameAttributeType.UGCAttributeGroup_Character_CritChance,                -- 暴击几率
+    CritDamageBoost             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_CritDamageBoost,           -- 暴击伤害
+    Defence                     = UGCCustomGameAttributeType.UGCAttributeGroup_Character_Defence,                   -- 防御力
+    DefenseBoost                = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DefenseBoost,              -- 防御力百分比
+    HealthStealRatio            = UGCCustomGameAttributeType.UGCAttributeGroup_Character_HealthStealRatio,          -- 吸血倍率
+    CounterAttackRatio          = UGCCustomGameAttributeType.UGCAttributeGroup_Character_CounterAttackRatio,        -- 反伤倍率
+    DamageDecreace              = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DamageDecreace,            -- 伤害减免
+    DamageDecreacePct           = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DamageDecreacePct,         -- 伤害减免百分比
+    BreakDefenceRatio           = UGCCustomGameAttributeType.UGCAttributeGroup_Character_BreakDefenceRatio,         -- 防御穿透百分比
+    RecoilPct                   = UGCCustomGameAttributeType.UGCAttributeGroup_Character_RecoilPct,                 -- 后坐力百分比
+    ReloadTimePct               = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ReloadTimePct,             -- 换弹时间百分比
+    DodgeChance                 = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DodgeChance,               -- 闪避率
+    SeckillChance               = UGCCustomGameAttributeType.UGCAttributeGroup_Character_SeckillChance,             -- 秒杀率
+    HealthMax                   = UGCNativeGameAttributeType.Character_HealthMax,                                   -- 生命值
+    MoveSpeedScale              = UGCNativeGameAttributeType.Character_UGCGeneralMoveSpeedScale,                    -- 移速百分比
+    ShootSpeedScale             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ShootSpeedScale,           -- 射速百分比
 
-    EpidemicToxinRatio          = 23, -- 疫毒触发概率
-    EpidemicToxinLevel          = 24, -- 疫毒等级
-    EpidemicToxinOverlyLimit    = 25, -- 疫毒叠加上限
-    EpidemicToxinSettleRatio    = 26, -- 疫毒结算概率
-    InfiniteAmmo                = 27, -- 无限子弹
-    IgnoreHarmRatio             = 28, -- 无视伤害率
-    DodgeRatio                  = 29,
-    SeckillRatio                = 30,
-    Recoilless                  = 31,
-    HealthMaxBoost              = 32,
+    EpidemicToxinRatio          = "EpidemicToxinRatio",         -- 疫毒触发概率
+    EpidemicToxinLevel          = "EpidemicToxinLevel",         -- 疫毒等级
+    EpidemicToxinOverlyLimit    = "EpidemicToxinOverlyLimit",   -- 疫毒叠加上限
+    EpidemicToxinSettleRatio    = "EpidemicToxinSettleRatio",   -- 疫毒结算概率
+    InfiniteAmmo                = "InfiniteAmmo",               -- 无限子弹
+    IgnoreHarmRatio             = "IgnoreHarmRatio",            -- 无视伤害率
+    DodgeRatio                  = "DodgeRatio",
+    SeckillRatio                = "SeckillRatio",
+    Recoilless                  = "Recoilless",
+    HealthMaxBoost              = "HealthMaxBoost",
     UGCGeneralMoveSpeedScale    = UGCNativeGameAttributeType.Character_UGCGeneralMoveSpeedScale,
     ReloadTime                  = UGCNativeGameAttributeType.Weapon_ReloadTime,
     BurstShootCDWrapper         = UGCNativeGameAttributeType.Weapon_BurstShootCDWrapper,

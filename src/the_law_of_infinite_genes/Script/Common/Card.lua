@@ -2,9 +2,10 @@ Card = {}
 
 
 Card.Common = {
-    SellRefundRatio = 1,    -- 出售卡牌返还比例
-    RefreshBaseCost = 10,   -- 刷新商店的首次价格
-    RefreshStepCost = 10,   -- 每次刷新相比上一次的加价
+    SellRefundRatio     = 1,    -- 出售卡牌返还比例
+    RefreshBaseCost     = 10,   -- 刷新商店的首次价格
+    RefreshStepCost     = 10,   -- 每次刷新相比上一次的加价
+    MaxCardSlotLevel    = 12,   -- 最大卡槽等级
 }
 
 
