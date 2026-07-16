@@ -2,8 +2,6 @@
 ---@field Degrade UButton
 ---@field Exit UButton
 ---@field ExitBtn UButton
----@field GeneContent GeneContent_C
----@field GeneReset GeneReset_C
 --Edit Below--
 local GeneMain = { 
     bInitDoOnce = false,
