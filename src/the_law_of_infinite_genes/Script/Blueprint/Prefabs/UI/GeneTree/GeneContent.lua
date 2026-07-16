@@ -117,20 +117,29 @@ function GeneContent:PlayAnim()
 end
 
 function GeneContent:ResetBranch()
+    local cacheLv = 0;
     for i, data in pairs(self:SelectedBranchDataList()) do
-        if i - 1 >= self:SelectedTab().index then
+        if i - 1 >= self:SelectedTab().index and data.Lv > 0 then
+            cacheLv = cacheLv + data.Lv
             data.Lv = 0;
         end
     end
     self:SelectedBranch():Reload();
+    GeneManager.Reset:AddOwnSkill(cacheLv);
     GeneManager.InfoBar:Refresh();
 end
 
 function GeneContent:ResetAll()
+    local cacheLv = 0;
     for _, node in pairs(self.tabButtons) do
-        node:Data().Lv = 0
-        node:Refresh();
+        local data = node:Data();
+        if data.Lv > 0 then
+            cacheLv = cacheLv + data.Lv
+            data.Lv = 0
+            node:Refresh();
+        end
     end
+    GeneManager.Reset:AddOwnSkill(cacheLv);
     GeneManager.InfoBar:Refresh();
 end
 

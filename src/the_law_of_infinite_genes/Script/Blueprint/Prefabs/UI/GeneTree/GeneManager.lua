@@ -9,6 +9,7 @@ GeneManager = GeneManager or
     SkillBranch = nil;
     SkillNode = nil;
     InfoBar = nil;
+    Reset = nil;
 
     -- ===== 静态配置（固定数据） =====
     Config = {

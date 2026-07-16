@@ -16,7 +16,8 @@ local GeneInfoBar = {
 		ReachedTheHighest = '基因已达到上限',
 		ReachedTheLowest = '基因已达到下限',
 		ProhibitedLower = '下一级基因已进化，禁止降低等级，请重铸基因',
-		ProhibitedHigher = '上一级基因未进化至上限，禁止增加等级'
+		ProhibitedHigher = '上一级基因未进化至上限，禁止增加等级',
+		NoPointsAvailable = '没有可使用的基因点'
 	}
 } 
 
@@ -68,6 +69,7 @@ function GeneInfoBar:LowestClicked()
 	if data.Lv == 0 then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheLowest);
 	end
+	GeneManager.Reset:AddOwnSkill(data.Lv);
 	data.Lv = 0;
     tab:Refresh();
 	self:Refresh();
@@ -86,6 +88,7 @@ function GeneInfoBar:ReduceClicked()
 	if not self:Executable(value) then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheLowest);
 	end
+	GeneManager.Reset:AddOwnSkill(1);
 	data.Lv = value;
     tab:Refresh();
 	self:Refresh();
@@ -105,6 +108,10 @@ function GeneInfoBar:AddClicked()
 	if not self:Executable(value) then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheHighest);
 	end
+	if GeneManager.Reset.own == 0 then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NoPointsAvailable);
+	end
+	GeneManager.Reset:ReduceOwnSkill(1);
 	data.Lv = value;
     tab:Refresh();
 	self:Refresh();
@@ -124,7 +131,12 @@ function GeneInfoBar:HighestClicked()
 	if data.Lv == limit then
 		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.ReachedTheHighest);
 	end
-	data.Lv = limit;
+	if GeneManager.Reset.own == 0 then
+		return UGCWidgetManagerSystem.ShowTipsUI(self.tips.NoPointsAvailable);
+	end
+	local value = math.min(GeneManager.Reset.own, limit - data.Lv);
+	GeneManager.Reset:ReduceOwnSkill(value);
+	data.Lv = data.Lv + value;
     tab:Refresh();
 	self:Refresh();
 end
