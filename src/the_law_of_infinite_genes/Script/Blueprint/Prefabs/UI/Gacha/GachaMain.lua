@@ -215,9 +215,9 @@ function GachaMain:_AttributeName(property)
     end
     local attr = Attribute;
     if attr ~= nil then
-        if attr.DodgeRatio ~= nil and property == attr.DodgeRatio then
+        if attr.DodgeChance ~= nil and property == attr.DodgeChance then
             return "闪避率";
-        elseif attr.SeckillRatio ~= nil and property == attr.SeckillRatio then
+        elseif attr.SeckillChance ~= nil and property == attr.SeckillChance then
             return "秒杀率";
         elseif attr.Recoilless ~= nil and property == attr.Recoilless then
             return "无后坐力";

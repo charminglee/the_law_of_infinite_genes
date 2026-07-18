@@ -24,13 +24,13 @@ function PutridMiasma_Monster:AllAttrBuffFormula_Health()
 end
 
 
-function PutridMiasma_Monster:AllAttrBuffFormula_Defence()
+function PutridMiasma_Monster:AllAttrBuffFormula_DefencePct()
 	local mul = Config.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
 	return mul
 end
 
 
-function PutridMiasma_Monster:AllAttrBuffFormula_DamageBoost()
+function PutridMiasma_Monster:AllAttrBuffFormula_DamagePct()
 	local mul = Config.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
 	return mul
 end

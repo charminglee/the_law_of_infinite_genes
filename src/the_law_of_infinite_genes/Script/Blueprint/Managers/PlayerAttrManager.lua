@@ -11,16 +11,16 @@ local _GAS_BACKED = nil
 function PlayerAttrManager:ReceiveBeginPlay()
     PlayerAttrManager.SuperClass.ReceiveBeginPlay(self)
     _GAS_BACKED = {
-        [Attribute.AttackPowerBoost]         = true,
-        [Attribute.NormalMonsterDamageBoost] = true,
-        [Attribute.EliteMonsterDamageBoost]  = true,
-        [Attribute.BossDamageBoost]          = true,
-        [Attribute.CritChance]               = true,
-        [Attribute.CritDamageBoost]          = true,
-        [Attribute.DefenseBoost]             = true,
-        [Attribute.HealthStealRatio]         = true,
-        [Attribute.DamageDecreacePct]        = true,
-        [Attribute.BreakDefenceRatio]        = true,
+        [Attribute.AttackPowerPct]          = true,
+        [Attribute.NormalMonsterDamagePct]  = true,
+        [Attribute.EliteMonsterDamagePct]   = true,
+        [Attribute.BossDamagePct]           = true,
+        [Attribute.CritChance]              = true,
+        [Attribute.CritDamagePct]           = true,
+        [Attribute.DefensePct]              = true,
+        [Attribute.HealthStealPct]          = true,
+        [Attribute.DamageDecreacePct]       = true,
+        [Attribute.BreakDefencePct]         = true,
     }
     Lib.EventSystem.Listen(ServerEvent.OnCardEquipAfter,   self.OnCardEquipAfter,   self)
     Lib.EventSystem.Listen(ServerEvent.OnCardUnequipAfter, self.OnCardUnequipAfter, self)

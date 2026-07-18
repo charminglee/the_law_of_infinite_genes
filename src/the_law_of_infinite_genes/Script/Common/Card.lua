@@ -55,22 +55,22 @@ Card.Suit = {
         Group = 1,
         Combo = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.08},
+                {property = Attribute.AttackPowerPct, value=0.08},
                 {property = Attribute.CritChance, value=0.04},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.16},
+                {property = Attribute.AttackPowerPct, value=0.16},
                 {property = Attribute.CritChance, value=0.08},
-                {property = Attribute.CritDamageBoost, value=0.15},
+                {property = Attribute.CritDamagePct, value=0.15},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.3},
+                {property = Attribute.AttackPowerPct, value=0.3},
                 {property = Attribute.CritChance, value=0.12},
-                {property = Attribute.CritDamageBoost, value=0.3},
-                {property = Attribute.HealthStealRatio, value=0.01}
+                {property = Attribute.CritDamagePct, value=0.3},
+                {property = Attribute.HealthStealPct, value=0.01}
             },
             [4] = {
-                {property = Attribute.SeckillRatio, value=0.01}
+                {property = Attribute.SeckillChance, value=0.01}
             }
         }
     },
@@ -119,16 +119,16 @@ Card.Suit = {
         Combo = {
             [1] = {
                 {property = Attribute.BurstShootCDWrapper, value=0.10},
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.05},
+                {property = Attribute.MoveSpeedScale, value=0.05},
             },
             [2] = {
                 {property = Attribute.BurstShootCDWrapper, value=0.20},
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.10},
+                {property = Attribute.MoveSpeedScale, value=0.10},
                 {property = Attribute.ReloadTime, value=0.15},
             },
             [3] = {
                 {property = Attribute.BurstShootCDWrapper, value=0.30},
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.20},
+                {property = Attribute.MoveSpeedScale, value=0.20},
                 {property = Attribute.ReloadTime, value=0.25},
             },
             [4] = {
@@ -148,16 +148,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_14.Icon_Skill_14',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.005},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.015},
+                {property = Attribute.AttackPowerPct, value=0.005},
+                {property = Attribute.NormalMonsterDamagePct, value=0.015},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.01},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.03},
+                {property = Attribute.AttackPowerPct, value=0.01},
+                {property = Attribute.NormalMonsterDamagePct, value=0.03},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.05},
+                {property = Attribute.AttackPowerPct, value=0.02},
+                {property = Attribute.NormalMonsterDamagePct, value=0.05},
             }
         }
     },
@@ -169,16 +169,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_99.Icon_Skill_99',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.005},
-                {property = Attribute.CritDamageBoost, value=0.01},
+                {property = Attribute.AttackPowerPct, value=0.005},
+                {property = Attribute.CritDamagePct, value=0.01},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.01},
-                {property = Attribute.CritDamageBoost, value=0.02},
+                {property = Attribute.AttackPowerPct, value=0.01},
+                {property = Attribute.CritDamagePct, value=0.02},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
-                {property = Attribute.CritDamageBoost, value=0.03},
+                {property = Attribute.AttackPowerPct, value=0.02},
+                {property = Attribute.CritDamagePct, value=0.03},
             },
         }
     },
@@ -190,15 +190,15 @@ Card.Cards = {
         texture = '/Game/Mod/EscapeLobby/Arts_UI/TableIcons/Talent/Escape_Talent_icon_LiRen.Escape_Talent_icon_LiRen',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.005},
+                {property = Attribute.AttackPowerPct, value=0.005},
                 {property = Attribute.CritChance, value=0.005},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.01},
+                {property = Attribute.AttackPowerPct, value=0.01},
                 {property = Attribute.CritChance, value=0.01},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
+                {property = Attribute.AttackPowerPct, value=0.02},
                 {property = Attribute.CritChance, value=0.02},
             },
         }
@@ -211,16 +211,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_117.Icon_Skill_117',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.005},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.015},
+                {property = Attribute.AttackPowerPct, value=0.005},
+                {property = Attribute.EliteMonsterDamagePct, value=0.015},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.01},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.03},
+                {property = Attribute.AttackPowerPct, value=0.01},
+                {property = Attribute.EliteMonsterDamagePct, value=0.03},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.05},
+                {property = Attribute.AttackPowerPct, value=0.02},
+                {property = Attribute.EliteMonsterDamagePct, value=0.05},
             },
         }
     },
@@ -232,18 +232,18 @@ Card.Cards = {
         texture = '/Game/Mod/EscapeLobby/Arts_UI/TableIcons/Talent/Escape_Talent_icon_XiJia.Escape_Talent_icon_XiJia',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.01},
-                {property = Attribute.CritDamageBoost, value=0.02},
+                {property = Attribute.AttackPowerPct, value=0.01},
+                {property = Attribute.CritDamagePct, value=0.02},
                 {property = Attribute.CritChance, value=0.01},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
-                {property = Attribute.CritDamageBoost, value=0.03},
+                {property = Attribute.AttackPowerPct, value=0.02},
+                {property = Attribute.CritDamagePct, value=0.03},
                 {property = Attribute.CritChance, value=0.02},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.04},
-                {property = Attribute.CritDamageBoost, value=0.05},
+                {property = Attribute.AttackPowerPct, value=0.04},
+                {property = Attribute.CritDamagePct, value=0.05},
                 {property = Attribute.CritChance, value=0.03},
             },
         }
@@ -256,16 +256,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_8.Icon_Skill_8',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.01},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.025},
+                {property = Attribute.AttackPowerPct, value=0.01},
+                {property = Attribute.EliteMonsterDamagePct, value=0.025},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.05},
+                {property = Attribute.AttackPowerPct, value=0.02},
+                {property = Attribute.EliteMonsterDamagePct, value=0.05},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.04},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.1},
+                {property = Attribute.AttackPowerPct, value=0.04},
+                {property = Attribute.EliteMonsterDamagePct, value=0.1},
             },
         }
     },
@@ -277,16 +277,16 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG029_SP_JobCyberSpider_0.CG029_SP_JobCyberSpider_0',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.01},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.025},
+                {property = Attribute.AttackPowerPct, value=0.01},
+                {property = Attribute.NormalMonsterDamagePct, value=0.025},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.06},
+                {property = Attribute.AttackPowerPct, value=0.02},
+                {property = Attribute.NormalMonsterDamagePct, value=0.06},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.04},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.1},
+                {property = Attribute.AttackPowerPct, value=0.04},
+                {property = Attribute.NormalMonsterDamagePct, value=0.1},
             },
         }
     },
@@ -298,19 +298,19 @@ Card.Cards = {
         texture = '/Game/Arts/UI/TableIcons/ProfessionResult_Icon/MS_Icon_jidonbing.MS_Icon_jidonbing',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
+                {property = Attribute.AttackPowerPct, value=0.02},
                 {property = Attribute.CritChance, value=0.02},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.05},
+                {property = Attribute.NormalMonsterDamagePct, value=0.05},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.04},
+                {property = Attribute.AttackPowerPct, value=0.04},
                 {property = Attribute.CritChance, value=0.03},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.1},
+                {property = Attribute.NormalMonsterDamagePct, value=0.1},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.08},
+                {property = Attribute.AttackPowerPct, value=0.08},
                 {property = Attribute.CritChance, value=0.04},
-                {property = Attribute.NormalMonsterDamageBoost, value=0.2},
+                {property = Attribute.NormalMonsterDamagePct, value=0.2},
             },
         }
     },
@@ -322,19 +322,19 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG025_SP_Dragn_1.CG025_SP_Dragn_1',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.02},
-                {property = Attribute.CritDamageBoost, value=0.03},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.05},
+                {property = Attribute.AttackPowerPct, value=0.02},
+                {property = Attribute.CritDamagePct, value=0.03},
+                {property = Attribute.EliteMonsterDamagePct, value=0.05},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.04},
-                {property = Attribute.CritDamageBoost, value=0.04},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.1},
+                {property = Attribute.AttackPowerPct, value=0.04},
+                {property = Attribute.CritDamagePct, value=0.04},
+                {property = Attribute.EliteMonsterDamagePct, value=0.1},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.08},
-                {property = Attribute.CritDamageBoost, value=0.07},
-                {property = Attribute.EliteMonsterDamageBoost, value=0.2},
+                {property = Attribute.AttackPowerPct, value=0.08},
+                {property = Attribute.CritDamagePct, value=0.07},
+                {property = Attribute.EliteMonsterDamagePct, value=0.2},
             },
         }
     },
@@ -346,19 +346,19 @@ Card.Cards = {
         texture = '/Game/Arts/UI/TableIcons/ProfessionResult_Icon/ProfessionSkill_Icon/tuji_kuangre2.tuji_kuangre2',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.04},
-                {property = Attribute.BossDamageBoost, value=0.05},
-                {property = Attribute.BreakDefenceRatio, value=0.03},
+                {property = Attribute.AttackPowerPct, value=0.04},
+                {property = Attribute.BossDamagePct, value=0.05},
+                {property = Attribute.BreakDefencePct, value=0.03},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.08},
-                {property = Attribute.BossDamageBoost, value=0.1},
-                {property = Attribute.BreakDefenceRatio, value=0.06},
+                {property = Attribute.AttackPowerPct, value=0.08},
+                {property = Attribute.BossDamagePct, value=0.1},
+                {property = Attribute.BreakDefencePct, value=0.06},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.16},
-                {property = Attribute.BossDamageBoost, value=0.2},
-                {property = Attribute.BreakDefenceRatio, value=0.1},
+                {property = Attribute.AttackPowerPct, value=0.16},
+                {property = Attribute.BossDamagePct, value=0.2},
+                {property = Attribute.BreakDefencePct, value=0.1},
             },
         }
     },
@@ -370,19 +370,19 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobLightning_3.CG020_SP_JobLightning_3',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.04},
+                {property = Attribute.AttackPowerPct, value=0.04},
                 {property = Attribute.CritChance, value=0.03},
-                {property = Attribute.CritDamageBoost, value=0.04},
+                {property = Attribute.CritDamagePct, value=0.04},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.08},
+                {property = Attribute.AttackPowerPct, value=0.08},
                 {property = Attribute.CritChance, value=0.04},
-                {property = Attribute.CritDamageBoost, value=0.06},
+                {property = Attribute.CritDamagePct, value=0.06},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.16},
+                {property = Attribute.AttackPowerPct, value=0.16},
                 {property = Attribute.CritChance, value=0.07},
-                {property = Attribute.CritDamageBoost, value=0.1},
+                {property = Attribute.CritDamagePct, value=0.1},
             },
         }
     },
@@ -394,25 +394,25 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG028_SP_JobGunman_3.CG028_SP_JobGunman_3',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerBoost, value=0.08},
+                {property = Attribute.AttackPowerPct, value=0.08},
                 {property = Attribute.CritChance, value=0.04},
-                {property = Attribute.BossDamageBoost, value=0.1},
-                {property = Attribute.CritDamageBoost, value=0.05},
-                {property = Attribute.BreakDefenceRatio, value=0.05},
+                {property = Attribute.BossDamagePct, value=0.1},
+                {property = Attribute.CritDamagePct, value=0.05},
+                {property = Attribute.BreakDefencePct, value=0.05},
             },
             [2] = {
-                {property = Attribute.AttackPowerBoost, value=0.16},
+                {property = Attribute.AttackPowerPct, value=0.16},
                 {property = Attribute.CritChance, value=0.06},
-                {property = Attribute.BossDamageBoost, value=0.15},
-                {property = Attribute.CritDamageBoost, value=0.1},
-                {property = Attribute.BreakDefenceRatio, value=0.1},
+                {property = Attribute.BossDamagePct, value=0.15},
+                {property = Attribute.CritDamagePct, value=0.1},
+                {property = Attribute.BreakDefencePct, value=0.1},
             },
             [3] = {
-                {property = Attribute.AttackPowerBoost, value=0.82},
+                {property = Attribute.AttackPowerPct, value=0.82},
                 {property = Attribute.CritChance, value=0.2},
-                {property = Attribute.BossDamageBoost, value=0.3},
-                {property = Attribute.CritDamageBoost, value=0.2},
-                {property = Attribute.BreakDefenceRatio, value=0.2},
+                {property = Attribute.BossDamagePct, value=0.3},
+                {property = Attribute.CritDamagePct, value=0.2},
+                {property = Attribute.BreakDefencePct, value=0.2},
             },
         }
     },
@@ -442,13 +442,13 @@ Card.Cards = {
         texture = '/Game/Mod/EscapeLobby/Arts_UI/TableIcons/Talent/Escape_Talent_icon_GuiKe.Escape_Talent_icon_GuiKe',
         bonus = {
             [1] = {
-                {property = Attribute.DefenseBoost, value=0.005},
+                {property = Attribute.DefensePct, value=0.005},
             },
             [2] = {
-                {property = Attribute.DefenseBoost, value=0.01},
+                {property = Attribute.DefensePct, value=0.01},
             },
             [3] = {
-                {property = Attribute.DefenseBoost, value=0.02},
+                {property = Attribute.DefensePct, value=0.02},
             },
         }
     },
@@ -461,15 +461,15 @@ Card.Cards = {
         bonus = {
             [1] = {
                 {property = Attribute.HealthMaxBoost, value=0.0025},
-                {property = Attribute.DefenseBoost, value=0.0025},
+                {property = Attribute.DefensePct, value=0.0025},
             },
             [2] = {
                 {property = Attribute.HealthMaxBoost, value=0.005},
-                {property = Attribute.DefenseBoost, value=0.005},
+                {property = Attribute.DefensePct, value=0.005},
             },
             [3] = {
                 {property = Attribute.HealthMaxBoost, value=0.01},
-                {property = Attribute.DefenseBoost, value=0.01},
+                {property = Attribute.DefensePct, value=0.01},
             },
         }
     },
@@ -517,13 +517,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_59.Icon_Skill_59',
         bonus = {
             [1] = {
-                {property = Attribute.DefenseBoost, value=0.01},
+                {property = Attribute.DefensePct, value=0.01},
             },
             [2] = {
-                {property = Attribute.DefenseBoost, value=0.02},
+                {property = Attribute.DefensePct, value=0.02},
             },
             [3] = {
-                {property = Attribute.DefenseBoost, value=0.04},
+                {property = Attribute.DefensePct, value=0.04},
             },
         }
     },
@@ -574,15 +574,15 @@ Card.Cards = {
         texture = '/Game/Arts/UI/TableIcons/ProfessionResult_Icon/ProfessionSkill_Icon/houqing_zhizaofangju.houqing_zhizaofangju',
         bonus = {
             [1] = {
-                {property = Attribute.DefenseBoost, value=0.02},
+                {property = Attribute.DefensePct, value=0.02},
                 {property = Attribute.DamageDecreacePct, value=0.01},
             },
             [2] = {
-                {property = Attribute.DefenseBoost, value=0.03},
+                {property = Attribute.DefensePct, value=0.03},
                 {property = Attribute.DamageDecreacePct, value=0.015},
             },
             [3] = {
-                {property = Attribute.DefenseBoost, value=0.06},
+                {property = Attribute.DefensePct, value=0.06},
                 {property = Attribute.DamageDecreacePct, value=0.03},
             },
         }
@@ -616,15 +616,15 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobBeltway_3.CG020_SP_JobBeltway_3',
         bonus = {
             [1] = {
-                {property = Attribute.DefenseBoost, value=0.025},
+                {property = Attribute.DefensePct, value=0.025},
                 {property = Attribute.DamageDecreacePct, value=0.015},
             },
             [2] = {
-                {property = Attribute.DefenseBoost, value=0.05},
+                {property = Attribute.DefensePct, value=0.05},
                 {property = Attribute.DamageDecreacePct, value=0.03},
             },
             [3] = {
-                {property = Attribute.DefenseBoost, value=0.1},
+                {property = Attribute.DefensePct, value=0.1},
                 {property = Attribute.DamageDecreacePct, value=0.05},
             },
         }
@@ -638,17 +638,17 @@ Card.Cards = {
         bonus = {
             [1] = {
                 {property = Attribute.HealthMaxBoost, value=0.04},
-                {property = Attribute.DefenseBoost, value=0.04},
+                {property = Attribute.DefensePct, value=0.04},
                 {property = Attribute.DamageDecreacePct, value=0.025},
             },
             [2] = {
                 {property = Attribute.HealthMaxBoost, value=0.08},
-                {property = Attribute.DefenseBoost, value=0.08},
+                {property = Attribute.DefensePct, value=0.08},
                 {property = Attribute.DamageDecreacePct, value=0.05},
             },
             [3] = {
                 {property = Attribute.HealthMaxBoost, value=0.2},
-                {property = Attribute.DefenseBoost, value=0.2},
+                {property = Attribute.DefensePct, value=0.2},
                 {property = Attribute.DamageDecreacePct, value=0.2},
             },
         }
@@ -715,13 +715,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_16.Icon_Skill_16',
         bonus = {
             [1] = {
-                {property = Attribute.DefenseBoost, value=0.005},
+                {property = Attribute.DefensePct, value=0.005},
             },
             [2] = {
-                {property = Attribute.DefenseBoost, value=0.01},
+                {property = Attribute.DefensePct, value=0.01},
             },
             [3] = {
-                {property = Attribute.DefenseBoost, value=0.02},
+                {property = Attribute.DefensePct, value=0.02},
             },
         }
     },
@@ -893,13 +893,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_49.Icon_Skill_49',
         bonus = {
             [1] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.005},
+                {property = Attribute.MoveSpeedScale, value=0.005},
             },
             [2] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.01},
+                {property = Attribute.MoveSpeedScale, value=0.01},
             },
             [3] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.02},
+                {property = Attribute.MoveSpeedScale, value=0.02},
             },
         }
     },
@@ -929,13 +929,13 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobRocket_3.CG020_SP_JobRocket_3',
         bonus = {
             [1] = {
-                {property = Attribute.DodgeRatio, value=0.01},
+                {property = Attribute.DodgeChance, value=0.01},
             },
             [2] = {
-                {property = Attribute.DodgeRatio, value=0.02},
+                {property = Attribute.DodgeChance, value=0.02},
             },
             [3] = {
-                {property = Attribute.DodgeRatio, value=0.04},
+                {property = Attribute.DodgeChance, value=0.04},
             },
         }
     },
@@ -965,13 +965,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_38.Icon_Skill_38',
         bonus = {
             [1] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.015},
+                {property = Attribute.MoveSpeedScale, value=0.015},
             },
             [2] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.03},
+                {property = Attribute.MoveSpeedScale, value=0.03},
             },
             [3] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.06},
+                {property = Attribute.MoveSpeedScale, value=0.06},
             },
         }
     },
@@ -983,13 +983,13 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobLightning_2.CG020_SP_JobLightning_2',
         bonus = {
             [1] = {
-                {property = Attribute.DodgeRatio, value=0.015},
+                {property = Attribute.DodgeChance, value=0.015},
             },
             [2] = {
-                {property = Attribute.DodgeRatio, value=0.03},
+                {property = Attribute.DodgeChance, value=0.03},
             },
             [3] = {
-                {property = Attribute.DodgeRatio, value=0.06},
+                {property = Attribute.DodgeChance, value=0.06},
             },
         }
     },
@@ -1019,16 +1019,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_82.Icon_Skill_82',
         bonus = {
             [1] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.025},
-                {property = Attribute.DodgeRatio, value=0.025},
+                {property = Attribute.MoveSpeedScale, value=0.025},
+                {property = Attribute.DodgeChance, value=0.025},
             },
             [2] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.05},
-                {property = Attribute.DodgeRatio, value=0.05},
+                {property = Attribute.MoveSpeedScale, value=0.05},
+                {property = Attribute.DodgeChance, value=0.05},
             },
             [3] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.1},
-                {property = Attribute.DodgeRatio, value=0.1},
+                {property = Attribute.MoveSpeedScale, value=0.1},
+                {property = Attribute.DodgeChance, value=0.1},
             },
         }
     },
@@ -1082,16 +1082,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_78.Icon_Skill_78',
         bonus = {
             [1] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.04},
-                {property = Attribute.DodgeRatio, value=0.04},
+                {property = Attribute.MoveSpeedScale, value=0.04},
+                {property = Attribute.DodgeChance, value=0.04},
             },
             [2] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.08},
-                {property = Attribute.DodgeRatio, value=0.08},
+                {property = Attribute.MoveSpeedScale, value=0.08},
+                {property = Attribute.DodgeChance, value=0.08},
             },
             [3] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.15},
-                {property = Attribute.DodgeRatio, value=0.15},
+                {property = Attribute.MoveSpeedScale, value=0.15},
+                {property = Attribute.DodgeChance, value=0.15},
             },
         }
     },
@@ -1103,22 +1103,22 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG028_SP_JobGunman_2.CG028_SP_JobGunman_2',
         bonus = {
             [1] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.06},
-                {property = Attribute.DodgeRatio, value=0.06},
+                {property = Attribute.MoveSpeedScale, value=0.06},
+                {property = Attribute.DodgeChance, value=0.06},
                 {property = Attribute.BurstShootCDWrapper, value=-0.06},
                 {property = Attribute.ReloadTime, value=-0.06},
             },
             [2] = {
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.12},
-                {property = Attribute.DodgeRatio, value=0.12},
+                {property = Attribute.MoveSpeedScale, value=0.12},
+                {property = Attribute.DodgeChance, value=0.12},
                 {property = Attribute.BurstShootCDWrapper, value=-0.12},
                 {property = Attribute.ReloadTime, value=-0.12},
             },
             [3] = {
                 {property = Attribute.Recoilless, value=1},
                 {property = Attribute.BurstShootCDWrapper, value=-0.25},
-                {property = Attribute.UGCGeneralMoveSpeedScale, value=0.25},
-                {property = Attribute.DodgeRatio, value=0.25},
+                {property = Attribute.MoveSpeedScale, value=0.25},
+                {property = Attribute.DodgeChance, value=0.25},
             },
         }
     },
