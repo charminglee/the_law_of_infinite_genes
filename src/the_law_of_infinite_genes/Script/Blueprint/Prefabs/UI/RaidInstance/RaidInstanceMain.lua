@@ -2,10 +2,7 @@
 ---@field Button_0 UButton
 ---@field CardButton UButton
 ---@field ShopButton UButton
---Edit Below--
----@class RaidInstanceMain_C:UAEUserWidget
----@field CardButton UButton
----@field ShopButton UButton
+
 local RaidInstanceMain = { bInitDoOnce = false } 
 
 function RaidInstanceMain:Construct()
