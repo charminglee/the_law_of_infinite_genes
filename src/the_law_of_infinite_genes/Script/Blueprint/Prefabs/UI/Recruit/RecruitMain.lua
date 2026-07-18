@@ -6,45 +6,117 @@
 ---@field Button_5 UButton
 ---@field CanvasPanel_8 UCanvasPanel
 ---@field CanvasPanel_9 UCanvasPanel
----@field CanvasPanel_10 UCanvasPanel
 ---@field ComboBoxString_0 UComboBoxString
 ---@field CreateRoom UButton
 ---@field Details UCanvasPanel
 ---@field Fold UCanvasPanel
----@field Image_1 UImage
----@field Image_4 UImage
----@field Image_5 UImage
----@field Image_6 UImage
----@field Image_7 UImage
----@field Image_8 UImage
----@field Image_9 UImage
----@field Image_10 UImage
----@field Image_11 UImage
----@field Image_25 UImage
----@field Image_26 UImage
----@field Image_27 UImage
+---@field MapImage UImage
 ---@field MemberItem1 MemberItem_C
 ---@field MemberItem2 MemberItem_C
 ---@field MemberItem3 MemberItem_C
 ---@field MemberItem4 MemberItem_C
 ---@field Normal UCanvasPanel
+---@field Room UCanvasPanel
 ---@field Selected UCanvasPanel
 ---@field TeamList UGC_ReuseList2_C
 --Edit Below--
-local RecruitMain = { bInitDoOnce = false } 
+local RecruitMain = {
+    bInitDoOnce = false,
+    lastSelectIndex = nil,
+    lastHasTeam = nil,
+}
 
---[==[ Construct
 function RecruitMain:Construct()
-	
+    self:LuaInit()
 end
--- Construct ]==]
 
--- function RecruitMain:Tick(MyGeometry, InDeltaTime)
+function RecruitMain:Tick(MyGeometry, InDeltaTime)
+    if RecruitManager.TeamInfo.HasTeam ~= self.lastHasTeam or RecruitManager.TeamInfo.SelectedIndex ~= self.lastSelectIndex then
+        self.lastSelectIndex = RecruitManager.TeamInfo.SelectedIndex;
+        self.lastHasTeam = RecruitManager.TeamInfo.HasTeam;
+        self.TeamList:Reload(#RecruitManager.TeamList);
+        self:RefreshUI();
+    end
+end
 
--- end
+function RecruitMain:LuaInit()
+    if self.bInitDoOnce then
+        return
+    end
+    self.bInitDoOnce = true;
+    self:Listen();
+    RecruitManager:RegisterMainUI(self);
+end
 
--- function RecruitMain:Destruct()
+function RecruitMain:Listen()
+    self.Button_0.OnClicked:Add(self.Exit, self);
+    self.TeamList.OnUpdateItem:Add(self.TeamListUpdate, self);
+end
 
--- end
+function RecruitMain:Exit()
+    RecruitManager:CloseMainUI();
+end
+
+function RecruitMain:TeamListUpdate(Item, Index)
+    Item.Index = Index+1;
+    Item:SetRoomText();
+    if self.lastSelectIndex == Item.Index then
+        Item:SetSelected(true);
+    else
+        Item:SetSelected(false);
+    end
+end
+
+function RecruitMain:RefreshUI()
+    if self.lastSelectIndex == nil then
+        if self.lastHasTeam then
+            self.Selected:SetVisibility(ESlateVisibility.Visible);
+            self.Normal:SetVisibility(ESlateVisibility.Collapsed);
+            self:RefreshMemberItem();
+        else
+            self.Selected:SetVisibility(ESlateVisibility.Collapsed);
+            self.Normal:SetVisibility(ESlateVisibility.Visible);
+        end
+    else
+        self.Selected:SetVisibility(ESlateVisibility.Visible);
+        self.Normal:SetVisibility(ESlateVisibility.Collapsed);
+        self:RefreshMemberItem();
+    end
+end
+
+function RecruitMain:RefreshMemberItem()
+    self:SetItemData(self.MemberItem1, RecruitManager.TeamList[self.lastSelectIndex].member[1], 1);
+    self:SetItemData(self.MemberItem2, RecruitManager.TeamList[self.lastSelectIndex].member[2], 2);
+    self:SetItemData(self.MemberItem3, RecruitManager.TeamList[self.lastSelectIndex].member[3], 3);
+    self:SetItemData(self.MemberItem4, RecruitManager.TeamList[self.lastSelectIndex].member[4], 4);
+end
+
+function RecruitMain:SetItemData(Item, dat, Index)
+    Item.No:SetText(tostring(Index))
+    if dat ~= nil then
+        Item.HasMember:SetVisibility(ESlateVisibility.Visible);
+        Item.Nobody:SetVisibility(ESlateVisibility.Collapsed);
+        Item.Username:SetText(dat.name);
+    else
+        Item.HasMember:SetVisibility(ESlateVisibility.Collapsed);
+        Item.Nobody:SetVisibility(ESlateVisibility.Visible);
+    end
+end
+
+function RecruitMain:CollapsedTeamList()
+
+end
+
+function RecruitMain:CollapsedInfo()
+
+end
+
+function RecruitMain:VisibleTeamList()
+
+end
+
+function RecruitMain:VisibleInfo()
+
+end
 
 return RecruitMain

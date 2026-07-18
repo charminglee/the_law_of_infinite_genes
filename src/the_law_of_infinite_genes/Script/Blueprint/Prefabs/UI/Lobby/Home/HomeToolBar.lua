@@ -5,7 +5,7 @@
 local HomeToolBar = { 
     bInitDoOnce = false, 
     parent=nil,  
-    ToolBarButtonLabel = {'商城', '抽奖', '排行榜', '仓库', '成就', '通行证', '基因树'},
+    ToolBarButtonLabel = {'商城', '抽奖', '排行榜', '仓库', '成就', '通行证', '基因树', '招募'},
     selectIndex = 0,
 	aniState = false,
 	currentTween = nil

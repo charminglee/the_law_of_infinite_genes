@@ -1,8 +1,6 @@
 ---@class HomeToolBarButton_C:UUserWidget
 ---@field Button_0 UButton
 ---@field button_icon UImage
----@field Image_0 UImage
----@field Image_1 UImage
 ---@field TextBlock_0 UTextBlock
 --Edit Below--
 local HomeToolBarButton = { 
@@ -48,7 +46,10 @@ function HomeToolBarButton:Button_0_Clicked()
     elseif self.Index == 6 then
         GeneManager:OpenMainUI();
         return nil;
-	end
+	elseif self.Index == 7 then
+        RecruitManager:OpenMainUI();
+        return nil;
+    end
 end
 
 function HomeToolBarButton:Refresh()
