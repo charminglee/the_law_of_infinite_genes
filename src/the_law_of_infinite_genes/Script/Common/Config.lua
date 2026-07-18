@@ -83,6 +83,8 @@ Config.InitialWeapon = {
     WeaponId = 8310018,
     BulletId = 301001,
 }
+
+
 -- 合成表 材料ID {8310014 = 领主之眼, 8310015 = 腐化布料, 8310016 = 硬化骨片, 8310017 = 变异粘液}
 Config.Formula = {
     -- 基础套装

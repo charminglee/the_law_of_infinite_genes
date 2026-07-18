@@ -5,8 +5,23 @@ local PlayerAttrManager = {
 }
 
 
+local _GAS_BACKED = nil
+
+
 function PlayerAttrManager:ReceiveBeginPlay()
     PlayerAttrManager.SuperClass.ReceiveBeginPlay(self)
+    _GAS_BACKED = {
+        [Attribute.AttackPowerBoost]         = true,
+        [Attribute.NormalMonsterDamageBoost] = true,
+        [Attribute.EliteMonsterDamageBoost]  = true,
+        [Attribute.BossDamageBoost]          = true,
+        [Attribute.CritChance]               = true,
+        [Attribute.CritDamageBoost]          = true,
+        [Attribute.DefenseBoost]             = true,
+        [Attribute.HealthStealRatio]         = true,
+        [Attribute.DamageDecreacePct]        = true,
+        [Attribute.BreakDefenceRatio]        = true,
+    }
     Lib.EventSystem.Listen(ServerEvent.OnCardEquipAfter,   self.OnCardEquipAfter,   self)
     Lib.EventSystem.Listen(ServerEvent.OnCardUnequipAfter, self.OnCardUnequipAfter, self)
     Lib.EventSystem.Listen(ServerEvent.OnCardSellAfter,    self.OnCardSellAfter,    self)
@@ -38,20 +53,6 @@ end
 
 
 --===========================  内部  ===========================--
-
-
-local _GAS_BACKED = {
-    [Attribute.AttackPowerBoost]         = true,
-    [Attribute.NormalMonsterDamageBoost] = true,
-    [Attribute.EliteMonsterDamageBoost]  = true,
-    [Attribute.BossDamageBoost]          = true,
-    [Attribute.CritChance]               = true,
-    [Attribute.CritDamageBoost]          = true,
-    [Attribute.DefenseBoost]             = true,
-    [Attribute.HealthStealRatio]         = true,
-    [Attribute.DamageDecreacePct]        = true,
-    [Attribute.BreakDefenceRatio]        = true,
-}
 
 
 ---计算单张卡牌提供的加成。
