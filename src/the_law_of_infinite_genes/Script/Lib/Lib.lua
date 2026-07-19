@@ -4,6 +4,8 @@ Lib = {
     EventSystem = UGCGameSystem.UGCRequire("Script.Lib.Utils.EventSystem"),
     ---@type Table
     Table = UGCGameSystem.UGCRequire("Script.Lib.Utils.Table"),
+    ---@type Math
+    Math = UGCGameSystem.UGCRequire("Script.Lib.Math.Math"),
 }
 
 

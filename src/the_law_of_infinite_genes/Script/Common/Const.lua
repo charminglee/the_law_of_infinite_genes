@@ -1,4 +1,4 @@
-local ROOT = UGCMapInfoLib.GetRootLongPackagePath()
+local ROOT = UGCMapInfoLib.GetRootLongPackagePath().."Asset/Blueprint/"
 
 
 ---@enum ServerEvent
@@ -21,21 +21,21 @@ ClientEvent = {
 
 
 ClassPath = {
-    [Buff.CorpseHuntingSurge]               = ROOT.."Asset/Blueprint/Prefabs/Buffs/CorpseHuntingSurge.CorpseHuntingSurge_C",
-    [Buff.CorpseSurgeGoldRush]              = ROOT.."Asset/Blueprint/Prefabs/Buffs/CorpseSurgeGoldRush.CorpseSurgeGoldRush_C",
-    [Buff.HeavenPunishmentThunderStrike]    = ROOT.."Asset/Blueprint/Prefabs/Buffs/HeavenPunishmentThunderStrike.HeavenPunishmentThunderStrike_C",
-    [Buff.PutridMiasma]                     = ROOT.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
-    [Buff.PutridMiasma_Monster]             = ROOT.."Asset/Blueprint/Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
+    [Buff.CorpseHuntingSurge]               = ROOT.."Prefabs/Buffs/CorpseHuntingSurge.CorpseHuntingSurge_C",
+    [Buff.CorpseSurgeGoldRush]              = ROOT.."Prefabs/Buffs/CorpseSurgeGoldRush.CorpseSurgeGoldRush_C",
+    [Buff.HeavenPunishmentThunderStrike]    = ROOT.."Prefabs/Buffs/HeavenPunishmentThunderStrike.HeavenPunishmentThunderStrike_C",
+    [Buff.PutridMiasma]                     = ROOT.."Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
+    [Buff.PutridMiasma_Monster]             = ROOT.."Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
 
-    BaseMonster = ROOT.."Asset/Blueprint/Prefabs/Monsters/BaseMonster.BaseMonster_C",
+    BaseMonster = ROOT.."Prefabs/Monsters/BaseMonster.BaseMonster_C",
 }
 
 
 InstancePath = {
-    LevelStart          = "UGCmap.LevelStart_8",
-    MobSpawnerManager   = "UGCmap.MobSpawnerManager_10",
-    MapStartLocation    = "UGCmap.MapStartLocation_8",
-    MapEndLocation      = "UGCmap.MapEndLocation_23",
+    LevelStart          = "HelipadMap.LevelStart_8",
+    MobSpawnerManager   = "HelipadMap.MobSpawnerManager_10",
+    MapStartLocation    = "HelipadMap.MapStartLocation_8",
+    MapEndLocation      = "HelipadMap.MapEndLocation_23",
 }
 
 
@@ -53,6 +53,8 @@ GameplayTag = {
             Critical        = "Damage.Type.Critical",
             Direct          = "Damage.Type.Direct",
             CounterAttack   = "Damage.Type.CounterAttack",
+            Seckill         = "Damage.Type.Seckill",
+            Dodge           = "Damage.Type.Dodge",
         },
     }
 }
