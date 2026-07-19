@@ -101,7 +101,6 @@ Attribute = {
     BreakDefencePct         = UGCCustomGameAttributeType.UGCAttributeGroup_Character_BreakDefencePct,           -- 防御穿透百分比
     SeckillChance           = UGCCustomGameAttributeType.UGCAttributeGroup_Character_SeckillChance,             -- 秒杀率
     DodgeChance             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DodgeChance,               -- 闪避率
-    IgnoreHarmRatio         = "IgnoreHarmRatio",                                                                -- 无视伤害率
 
     RecoilPct       = UGCCustomGameAttributeType.UGCAttributeGroup_Character_RecoilPct,         -- 后坐力百分比
     ReloadTime      = UGCNativeGameAttributeType.Weapon_ReloadTime,                             -- 换弹时间
@@ -149,7 +148,6 @@ AttributeMate = {
     [Attribute.EpidemicToxinOverlyLimit]    = {index=25, anno="疫毒叠加上限"},
     [Attribute.EpidemicToxinSettleRatio]    = {index=26, anno="疫毒结算概率"},
     [Attribute.InfiniteAmmo]                = {index=27, anno="无限子弹"},
-    [Attribute.IgnoreHarmRatio]             = {index=28, anno="无视伤害率"},
     [Attribute.HealthMaxBoost]              = {index=29, anno="生命值百分比"},
     [Attribute.Recoilless]                  = {index=32, anno="无后坐力"},
     [Attribute.ReloadTime]                  = {index=34, anno="换弹时间"},

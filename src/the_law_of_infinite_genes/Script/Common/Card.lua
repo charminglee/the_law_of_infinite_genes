@@ -88,10 +88,10 @@ Card.Suit = {
             [3] = {
                 {property = Attribute.HealthMaxBoost, value=0.20},
                 {property = Attribute.DamageDecreacePct, value=0.20},
-                {property = Attribute.IgnoreHarmRatio, value=0.01}
+                {property = Attribute.DodgeChance, value=0.01}
             },
             [4] = {
-                {property = Attribute.IgnoreHarmRatio, value=0.10}
+                {property = Attribute.DodgeChance, value=0.10}
             }
         }
     },
