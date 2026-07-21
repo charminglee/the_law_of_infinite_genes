@@ -30,6 +30,13 @@ function PlayerDataManager:ReceiveBeginPlay()
     PlayerDataManager.SuperClass.ReceiveBeginPlay(self)
     self:_Load()
     self:ResetCardData()
+    
+    if UGCGameSystem.IsUGCPIE() then
+        for k, v in pairs(Config.Debug.Coin) do
+            self:SetCoin(k, v, false)
+        end
+        self:Sync()
+    end
 end
 
 
@@ -148,6 +155,7 @@ function PlayerDataManager:Sync()
         return
     end
     UnrealNetwork.RepLazyProperty(self, "_data")
+    UnrealNetwork.RepLazyProperty(self, "_card")
 end
 
 
@@ -500,15 +508,15 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
-    -- if isFirstRefresh then
-    --     self._card.refreshCount = 0
-    -- end
-    -- local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
-    -- if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
-    --     -- 资源点不足
-    --     return  
-    -- end
-    -- self:AddCoin(ItemId.Coin_0, -cost)
+    if isFirstRefresh then
+        self._card.refreshCount = 0
+    end
+    local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
+    if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
+        -- 资源点不足
+        return  
+    end
+    self:AddCoin(ItemId.Coin_0, -cost)
 
     local weights = Card.StoreWeight[self._card.shopLevel]
     local byGrade = _BuildCardsByGrade()

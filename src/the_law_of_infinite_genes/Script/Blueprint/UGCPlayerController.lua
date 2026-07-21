@@ -7,7 +7,7 @@
 ---@field GlobalEventComponent GlobalEventComponent_C
 ---@field GachaComponent GachaComponent_C
 ---@field FightComponent FightComponent_C
----@field ACHVComponent CHVComponent_C
+---@field ACHVComponent ACHVComponent_C
 ---@field StoreComponent StoreComponent_C
 ---@field HomeComponent HomeComponent_C
 ---@field RankingListComponent RankingListComponent_C
@@ -37,7 +37,7 @@ function UGCPlayerController:ReceiveBeginPlay()
                     UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
                 end
 
-                if Config.Debug.AutoStartGame then
+                if UGCGameSystem.IsUGCPIE() and Config.Debug.AutoStartGame then
                     GameState:StartGame()
                 end
             end
