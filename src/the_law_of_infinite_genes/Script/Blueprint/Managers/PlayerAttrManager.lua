@@ -4,6 +4,8 @@ local PlayerAttrManager = {
     ---@type table<Attribute, number>
     _attrCache = nil,
     ---@type table<Attribute, number>
+    _base = nil,
+    ---@type table<Attribute, number>
     _final = nil,
 }
 
@@ -69,6 +71,7 @@ function PlayerAttrManager:ReceiveBeginPlay()
                 v = UGCAttributeSystem.GetGameAttributeValue(self.owner, k)
             end
             self._attrCache[k] = v
+            self._base[k] = v
         end
     end
     if not self._final then
@@ -156,15 +159,7 @@ end
 
 
 function PlayerAttrManager:_ClearCardDelta()
-    for attr, _ in pairs(_GAS_BACKED) do
-        local baseVal = UGCAttributeSystem.GetGameAttributeValue(self.owner, attr)
-        self._attrCache[attr] = baseVal
-        if _PCT_MAP[attr] then
-            local pctAttr = _PCT_MAP[attr]
-            local pctVal = UGCAttributeSystem.GetGameAttributeValue(self.owner, pctAttr)
-            self._attrCache[pctAttr] = pctVal
-        end
-    end
+    self._attrCache = Lib.Table.Copy(self._base)
     self:_UpdateFinal()
     self:_UpdateHealthMax()
 end
