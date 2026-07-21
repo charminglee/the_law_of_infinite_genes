@@ -327,14 +327,15 @@ obj:ReceiveBeginPlay()
 
 `@param` / `@return` / `@field` / `@type` 等标签中的 `type` 均可使用以下类型写法：
 
-| 类型 | 含义 |
-| --- | --- |
-| `number` / `string` / `boolean` / `function` / `table` / `any` | 基础类型 |
-| `nil` | 空值 |
-| `MyClass` | 自定义类（需先用 `@class` 声明） |
-| `T[]` | 元素类型为 `T` 的数组 |
-| `T?` | 可空类型（值可能为 `nil`） |
-| `T1\|T2` | 联合类型（取值可为 `T1` 或 `T2`） |
-| `fun(var1: T1, var2: T2, ...): T3` | 函数签名 |
-| `table<K, V>` | 键类型为 `K` ，值类型为 `V` 的表 |
-| `[T1, T2, ..., Tn]` | 元组类型，表示有 `n` 个元素的元组，元素类型分别为 `T1, T2, ..., Tn` |
+| 类型 | 含义 | 示例 | 等价写法 |
+| --- | --- | --- | --- |
+| `number` / `string` / `boolean` / `function` / `table` / `any` | 基础类型 | | |
+| `nil` | 空值 | | |
+| `MyType` | 自定义类型（需先用 `@class` 、 `@enum` 等标签声明） | | |
+| `T[]` | 元素类型为 `T` 的数组 | `number[]` | `table<T>` |
+| `T?` | 可空类型（值可能为 `nil` ） | `number?` | `T\|nil` |
+| `T1\|T2\|...\|Tn` | 联合类型（取值可为 `T1` 、 `T2` 等） | `number\|string` | |
+| `[T1, T2, ..., Tn]` | 元组类型，表示有 `n` 个元素的元组，元素类型分别为 `T1, T2, ..., Tn` | `[number, string]` | |
+| `table<KT, VT>` | 键类型为 `KT` ，值类型为 `VT` 的表 | `table<string, number>` | |
+| `{k1: VT1, k2: VT2, ..., kn: VTn}` | 类型化表，显式表示表的键名 | `{x: number, y: number, z: number}` | |
+| `fun(arg1: T1, arg2: T2, ..., argn: Tn): RT` | 函数签名 | `fun(a: number, b: number): number` | |

@@ -36,6 +36,14 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 
 ## 事件列表
 
+### OnResetCardData
+
+【双端】重置卡牌数据时触发。
+
+| 序号 | 参数 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| 1 | uid | number | 玩家 UID |
+
 ### OnRepCardData
 
 【客户端】接收到来自服务端的卡牌数据更新时触发。

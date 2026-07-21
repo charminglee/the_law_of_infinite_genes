@@ -19,25 +19,15 @@ local function _SetDamageTag(extraResult, tag)
 end
 
 
-local function _ApplyHealthSteal(instigator, victim, damage, healthStealPct)
-    healthStealPct = Lib.Math.Clamp(healthStealPct, 0, 1)
-    if healthStealPct <= 0 or damage <= 0 then
-        return
-    end
-
-    local victimHealth = UGCAttributeSystem.GetGameAttributeValue(victim, UGCNativeGameAttributeType.Character_Health)
-    local recoverableDamage = math.min(damage, math.max(0, victimHealth))
-    local recoveredHealth = recoverableDamage * healthStealPct
+local function _ApplyHealthSteal(instigator, damage, healthStealPct)
+    local recoveredHealth = damage * healthStealPct
     if recoveredHealth <= 0 then
         return
     end
-
-    local currentHealth = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCNativeGameAttributeType.Character_Health)
+    local currHealth = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCNativeGameAttributeType.Character_Health)
     local maxHealth = UGCAttributeSystem.GetGameAttributeValue(instigator, UGCNativeGameAttributeType.Character_HealthMax)
-    local newHealth = math.min(maxHealth, currentHealth + recoveredHealth)
-    if newHealth > currentHealth then
-        UGCAttributeSystem.SetGameAttributeValue(instigator, UGCNativeGameAttributeType.Character_Health, newHealth)
-    end
+    local newHealth = math.min(maxHealth, currHealth + recoveredHealth)
+    UGCAttributeSystem.SetGameAttributeValue(instigator, UGCNativeGameAttributeType.Character_Health, newHealth)
 end
 
 
@@ -116,7 +106,7 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     finalDamage = math.max(1, finalDamage)
 
     -- 吸血
-    _ApplyHealthSteal(instigator, victim, finalDamage, healthStealPct)
+    _ApplyHealthSteal(instigator, finalDamage, healthStealPct)
     
     -- 反伤
     local counterDamage = finalDamage * counterAttackPct

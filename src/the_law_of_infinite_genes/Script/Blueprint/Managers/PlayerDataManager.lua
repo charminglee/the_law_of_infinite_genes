@@ -282,6 +282,7 @@ function PlayerDataManager:ResetCardData()
         refreshCount = 0,
     }
     UnrealNetwork.RepLazyProperty(self, "_card")
+    Lib.EventSystem.Broadcast(ServerEvent.OnResetCardData, self.owner.UID)
 end
 
 

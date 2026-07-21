@@ -311,6 +311,12 @@ UGCCustomGameAttributeType = {
 	UGCAttributeGroup_Character_ReloadTimePct = 'ReloadTimePct',
 	--Character [射速百分比-ShootSpeedScale],
 	UGCAttributeGroup_Character_ShootSpeedScale = 'ShootSpeedScale',
+	--Character [基础最大血量-_HealthMax],
+	UGCAttributeGroup_Character__HealthMax = '_HealthMax',
+	--Character [最大血量百分比-HealthMaxPct],
+	UGCAttributeGroup_Character_HealthMaxPct = 'HealthMaxPct',
+	--Character [换弹时间-ReloadTime],
+	UGCAttributeGroup_Character_ReloadTime = 'ReloadTime',
 }; 
 
 UGCCustomGameAttributeTypeCommentMap = { 
@@ -336,5 +342,8 @@ UGCCustomGameAttributeTypeCommentMap = {
 	['RecoilPct'] = 'Character [后坐力百分比-RecoilPct]', 
 	['ReloadTimePct'] = 'Character [换弹时间百分比-ReloadTimePct]', 
 	['ShootSpeedScale'] = 'Character [射速百分比-ShootSpeedScale]', 
+	['_HealthMax'] = 'Character [基础最大血量-_HealthMax]', 
+	['HealthMaxPct'] = 'Character [最大血量百分比-HealthMaxPct]', 
+	['ReloadTime'] = 'Character [换弹时间-ReloadTime]', 
 }; 
 

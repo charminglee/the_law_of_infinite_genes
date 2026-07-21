@@ -55,22 +55,22 @@ Card.Suit = {
         Group = 1,
         Combo = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.08},
-                {property = Attribute.CritChance, value=0.04},
+                {property = Attribute.AttackPowerPct, value = 0.08},
+                {property = Attribute.CritChance, value = 0.04},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.16},
-                {property = Attribute.CritChance, value=0.08},
-                {property = Attribute.CritDamagePct, value=0.15},
+                {property = Attribute.AttackPowerPct, value = 0.16},
+                {property = Attribute.CritChance, value = 0.08},
+                {property = Attribute.CritDamagePct, value = 0.15},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.3},
-                {property = Attribute.CritChance, value=0.12},
-                {property = Attribute.CritDamagePct, value=0.3},
-                {property = Attribute.HealthStealPct, value=0.01}
+                {property = Attribute.AttackPowerPct, value = 0.3},
+                {property = Attribute.CritChance, value = 0.12},
+                {property = Attribute.CritDamagePct, value = 0.3},
+                {property = Attribute.HealthStealPct, value = 0.01}
             },
             [4] = {
-                {property = Attribute.SeckillChance, value=0.01}
+                {property = Attribute.SeckillChance, value = 0.01}
             }
         }
     },
@@ -78,20 +78,20 @@ Card.Suit = {
         Group = 2,
         Combo = {
             [1] = {
-                {property = Attribute.HealthMaxBoost, value=0.05},
-                {property = Attribute.DamageDecreacePct, value=0.05},
+                {property = Attribute.HealthMaxPct, value = 0.05},
+                {property = Attribute.DamageDecreacePct, value = 0.05},
             },
             [2] = {
-                {property = Attribute.HealthMaxBoost, value=0.10},
-                {property = Attribute.DamageDecreacePct, value=0.10},
+                {property = Attribute.HealthMaxPct, value = 0.10},
+                {property = Attribute.DamageDecreacePct, value = 0.10},
             },
             [3] = {
-                {property = Attribute.HealthMaxBoost, value=0.20},
-                {property = Attribute.DamageDecreacePct, value=0.20},
-                {property = Attribute.DodgeChance, value=0.01}
+                {property = Attribute.HealthMaxPct, value = 0.20},
+                {property = Attribute.DamageDecreacePct, value = 0.20},
+                {property = Attribute.DodgeChance, value = 0.01}
             },
             [4] = {
-                {property = Attribute.DodgeChance, value=0.10}
+                {property = Attribute.DodgeChance, value = 0.10}
             }
         }
     },
@@ -99,18 +99,18 @@ Card.Suit = {
         Group = 3,
         Combo = {
             [1] = {
-                {property = Attribute.EpidemicToxinRatio, value=0.10},
-                {property = Attribute.EpidemicToxinLevel, value=2},
+                {property = Attribute.EpidemicToxinRatio, value = 0.10},
+                {property = Attribute.EpidemicToxinLevel, value = 2},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinRatio, value=0.20},
-                {property = Attribute.EpidemicToxinLevel, value=5},
+                {property = Attribute.EpidemicToxinRatio, value = 0.20},
+                {property = Attribute.EpidemicToxinLevel, value = 5},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinSettleRatio, value=0.01}
+                {property = Attribute.EpidemicToxinSettleRatio, value = 0.01}
             },
             [4] = {
-                {property = Attribute.EpidemicToxinSettleRatio, value=0.05}
+                {property = Attribute.EpidemicToxinSettleRatio, value = 0.05}
             }
         }
     },
@@ -118,21 +118,21 @@ Card.Suit = {
         Group = 4,
         Combo = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value=0.10},
-                {property = Attribute.MoveSpeedScale, value=0.05},
+                {property = Attribute.BurstShootCDWrapper, value = 0.10},
+                {property = Attribute.MoveSpeedScale, value = 0.05},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value=0.20},
-                {property = Attribute.MoveSpeedScale, value=0.10},
-                {property = Attribute.ReloadTime, value=0.15},
+                {property = Attribute.BurstShootCDWrapper, value = 0.20},
+                {property = Attribute.MoveSpeedScale, value = 0.10},
+                {property = Attribute.ReloadTime, value = 0.15},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value=0.30},
-                {property = Attribute.MoveSpeedScale, value=0.20},
-                {property = Attribute.ReloadTime, value=0.25},
+                {property = Attribute.BurstShootCDWrapper, value = 0.30},
+                {property = Attribute.MoveSpeedScale, value = 0.20},
+                {property = Attribute.ReloadTime, value = 0.25},
             },
             [4] = {
-                {property = Attribute.InfiniteAmmo, value=1}
+                {property = Attribute.InfiniteAmmo, value = 1}
             }
         }
     }
@@ -148,16 +148,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_14.Icon_Skill_14',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.005},
-                {property = Attribute.NormalMonsterDamagePct, value=0.015},
+                {property = Attribute.AttackPowerPct, value = 0.005},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.015},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.01},
-                {property = Attribute.NormalMonsterDamagePct, value=0.03},
+                {property = Attribute.AttackPowerPct, value = 0.01},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.03},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.NormalMonsterDamagePct, value=0.05},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.05},
             }
         }
     },
@@ -169,16 +169,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_99.Icon_Skill_99',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.005},
-                {property = Attribute.CritDamagePct, value=0.01},
+                {property = Attribute.AttackPowerPct, value = 0.005},
+                {property = Attribute.CritDamagePct, value = 0.01},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.01},
-                {property = Attribute.CritDamagePct, value=0.02},
+                {property = Attribute.AttackPowerPct, value = 0.01},
+                {property = Attribute.CritDamagePct, value = 0.02},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.CritDamagePct, value=0.03},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.CritDamagePct, value = 0.03},
             },
         }
     },
@@ -190,16 +190,16 @@ Card.Cards = {
         texture = '/Game/Mod/EscapeLobby/Arts_UI/TableIcons/Talent/Escape_Talent_icon_LiRen.Escape_Talent_icon_LiRen',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.005},
-                {property = Attribute.CritChance, value=0.005},
+                {property = Attribute.AttackPowerPct, value = 0.005},
+                {property = Attribute.CritChance, value = 0.005},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.01},
-                {property = Attribute.CritChance, value=0.01},
+                {property = Attribute.AttackPowerPct, value = 0.01},
+                {property = Attribute.CritChance, value = 0.01},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.CritChance, value=0.02},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.CritChance, value = 0.02},
             },
         }
     },
@@ -211,16 +211,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_117.Icon_Skill_117',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.005},
-                {property = Attribute.EliteMonsterDamagePct, value=0.015},
+                {property = Attribute.AttackPowerPct, value = 0.005},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.015},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.01},
-                {property = Attribute.EliteMonsterDamagePct, value=0.03},
+                {property = Attribute.AttackPowerPct, value = 0.01},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.03},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.EliteMonsterDamagePct, value=0.05},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.05},
             },
         }
     },
@@ -232,19 +232,19 @@ Card.Cards = {
         texture = '/Game/Mod/EscapeLobby/Arts_UI/TableIcons/Talent/Escape_Talent_icon_XiJia.Escape_Talent_icon_XiJia',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.01},
-                {property = Attribute.CritDamagePct, value=0.02},
-                {property = Attribute.CritChance, value=0.01},
+                {property = Attribute.AttackPowerPct, value = 0.01},
+                {property = Attribute.CritDamagePct, value = 0.02},
+                {property = Attribute.CritChance, value = 0.01},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.CritDamagePct, value=0.03},
-                {property = Attribute.CritChance, value=0.02},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.CritDamagePct, value = 0.03},
+                {property = Attribute.CritChance, value = 0.02},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.04},
-                {property = Attribute.CritDamagePct, value=0.05},
-                {property = Attribute.CritChance, value=0.03},
+                {property = Attribute.AttackPowerPct, value = 0.04},
+                {property = Attribute.CritDamagePct, value = 0.05},
+                {property = Attribute.CritChance, value = 0.03},
             },
         }
     },
@@ -256,16 +256,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_8.Icon_Skill_8',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.01},
-                {property = Attribute.EliteMonsterDamagePct, value=0.025},
+                {property = Attribute.AttackPowerPct, value = 0.01},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.025},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.EliteMonsterDamagePct, value=0.05},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.05},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.04},
-                {property = Attribute.EliteMonsterDamagePct, value=0.1},
+                {property = Attribute.AttackPowerPct, value = 0.04},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.1},
             },
         }
     },
@@ -277,16 +277,16 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG029_SP_JobCyberSpider_0.CG029_SP_JobCyberSpider_0',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.01},
-                {property = Attribute.NormalMonsterDamagePct, value=0.025},
+                {property = Attribute.AttackPowerPct, value = 0.01},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.025},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.NormalMonsterDamagePct, value=0.06},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.06},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.04},
-                {property = Attribute.NormalMonsterDamagePct, value=0.1},
+                {property = Attribute.AttackPowerPct, value = 0.04},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.1},
             },
         }
     },
@@ -298,19 +298,19 @@ Card.Cards = {
         texture = '/Game/Arts/UI/TableIcons/ProfessionResult_Icon/MS_Icon_jidonbing.MS_Icon_jidonbing',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.CritChance, value=0.02},
-                {property = Attribute.NormalMonsterDamagePct, value=0.05},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.CritChance, value = 0.02},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.05},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.04},
-                {property = Attribute.CritChance, value=0.03},
-                {property = Attribute.NormalMonsterDamagePct, value=0.1},
+                {property = Attribute.AttackPowerPct, value = 0.04},
+                {property = Attribute.CritChance, value = 0.03},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.1},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.08},
-                {property = Attribute.CritChance, value=0.04},
-                {property = Attribute.NormalMonsterDamagePct, value=0.2},
+                {property = Attribute.AttackPowerPct, value = 0.08},
+                {property = Attribute.CritChance, value = 0.04},
+                {property = Attribute.NormalMonsterDamagePct, value = 0.2},
             },
         }
     },
@@ -322,19 +322,19 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG025_SP_Dragn_1.CG025_SP_Dragn_1',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.02},
-                {property = Attribute.CritDamagePct, value=0.03},
-                {property = Attribute.EliteMonsterDamagePct, value=0.05},
+                {property = Attribute.AttackPowerPct, value = 0.02},
+                {property = Attribute.CritDamagePct, value = 0.03},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.05},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.04},
-                {property = Attribute.CritDamagePct, value=0.04},
-                {property = Attribute.EliteMonsterDamagePct, value=0.1},
+                {property = Attribute.AttackPowerPct, value = 0.04},
+                {property = Attribute.CritDamagePct, value = 0.04},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.1},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.08},
-                {property = Attribute.CritDamagePct, value=0.07},
-                {property = Attribute.EliteMonsterDamagePct, value=0.2},
+                {property = Attribute.AttackPowerPct, value = 0.08},
+                {property = Attribute.CritDamagePct, value = 0.07},
+                {property = Attribute.EliteMonsterDamagePct, value = 0.2},
             },
         }
     },
@@ -346,19 +346,19 @@ Card.Cards = {
         texture = '/Game/Arts/UI/TableIcons/ProfessionResult_Icon/ProfessionSkill_Icon/tuji_kuangre2.tuji_kuangre2',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.04},
-                {property = Attribute.BossDamagePct, value=0.05},
-                {property = Attribute.BreakDefencePct, value=0.03},
+                {property = Attribute.AttackPowerPct, value = 0.04},
+                {property = Attribute.BossDamagePct, value = 0.05},
+                {property = Attribute.BreakDefencePct, value = 0.03},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.08},
-                {property = Attribute.BossDamagePct, value=0.1},
-                {property = Attribute.BreakDefencePct, value=0.06},
+                {property = Attribute.AttackPowerPct, value = 0.08},
+                {property = Attribute.BossDamagePct, value = 0.1},
+                {property = Attribute.BreakDefencePct, value = 0.06},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.16},
-                {property = Attribute.BossDamagePct, value=0.2},
-                {property = Attribute.BreakDefencePct, value=0.1},
+                {property = Attribute.AttackPowerPct, value = 0.16},
+                {property = Attribute.BossDamagePct, value = 0.2},
+                {property = Attribute.BreakDefencePct, value = 0.1},
             },
         }
     },
@@ -370,19 +370,19 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobLightning_3.CG020_SP_JobLightning_3',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.04},
-                {property = Attribute.CritChance, value=0.03},
-                {property = Attribute.CritDamagePct, value=0.04},
+                {property = Attribute.AttackPowerPct, value = 0.04},
+                {property = Attribute.CritChance, value = 0.03},
+                {property = Attribute.CritDamagePct, value = 0.04},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.08},
-                {property = Attribute.CritChance, value=0.04},
-                {property = Attribute.CritDamagePct, value=0.06},
+                {property = Attribute.AttackPowerPct, value = 0.08},
+                {property = Attribute.CritChance, value = 0.04},
+                {property = Attribute.CritDamagePct, value = 0.06},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.16},
-                {property = Attribute.CritChance, value=0.07},
-                {property = Attribute.CritDamagePct, value=0.1},
+                {property = Attribute.AttackPowerPct, value = 0.16},
+                {property = Attribute.CritChance, value = 0.07},
+                {property = Attribute.CritDamagePct, value = 0.1},
             },
         }
     },
@@ -394,25 +394,25 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG028_SP_JobGunman_3.CG028_SP_JobGunman_3',
         bonus = {
             [1] = {
-                {property = Attribute.AttackPowerPct, value=0.08},
-                {property = Attribute.CritChance, value=0.04},
-                {property = Attribute.BossDamagePct, value=0.1},
-                {property = Attribute.CritDamagePct, value=0.05},
-                {property = Attribute.BreakDefencePct, value=0.05},
+                {property = Attribute.AttackPowerPct, value = 0.08},
+                {property = Attribute.CritChance, value = 0.04},
+                {property = Attribute.BossDamagePct, value = 0.1},
+                {property = Attribute.CritDamagePct, value = 0.05},
+                {property = Attribute.BreakDefencePct, value = 0.05},
             },
             [2] = {
-                {property = Attribute.AttackPowerPct, value=0.16},
-                {property = Attribute.CritChance, value=0.06},
-                {property = Attribute.BossDamagePct, value=0.15},
-                {property = Attribute.CritDamagePct, value=0.1},
-                {property = Attribute.BreakDefencePct, value=0.1},
+                {property = Attribute.AttackPowerPct, value = 0.16},
+                {property = Attribute.CritChance, value = 0.06},
+                {property = Attribute.BossDamagePct, value = 0.15},
+                {property = Attribute.CritDamagePct, value = 0.1},
+                {property = Attribute.BreakDefencePct, value = 0.1},
             },
             [3] = {
-                {property = Attribute.AttackPowerPct, value=0.82},
-                {property = Attribute.CritChance, value=0.2},
-                {property = Attribute.BossDamagePct, value=0.3},
-                {property = Attribute.CritDamagePct, value=0.2},
-                {property = Attribute.BreakDefencePct, value=0.2},
+                {property = Attribute.AttackPowerPct, value = 0.82},
+                {property = Attribute.CritChance, value = 0.2},
+                {property = Attribute.BossDamagePct, value = 0.3},
+                {property = Attribute.CritDamagePct, value = 0.2},
+                {property = Attribute.BreakDefencePct, value = 0.2},
             },
         }
     },
@@ -424,13 +424,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_12.Icon_Skill_12',
         bonus = {
             [1] = {
-                {property = Attribute.HealthMaxBoost, value=0.005},
+                {property = Attribute.HealthMaxPct, value = 0.005},
             },
             [2] = {
-                {property = Attribute.HealthMaxBoost, value=0.01},
+                {property = Attribute.HealthMaxPct, value = 0.01},
             },
             [3] = {
-                {property = Attribute.HealthMaxBoost, value=0.02},
+                {property = Attribute.HealthMaxPct, value = 0.02},
             },
         }
     },
@@ -442,13 +442,13 @@ Card.Cards = {
         texture = '/Game/Mod/EscapeLobby/Arts_UI/TableIcons/Talent/Escape_Talent_icon_GuiKe.Escape_Talent_icon_GuiKe',
         bonus = {
             [1] = {
-                {property = Attribute.DefensePct, value=0.005},
+                {property = Attribute.DefensePct, value = 0.005},
             },
             [2] = {
-                {property = Attribute.DefensePct, value=0.01},
+                {property = Attribute.DefensePct, value = 0.01},
             },
             [3] = {
-                {property = Attribute.DefensePct, value=0.02},
+                {property = Attribute.DefensePct, value = 0.02},
             },
         }
     },
@@ -460,16 +460,16 @@ Card.Cards = {
         texture = '/Game/Mod/EscapeLobby/Arts_UI/TableIcons/Talent/Escape_Talent_icon_RenXing.Escape_Talent_icon_RenXing',
         bonus = {
             [1] = {
-                {property = Attribute.HealthMaxBoost, value=0.0025},
-                {property = Attribute.DefensePct, value=0.0025},
+                {property = Attribute.HealthMaxPct, value = 0.0025},
+                {property = Attribute.DefensePct, value = 0.0025},
             },
             [2] = {
-                {property = Attribute.HealthMaxBoost, value=0.005},
-                {property = Attribute.DefensePct, value=0.005},
+                {property = Attribute.HealthMaxPct, value = 0.005},
+                {property = Attribute.DefensePct, value = 0.005},
             },
             [3] = {
-                {property = Attribute.HealthMaxBoost, value=0.01},
-                {property = Attribute.DefensePct, value=0.01},
+                {property = Attribute.HealthMaxPct, value = 0.01},
+                {property = Attribute.DefensePct, value = 0.01},
             },
         }
     },
@@ -481,13 +481,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_34.Icon_Skill_34',
         bonus = {
             [1] = {
-                {property = Attribute.DamageDecreacePct, value=0.0025},
+                {property = Attribute.DamageDecreacePct, value = 0.0025},
             },
             [2] = {
-                {property = Attribute.DamageDecreacePct, value=0.005},
+                {property = Attribute.DamageDecreacePct, value = 0.005},
             },
             [3] = {
-                {property = Attribute.DamageDecreacePct, value=0.01},
+                {property = Attribute.DamageDecreacePct, value = 0.01},
             },
         }
     },
@@ -499,13 +499,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_74.Icon_Skill_74',
         bonus = {
             [1] = {
-                {property = Attribute.HealthMaxBoost, value=0.01},
+                {property = Attribute.HealthMaxPct, value = 0.01},
             },
             [2] = {
-                {property = Attribute.HealthMaxBoost, value=0.02},
+                {property = Attribute.HealthMaxPct, value = 0.02},
             },
             [3] = {
-                {property = Attribute.HealthMaxBoost, value=0.04},
+                {property = Attribute.HealthMaxPct, value = 0.04},
             },
         }
     },
@@ -517,13 +517,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_59.Icon_Skill_59',
         bonus = {
             [1] = {
-                {property = Attribute.DefensePct, value=0.01},
+                {property = Attribute.DefensePct, value = 0.01},
             },
             [2] = {
-                {property = Attribute.DefensePct, value=0.02},
+                {property = Attribute.DefensePct, value = 0.02},
             },
             [3] = {
-                {property = Attribute.DefensePct, value=0.04},
+                {property = Attribute.DefensePct, value = 0.04},
             },
         }
     },
@@ -535,13 +535,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_30.Icon_Skill_30',
         bonus = {
             [1] = {
-                {property = Attribute.DamageDecreacePct, value=0.005},
+                {property = Attribute.DamageDecreacePct, value = 0.005},
             },
             [2] = {
-                {property = Attribute.DamageDecreacePct, value=0.01},
+                {property = Attribute.DamageDecreacePct, value = 0.01},
             },
             [3] = {
-                {property = Attribute.DamageDecreacePct, value=0.02},
+                {property = Attribute.DamageDecreacePct, value = 0.02},
             },
         }
     },
@@ -553,16 +553,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_28.Icon_Skill_28',
         bonus = {
             [1] = {
-                {property = Attribute.HealthMaxBoost, value=0.02},
-                {property = Attribute.DamageDecreacePct, value=0.01},
+                {property = Attribute.HealthMaxPct, value = 0.02},
+                {property = Attribute.DamageDecreacePct, value = 0.01},
             },
             [2] = {
-                {property = Attribute.HealthMaxBoost, value=0.03},
-                {property = Attribute.DamageDecreacePct, value=0.015},
+                {property = Attribute.HealthMaxPct, value = 0.03},
+                {property = Attribute.DamageDecreacePct, value = 0.015},
             },
             [3] = {
-                {property = Attribute.HealthMaxBoost, value=0.06},
-                {property = Attribute.DamageDecreacePct, value=0.03},
+                {property = Attribute.HealthMaxPct, value = 0.06},
+                {property = Attribute.DamageDecreacePct, value = 0.03},
             },
         }
     },
@@ -574,16 +574,16 @@ Card.Cards = {
         texture = '/Game/Arts/UI/TableIcons/ProfessionResult_Icon/ProfessionSkill_Icon/houqing_zhizaofangju.houqing_zhizaofangju',
         bonus = {
             [1] = {
-                {property = Attribute.DefensePct, value=0.02},
-                {property = Attribute.DamageDecreacePct, value=0.01},
+                {property = Attribute.DefensePct, value = 0.02},
+                {property = Attribute.DamageDecreacePct, value = 0.01},
             },
             [2] = {
-                {property = Attribute.DefensePct, value=0.03},
-                {property = Attribute.DamageDecreacePct, value=0.015},
+                {property = Attribute.DefensePct, value = 0.03},
+                {property = Attribute.DamageDecreacePct, value = 0.015},
             },
             [3] = {
-                {property = Attribute.DefensePct, value=0.06},
-                {property = Attribute.DamageDecreacePct, value=0.03},
+                {property = Attribute.DefensePct, value = 0.06},
+                {property = Attribute.DamageDecreacePct, value = 0.03},
             },
         }
     },
@@ -595,16 +595,16 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobCommander_1.CG020_SP_JobCommander_1',
         bonus = {
             [1] = {
-                {property = Attribute.HealthMaxBoost, value=0.025},
-                {property = Attribute.DamageDecreacePct, value=0.015},
+                {property = Attribute.HealthMaxPct, value = 0.025},
+                {property = Attribute.DamageDecreacePct, value = 0.015},
             },
             [2] = {
-                {property = Attribute.HealthMaxBoost, value=0.05},
-                {property = Attribute.DamageDecreacePct, value=0.03},
+                {property = Attribute.HealthMaxPct, value = 0.05},
+                {property = Attribute.DamageDecreacePct, value = 0.03},
             },
             [3] = {
-                {property = Attribute.HealthMaxBoost, value=0.1},
-                {property = Attribute.DamageDecreacePct, value=0.05},
+                {property = Attribute.HealthMaxPct, value = 0.1},
+                {property = Attribute.DamageDecreacePct, value = 0.05},
             },
         }
     },
@@ -616,16 +616,16 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobBeltway_3.CG020_SP_JobBeltway_3',
         bonus = {
             [1] = {
-                {property = Attribute.DefensePct, value=0.025},
-                {property = Attribute.DamageDecreacePct, value=0.015},
+                {property = Attribute.DefensePct, value = 0.025},
+                {property = Attribute.DamageDecreacePct, value = 0.015},
             },
             [2] = {
-                {property = Attribute.DefensePct, value=0.05},
-                {property = Attribute.DamageDecreacePct, value=0.03},
+                {property = Attribute.DefensePct, value = 0.05},
+                {property = Attribute.DamageDecreacePct, value = 0.03},
             },
             [3] = {
-                {property = Attribute.DefensePct, value=0.1},
-                {property = Attribute.DamageDecreacePct, value=0.05},
+                {property = Attribute.DefensePct, value = 0.1},
+                {property = Attribute.DamageDecreacePct, value = 0.05},
             },
         }
     },
@@ -637,19 +637,19 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG032_SP_JobDriver_2.CG032_SP_JobDriver_2',
         bonus = {
             [1] = {
-                {property = Attribute.HealthMaxBoost, value=0.04},
-                {property = Attribute.DefensePct, value=0.04},
-                {property = Attribute.DamageDecreacePct, value=0.025},
+                {property = Attribute.HealthMaxPct, value = 0.04},
+                {property = Attribute.DefensePct, value = 0.04},
+                {property = Attribute.DamageDecreacePct, value = 0.025},
             },
             [2] = {
-                {property = Attribute.HealthMaxBoost, value=0.08},
-                {property = Attribute.DefensePct, value=0.08},
-                {property = Attribute.DamageDecreacePct, value=0.05},
+                {property = Attribute.HealthMaxPct, value = 0.08},
+                {property = Attribute.DefensePct, value = 0.08},
+                {property = Attribute.DamageDecreacePct, value = 0.05},
             },
             [3] = {
-                {property = Attribute.HealthMaxBoost, value=0.2},
-                {property = Attribute.DefensePct, value=0.2},
-                {property = Attribute.DamageDecreacePct, value=0.2},
+                {property = Attribute.HealthMaxPct, value = 0.2},
+                {property = Attribute.DefensePct, value = 0.2},
+                {property = Attribute.DamageDecreacePct, value = 0.2},
             },
         }
     },
@@ -661,13 +661,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_18.Icon_Skill_18',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinRatio, value=0.01},
+                {property = Attribute.EpidemicToxinRatio, value = 0.01},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinRatio, value=0.02},
+                {property = Attribute.EpidemicToxinRatio, value = 0.02},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinRatio, value=0.04},
+                {property = Attribute.EpidemicToxinRatio, value = 0.04},
             },
         }
     },
@@ -679,13 +679,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_21.Icon_Skill_21',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinLevel, value=1},
+                {property = Attribute.EpidemicToxinLevel, value = 1},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinLevel, value=2},
+                {property = Attribute.EpidemicToxinLevel, value = 2},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinLevel, value=3},
+                {property = Attribute.EpidemicToxinLevel, value = 3},
             },
         }
     },
@@ -697,13 +697,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_29.Icon_Skill_29',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=1},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 1},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=2},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 2},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=3},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 3},
             },
         }
     },
@@ -715,13 +715,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_16.Icon_Skill_16',
         bonus = {
             [1] = {
-                {property = Attribute.DefensePct, value=0.005},
+                {property = Attribute.DefensePct, value = 0.005},
             },
             [2] = {
-                {property = Attribute.DefensePct, value=0.01},
+                {property = Attribute.DefensePct, value = 0.01},
             },
             [3] = {
-                {property = Attribute.DefensePct, value=0.02},
+                {property = Attribute.DefensePct, value = 0.02},
             },
         }
     },
@@ -733,13 +733,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_61.Icon_Skill_61',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinLevel, value=2},
+                {property = Attribute.EpidemicToxinLevel, value = 2},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinLevel, value=4},
+                {property = Attribute.EpidemicToxinLevel, value = 4},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinLevel, value=6},
+                {property = Attribute.EpidemicToxinLevel, value = 6},
             },
         }
     },
@@ -751,13 +751,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_82.Icon_Skill_82',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinRatio, value=0.015},
+                {property = Attribute.EpidemicToxinRatio, value = 0.015},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinRatio, value=0.03},
+                {property = Attribute.EpidemicToxinRatio, value = 0.03},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinRatio, value=0.06},
+                {property = Attribute.EpidemicToxinRatio, value = 0.06},
             },
         }
     },
@@ -769,13 +769,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_58.Icon_Skill_58',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=2},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 2},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=4},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 4},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=6},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 6},
             },
         }
     },
@@ -787,16 +787,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_62.Icon_Skill_62',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=3},
-                {property = Attribute.EpidemicToxinRatio, value=0.02},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 3},
+                {property = Attribute.EpidemicToxinRatio, value = 0.02},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=6},
-                {property = Attribute.EpidemicToxinRatio, value=0.04},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 6},
+                {property = Attribute.EpidemicToxinRatio, value = 0.04},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=9},
-                {property = Attribute.EpidemicToxinRatio, value=0.08},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 9},
+                {property = Attribute.EpidemicToxinRatio, value = 0.08},
             },
         }
     },
@@ -808,16 +808,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_45.Icon_Skill_45',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinLevel, value=3},
-                {property = Attribute.EpidemicToxinRatio, value=0.02},
+                {property = Attribute.EpidemicToxinLevel, value = 3},
+                {property = Attribute.EpidemicToxinRatio, value = 0.02},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinLevel, value=6},
-                {property = Attribute.EpidemicToxinRatio, value=0.04},
+                {property = Attribute.EpidemicToxinLevel, value = 6},
+                {property = Attribute.EpidemicToxinRatio, value = 0.04},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinLevel, value=9},
-                {property = Attribute.EpidemicToxinRatio, value=0.08},
+                {property = Attribute.EpidemicToxinLevel, value = 9},
+                {property = Attribute.EpidemicToxinRatio, value = 0.08},
             },
         }
     },
@@ -829,16 +829,16 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG029_SP_JobCyberSpider_2.CG029_SP_JobCyberSpider_2',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=4},
-                {property = Attribute.EpidemicToxinRatio, value=0.03},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 4},
+                {property = Attribute.EpidemicToxinRatio, value = 0.03},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=8},
-                {property = Attribute.EpidemicToxinRatio, value=0.06},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 8},
+                {property = Attribute.EpidemicToxinRatio, value = 0.06},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinOverlyLimit, value=15},
-                {property = Attribute.EpidemicToxinRatio, value=0.12},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 15},
+                {property = Attribute.EpidemicToxinRatio, value = 0.12},
             },
         }
     },
@@ -850,16 +850,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_86.Icon_Skill_86',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinLevel, value=4},
-                {property = Attribute.EpidemicToxinRatio, value=0.03},
+                {property = Attribute.EpidemicToxinLevel, value = 4},
+                {property = Attribute.EpidemicToxinRatio, value = 0.03},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinLevel, value=8},
-                {property = Attribute.EpidemicToxinRatio, value=0.06},
+                {property = Attribute.EpidemicToxinLevel, value = 8},
+                {property = Attribute.EpidemicToxinRatio, value = 0.06},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinLevel, value=15},
-                {property = Attribute.EpidemicToxinRatio, value=0.12},
+                {property = Attribute.EpidemicToxinLevel, value = 15},
+                {property = Attribute.EpidemicToxinRatio, value = 0.12},
             },
         }
     },
@@ -871,17 +871,17 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG029_SP_JobCyberSpider_1.CG029_SP_JobCyberSpider_1',
         bonus = {
             [1] = {
-                {property = Attribute.EpidemicToxinLevel, value=5},
-                {property = Attribute.EpidemicToxinOverlyLimit, value=5},
+                {property = Attribute.EpidemicToxinLevel, value = 5},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 5},
             },
             [2] = {
-                {property = Attribute.EpidemicToxinLevel, value=10},
-                {property = Attribute.EpidemicToxinOverlyLimit, value=10},
+                {property = Attribute.EpidemicToxinLevel, value = 10},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 10},
             },
             [3] = {
-                {property = Attribute.EpidemicToxinLevel, value=20},
-                {property = Attribute.EpidemicToxinOverlyLimit, value=20},
-                {property = Attribute.EpidemicToxinSettleRatio, value=0.01},
+                {property = Attribute.EpidemicToxinLevel, value = 20},
+                {property = Attribute.EpidemicToxinOverlyLimit, value = 20},
+                {property = Attribute.EpidemicToxinSettleRatio, value = 0.01},
             },
         }
     },
@@ -893,13 +893,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_49.Icon_Skill_49',
         bonus = {
             [1] = {
-                {property = Attribute.MoveSpeedScale, value=0.005},
+                {property = Attribute.MoveSpeedScale, value = 0.005},
             },
             [2] = {
-                {property = Attribute.MoveSpeedScale, value=0.01},
+                {property = Attribute.MoveSpeedScale, value = 0.01},
             },
             [3] = {
-                {property = Attribute.MoveSpeedScale, value=0.02},
+                {property = Attribute.MoveSpeedScale, value = 0.02},
             },
         }
     },
@@ -911,13 +911,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_41.Icon_Skill_41',
         bonus = {
             [1] = {
-                {property = Attribute.ReloadTime, value=-0.01},
+                {property = Attribute.ReloadTime, value = -0.01},
             },
             [2] = {
-                {property = Attribute.ReloadTime, value=-0.02},
+                {property = Attribute.ReloadTime, value = -0.02},
             },
             [3] = {
-                {property = Attribute.ReloadTime, value=-0.04},
+                {property = Attribute.ReloadTime, value = -0.04},
             },
         }
     },
@@ -929,13 +929,13 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobRocket_3.CG020_SP_JobRocket_3',
         bonus = {
             [1] = {
-                {property = Attribute.DodgeChance, value=0.01},
+                {property = Attribute.DodgeChance, value = 0.01},
             },
             [2] = {
-                {property = Attribute.DodgeChance, value=0.02},
+                {property = Attribute.DodgeChance, value = 0.02},
             },
             [3] = {
-                {property = Attribute.DodgeChance, value=0.04},
+                {property = Attribute.DodgeChance, value = 0.04},
             },
         }
     },
@@ -947,13 +947,13 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobLightning_1.CG020_SP_JobLightning_1',
         bonus = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.01},
+                {property = Attribute.BurstShootCDWrapper, value = -0.01},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.02},
+                {property = Attribute.BurstShootCDWrapper, value = -0.02},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.04},
+                {property = Attribute.BurstShootCDWrapper, value = -0.04},
             },
         }
     },
@@ -965,13 +965,13 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_38.Icon_Skill_38',
         bonus = {
             [1] = {
-                {property = Attribute.MoveSpeedScale, value=0.015},
+                {property = Attribute.MoveSpeedScale, value = 0.015},
             },
             [2] = {
-                {property = Attribute.MoveSpeedScale, value=0.03},
+                {property = Attribute.MoveSpeedScale, value = 0.03},
             },
             [3] = {
-                {property = Attribute.MoveSpeedScale, value=0.06},
+                {property = Attribute.MoveSpeedScale, value = 0.06},
             },
         }
     },
@@ -983,13 +983,13 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobLightning_2.CG020_SP_JobLightning_2',
         bonus = {
             [1] = {
-                {property = Attribute.DodgeChance, value=0.015},
+                {property = Attribute.DodgeChance, value = 0.015},
             },
             [2] = {
-                {property = Attribute.DodgeChance, value=0.03},
+                {property = Attribute.DodgeChance, value = 0.03},
             },
             [3] = {
-                {property = Attribute.DodgeChance, value=0.06},
+                {property = Attribute.DodgeChance, value = 0.06},
             },
         }
     },
@@ -1001,13 +1001,13 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobLightning_1.CG020_SP_JobLightning_1',
         bonus = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value=0.015},
+                {property = Attribute.BurstShootCDWrapper, value = 0.015},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.03},
+                {property = Attribute.BurstShootCDWrapper, value = -0.03},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.06},
+                {property = Attribute.BurstShootCDWrapper, value = -0.06},
             },
         }
     },
@@ -1019,16 +1019,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_82.Icon_Skill_82',
         bonus = {
             [1] = {
-                {property = Attribute.MoveSpeedScale, value=0.025},
-                {property = Attribute.DodgeChance, value=0.025},
+                {property = Attribute.MoveSpeedScale, value = 0.025},
+                {property = Attribute.DodgeChance, value = 0.025},
             },
             [2] = {
-                {property = Attribute.MoveSpeedScale, value=0.05},
-                {property = Attribute.DodgeChance, value=0.05},
+                {property = Attribute.MoveSpeedScale, value = 0.05},
+                {property = Attribute.DodgeChance, value = 0.05},
             },
             [3] = {
-                {property = Attribute.MoveSpeedScale, value=0.1},
-                {property = Attribute.DodgeChance, value=0.1},
+                {property = Attribute.MoveSpeedScale, value = 0.1},
+                {property = Attribute.DodgeChance, value = 0.1},
             },
         }
     },
@@ -1040,16 +1040,16 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG029_SP_JobCyberSpider_3.CG029_SP_JobCyberSpider_3',
         bonus = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.025},
-                {property = Attribute.ReloadTime, value=-0.025},
+                {property = Attribute.BurstShootCDWrapper, value = -0.025},
+                {property = Attribute.ReloadTime, value = -0.025},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.05},
-                {property = Attribute.ReloadTime, value=-0.05},
+                {property = Attribute.BurstShootCDWrapper, value = -0.05},
+                {property = Attribute.ReloadTime, value = -0.05},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.1},
-                {property = Attribute.ReloadTime, value=-0.1},
+                {property = Attribute.BurstShootCDWrapper, value = -0.1},
+                {property = Attribute.ReloadTime, value = -0.1},
             },
         }
     },
@@ -1061,16 +1061,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_9.Icon_Skill_9',
         bonus = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.04},
-                {property = Attribute.ReloadTime, value=-0.04},
+                {property = Attribute.BurstShootCDWrapper, value = -0.04},
+                {property = Attribute.ReloadTime, value = -0.04},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.08},
-                {property = Attribute.ReloadTime, value=-0.08},
+                {property = Attribute.BurstShootCDWrapper, value = -0.08},
+                {property = Attribute.ReloadTime, value = -0.08},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value=-0.15},
-                {property = Attribute.ReloadTime, value=-0.15},
+                {property = Attribute.BurstShootCDWrapper, value = -0.15},
+                {property = Attribute.ReloadTime, value = -0.15},
             },
         }
     },
@@ -1082,16 +1082,16 @@ Card.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_78.Icon_Skill_78',
         bonus = {
             [1] = {
-                {property = Attribute.MoveSpeedScale, value=0.04},
-                {property = Attribute.DodgeChance, value=0.04},
+                {property = Attribute.MoveSpeedScale, value = 0.04},
+                {property = Attribute.DodgeChance, value = 0.04},
             },
             [2] = {
-                {property = Attribute.MoveSpeedScale, value=0.08},
-                {property = Attribute.DodgeChance, value=0.08},
+                {property = Attribute.MoveSpeedScale, value = 0.08},
+                {property = Attribute.DodgeChance, value = 0.08},
             },
             [3] = {
-                {property = Attribute.MoveSpeedScale, value=0.15},
-                {property = Attribute.DodgeChance, value=0.15},
+                {property = Attribute.MoveSpeedScale, value = 0.15},
+                {property = Attribute.DodgeChance, value = 0.15},
             },
         }
     },
@@ -1103,22 +1103,22 @@ Card.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG028_SP_JobGunman_2.CG028_SP_JobGunman_2',
         bonus = {
             [1] = {
-                {property = Attribute.MoveSpeedScale, value=0.06},
-                {property = Attribute.DodgeChance, value=0.06},
-                {property = Attribute.BurstShootCDWrapper, value=-0.06},
-                {property = Attribute.ReloadTime, value=-0.06},
+                {property = Attribute.MoveSpeedScale, value = 0.06},
+                {property = Attribute.DodgeChance, value = 0.06},
+                {property = Attribute.BurstShootCDWrapper, value = -0.06},
+                {property = Attribute.ReloadTime, value = -0.06},
             },
             [2] = {
-                {property = Attribute.MoveSpeedScale, value=0.12},
-                {property = Attribute.DodgeChance, value=0.12},
-                {property = Attribute.BurstShootCDWrapper, value=-0.12},
-                {property = Attribute.ReloadTime, value=-0.12},
+                {property = Attribute.MoveSpeedScale, value = 0.12},
+                {property = Attribute.DodgeChance, value = 0.12},
+                {property = Attribute.BurstShootCDWrapper, value = -0.12},
+                {property = Attribute.ReloadTime, value = -0.12},
             },
             [3] = {
-                {property = Attribute.Recoilless, value=1},
-                {property = Attribute.BurstShootCDWrapper, value=-0.25},
-                {property = Attribute.MoveSpeedScale, value=0.25},
-                {property = Attribute.DodgeChance, value=0.25},
+                {property = Attribute.Recoilless, value = 1},
+                {property = Attribute.BurstShootCDWrapper, value = -0.25},
+                {property = Attribute.MoveSpeedScale, value = 0.25},
+                {property = Attribute.DodgeChance, value = 0.25},
             },
         }
     },

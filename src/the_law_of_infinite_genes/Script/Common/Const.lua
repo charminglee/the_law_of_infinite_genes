@@ -3,6 +3,7 @@ local ROOT = UGCMapInfoLib.GetRootLongPackagePath().."Asset/Blueprint/"
 
 ---@enum ServerEvent
 ServerEvent = {
+    OnResetCardData         = "OnResetCardData",
     OnRepCardData           = "OnRepCardData",
     OnCardShopRefreshAfter  = "OnCardShopRefreshAfter",
     OnCardEquipAfter        = "OnCardEquipAfter",
@@ -104,10 +105,11 @@ Attribute = {
     SeckillChance           = UGCCustomGameAttributeType.UGCAttributeGroup_Character_SeckillChance,             -- 秒杀率
     DodgeChance             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_DodgeChance,               -- 闪避率
 
+    HealthMax       = UGCNativeGameAttributeType.Character_HealthMax,                           -- 最大血量
+    HealthMaxPct    = UGCCustomGameAttributeType.UGCAttributeGroup_Character_HealthMaxPct,      -- 最大血量百分比
     RecoilPct       = UGCCustomGameAttributeType.UGCAttributeGroup_Character_RecoilPct,         -- 后坐力百分比
-    ReloadTime      = UGCNativeGameAttributeType.Weapon_ReloadTime,                             -- 换弹时间
+    ReloadTime      = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ReloadTime,        -- 换弹时间
     ReloadTimePct   = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ReloadTimePct,     -- 换弹时间百分比
-    HealthMax       = UGCNativeGameAttributeType.Character_HealthMax,                           -- 最大生命值
     MoveSpeedScale  = UGCNativeGameAttributeType.Character_UGCGeneralMoveSpeedScale,            -- 移速百分比
     ShootSpeedScale = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ShootSpeedScale,   -- 射速百分比
 
@@ -116,9 +118,10 @@ Attribute = {
     EpidemicToxinOverlyLimit    = "EpidemicToxinOverlyLimit",   -- 疫毒叠加上限
     EpidemicToxinSettleRatio    = "EpidemicToxinSettleRatio",   -- 疫毒结算概率
     InfiniteAmmo                = "InfiniteAmmo",               -- 无限子弹
-    Recoilless                  = "Recoilless",
-    HealthMaxBoost              = "HealthMaxBoost",
+    Recoilless                  = "Recoilless",                 -- 无后坐力
     BurstShootCDWrapper         = UGCNativeGameAttributeType.Weapon_BurstShootCDWrapper,
+
+    _HealthMax = UGCCustomGameAttributeType.UGCAttributeGroup_Character__HealthMax,
 }
 
 
@@ -142,7 +145,7 @@ AttributeMate = {
     [Attribute.ReloadTimePct]               = {index=17, anno="换弹时间百分比"},
     [Attribute.DodgeChance]                 = {index=18, anno="闪避率"},
     [Attribute.SeckillChance]               = {index=19, anno="秒杀率"},
-    [Attribute.HealthMax]                   = {index=20, anno="生命值"},
+    [Attribute.HealthMax]                   = {index=20, anno="最大血量"},
     [Attribute.MoveSpeedScale]              = {index=21, anno="移速百分比"},
     [Attribute.ShootSpeedScale]             = {index=22, anno="射速百分比"},
     [Attribute.EpidemicToxinRatio]          = {index=23, anno="疫毒触发概率"},
@@ -150,7 +153,7 @@ AttributeMate = {
     [Attribute.EpidemicToxinOverlyLimit]    = {index=25, anno="疫毒叠加上限"},
     [Attribute.EpidemicToxinSettleRatio]    = {index=26, anno="疫毒结算概率"},
     [Attribute.InfiniteAmmo]                = {index=27, anno="无限子弹"},
-    [Attribute.HealthMaxBoost]              = {index=29, anno="生命值百分比"},
+    [Attribute.HealthMaxPct]                = {index=29, anno="最大血量百分比"},
     [Attribute.Recoilless]                  = {index=32, anno="无后坐力"},
     [Attribute.ReloadTime]                  = {index=34, anno="换弹时间"},
     [Attribute.BurstShootCDWrapper]         = {index=35, anno="连发间隔"},

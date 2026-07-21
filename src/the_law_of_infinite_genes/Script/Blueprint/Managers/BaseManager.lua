@@ -4,7 +4,8 @@
 ---@class BaseManager_C:ActorComponent
 --Edit Below-- 
 local BaseManager = {
-    owner = nil, ---@type Actor @属主Actor
+    ---@type Actor @属主Actor
+    owner = nil, 
 }
 
 
