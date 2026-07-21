@@ -65,6 +65,14 @@ Title = {
 }; 
 
 
+---@enum EModeDifficulty
+EModeDifficulty = { 
+    Simple = 0,
+    Hard = 1,
+    Nightmare = 2,
+}; 
+
+
 ---@enum ELotteryResetType
 ELotteryResetType = { 
     NotReset = 0,

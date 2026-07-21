@@ -18,6 +18,7 @@ UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.Card")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
+UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
 
 
 local function InitSubControl(mainUI)
@@ -102,5 +103,9 @@ function UGCGameState:MulticastRPC_EquippedTitle(uid, id)
     ACHVManager.CacheEquippedTitle = id;
 end
 
+-- 是否在大厅中
+function UGCGameState.IsInLobby()
+   return UGCGameData.GetGameModeName(UGCMultiMode.GetModeID()) == UGCGameData.ModeName.Lobby
+end
 
 return UGCGameState
