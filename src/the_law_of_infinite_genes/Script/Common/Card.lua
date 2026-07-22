@@ -6,6 +6,9 @@ Card.Common = {
     RefreshBaseCost     = 10,   -- 刷新商店的首次价格
     RefreshStepCost     = 10,   -- 每次刷新相比上一次的加价
     MaxCardSlotLevel    = 12,   -- 最大卡槽等级
+    EquippedSlotCount   = 12,   -- 已装备卡槽数量
+    StoreSlotCount      = 20,   -- 仓库卡槽数量
+    ShopSlotCount       = 6,    -- 商店卡槽数量
 }
 
 

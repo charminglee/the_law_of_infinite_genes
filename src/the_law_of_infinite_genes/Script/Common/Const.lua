@@ -18,6 +18,7 @@ ServerEvent = {
 
 ---@enum ClientEvent
 ClientEvent = {
+    OnRepCardData = "OnRepCardData",
 }
 
 

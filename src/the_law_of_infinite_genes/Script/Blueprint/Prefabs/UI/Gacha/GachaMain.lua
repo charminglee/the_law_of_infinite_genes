@@ -35,7 +35,6 @@ local SelectTag = {
     Equipped = 2,
     Store = 3,
 }
-local MAX_CARD_SLOT_LEVEL = 12
 local DEFAULT_ATTRIBUTE_TEXT_COLOR = 'FFFFFF'
 local function SetButtonVisible(button, visible)
     if button == nil then
@@ -156,16 +155,6 @@ function GachaMain:_SelectedSlot()
     end
     return GachaManager.SelectIndex + 1
 end
-function GachaMain:_CardData()
-    local playerState = LocalPlayerState
-    local manager = playerState and playerState.PlayerDataManager
-    return manager and manager._card or nil
-end
-function GachaMain:_UnlockedSlotCount()
-    local card = self:_CardData()
-    local level = card and card.shopLevel or 1
-    return math.min(MAX_CARD_SLOT_LEVEL, math.max(1, level))
-end
 function GachaMain:_CountUsed(list)
     if list == nil then
         return 0
@@ -180,23 +169,19 @@ function GachaMain:_CountUsed(list)
     return count
 end
 function GachaMain:RefreshInfo()
-    local card = self:_CardData()
-    if card == nil then
-        SetButtonVisible(self.LevelUpButton, false);
-        return
-    end
+    local maxSlotLv = Card.Common.MaxCardSlotLevel
     local level = self:_UnlockedSlotCount()
     if self.ShopLevel ~= nil then
         self.ShopLevel:SetText(tostring(level));
     end
     if self.SlotCount ~= nil then
-        self.SlotCount:SetText(tostring(level) .. "/" .. tostring(MAX_CARD_SLOT_LEVEL));
+        self.SlotCount:SetText(tostring(level) .. "/" .. tostring(maxSlotLv));
     end
     if self.StoreCount ~= nil then
-        local storeMax = card.store and (card.store.n or #card.store) or 0
-        self.StoreCount:SetText(tostring(self:_CountUsed(card.store)) .. "/" .. tostring(storeMax));
+        local storeSlotCount = Card.Common.StoreSlotCount
+        self.StoreCount:SetText(tostring(self:_CountUsed(card.store)) .. "/" .. tostring(storeSlotCount));
     end
-    SetButtonVisible(self.LevelUpButton, level < MAX_CARD_SLOT_LEVEL);
+    SetButtonVisible(self.LevelUpButton, level < maxSlotLv);
 end
 function GachaMain:_RefreshActionButtons(hasPreview)
     local tag = GachaManager.SelectTag;
@@ -346,12 +331,11 @@ function GachaMain:BuildAttributeCountTextList()
     local suitCounts = {};
     local suitFullStarCounts = {};
     local activeSuitList = {};
-    local card = self:_CardData();
-    local equipped = card and card.equipped;
+    local equipped = LocalPlayerState.PlayerDataManager:GetAllEquippedCards();
     if equipped == nil then
         return list;
     end
-    local count = equipped.n or #equipped;
+    local count = Card.Common.EquippedSlotCount;
     for i = 1, count do
         local data = equipped[i];
         local cardIndex = data and data[1];

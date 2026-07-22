@@ -4,8 +4,8 @@ local PlayerDataManager = {
     _data = {},
     _isLoaded = false,
     _tick = 0,
-    ---@alias Card {number, number}
-    ---@type { shopLevel: number, store: table<number, Card>, shop: table<number, Card>, equipped: table<number, Card>, refreshCount: number }
+    ---@alias Card [number, number]?
+    ---@type {shopLevel: number, store: table<number, Card>, shop: table<number, Card>, equipped: table<number, Card>, refreshCount: number}
     _card = {},
 }
 
@@ -21,8 +21,7 @@ end
 
 
 function PlayerDataManager:OnRep__card()
-    GachaManager.RefreshUI = true;
-    GachaManager.PreviewDAT = nil;
+    Lib.EventSystem.Dispatch(ClientEvent.OnRepCardData)
 end
 
 
@@ -312,10 +311,62 @@ function PlayerDataManager:LevelUpCardSlot(sync)
 end
 
 
----【双端】获取玩家所有已装备的卡牌。
----@return table<number, Card> @所有已装备的卡牌，结构为：{ index: {cardId, star} }
+---【双端】获取玩家仓库中的所有卡牌。
+---@return table<number, Card> @仓库中的所有卡牌，结构为：{ index: {cardId, star} }
+function PlayerDataManager:GetAllStoreCards()
+    return Lib.Table.DeepCopy(self._card.store)
+end
+
+
+---【双端】获取玩家卡牌商店中的所有卡牌。
+---@return table<number, Card> @卡牌商店中的所有卡牌，结构为：{ index: {cardId, star} }
+function PlayerDataManager:GetAllShopCards()
+    return Lib.Table.DeepCopy(self._card.shop)
+end
+
+
+---【双端】获取玩家已装备的所有卡牌。
+---@return table<number, Card> @已装备的所有卡牌，结构为：{ index: {cardId, star} }
 function PlayerDataManager:GetAllEquippedCards()
     return Lib.Table.DeepCopy(self._card.equipped)
+end
+
+
+---【双端】获取玩家仓库中指定槽位的卡牌。
+---@param slot number @仓库槽位索引 1-20
+---@return Card @指定槽位的卡牌，结构为：{cardId, star}
+function PlayerDataManager:GetStoreCard(slot)
+    return Lib.Table.Copy(self._card.store[slot])
+end
+
+
+---【双端】获取玩家卡牌商店中指定槽位的卡牌。
+---@param slot number @卡牌商店槽位索引 1-6
+---@return Card @指定槽位的卡牌，结构为：{cardId, star}
+function PlayerDataManager:GetShopCard(slot)
+    return Lib.Table.Copy(self._card.shop[slot])
+end
+
+
+---【双端】获取玩家已装备的指定槽位的卡牌。
+---@param slot number @已装备槽位索引 1-12
+---@return Card @指定槽位的卡牌，结构为：{cardId, star}
+function PlayerDataManager:GetEquippedCard(slot)
+    return Lib.Table.Copy(self._card.equipped[slot])
+end
+
+
+---【双端】获取当前卡牌商店等级。
+---@return number @卡牌商店等级
+function PlayerDataManager:GetCardShopLevel()
+    return self._card.shopLevel
+end
+
+
+---【双端】获取当前卡牌商店的刷新次数。
+---@return number @卡牌商店刷新次数
+function PlayerDataManager:GetCardShopRefreshCount()
+    return self._card.refreshCount
 end
 
 

@@ -15,15 +15,6 @@ local GachaItem = {
     Index=nil, 
     Tag=nil,
 }; 
-local MAX_CARD_SLOT_LEVEL = 12
-
-local function UnlockedSlotCount()
-    local playerState = LocalPlayerState
-    local manager = playerState and playerState.PlayerDataManager
-    local card = manager and manager._card
-    local level = card and card.shopLevel or 1
-    return math.min(MAX_CARD_SLOT_LEVEL, math.max(1, level))
-end
 
 function GachaItem:Construct()
 	self:LuaInit();
@@ -103,7 +94,7 @@ function GachaItem:_ApplySelection(data)
 end
 
 function GachaItem:ShopUpdate()
-    local data = LocalPlayerState.PlayerDataManager._card.shop[self.Index+1];
+    local data = LocalPlayerState.PlayerDataManager:GetShopCard(self.Index+1);
     if data == nil then
         self:_ShowEmpty(self.NilItem);
         return;
@@ -116,7 +107,7 @@ function GachaItem:ShopUpdate()
 end
 
 function GachaItem:StoreUpdate()
-    local data = LocalPlayerState.PlayerDataManager._card.store[self.Index+1];
+    local data = LocalPlayerState.PlayerDataManager:GetStoreCard(self.Index+1);
     if data == nil then
         self:_ShowEmpty(self.Empty);
         return;
@@ -129,12 +120,13 @@ function GachaItem:StoreUpdate()
 end
 
 function GachaItem:SlotUpdate()
-    if self.Index + 1 > UnlockedSlotCount() then
+    local slotCount = LocalPlayerState.PlayerDataManager:GetUnlockedCardSlotCount();
+    if self.Index + 1 > slotCount then
         self:_ShowEmpty(self.Lock);
         return;
     end
 
-    local data = LocalPlayerState.PlayerDataManager._card.equipped[self.Index+1];
+    local data = LocalPlayerState.PlayerDataManager:GetEquippedCard(self.Index+1);
     if data == nil then
         self:_ShowEmpty(self.Empty);
         return;

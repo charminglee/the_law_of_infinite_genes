@@ -28,28 +28,28 @@ function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageE
 	-- 资源点掉落/称号条件相关逻辑
 	local isBoss = self:ActorHasTag(Tag.Boss)
 	local isElite = self:ActorHasTag(Tag.Elite)
-	local mgr = EventInstigator.PlayerDataManager
+	local pdm = EventInstigator.PlayerDataManager
 	local config = Config.Resource.Coin_0.MonsterLoot
 	local playerHealth = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_Health)
 	local playerHealthMax = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_HealthMax)
 	local playerHealthPct = playerHealth / playerHealthMax
 	if isBoss then 
-		mgr:AddCoin(ItemId.Coin_0, config[3], false)
-		mgr:AddStat(Statistics.BossKillCount, 1, false)
+		pdm:AddCoin(ItemId.Coin_0, config[3], false)
+		pdm:AddStat(Statistics.BossKillCount, 1, false)
 	elseif isElite then
-		mgr:AddCoin(ItemId.Coin_0, config[2], false)
-		mgr:AddStat(Statistics.EliteMonsterKillCount, 1, false)
+		pdm:AddCoin(ItemId.Coin_0, config[2], false)
+		pdm:AddStat(Statistics.EliteMonsterKillCount, 1, false)
 		if playerHealthPct > 0.5 then
-			mgr:AddStat(Statistics.EliteMonsterKillCountHealthAboveHalf, 1, false)
+			pdm:AddStat(Statistics.EliteMonsterKillCountHealthAboveHalf, 1, false)
 		end
 	else
-		mgr:AddCoin(ItemId.Coin_0, config[1], false)
-		mgr:AddStat(Statistics.NormalMonsterKillCount, 1, false)
+		pdm:AddCoin(ItemId.Coin_0, config[1], false)
+		pdm:AddStat(Statistics.NormalMonsterKillCount, 1, false)
 		if playerHealthPct > 0.5 then
-			mgr:AddStat(Statistics.NormalMonsterKillCountHealthAboveHalf, 1, false)
+			pdm:AddStat(Statistics.NormalMonsterKillCountHealthAboveHalf, 1, false)
 		end
     end
-	mgr:Sync()
+	pdm:Sync()
 end
 
 

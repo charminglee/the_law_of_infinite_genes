@@ -1,9 +1,10 @@
 ---@class GachaComponent_C:ActorComponent
 ---@field GachaMainPath FSoftClassPath
 --Edit Below--
+local GachaComponent = {}
+
 
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Gacha.GachaManager");
-local GachaComponent = {}
 
 
 function GachaComponent:GetAvailableServerRPCs()
@@ -18,12 +19,25 @@ function GachaComponent:GetAvailableServerRPCs()
     "ResetCardData"
 end
 
+
 function GachaComponent:ReceiveBeginPlay()
     GachaComponent.SuperClass.ReceiveBeginPlay(self);
     if self:GetOwner():HasAuthority() == false then
         self:InitUI();
         GachaManager:RegisterComponentClass(self);
+        Lib.EventSystem.Listen(ClientEvent.OnRepCardData, self.OnRepCardData, self);
     end
+end
+
+
+function GachaComponent:ReceiveEndPlay()
+    Lib.EventSystem.UnlistenByOwner(self);
+end
+
+
+function GachaComponent:OnRepCardData()
+    GachaManager.RefreshUI = true;
+    GachaManager.PreviewDAT = nil;
 end
 
 
