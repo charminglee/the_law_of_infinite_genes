@@ -11,12 +11,12 @@ function UGCGameMode:ReceiveBeginPlay()
 end
 
 function UGCGameMode:InitMode(ModeID)
-    if GameState.IsInLobby() then
-        -- UGCGenericMessageSystem.ListenGlobalMessage(self,  UGCGenericMessageSystem.Messages.UGC.Player.PlayerEnter, self, self.ExecuteStartMatch)
-        -- UGCGameSystem.LoadStreamLevel("LobbySkyBox", true, false)
-    else
-        -- UGCGameSystem.LoadStreamLevel("BattleSkyBox", true, false)
-    end
+    -- if GameState.IsInLobby() then
+    --     -- UGCGenericMessageSystem.ListenGlobalMessage(self,  UGCGenericMessageSystem.Messages.UGC.Player.PlayerEnter, self, self.ExecuteStartMatch)
+    --     -- UGCGameSystem.LoadStreamLevel("LobbySkyBox", true, false)
+    -- else
+    --     -- UGCGameSystem.LoadStreamLevel("BattleSkyBox", true, false)
+    -- end
 
     ugcprint("UGCGameMode:ReceiveBeginPlay ModeID=" .. ModeID)
 
