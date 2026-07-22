@@ -1,6 +1,6 @@
----@class PlayerAttrManager_C:BaseManager_C
+---@class AttrManager_C:BaseManager_C
 --Edit Below--
-local PlayerAttrManager = {
+local AttrManager = {
     ---@type table<Attribute, number>
     _attrCache = nil,
     ---@type table<Attribute, number>
@@ -18,8 +18,9 @@ local _ATTR_MIN_MAX = nil
 local _PCT_MAP = nil
 
 
-function PlayerAttrManager:ReceiveBeginPlay()
-    PlayerAttrManager.SuperClass.ReceiveBeginPlay(self)
+function AttrManager:ReceiveBeginPlay()
+    AttrManager.SuperClass.ReceiveBeginPlay(self)
+
     _GAS_BACKED = _GAS_BACKED or {
         [Attribute.AttackPower]             = true,
         [Attribute.AttackPowerPct]          = true,
@@ -61,17 +62,19 @@ function PlayerAttrManager:ReceiveBeginPlay()
         [Attribute._HealthMax]  = Attribute.HealthMaxPct,
     }
 
-    self._base = self._base or {}
-    self._attrCache = self._attrCache or {}
-    for k, _ in pairs(_GAS_BACKED) do
-        if self._base[k] == nil then
+    if not self._base then
+        self._base = {}
+        for k, _ in pairs(_GAS_BACKED) do
+            local attr = k
             if k == Attribute._HealthMax then
-                self._base[k] = UGCAttributeSystem.GetGameAttributeValue(self.owner, Attribute.HealthMax)
-            else
-                self._base[k] = UGCAttributeSystem.GetGameAttributeValue(self.owner, k)
+                attr = Attribute.HealthMax
             end
+            local v = UGCAttributeSystem.GetGameAttributeValue(self.owner, attr)
+            self._base[k] = v
         end
-        self._attrCache[k] = self._base[k]
+    end
+    if not self._attrCache then
+        self._attrCache = Lib.Table.Copy(self._base)
     end
     if not self._final then
         self._final = {}
@@ -87,15 +90,14 @@ function PlayerAttrManager:ReceiveBeginPlay()
 end
 
 
-function PlayerAttrManager:ReceiveEndPlay()
+function AttrManager:ReceiveEndPlay()
     self._attrCache = nil
-    self._base = nil
     self._final = nil
     Lib.EventSystem.UnlistenByOwner(self)
 end
 
 
-function PlayerAttrManager:OnResetCardData(uid)
+function AttrManager:OnResetCardData(uid)
     if uid ~= self.owner.UID then
         return
     end
@@ -103,7 +105,7 @@ function PlayerAttrManager:OnResetCardData(uid)
 end
 
 
-function PlayerAttrManager:OnCardEquipAfter(uid, fromSlot, toSlot, card)
+function AttrManager:OnCardEquipAfter(uid, fromSlot, toSlot, card)
     if uid ~= self.owner.UID then
         return
     end
@@ -111,7 +113,7 @@ function PlayerAttrManager:OnCardEquipAfter(uid, fromSlot, toSlot, card)
 end
 
 
-function PlayerAttrManager:OnCardUnequipAfter(uid, fromSlot, toSlot, card)
+function AttrManager:OnCardUnequipAfter(uid, fromSlot, toSlot, card)
     if uid ~= self.owner.UID then
         return
     end
@@ -119,7 +121,7 @@ function PlayerAttrManager:OnCardUnequipAfter(uid, fromSlot, toSlot, card)
 end
 
 
-function PlayerAttrManager:OnCardSellAfter(uid, from, slot, card, refund)
+function AttrManager:OnCardSellAfter(uid, from, slot, card, refund)
     if uid ~= self.owner.UID or from ~= "equipped" then
         return
     end
@@ -155,7 +157,7 @@ local function _CardBonusOf(card)
 end
 
 
-function PlayerAttrManager:_UpdateFinal()
+function AttrManager:_UpdateFinal()
     for base, pct in pairs(_PCT_MAP) do
         local baseVal = self._attrCache[base]
         local pctVal = self._attrCache[pct]
@@ -167,21 +169,14 @@ function PlayerAttrManager:_UpdateFinal()
 end
 
 
-function PlayerAttrManager:_UpdateHealthMax()
+function AttrManager:_UpdateHealthMax()
     local val = self._final[Attribute._HealthMax]
     UGCAttributeSystem.SetGameAttributeValue(self.owner, Attribute.HealthMax, val)
 end
 
 
-function PlayerAttrManager:_ClearCardDelta()
-    self._attrCache = Lib.Table.Copy(self._base)
-    self:_UpdateFinal()
-    self:_UpdateHealthMax()
-end
-
-
 ---从已装备卡牌列表重算全部卡牌加成并同步属性。
-function PlayerAttrManager:_RebuildFromEquipped()
+function AttrManager:_RebuildFromEquipped()
     if not self:HasAuthority() then
         return false
     end
@@ -217,7 +212,7 @@ end
 ---@param attr Attribute @Attribute枚举值
 ---@param includePct boolean? @是否包含百分比加成，默认为true
 ---@return number @属性值
-function PlayerAttrManager:Get(attr, includePct)
+function AttrManager:GetAttr(attr, includePct)
     if attr == Attribute.HealthMax then
         attr = Attribute._HealthMax
     end
@@ -233,4 +228,4 @@ function PlayerAttrManager:Get(attr, includePct)
 end
 
 
-return PlayerAttrManager
+return AttrManager

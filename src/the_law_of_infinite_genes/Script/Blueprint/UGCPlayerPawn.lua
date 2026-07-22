@@ -1,5 +1,5 @@
 ---@class UGCPlayerPawn_C:BP_UGCPlayerPawn_C
----@field PlayerAttrManager PlayerAttrManager_C
+---@field AttrManager AttrManager_C
 --Edit Below--
 local UGCPlayerPawn = {}
  

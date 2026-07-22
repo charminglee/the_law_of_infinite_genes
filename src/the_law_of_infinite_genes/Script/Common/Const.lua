@@ -33,10 +33,10 @@ ClassPath = {
 
 
 InstancePath = {
-    LevelStart          = "HelipadMap.LevelStart_8",
-    MobSpawnerManager   = "HelipadMap.MobSpawnerManager_10",
-    MapStartLocation    = "HelipadMap.MapStartLocation_8",
-    MapEndLocation      = "HelipadMap.MapEndLocation_23",
+    LevelStart          = "Helipad.LevelStart_8",
+    MobSpawnerManager   = "Helipad.MobSpawnerManager_10",
+    MapStartLocation    = "Helipad.MapStartLocation_8",
+    MapEndLocation      = "Helipad.MapEndLocation_23",
 }
 
 

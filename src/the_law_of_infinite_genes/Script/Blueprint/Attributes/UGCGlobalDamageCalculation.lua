@@ -31,6 +31,13 @@ local function _ApplyHealthSteal(instigator, damage, healthStealPct)
 end
 
 
+local function _ApplyCounterAttack(instigator, victim, damage)
+    local instigatorController = UGCGameSystem.GetControllerByPawn(instigator)
+    local tag = UGCGameplayTagSystem.RequestGameplayTag(GameplayTag.Damage.Type.CounterAttack)
+    UGCGameSystem.ApplyDamage(victim, damage, instigatorController, instigator, {tag})
+end
+
+
 function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     local damage = UGCAttributeSystem.GetSourceMagnitudeFromContext(context)
 
@@ -41,26 +48,27 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
 
     local instigator                = UGCAttributeSystem.GetInstigatorFromContext(context):K2_GetPawn()
     ugcprint("GetCalculationResult"..UGCObjectUtility.GetObjectFullName(instigator))
-    local attackPower               = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.AttackPower)
-    local attackPowerPct            = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.AttackPowerPct)
-    local breakDefencePct           = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.BreakDefencePct)
-    local critChance                = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.CritChance)
-    local critDamagePct             = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.CritDamagePct)
-    local damagePct                 = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.DamagePct)
-    local normalMonsterDamagePct    = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.NormalMonsterDamagePct)
-    local eliteDamagePct            = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.EliteMonsterDamagePct)
-    local bossDamagePct             = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.BossDamagePct)
-    local healthStealPct            = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.HealthStealPct)
-    local seckillChance             = UGCAttributeSystem.GetGameAttributeValue(instigator, Attribute.SeckillChance)
+    local instigatorAM              = instigator.AttrManager ---@type AttrManager_C
+    local attackPower               = instigatorAM:GetAttr(Attribute.AttackPower)
+    local breakDefencePct           = instigatorAM:GetAttr(Attribute.BreakDefencePct)
+    local critChance                = instigatorAM:GetAttr(Attribute.CritChance)
+    local critDamagePct             = instigatorAM:GetAttr(Attribute.CritDamagePct)
+    local damagePct                 = instigatorAM:GetAttr(Attribute.DamagePct)
+    local normalMonsterDamagePct    = instigatorAM:GetAttr(Attribute.NormalMonsterDamagePct)
+    local eliteDamagePct            = instigatorAM:GetAttr(Attribute.EliteMonsterDamagePct)
+    local bossDamagePct             = instigatorAM:GetAttr(Attribute.BossDamagePct)
+    local healthStealPct            = instigatorAM:GetAttr(Attribute.HealthStealPct)
+    local seckillChance             = instigatorAM:GetAttr(Attribute.SeckillChance)
     
     local victim            = UGCAttributeSystem.GetVictimFromContext(context)
     ugcprint("GetCalculationResult"..UGCObjectUtility.GetObjectFullName(victim))
-    local defence           = UGCAttributeSystem.GetGameAttributeValue(victim, Attribute.Defence)
-    local defencePct        = UGCAttributeSystem.GetGameAttributeValue(victim, Attribute.DefensePct)
-    local damageDecreace    = UGCAttributeSystem.GetGameAttributeValue(victim, Attribute.DamageDecreace)
-    local damageDecreacePct = UGCAttributeSystem.GetGameAttributeValue(victim, Attribute.DamageDecreacePct)
-    local dodgeChance       = UGCAttributeSystem.GetGameAttributeValue(victim, Attribute.DodgeChance)
-    local counterAttackPct  = UGCAttributeSystem.GetGameAttributeValue(victim, Attribute.CounterAttackPct)
+    local victimAM          = victim.AttrManager ---@type AttrManager_C
+    local defence           = victimAM:GetAttr(Attribute.Defence)
+    local defencePct        = victimAM:GetAttr(Attribute.DefensePct)
+    local damageDecreace    = victimAM:GetAttr(Attribute.DamageDecreace)
+    local damageDecreacePct = victimAM:GetAttr(Attribute.DamageDecreacePct)
+    local dodgeChance       = victimAM:GetAttr(Attribute.DodgeChance)
+    local counterAttackPct  = victimAM:GetAttr(Attribute.CounterAttackPct)
 
     -- 秒杀
     if Lib.Math.Chance(seckillChance) then
@@ -75,7 +83,7 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     end
     
     -- 攻击区
-    local atkArea = math.max(1, attackPower * (1 + attackPowerPct))
+    local atkArea = attackPower
 
     -- 暴击区
     local critArea = 1
@@ -109,15 +117,9 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     _ApplyHealthSteal(instigator, finalDamage, healthStealPct)
     
     -- 反伤
-    local counterDamage = finalDamage * counterAttackPct
+    local counterDamage = damage * counterAttackPct
     if counterDamage > 0 then
-        UGCGameSystem.ApplyDamage(
-            instigator, 
-            counterDamage,
-            victim,
-            victim, 
-            GameplayTag.Damage.Type.CounterAttack
-        )
+        _ApplyCounterAttack(victim, instigator, counterDamage)
     end
     
     return finalDamage, extraResult

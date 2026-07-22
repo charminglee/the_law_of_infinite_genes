@@ -2,7 +2,7 @@ Config = {}
 
 
 Config.Debug = {
-    AutoStartGame = true,
+    AutoStartGame = false,
     Coin = {
         [8310000] = 999999, -- Coin_0
         [8310001] = 999999, -- Coin_1
