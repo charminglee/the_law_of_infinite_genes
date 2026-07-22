@@ -61,18 +61,17 @@ function PlayerAttrManager:ReceiveBeginPlay()
         [Attribute._HealthMax]  = Attribute.HealthMaxPct,
     }
 
-    if not self._attrCache then
-        self._attrCache = {}
-        for k, _ in pairs(_GAS_BACKED) do
-            local v
+    self._base = self._base or {}
+    self._attrCache = self._attrCache or {}
+    for k, _ in pairs(_GAS_BACKED) do
+        if self._base[k] == nil then
             if k == Attribute._HealthMax then
-                v = UGCAttributeSystem.GetGameAttributeValue(self.owner, Attribute.HealthMax)
+                self._base[k] = UGCAttributeSystem.GetGameAttributeValue(self.owner, Attribute.HealthMax)
             else
-                v = UGCAttributeSystem.GetGameAttributeValue(self.owner, k)
+                self._base[k] = UGCAttributeSystem.GetGameAttributeValue(self.owner, k)
             end
-            self._attrCache[k] = v
-            self._base[k] = v
         end
+        self._attrCache[k] = self._base[k]
     end
     if not self._final then
         self._final = {}
@@ -89,6 +88,9 @@ end
 
 
 function PlayerAttrManager:ReceiveEndPlay()
+    self._attrCache = nil
+    self._base = nil
+    self._final = nil
     Lib.EventSystem.UnlistenByOwner(self)
 end
 
@@ -97,7 +99,7 @@ function PlayerAttrManager:OnResetCardData(uid)
     if uid ~= self.owner.UID then
         return
     end
-    self:_ClearCardDelta()
+    self:_RebuildFromEquipped()
 end
 
 
@@ -105,7 +107,7 @@ function PlayerAttrManager:OnCardEquipAfter(uid, fromSlot, toSlot, card)
     if uid ~= self.owner.UID then
         return
     end
-    self:_ApplyCardDelta(card, 1)
+    self:_RebuildFromEquipped()
 end
 
 
@@ -113,7 +115,7 @@ function PlayerAttrManager:OnCardUnequipAfter(uid, fromSlot, toSlot, card)
     if uid ~= self.owner.UID then
         return
     end
-    self:_ApplyCardDelta(card, -1)
+    self:_RebuildFromEquipped()
 end
 
 
@@ -121,7 +123,7 @@ function PlayerAttrManager:OnCardSellAfter(uid, from, slot, card, refund)
     if uid ~= self.owner.UID or from ~= "equipped" then
         return
     end
-    self:_ApplyCardDelta(card, -1)
+    self:_RebuildFromEquipped()
 end
 
 
@@ -133,7 +135,18 @@ local function _CardBonusOf(card)
     for _, entry in pairs(bonus) do
         local prop = entry.property
         local val = entry.value
-        result[prop] = (result[prop] or 0) + val
+        -- 无后坐力的特殊处理
+        if prop == Attribute.Recoilless then
+            prop = Attribute.RecoilPct
+            val = -1.0
+        end
+        -- 最大血量的特殊处理
+        if prop == Attribute.HealthMax then
+            prop = Attribute._HealthMax
+        end
+        if _GAS_BACKED[prop] then
+            result[prop] = (result[prop] or 0) + val
+        end
     end
     if Lib.Table.IsEmpty(result) then
         return nil
@@ -147,6 +160,8 @@ function PlayerAttrManager:_UpdateFinal()
         local baseVal = self._attrCache[base]
         local pctVal = self._attrCache[pct]
         local finalVal = baseVal * (1 + pctVal)
+        local range = _ATTR_MIN_MAX[base]
+        finalVal = Lib.Math.Clamp(finalVal, range.min, range.max)
         self._final[base] = finalVal
     end
 end
@@ -165,36 +180,36 @@ function PlayerAttrManager:_ClearCardDelta()
 end
 
 
----按符号叠加一份卡牌加成到_attrCache并应用到玩家。
-function PlayerAttrManager:_ApplyCardDelta(card, sign)
+---从已装备卡牌列表重算全部卡牌加成并同步属性。
+function PlayerAttrManager:_RebuildFromEquipped()
     if not self:HasAuthority() then
-        return
-    end
-    local bonus = _CardBonusOf(card)
-    if not bonus then
-        return
+        return false
     end
 
-    for attr, val in pairs(bonus) do
-        -- 无后坐力的特殊处理
-        if attr == Attribute.Recoilless then
-            attr = Attribute.RecoilPct
-            val = -1.0
+    local ps = UGCGameSystem.GetPlayerStateByPlayerPawn(self.owner)
+    local pdm = ps.PlayerDataManager
+    local equipped = pdm:GetAllEquippedCards()
+    local slotCount = pdm:GetUnlockedCardSlotCount()
+    self._attrCache = Lib.Table.Copy(self._base)
+    for slot = 1, slotCount do
+        local bonus = _CardBonusOf(equipped[slot])
+        if bonus ~= nil then
+            for attr, value in pairs(bonus) do
+                self._attrCache[attr] = (self._attrCache[attr] or 0) + value
+            end
         end
-        -- 最大血量的特殊处理
-        if attr == Attribute.HealthMax then
-            attr = Attribute._HealthMax
-        end
+    end
 
-        if _GAS_BACKED[attr] then
-            local newVal = (self._attrCache[attr] or 0) + sign * val
-            self._attrCache[attr] = newVal
-            UGCAttributeSystem.SetGameAttributeValue(self.owner, attr, newVal)
-        end
+    for attr, value in pairs(self._attrCache) do
+        local range = _ATTR_MIN_MAX[attr]
+        value = Lib.Math.Clamp(value, range.min, range.max)
+        self._attrCache[attr] = value
+        UGCAttributeSystem.SetGameAttributeValue(self.owner, attr, value)
     end
 
     self:_UpdateFinal()
     self:_UpdateHealthMax()
+    return true
 end
 
 
@@ -210,13 +225,11 @@ function PlayerAttrManager:Get(attr, includePct)
         includePct = true
     end
 
-    local val
     if includePct and self._final[attr] ~= nil then 
-        val = self._final[attr]
+        return self._final[attr]
     else
-        val = self._attrCache[attr]
+        return self._attrCache[attr]
     end
-    return Lib.Math.Clamp(val, _ATTR_MIN_MAX[attr].min, _ATTR_MIN_MAX[attr].max)
 end
 
 
