@@ -10,18 +10,22 @@ function UGCGameMode:ReceiveBeginPlay()
     self:InitMode(ModeID)
 end
 
-function UGCGameMode:InitMode(ModeID)
+function UGCGameMode:InitMode(modeId)
     -- if GameState.IsInLobby() then
-    --     -- UGCGenericMessageSystem.ListenGlobalMessage(self,  UGCGenericMessageSystem.Messages.UGC.Player.PlayerEnter, self, self.ExecuteStartMatch)
     --     -- UGCGameSystem.LoadStreamLevel("LobbySkyBox", true, false)
     -- else
     --     -- UGCGameSystem.LoadStreamLevel("BattleSkyBox", true, false)
     -- end
+    UGCGenericMessageSystem.ListenGlobalMessage(self,  UGCGenericMessageSystem.Messages.UGC.Player.PlayerEnter, self, self.PlayerEnter)
+    UGCLevelFlowSystem.EnableLevelFlow(UGCGameSystem.GetUGCResourcesFullPath(UGCGameData.GetGameModeActorMgrConfig(modeId)))
+end
 
-    ugcprint("UGCGameMode:ReceiveBeginPlay ModeID=" .. ModeID)
-
-    UGCLevelFlowSystem.EnableLevelFlow(UGCGameSystem.GetUGCResourcesFullPath(UGCGameData.GetGameModeActorMgrConfig(ModeID)))
-    
+function UGCGameMode:PlayerEnter(playerKey)
+    local ModeID = UGCMultiMode.GetModeID()
+    if ModeID == 1002 then
+        GameState:StartGame();
+    end
+    UGCLog.Log('UGCGameMode:ModeID=', ModeID);
 end
 
 -- function UGCGameMode:ReceiveTick(DeltaTime)

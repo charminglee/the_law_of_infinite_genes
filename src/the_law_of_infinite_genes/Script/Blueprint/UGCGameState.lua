@@ -32,23 +32,11 @@ function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
     GameState = self
 
-    if self:HasAuthority() == true then 
-        -- 只有客户端加载UI
-    else
-        -- local MainUI = UE.LoadClass( UGCMapInfoLib.GetRootLongPackagePath().. "Asset/Blueprint/Prefabs/WidgetLayout/lobby.lobby_C");
-        -- -- 加载 MainUI 蓝图类
-        -- local PlayerController = GameplayStatics.GetPlayerController(self, 0);
-        -- -- 获得当前PlayerController
-        -- local MainUI_BP = UserWidget.NewWidgetObjectBP(PlayerController, MainUI);
-        -- -- 加载 MainUI
-        -- MainUI_BP:AddToViewport(10000);
-        -- -- 将 MainUI 加入视口，显示UI
-        -- -- 隐藏原生界面
-
-        local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/Prefabs/WidgetLayout/hideLayout.hideLayout_C')
-        UGCWidgetManagerSystem.SetWidgetLayout(path)
-        UGCWidgetManagerSystem.GetMainControlUI().NavigatorPanel:SetVisibility(ESlateVisibility.Collapsed)
-        UGCWidgetManagerSystem.GetMainControlUI().Image_0:SetVisibility(ESlateVisibility.Collapsed)
+    if not self:HasAuthority() then 
+        -- 原生界面修改
+        UGCWidgetManagerSystem.HideWidget(UGCWidgetManagerSystem.GetMainControlUI());
+        -- local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/MainWidget.MainWidget_C');
+        -- UGCWidgetManagerSystem.SetWidgetLayout(path);
     end
 end
 
@@ -83,7 +71,7 @@ function UGCGameState:StartGame()
     end
 
     self.isWaiting = false
-    self:_TpAllPlayers()
+    -- self:_TpAllPlayers()
     self:_StartMobSpawnerManager()
 end
 
