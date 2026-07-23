@@ -6,6 +6,8 @@ local UGCPlayerPawn = {}
 
 function UGCPlayerPawn:ReceiveBeginPlay()
     UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self)
+    self.bVaultIsOpen = true
+    self.IsOpenShovelAbility = true
     if not self:HasAuthority() then
         LocalPlayerPawn = LocalPlayerPawn or self
     end

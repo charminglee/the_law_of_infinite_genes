@@ -5,6 +5,7 @@ local UGCGameMode = {};
 
 function UGCGameMode:ReceiveBeginPlay()
     UGCGameMode.SuperClass.ReceiveBeginPlay(self)
+    self.bIsOpenShovelingAbility = true
     GameMode = self
     local ModeID = UGCMultiMode.GetModeID()
     self:InitMode(ModeID)

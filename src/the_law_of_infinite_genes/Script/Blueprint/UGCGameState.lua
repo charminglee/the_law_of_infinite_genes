@@ -30,6 +30,7 @@ end
 
 function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
+    self.bIsOpenShovelingAbility = true
     GameState = self
 
     if not self:HasAuthority() then 
