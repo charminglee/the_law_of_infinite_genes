@@ -35,9 +35,8 @@ function UGCGameState:ReceiveBeginPlay()
 
     if not self:HasAuthority() then 
         -- 原生界面修改
-        UGCWidgetManagerSystem.HideWidget(UGCWidgetManagerSystem.GetMainControlUI());
-        -- local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/MainWidget.MainWidget_C');
-        -- UGCWidgetManagerSystem.SetWidgetLayout(path);
+        self:SetUIWidget();
+        -- self:SetUIPosition();
     end
 end
 
@@ -48,6 +47,32 @@ end
 
 -- function UGCGameState:ReceiveEndPlay()
 -- end
+
+
+function UGCGameState:SetUIWidget()
+    -- UGCWidgetManagerSystem.HideWidget(UGCWidgetManagerSystem.GetMainControlUI());
+    local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/MainWidget.MainWidget_C');
+    UGCWidgetManagerSystem.SetWidgetLayout(path);
+    UGCWidgetManagerSystem.GetMainControlUI().NavigatorPanel:SetVisibility(ESlateVisibility.Collapsed);
+    UGCWidgetManagerSystem.GetMainControlUI().Image_0:SetVisibility(ESlateVisibility.Collapsed);
+end
+
+
+function UGCGameState:SetUIPosition()
+    local widget = {
+        UGCWidgetManagerSystem.GetMainControlUI().CanvasEnterSetting,
+        UGCWidgetManagerSystem.GetMainControlUI().Canvas_Speaker,
+        UGCWidgetManagerSystem.GetMainControlUI().ChatAndChatPanelCanvas
+    };
+    local vector2D = {
+        {X = -250, Y = 52},
+        {X = -250, Y = 104},
+        {X = -350, Y = 156},
+    };
+    for k, v in pairs(widget) do
+        UGCWidgetManagerSystem.SlotAsCanvasSlot(v):SetPosition(vector2D[k]);
+    end
+end
 
 
 function UGCGameState:_TpAllPlayers()
