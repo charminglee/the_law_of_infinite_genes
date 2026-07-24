@@ -19,6 +19,7 @@ UGCGameSystem.UGCRequire("Script.Common.Card")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
 UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
+UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyFlow")
 
 
 local function InitSubControl(mainUI)

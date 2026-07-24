@@ -131,14 +131,36 @@ end
 
 -- 开始匹配
 function HomeMain:OnMatchClicked()
-	UGCWidgetManagerSystem.ShowTipsUI('开始挑战，请耐心等待');
 	self:UpdateMatch();
-    UGCMultiMode.RequestMatch(1002, self.MatchResCallBack, self, true);
+
+    -- local ModeMaxPlayerNum = UGCMultiMode.GetModeSetting(LobbyModel.CurrentSelectedModeID).TeamPlayers
+    -- local PlayerController = UGCGameSystem.GetLocalPlayerController()
+    -- local CurPlayerNum = #PlayerController.LobbyTeammatePlayerKeys
+    
+    -- if not PlayerController.LobbyInfo.bTeamComplete then
+    --     UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
+    --     return
+    -- end
+
+    -- if CurPlayerNum > ModeMaxPlayerNum then
+    --     UGCWidgetManagerSystem.ShowTipsUI("当前人数大于模式最大人数!")
+    --     return;
+    -- end
+
+    -- local bLeader = PlayerController.bIsTeamLeader
+    -- if bLeader then
+    --     if not UGCGameSystem.GameState:IsAllLobbyTeammateReady() then
+    --         UGCWidgetManagerSystem.ShowTipsUI("有队友未准备，不能开始匹配!")
+    --         return
+    --     end
+    -- end
+
+    LobbyModel:RequestMatch(not self.FillTeammateCheckBox:IsChecked())
 end
 
 -- 取消匹配
 function HomeMain:OnCancelMatchClicked()
-	UGCMultiMode.RequestCancelMatch();
+	LobbyModel:CancelMatch();
 end
 
 -- 准备

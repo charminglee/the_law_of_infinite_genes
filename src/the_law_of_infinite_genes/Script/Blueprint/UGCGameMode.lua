@@ -1,6 +1,7 @@
 ---@class UGCGameMode_C:BP_UGCGameBase_C
 --Edit Below--
 local UGCGameMode = {}; 
+UGCGameMode.IsStartMatch = false
 
 
 function UGCGameMode:ReceiveBeginPlay()
