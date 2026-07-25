@@ -1,5 +1,5 @@
 ---@class BaseMonster_C:BP_UGC_GenericMobPawn_Base_C
----@field AttrManager ttrManager_C
+---@field AttrManager AttrManager_C
 ---@field HitBox UCapsuleComponent
 --Edit Below--
 local BaseMonster = {}
