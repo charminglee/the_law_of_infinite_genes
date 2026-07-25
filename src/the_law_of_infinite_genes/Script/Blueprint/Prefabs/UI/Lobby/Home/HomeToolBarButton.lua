@@ -49,6 +49,9 @@ function HomeToolBarButton:Button_0_Clicked()
 	elseif self.Index == 7 then
         RecruitManager:OpenMainUI();
         return nil;
+    elseif self.Index == 8 then
+        ComposeManager:OpenMainUI();
+        return nil;
     end
 end
 

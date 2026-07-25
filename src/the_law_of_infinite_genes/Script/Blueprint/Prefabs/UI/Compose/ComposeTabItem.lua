@@ -5,20 +5,35 @@
 ---@field ItemName UTextBlock
 ---@field Selected UCanvasPanel
 --Edit Below--
-local ComposeTabItem = { bInitDoOnce = false } 
+local ComposeTabItem = { bInitDoOnce = false, Index=nil}
 
---[==[ Construct
 function ComposeTabItem:Construct()
-	
+	self:LuaInit();
 end
--- Construct ]==]
 
--- function ComposeTabItem:Tick(MyGeometry, InDeltaTime)
+function ComposeTabItem:LuaInit()
+    if self.bInitDoOnce then
+        return;
+    end
+    self.bInitDoOnce = true;
+    self:Listen();
+end
 
--- end
+function ComposeTabItem:Listen()
+    self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
+end
 
--- function ComposeTabItem:Destruct()
+function ComposeTabItem:Button_0_Clicked()
+    ComposeManager.TabSelectedIndex = self.Index;
+    ComposeManager.GoodSelectedIndex = nil;
+end
 
--- end
+function ComposeTabItem:SetSelected(Visible)
+    if Visible then
+        self.Selected:SetVisibility(ESlateVisibility.Visible);
+    else
+        self.Selected:SetVisibility(ESlateVisibility.Collapsed);
+    end
+end
 
 return ComposeTabItem

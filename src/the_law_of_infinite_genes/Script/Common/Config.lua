@@ -76,13 +76,13 @@ Config.ItemType = {
 
 -- 物品品质配置
 Config.ItemQuality = {
-    [1] = {path='Asset/Texture/UI/Image_BigQualityBg_1.Image_BigQualityBg_1', name='普通'},
-    [2] = {path='Asset/Texture/UI/Image_BigQualityBg_2.Image_BigQualityBg_2', name='平凡'},
-    [3] = {path='Asset/Texture/UI/Image_BigQualityBg_3.Image_BigQualityBg_3', name='精良'},
-    [4] = {path='Asset/Texture/UI/Image_BigQualityBg_4.Image_BigQualityBg_4', name='稀有'},
-    [5] = {path='Asset/Texture/UI/Image_BigQualityBg_5.Image_BigQualityBg_5', name='传说'},
-    [6] = {path='Asset/Texture/UI/Image_BigQualityBg_6.Image_BigQualityBg_6', name='史诗'},
-    [7] = {path='Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话'}
+    [1] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_1.Image_BigQualityBg_1', name='普通'},
+    [2] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_2.Image_BigQualityBg_2', name='平凡'},
+    [3] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_3.Image_BigQualityBg_3', name='精良'},
+    [4] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_4.Image_BigQualityBg_4', name='稀有'},
+    [5] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_5.Image_BigQualityBg_5', name='传说'},
+    [6] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_6.Image_BigQualityBg_6', name='史诗'},
+    [7] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话'}
 }
 
 -- 初始武器
@@ -141,96 +141,148 @@ Config.Formula = {
     },
     --- 赤锋突击头盔
     [8310026] = {
-        [1]={ItemId=8310017, number=35, aux=1},
-        [2]={ItemId=8310015, number=25, aux=1},
-        [3]={ItemId=8310014, number=4, aux=4},
-        [4]={ItemId=8310021, number=1, aux=4},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 赤锋突击战靴
     [8310027] = {
-        [1]={ItemId=8310017, number=35, aux=1},
-        [2]={ItemId=8310015, number=25, aux=1},
-        [3]={ItemId=8310014, number=4, aux=4},
-        [4]={ItemId=8310021, number=1, aux=4},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 赤锋突击外套
     [8310028] = {
-        [1]={ItemId=8310017, number=35, aux=1},
-        [2]={ItemId=8310015, number=25, aux=1},
-        [3]={ItemId=8310014, number=4, aux=4},
-        [4]={ItemId=8310021, number=1, aux=4},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒土耐磨工装裤
     [8310029] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒土防毒面罩
     [8310030] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒土战术帽
     [8310031] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒土战术靴
     [8310032] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒土迷彩外套
     [8310033] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒原·残戍夹克
     [8310007] = {
-        [1]={ItemId=8310017, number=35},
-        [2]={ItemId=8310015, number=25},
-        [3]={ItemId=8310014, number=4},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒原·工装长裤
     [8310008] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒原·破雾面罩
     [8310009] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒原·皮质手套
     [8310010] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
     --- 荒原·踏尘战靴
     [8310011] = {
-        [1]={ItemId=0, number=1},
-        [2]={ItemId=0, number=1},
-        [3]={ItemId=0, number=1},
-        [4]={ItemId=0, number=1},
+        [1]={ItemId=8310017, number=30},
+        [2]={ItemId=8310015, number=20},
+        [3]={ItemId=8310014, number=2},
+        [4]={ItemId=8310020, number=1},
     },
 }
 
+Config.ItemDef = {
+    [1] = '帽子',
+    [2] = '脸饰',
+    [3] = '衣服',
+    [4] = '裤子',
+    [5] = '鞋子',
+    [6] = '消耗品',
+    [7] = '材料',
+    [8] = '其他',
+}
+
+Config.ItemTable = {
+    [1] = {
+        8310021,
+        8310026,
+        8310031
+    },
+    [2] = {
+        8310020,
+        8310025,
+        8310030,
+        8310009,
+    },
+    [3] = {
+        8310023,
+        8310028,
+        8310033,
+        8310007,
+    },
+    [4] = {
+        8310019,
+        8310024,
+        8310029,
+        8310008
+    },
+    [5] = {
+        8310022,
+        8310027,
+        8310032,
+        8310011,
+    },
+    [6] = {
+
+    },
+    [7] = {
+        8310014,
+        8310015,
+        8310016,
+        8310017
+    },
+    [8] = {}
+}
 
 return Config

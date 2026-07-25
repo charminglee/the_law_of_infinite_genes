@@ -25,12 +25,40 @@ local ComposeMain = {
     bInitDoOnce = false,
     Counter = 1,
     SelectedItemId = nil,
+    TabSelectedIndex = nil;
+    GoodSelectedIndex = nil;
 }
 function ComposeMain:Construct()
 	self:LuaInit();
+    self.Counter:SetVisibility()
 end
+
+function ComposeMain:SetPreviewVisibility(Visible)
+    if Visible then
+        self.Preview:SetVisibility(ESlateVisibility.Visible);
+    else
+        self.Preview:SetVisibility(ESlateVisibility.Collapsed);
+    end
+end
+
 function ComposeMain:Tick(MyGeometry, InDeltaTime)
     if self.SelectedItemId ~= ComposeManager.SelectedItemId then
+    end
+    if self.GoodSelectedIndex == nil then
+        self:SetPreviewVisibility(false);
+    end
+    if self.TabSelectedIndex ~= ComposeManager.TabSelectedIndex then
+        self.TabSelectedIndex = ComposeManager.TabSelectedIndex;
+        self.TabList:Reload(#Config.ItemDef);
+        self.GoodsList:Reload(#Config.ItemTable[self.TabSelectedIndex]);
+    end
+    if self.GoodSelectedIndex ~= ComposeManager.GoodSelectedIndex then
+        self:SetPreviewVisibility(true);
+        self.GoodSelectedIndex = ComposeManager.GoodSelectedIndex;
+        self.GoodsList:Reload(#Config.ItemTable[self.TabSelectedIndex]);
+        local ItemId = Config.ItemTable[self.TabSelectedIndex][self.GoodSelectedIndex+1]
+        self:ReloadMaterial(ItemId);
+        self:RefreshPreview(ItemId);
     end
 end
 function ComposeMain:LuaInit()
@@ -65,41 +93,107 @@ end
 function ComposeMain:IncreaseButtonClicked()
 end
 function ComposeMain:TabListUpdate(Item, Index)
+    Item.Index = Index+1;
+    Item.ItemName:SetText(Config.ItemDef[Index+1]);
+    if Index+1 == self.TabSelectedIndex then
+        Item:SetSelected(true);
+    else
+        Item:SetSelected(false);
+    end
 end
 function ComposeMain:GoodsListUpdate(Item, Index)
+    Item.Index = Index;
+    local ItemId = Config.ItemTable[self.TabSelectedIndex][Index+1];
+    Item:SetGoodItem(ItemId);
+    if self.GoodSelectedIndex == Index then
+        Item:SetSelected(true);
+    else
+        Item:SetSelected(false);
+    end
 end
+
+function ComposeMain:HasContent(val)
+    return val ~= nil;
+end
+
 function ComposeMain:ReloadMaterial(ItemId)
     local Formula = self:GetFormula(ItemId);
-    local DisplayList = {true, false, true, false, false, false};
-    if Formula[3] ~= nil then
-        DisplayList[2] = true;
-        DisplayList[5] = true;
-        if Formula[4] ~= nil then
-            DisplayList[6] = true;
-        end
-    end
-    if Formula[2] ~= nil then
-        DisplayList[4] = true;
-    end
+    local DisplayList = {
+        group = {false, false},
+        item = {false, false, false, false},
+    };
+    local Item1 = Config.Formula[ItemId][1];
+    local Item2 = Config.Formula[ItemId][2];
+    local Item3 = Config.Formula[ItemId][3];
+    local Item4 = Config.Formula[ItemId][4];
+
+    DisplayList.item[1] = self:HasContent(Item1);
+    DisplayList.item[2] = self:HasContent(Item2);
+    DisplayList.item[3] = self:HasContent(Item3);
+    DisplayList.item[4] = self:HasContent(Item4);
+
+    DisplayList.group[1] = DisplayList.item[1] or DisplayList.item[2];
+    DisplayList.group[2] = DisplayList.item[3] or DisplayList.item[4];
+    UGCLog.Log(DisplayList);
     self:SetMaterialVisible(DisplayList);
+    self:SetMaterialItem(self.MaterialItem1, Item1);
+    self:SetMaterialItem(self.MaterialItem2, Item2);
+    self:SetMaterialItem(self.MaterialItem3, Item3);
+    self:SetMaterialItem(self.MaterialItem4, Item4);
+end
+
+function ComposeMain:RefreshPreview(ItemId)
+    local ItemName = UGCItemSystemV2.GetItemNameV2(ItemId);
+    self.ItemName:SetText(ItemName);
+    local ItemPath = UGCItemSystemV2.GetItemIconTextureV2(ItemId);
+    local Texture = LoadObject(ItemPath.AssetPathName);
+    self.SelectItem:SetBrushFromTexture(Texture);
+    local customType = UGCItemSystemV2.GetItemCustomizedTypeV2(ItemId);
+    local Q = 1;
+    if tonumber(customType) > 5 then
+        Q = UGCItemSystemV2.GetItemQualityV2(ItemId);
+    else
+        Q = 1;
+    end
+    local QPath = Config.ItemQuality[Q].path;
+    local QTexture = LoadObject(QPath);
+    self.SelectQuality:SetBrushFromTexture(QTexture);
+    local Detail = UGCItemSystemV2.GetItemDetailV2(ItemId);
+    self.ItemDesc:SetText(Detail);
+end
+
+function ComposeMain:SetMaterialItem(item, dat)
+    if dat == nil then
+        return;
+    end
+    item:SetMaterial(dat);
 end
 
 function ComposeMain:GetFormula(ItemId)
-    return {
-        [1] = {ItemId=8310004, number=0},
-        [2] = {ItemId=8310004, number=0},
-        [3] = {ItemId=8310004, number=0},
-        [4] = {ItemId=8310004, number=0},
-    };
+    local f = Config.Formula[ItemId]
+    if f ~= nil then
+        return f
+    else
+        return {}
+    end
 end
 
 ---@param List table
 function ComposeMain:SetMaterialVisible(List)
-    self.MaterialBox1:SetVisibility(List[1]);
-    self.MaterialBox2:SetVisibility(List[2])
-    self.MaterialItem1:SetVisibility(List[3])
-    self.MaterialItem2:SetVisibility(List[4])
-    self.MaterialItem3:SetVisibility(List[5])
-    self.MaterialItem4:SetVisibility(List[6])
+    self.MaterialBox1:SetVisibility(self:TransformBool(List.group[1]));
+    self.MaterialBox2:SetVisibility(self:TransformBool(List.group[2]));
+
+    self.MaterialItem1:SetVisibility(self:TransformBool(List.item[1]));
+    self.MaterialItem2:SetVisibility(self:TransformBool(List.item[2]));
+    self.MaterialItem3:SetVisibility(self:TransformBool(List.item[3]));
+    self.MaterialItem4:SetVisibility(self:TransformBool(List.item[4]));
+end
+
+function ComposeMain:TransformBool(Bool)
+    if Bool then
+        return ESlateVisibility.Visible;
+    else
+        return ESlateVisibility.Collapsed;
+    end
 end
 return ComposeMain

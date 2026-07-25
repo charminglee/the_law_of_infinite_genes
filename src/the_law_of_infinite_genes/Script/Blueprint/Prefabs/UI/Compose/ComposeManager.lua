@@ -2,7 +2,11 @@
 ComposeManager = ComposeManager or
 {
     MainUI = nil;
+    TabSelectedIndex= 0;
     SelectedItemId = nil;
+    MaterialList = nil;
+    GoodSelectedIndex = nil;
+
 }
 
 function ComposeManager:RegisterComponentClass(CompClass)
@@ -27,6 +31,8 @@ function ComposeManager:OpenMainUI()
     if self.MainUI == nil then
         return;
     end
+    self.TabSelectedIndex = 1;
+    self.GoodSelectedIndex = nil;
     self.MainUI:SetVisibility(ESlateVisibility.Visible);
 end
 
@@ -34,6 +40,8 @@ function ComposeManager:CloseMainUI()
     if self.MainUI == nil then
         return;
     end
+    self.TabSelectedIndex = 1;
+    self.GoodSelectedIndex = nil;
     self.MainUI:SetVisibility(ESlateVisibility.Collapsed);
 end
 
