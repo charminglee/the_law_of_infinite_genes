@@ -16,6 +16,27 @@
 --Edit Below--
 local UGCPlayerController = {}
 
+-- GamePart是否加载完成
+UGCPlayerController.GamePartReady = false
+-- 是否是队长
+UGCPlayerController.bIsTeamLeader = false
+-- 大厅队友的PlayerKey
+UGCPlayerController.LobbyTeammatePlayerKeys = {}
+-- -- 大厅队友PlayerKey更新时的委托 
+-- UGCPlayerController.OnLobbyTeammatePlayerKeysUpdate = Delegate.New()
+
+-- 大厅信息配置
+UGCPlayerController.LobbyInfo = {
+    -- 当前选择的模式ID（默认1002）
+    SelectedModeID = 1002,
+    -- 是否自动填充队友
+    bFillTeammate = false,
+    -- 是否队伍状态完整
+    bTeamComplete = true,
+    -- 是否在匹配中
+    bIsMatching = false
+}
+
 
 function UGCPlayerController:ReceiveBeginPlay()
     UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
