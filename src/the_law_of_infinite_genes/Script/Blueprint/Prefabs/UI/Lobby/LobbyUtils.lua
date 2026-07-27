@@ -8,24 +8,24 @@
 LobbyWidgetType = {
     LWT_MainLobby = {
         Name = "MainLobby",
-        Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/UGC_Lobby_Main_UIBP.UGC_Lobby_Main_UIBP_C',
+        Path = 'Asset/Blueprint/Prefabs/UI/Lobby/Home/HomeMain.HomeMain_C',
         Instance = nil,
     },
-    LWT_ModeSelect = {
-        Name = "ModeSelect",
-        Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/UGC_ModeSelection_UIBP.UGC_ModeSelection_UIBP_C',
-        Instance = nil,
-    },
-    LWT_ClosePopupsTips = {
-        Name = "LWT_ClosePopupsTips",
-        Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/UGC_ClosePopupsTips_UIBP.UGC_ClosePopupsTips_UIBP_C',
-        Instance = nil
-    },
-    LWT_ModeDifficultyTip = {
-        Name = "LWT_ModeDifficultyTip",
-        Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/Item/UGC_DifficultyTips_UIBP.UGC_DifficultyTips_UIBP_C',
-        Instance = nil
-    },
+    -- LWT_ModeSelect = {
+    --     Name = "ModeSelect",
+    --     Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/UGC_ModeSelection_UIBP.UGC_ModeSelection_UIBP_C',
+    --     Instance = nil,
+    -- },
+    -- LWT_ClosePopupsTips = {
+    --     Name = "LWT_ClosePopupsTips",
+    --     Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/UGC_ClosePopupsTips_UIBP.UGC_ClosePopupsTips_UIBP_C',
+    --     Instance = nil
+    -- },
+    -- LWT_ModeDifficultyTip = {
+    --     Name = "LWT_ModeDifficultyTip",
+    --     Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/Item/UGC_DifficultyTips_UIBP.UGC_DifficultyTips_UIBP_C',
+    --     Instance = nil
+    -- },
 }
 
 

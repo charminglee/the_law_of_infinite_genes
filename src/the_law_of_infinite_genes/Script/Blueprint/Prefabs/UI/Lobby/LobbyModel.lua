@@ -36,40 +36,40 @@ function LobbyModel:Init()
     ugcprint("[LobbyModel:Init]")
     self.MultiModeConfigTableList = {}
 
-    -- -- 读项目工程里的模式配置表
-    -- local MultiModeConfigList = GameFrontendHUD:UGCGetMultiModeConfig()
-    -- local MultiModeNum = MultiModeConfigList:Num()
+    -- 读项目工程里的模式配置表
+    local MultiModeConfigList = GameFrontendHUD:UGCGetMultiModeConfig()
+    local MultiModeNum = MultiModeConfigList:Num()
 
-    -- if MultiModeNum <= 0 then return end
+    if MultiModeNum <= 0 then return end
 
-    -- for i = 1, MultiModeNum, 1 do
-    --     local MultiModeConfigJsonString = MultiModeConfigList:Get(i)
-    --     local MultiModeConfigTable = json.decode(MultiModeConfigJsonString)
-    --     if MultiModeConfigTable.ModeID ~= "1001" then
-    --         table.insert(self.MultiModeConfigTableList, MultiModeConfigTable)
-    --     end
-    -- end
+    for i = 1, MultiModeNum, 1 do
+        local MultiModeConfigJsonString = MultiModeConfigList:Get(i)
+        local MultiModeConfigTable = json.decode(MultiModeConfigJsonString)
+        if MultiModeConfigTable.ModeID ~= "1001" then
+            table.insert(self.MultiModeConfigTableList, MultiModeConfigTable)
+        end
+    end
 
-    -- -- 读 GameModeConfigTable
-    -- local GameModeConfigTablePath = UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig')
-    -- local GameModeConfigTable = UGCGameSystem.GetTableData(GameModeConfigTablePath)
-    -- for _, GameModeConfigRow in pairs(GameModeConfigTable) do
-    --     table.insert(self.GameModeConfigList, GameModeConfigRow)
-    -- end
+    -- 读 GameModeConfigTable
+    local GameModeConfigTablePath = UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig')
+    local GameModeConfigTable = UGCGameSystem.GetTableData(GameModeConfigTablePath)
+    for _, GameModeConfigRow in pairs(GameModeConfigTable) do
+        table.insert(self.GameModeConfigList, GameModeConfigRow)
+    end
 
-    -- -- 读 GameModeDetailTable
-    -- local GameModeDetailTablePath = UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeDetail.UGCGameModeDetail')
-    -- local GameModeDetailTable = UGCGameSystem.GetTableData(GameModeDetailTablePath)
-    -- for _, GameModeDetailRow in pairs(GameModeDetailTable) do
-    --     table.insert(self.GameModeDetailList, GameModeDetailRow)
-    -- end
+    -- 读 GameModeDetailTable
+    local GameModeDetailTablePath = UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeDetail.UGCGameModeDetail')
+    local GameModeDetailTable = UGCGameSystem.GetTableData(GameModeDetailTablePath)
+    for _, GameModeDetailRow in pairs(GameModeDetailTable) do
+        table.insert(self.GameModeDetailList, GameModeDetailRow)
+    end
 
-    -- -- 合并两张表
-    -- self:CombineModeConfigTable()
+    -- 合并两张表
+    self:CombineModeConfigTable()
 
-    -- -- 默认选择第一个模式、简单难度
-    -- local DefaultModeID = self:IsModeIDValid(self.CurrentSelectedModeID) and self.CurrentSelectedModeID or self:GetAllModeID()[1]
-    -- self:SelectMode(DefaultModeID, true)
+    -- 默认选择第一个模式、简单难度
+    local DefaultModeID = self:IsModeIDValid(self.CurrentSelectedModeID) and self.CurrentSelectedModeID or self:GetAllModeID()[1]
+    self:SelectMode(DefaultModeID, true)
 
     -- 注册匹配事件
     UGCMultiMode.NotifyMatchResponseDelegate:Add(self.OnMatchStarted, self)
@@ -335,10 +335,10 @@ function LobbyModel:OnMatchStarted(bSucceeded)
         return
     end
 
-    -- self.bIsMatching = bSucceeded
-    -- LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { bIsMatching = self.bIsMatching })
+    self.bIsMatching = bSucceeded
+    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { bIsMatching = self.bIsMatching })
     UGCWidgetManagerSystem.ShowTipsUI("匹配" .. (bSucceeded and "开始" or "失败"))
-    UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbybIsMatching", bSucceeded)
+    -- UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbybIsMatching", bSucceeded)
 
     ugcprint("[LobbyEvent.OnStartMatch] bSucceeded = " .. tostring(bSucceeded))
     LobbyEvent.OnMatchStarted(bSucceeded)
@@ -353,8 +353,8 @@ function LobbyModel:OnMatchCanceled()
         return
     end
 
-    -- self.bIsMatching = false
-    -- LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { bIsMatching = self.bIsMatching })
+    self.bIsMatching = false
+    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { bIsMatching = self.bIsMatching })
 
     -- UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbybIsMatching", false)
 

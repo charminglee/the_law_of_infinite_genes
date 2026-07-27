@@ -74,7 +74,7 @@ end
 --------------------------------[[ 状态函数 ]]--------------------------------
 
 function LobbyStateSwitcher:Lobby_Enter()
-    -- LobbyUtils.OpenAndUpdateWidget(LobbyWidgetType.LWT_MainLobby, { ModeID = LobbyModel:GetCurrentSelectedModeID() })
+    LobbyUtils.OpenAndUpdateWidget(LobbyWidgetType.LWT_MainLobby, { ModeID = LobbyModel:GetCurrentSelectedModeID() })
 end
 
 function LobbyStateSwitcher:Lobby_Leave()
@@ -83,8 +83,8 @@ function LobbyStateSwitcher:Lobby_Leave()
 end
 
 function LobbyStateSwitcher:ModeSelect_Enter()
-    -- LobbyUtils.CloseWidget(LobbyWidgetType.LWT_MainLobby)
-    -- LobbyUtils.OpenAndUpdateWidget(LobbyWidgetType.LWT_ModeSelect, { FocusedMode = LobbyModel:GetCurrentSelectedModeID() })
+    LobbyUtils.CloseWidget(LobbyWidgetType.LWT_MainLobby)
+    LobbyUtils.OpenAndUpdateWidget(LobbyWidgetType.LWT_ModeSelect, { FocusedMode = LobbyModel:GetCurrentSelectedModeID() })
 end
 
 function LobbyStateSwitcher:ModeSelect_Leave()
