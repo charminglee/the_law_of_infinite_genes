@@ -51,9 +51,10 @@ end
 function HomeMain:InitMode(modeId)
     if modeId == 1001 then
 		self.WidgetSwitcher_Matching:SetActiveWidgetIndex(0);
-		self:ToggleDifficulty(false)
+		self:ToggleDifficulty(false);
 	elseif modeId == 1002 then
 		self.GamePanel:SetVisibility(ESlateVisibility.Collapsed);
+        self.HomeToolBar:SetVisibility(ESlateVisibility.Collapsed);
 	end
 end
 
@@ -102,9 +103,10 @@ function HomeMain:UpdateMatch()
         if not self.MatchingTimer then
             self.TextBlock_MatchingTime:SetText("00:00");
             self.MatchingStartTime = os.time();
-            self.MatchingTimer = UGCTimerUtility.CreateLuaTimer(0.5, function()
-                local MatchingPassTime = os.time() - self.MatchingStartTime
-                self.TextBlock_MatchingTime:SetText(string.format("%02d:%02d", MatchingPassTime // 60, MatchingPassTime % 60))
+            self.MatchingTimer = UGCTimerUtility.CreateLuaTimer(1, function()
+                UGCSoundManagerSystem.PlaySound2D(UE.LoadObject('/Game/UGC/Repository/CG032/PVPTemplate/Audio/WwiseEvent/Play_UGC_Mode_SkillPVP_UI_Countdown.Play_UGC_Mode_SkillPVP_UI_Countdown'));
+                local MatchingPassTime = os.time() - self.MatchingStartTime;
+                self.TextBlock_MatchingTime:SetText(string.format("%02d:%02d", MatchingPassTime // 60, MatchingPassTime % 60));
             end, true);
         end
     else
