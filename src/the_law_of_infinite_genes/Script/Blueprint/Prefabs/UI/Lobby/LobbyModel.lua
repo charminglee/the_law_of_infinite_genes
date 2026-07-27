@@ -269,9 +269,9 @@ function LobbyModel:SelectMode(ModeID, bClientInit)
         LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { ModeID = ModeID })
 
         local PC = UGCGameSystem.GetLocalPlayerController()
-        -- if PC and PC.bIsTeamLeader and UGCGameSystem.GameState and not bClientInit then
-        --     UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbySelectedModeID", ModeID)
-        -- end
+        if PC and PC.bIsTeamLeader and UGCGameSystem.GameState and not bClientInit then
+            UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbySelectedModeID", ModeID)
+        end
     end
 end
 
@@ -299,7 +299,7 @@ function LobbyModel:RequestMatch(bFillTeammate)
         return
     end
 
-    UGCMultiMode.RequestMatch(1002, nil, nil, true)
+    UGCMultiMode.RequestMatch(self:GetCurrentSelectedModeID(), nil, nil, true)
 end
 
 ---取消匹配

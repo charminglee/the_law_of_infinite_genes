@@ -27,7 +27,6 @@ function UGCGameMode:PlayerEnter(playerKey)
     if ModeID == 1002 then
         GameState:StartGame();
     end
-    UGCLog.Log('UGCGameMode:ModeID=', ModeID);
 end
 
 -- function UGCGameMode:ReceiveTick(DeltaTime)

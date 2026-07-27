@@ -76,7 +76,7 @@ function UGCPlayerController:ReceiveBeginPlay()
     end
 
     if UGCGameSystem.IsServer() then
-        if GameState.IsInLobby() then
+        if UGCGameSystem.GameState.IsInLobby() then
             self:HandleBeginPlayInServerForLobby()
         else
             self:HandleBeginPlayInServerForFighting()

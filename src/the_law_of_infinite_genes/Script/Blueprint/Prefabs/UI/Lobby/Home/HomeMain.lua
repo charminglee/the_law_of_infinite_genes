@@ -80,11 +80,11 @@ function HomeMain:OnUpdate(Data)
     self:UpdateDifficulty()
 
     local PC = UGCGameSystem.GetLocalPlayerController()
-    if PC ~= nil and UGCGameSystem.GetPlayerStateByPlayerController(PC) ~= nil then
-        if UGCGameSystem.GetPlayerStateByPlayerController(PC).bIsLobbyTeamLeader then
+    if PC ~= nil and UGCGameSystem.GetLocalPlayerState() ~= nil then
+        if UGCGameSystem.GetLocalPlayerState().bIsLobbyTeamLeader then
             self.WidgetSwitcher_Matching:SetActiveWidgetIndex(0)
-        elseif UGCGameSystem.GetPlayerStateByPlayerController(PC) then
-            self.WidgetSwitcher_Matching:SetActiveWidgetIndex(UGCGameSystem.GetPlayerStateByPlayerController(PC).bIsReadyInLobby and 2 or 1)
+        elseif UGCGameSystem.GetLocalPlayerState() then
+            self.WidgetSwitcher_Matching:SetActiveWidgetIndex(UGCGameSystem.GetLocalPlayerState().bIsReadyInLobby and 2 or 1)
         else
             self.WidgetSwitcher_Matching:SetActiveWidgetIndex(1)
         end
