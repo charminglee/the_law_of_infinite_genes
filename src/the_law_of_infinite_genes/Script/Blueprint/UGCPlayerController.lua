@@ -111,6 +111,7 @@ function UGCPlayerController:HandleBeginPlayInClientForLobby()
 end
 
 function UGCPlayerController:HandleBeginPlayInClientForFighting()
+    LobbyUtils.OpenWidget(LobbyWidgetType.LWT_RaidInstance)
     local GamePartReadyMessage = UGCGenericMessageSystem.Messages.UGC.GamePart.GamePartLoaded
     local ChangeGamePartReady = function()
         self.GamePartReady = true
@@ -126,7 +127,6 @@ function UGCPlayerController:InitInServer(PlayerKey)
     local bIsUGCPIE = UGCGameSystem.IsUGCPIE();
     if PlayerKey == UGCGameSystem.GetPlayerKeyByPlayerController(self) then
         self.bIsTeamLeader = bIsUGCPIE and PlayerKey == 10001 or UGCTeamSystem.GetIsLeaderOrNotByPlayerKey(PlayerKey)
-        UGCLog.Log('InitInServer', self.bIsTeamLeader);
         UnrealNetwork.RepLazyProperty(self, "bIsTeamLeader")
         UGCGameSystem.GetPlayerStateByPlayerController(self):SetIsLobbyTeamLeader(self.bIsTeamLeader)
         
@@ -138,14 +138,14 @@ function UGCPlayerController:InitInServer(PlayerKey)
         self.LobbyTeammatePlayerKeys = UGCTeamSystem.GetPlayerKeysByTeamID(UGCTeamSystem.GetTeamIDByPlayerKey(UGCGameSystem.GetPlayerKeyByPlayerController(self)), true)
         -- self.LobbyTeammatePlayerKeys = {self.PlayerKey}
     else
-        self.LobbyTeammatePlayerKeys = UGCTeamSystem.GetLobbyTeamKeysByPlayerKey(UGCGameSystem.GetPlayerKeyByPlayerController(self))
+        self.LobbyTeammatePlayerKeys = UGCTeamSystem.GetLobbyTeammatePlayerKeysByPlayerKey(UGCGameSystem.GetPlayerKeyByPlayerController(self))
     end
     UnrealNetwork.RepLazyProperty(self, "LobbyTeammatePlayerKeys")
 
     -- 给加入游戏的队友同步大厅信息
     if self.bIsTeamLeader then
         if not bIsUGCPIE then
-            self.LobbyInfo.bTeamComplete = #UGCTeamSystem.GetLobbyTeamKeysByPlayerKey(self.PlayerKey) == #UGCTeamSystem.GetLobbyTeammateUIDsByUID(UGCGameSystem.GetUIDByPlayerController(self))
+            self.LobbyInfo.bTeamComplete = #UGCTeamSystem.GetLobbyTeammatePlayerKeysByPlayerKey(self.PlayerKey) == #UGCTeamSystem.GetLobbyTeammateUIDsByUID(UGCGameSystem.GetUIDByPlayerController(self))
             -- UnrealNetwork.RepLazyProperty(self, "LobbyInfo.bTeamComplete")
         end
 
@@ -187,6 +187,29 @@ end
 
 function UGCPlayerController:RPC_Server_SetLobbyReadyStatus(bIsReady)
     UGCGameSystem.GetPlayerStateByPlayerController(self):SetLobbyReadyStatus(bIsReady)
+end
+
+function UGCPlayerController:RPC_Server_SetLobbybIsMatching(bIsMatching)
+    if not UGCActorComponentUtility.HasAuthority(self) then
+        return
+     end
+  
+    if not self.bIsTeamLeader then
+        print("UGCGameState:Server_ChangeLobbySelectedModeID PlayerKey="..tostring(UGCGameSystem.GetPlayerKeyByPlayerController(self)).." is not team leader!")
+    end
+
+    self.LobbyInfo.bIsMatching = bIsMatching
+    UnrealNetwork.RepLazyProperty(self, "LobbyInfo.bIsMatching")
+
+    local LeaderPlayerKey = UGCGameSystem.GetPlayerKeyByPlayerController(self)
+    for _, PlayerKey in ipairs(self.LobbyTeammatePlayerKeys) do
+        if PlayerKey ~= LeaderPlayerKey then
+            local PC = UGCGameSystem.GetPlayerControllerByPlayerKey(PlayerKey)
+            if PC ~= nil then
+                PC:SetLobbyInfo(self.LobbyInfo)
+            end
+        end
+    end
 end
 
 --[[

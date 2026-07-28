@@ -26,6 +26,11 @@ LobbyWidgetType = {
     --     Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/Item/UGC_DifficultyTips_UIBP.UGC_DifficultyTips_UIBP_C',
     --     Instance = nil
     -- },
+    LWT_RaidInstance = {
+        Name = "RaidInstance",
+        Path = 'Asset/Blueprint/Prefabs/UI/RaidInstance/RaidInstanceMain.RaidInstanceMain_C',
+        Instance = nil,
+    }
 }
 
 

@@ -2,7 +2,7 @@
 ---@field Button_0 UButton
 ---@field CardButton UButton
 ---@field ShopButton UButton
-
+--Edit Below--
 local RaidInstanceMain = { bInitDoOnce = false } 
 
 function RaidInstanceMain:Construct()
@@ -22,6 +22,10 @@ function RaidInstanceMain:Listen()
     self.CardButton.OnClicked:Add(self.OpenCardUI, self);
     self.ShopButton.OnClicked:Add(self.OpenShopUI, self);
     self.Button_0.OnClicked:Add(self.Exit, self);
+end
+
+function RaidInstanceMain:OnOpen(...)
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "ResetCardData", LocalPlayerController.PlayerKey);
 end
 
 function RaidInstanceMain:OpenCardUI()

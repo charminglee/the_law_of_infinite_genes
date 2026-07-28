@@ -1,5 +1,4 @@
 ---@class HomeMain_C:UserWidgetLayout
----@field Button_46 UButton
 ---@field Button_CancelMatch UButton
 ---@field Button_CancelReady UButton
 ---@field Button_DifficultySelect UButton
@@ -43,32 +42,20 @@ function HomeMain:LuaInit()
 	self.bInitDoOnce = true;
     self.HomeToolBar.parent = self;
 	HomeManager:RegisterMainUI(self);
-	local ModeID = UGCMultiMode.GetModeID()
-	self:InitMode(ModeID)
 	self:Listen();
 end
 
-function HomeMain:InitMode(modeId)
-    if modeId == 1001 then
-		self:ToggleDifficulty(false);
-	elseif modeId == 1002 then
-		self.GamePanel:SetVisibility(ESlateVisibility.Collapsed);
-        self.HomeToolBar:SetVisibility(ESlateVisibility.Collapsed);
-	end
-end
-
 function HomeMain:Listen()
-	self.Button_46.OnClicked:Add(self.Button_46_OnClicked, self);
+    self.UGC_ReuseList2_Difficulty.OnAfterNewItem:Add(self.UGC_ReuseList2_Difficulty_OnAfterNewItem, self);
 
 	self.Button_Show.OnClicked:Add(self.OnMatchClicked, self);
     self.Button_CancelMatch.OnClicked:Add(self.OnCancelMatchClicked, self);
     self.Button_Ready.OnClicked:Add(self.OnReadyClicked, self);
     self.Button_CancelReady.OnClicked:Add(self.OnCancelReadyClicked,self);
-	self.Button_DifficultySelect.OnClicked:Add(self.OnDifficultySelectClicked, self)
-
-    self.UGC_ReuseList2_Difficulty.OnAfterNewItem:Add(self.UGC_ReuseList2_Difficulty_OnAfterNewItem, self)
+	self.Button_DifficultySelect.OnClicked:Add(self.OnDifficultySelectClicked, self);
 end
 
+-- 刷新
 function HomeMain:OnUpdate(Data)
     self.Data = Data
 
@@ -161,11 +148,6 @@ function HomeMain:RefreshMatchButton(bIsLeader)
     self.WidgetSwitcher_Matching:SetActiveWidgetIndex(bIsLeader and 0 or 1);
 end
 
-function HomeMain:Button_46_OnClicked()
-	UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "ResetCardData", LocalPlayerController.PlayerKey);
-	RaidInstanceManager:OpenMainUI();
-end
-
 -- 难度列表刷新
 function HomeMain:UGC_ReuseList2_Difficulty_OnAfterNewItem(Widget, Idx)
     Idx = Idx + 1
@@ -233,11 +215,6 @@ function HomeMain:OnCancelReadyClicked()
 
     -- UGCWidgetManagerSystem.ShowTipsUI("已取消准备")
     PlayerController:SetLobbyReadyStatus(false)
-end
-
--- 匹配结束回调
-function HomeMain:MatchResCallBack(res)
-
 end
 
 -- 选择难度
