@@ -22,7 +22,7 @@ function GeneSkillBranch:LuaInit()
 end
 
 function GeneSkillBranch:DataList()
-    return GeneManager.Config.SkillData[self.index]
+    return GeneTree.SkillData[self.index]
 end
 
 function GeneSkillBranch:Reload()
@@ -30,7 +30,7 @@ function GeneSkillBranch:Reload()
 end
 
 function GeneSkillBranch:Refresh()
-    self.Name:SetText(GeneManager.Config.BranchText[self.index])
+    self.Name:SetText(GeneTree.BranchText[self.index])
 end
 
 function GeneSkillBranch:ReuseList2Update(item, index)

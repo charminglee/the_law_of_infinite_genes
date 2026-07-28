@@ -1,6 +1,9 @@
 ---@meta
 
 
+---@alias ntable<T> table<number, T> & {n: number}
+
+
 ---@alias UGCGameMode UGCGameMode_C
 ---@alias UGCGameState UGCGameState_C
 ---@alias UGCPlayerController UGCPlayerController_C

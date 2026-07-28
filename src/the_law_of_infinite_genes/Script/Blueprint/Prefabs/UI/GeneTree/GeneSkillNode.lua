@@ -46,21 +46,21 @@ function GeneSkillNode:LuaInit()
 end
 
 function GeneSkillNode:Data()
-    return GeneManager.Config.SkillData[self.branchId][self.index + 1]
+    return GeneTree.SkillData[self.branchId][self.index + 1]
 end
 
 function GeneSkillNode:PreviousData()
 	if self.index == 0 then
 		return nil
 	end
-	return GeneManager.Config.SkillData[self.branchId][self.index]
+	return GeneTree.SkillData[self.branchId][self.index]
 end
 
 function GeneSkillNode:NextData()
 	if self.index + 2 > #GeneManager.Content:SelectedBranchDataList() then
 		return nil
 	end
-	return GeneManager.Config.SkillData[self.branchId][self.index + 2]
+	return GeneTree.SkillData[self.branchId][self.index + 2]
 end
 
 function GeneSkillNode:CheckUnlockCondition()
