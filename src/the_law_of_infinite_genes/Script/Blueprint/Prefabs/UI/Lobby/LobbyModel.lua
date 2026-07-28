@@ -356,7 +356,7 @@ function LobbyModel:OnMatchCanceled()
     self.bIsMatching = false
     LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { bIsMatching = self.bIsMatching })
 
-    -- UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbybIsMatching", false)
+    UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbybIsMatching", false)
 
     UGCWidgetManagerSystem.ShowTipsUI("匹配取消")
     LobbyEvent.OnMatchCanceled()
