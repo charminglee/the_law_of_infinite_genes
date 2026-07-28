@@ -1,4 +1,4 @@
-local Config = {}
+Config = Config or {}
 
 
 Config.Debug = {

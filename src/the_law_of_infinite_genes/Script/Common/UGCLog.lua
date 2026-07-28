@@ -1,4 +1,4 @@
-local UGCLog = {}
+UGCLog = UGCLog or {}
 
 local UGC_DEV_LOG = true
 

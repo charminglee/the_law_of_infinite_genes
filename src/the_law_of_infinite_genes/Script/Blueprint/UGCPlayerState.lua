@@ -72,7 +72,7 @@ end
 function UGCPlayerState:ReceiveBeginPlay()
     UGCPlayerState.SuperClass.ReceiveBeginPlay(self)
     if not self:HasAuthority() then
-        LocalPlayerState = LocalPlayerState or self
+        LocalPlayerState = LocalPlayerState or self ---@type UGCPlayerState_C
     end
 end
 

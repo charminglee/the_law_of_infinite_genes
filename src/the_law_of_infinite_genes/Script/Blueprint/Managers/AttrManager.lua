@@ -1,3 +1,4 @@
+---管理玩家属性数据，绑定于PlayerPawn，仅服务端可见。
 ---@class AttrManager_C:BaseManager_C
 --Edit Below--
 local AttrManager = {

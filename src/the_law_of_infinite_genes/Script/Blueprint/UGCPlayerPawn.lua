@@ -9,7 +9,7 @@ function UGCPlayerPawn:ReceiveBeginPlay()
     self.bVaultIsOpen = true
     self.IsOpenShovelAbility = true
     if not self:HasAuthority() then
-        LocalPlayerPawn = LocalPlayerPawn or self
+        LocalPlayerPawn = LocalPlayerPawn or self ---@type UGCPlayerPawn_C
     end
 end
 

@@ -51,7 +51,7 @@ function UGCPlayerController:ReceiveBeginPlay()
     UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
 
     if not self:HasAuthority() then
-        LocalPlayerController = self
+        LocalPlayerController = self ---@type UGCPlayerController_C
 
     else
         local delegate = ObjectExtend.CreateDelegate(

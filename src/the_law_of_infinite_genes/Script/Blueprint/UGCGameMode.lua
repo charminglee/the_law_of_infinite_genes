@@ -7,7 +7,7 @@ UGCGameMode.IsStartMatch = false
 function UGCGameMode:ReceiveBeginPlay()
     UGCGameMode.SuperClass.ReceiveBeginPlay(self)
     self.bIsOpenShovelingAbility = true
-    GameMode = self
+    GameMode = self ---@type UGCGameMode_C
     local ModeID = UGCMultiMode.GetModeID()
     self:InitMode(ModeID)
 end

@@ -10,7 +10,7 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyEvent")
 
 
 ---@class LobbyFlow
-local LobbyFlow = {}
+LobbyFlow = LobbyFlow or {}
 
 
 ---@type LobbyStateSwitcher

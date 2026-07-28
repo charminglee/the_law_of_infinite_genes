@@ -1,4 +1,4 @@
-local GeneTree = {}
+GeneTree = GeneTree or {}
 
 
 -- 称号类型文本
