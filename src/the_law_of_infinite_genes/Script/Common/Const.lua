@@ -1,8 +1,8 @@
 local ROOT = UGCMapInfoLib.GetRootLongPackagePath().."Asset/Blueprint/"
 
 
----@enum ServerEvent
-ServerEvent = {
+---@enum Event
+Event = {
     OnResetCardData         = "OnResetCardData",
     OnRepCardData           = "OnRepCardData",
     OnCardShopRefreshAfter  = "OnCardShopRefreshAfter",
@@ -13,12 +13,7 @@ ServerEvent = {
     OnCoinChangeAfter       = "OnCoinChangeAfter",
     OnTitleEquipAfter       = "OnTitleEquipAfter",
     OnTitleUnlockAfter      = "OnTitleUnlockAfter",
-}
-
-
----@enum ClientEvent
-ClientEvent = {
-    OnRepCardData = "OnRepCardData",
+    OnCardShopLevelUpAfter  = "OnCardShopLevelUpAfter",
 }
 
 

@@ -28,7 +28,7 @@ function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageE
 	-- 资源点掉落/称号条件相关逻辑
 	local isBoss = self:ActorHasTag(Tag.Boss)
 	local isElite = self:ActorHasTag(Tag.Elite)
-	local pdm = EventInstigator.PlayerDataManager
+	local pdm = UGCGameSystem.GetPlayerStateByPlayerController(EventInstigator).PlayerDataManager ---@type PlayerDataManager_C
 	local config = Config.Resource.Coin_0.MonsterLoot
 	local playerHealth = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_Health)
 	local playerHealthMax = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_HealthMax)
@@ -49,7 +49,7 @@ function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageE
 			pdm:AddStat(Statistics.NormalMonsterKillCountHealthAboveHalf, 1, false)
 		end
     end
-	pdm:Sync()
+	pdm:SyncData()
 end
 
 

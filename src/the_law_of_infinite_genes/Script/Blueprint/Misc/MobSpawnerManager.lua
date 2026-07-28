@@ -2,7 +2,7 @@
 local MobSpawnerManager = {}
 
 
-local function SpawnCountFormula(n)
+local function _SpawnCountFormula(n)
     -- 每波刷怪数量 = (20 + 波次) * 存活玩家数
     local survivors = 0
     local playerKeys = UGCGameSystem.GetAllPlayerKey(false)
@@ -29,7 +29,7 @@ function MobSpawnerManager:OnWaveStart(waveIndex)
 
     -- 根据波次控制刷怪数量
     local spawnerCount = self:GetWaveSpawnerNum(waveIndex)
-    local spawnCount = math.floor(SpawnCountFormula(waveIndex) / spawnerCount)
+    local spawnCount = math.floor(_SpawnCountFormula(waveIndex) / spawnerCount)
     for i = 0, spawnerCount - 1 do
         local spawner = self:GetSpawner(waveIndex, i)
         spawner:ModifyMinMaxSpawnCount(spawnCount, spawnCount)

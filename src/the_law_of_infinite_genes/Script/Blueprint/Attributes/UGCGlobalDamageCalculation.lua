@@ -47,7 +47,6 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     end
 
     local instigator                = UGCAttributeSystem.GetInstigatorFromContext(context):K2_GetPawn()
-    ugcprint("GetCalculationResult"..UGCObjectUtility.GetObjectFullName(instigator))
     local instigatorAM              = instigator.AttrManager ---@type AttrManager_C
     local attackPower               = instigatorAM:GetAttr(Attribute.AttackPower)
     local breakDefencePct           = instigatorAM:GetAttr(Attribute.BreakDefencePct)
@@ -61,7 +60,6 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     local seckillChance             = instigatorAM:GetAttr(Attribute.SeckillChance)
     
     local victim            = UGCAttributeSystem.GetVictimFromContext(context)
-    ugcprint("GetCalculationResult"..UGCObjectUtility.GetObjectFullName(victim))
     local victimAM          = victim.AttrManager ---@type AttrManager_C
     local defence           = victimAM:GetAttr(Attribute.Defence)
     local defencePct        = victimAM:GetAttr(Attribute.DefensePct)
@@ -112,6 +110,18 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
     -- 最终伤害
     local finalDamage = atkArea * critArea * damagePctArea * defenceArea * damageDecreaceArea - damageDecreace
     finalDamage = math.max(1, finalDamage)
+    ugcprint(
+        "GetCalculationResult " 
+        .. " instigator:" .. UGCObjectUtility.GetDisplayName(instigator)
+        .. " victim:" .. UGCObjectUtility.GetDisplayName(victim)
+        .. " atkArea:" .. atkArea 
+        .. " critArea:" .. critArea 
+        .. " damagePctArea:" .. damagePctArea 
+        .. " defenceArea:" .. defenceArea 
+        .. " damageDecreaceArea:" .. damageDecreaceArea
+        .. " damageDecreace:" .. damageDecreace
+        .. " finalDamage:" .. finalDamage
+    )
 
     -- 吸血
     _ApplyHealthSteal(instigator, finalDamage, healthStealPct)

@@ -82,10 +82,10 @@ function AttrManager:ReceiveBeginPlay()
     end
 
     if self:HasAuthority() then 
-        Lib.EventSystem.Listen(ServerEvent.OnResetCardData, self.OnResetCardData, self)
-        Lib.EventSystem.Listen(ServerEvent.OnCardEquipAfter, self.OnCardEquipAfter, self)
-        Lib.EventSystem.Listen(ServerEvent.OnCardUnequipAfter, self.OnCardUnequipAfter, self)
-        Lib.EventSystem.Listen(ServerEvent.OnCardSellAfter, self.OnCardSellAfter, self)
+        Lib.EventSystem.Listen(Event.OnResetCardData, self.OnResetCardData, self)
+        Lib.EventSystem.Listen(Event.OnCardEquipAfter, self.OnCardEquipAfter, self)
+        Lib.EventSystem.Listen(Event.OnCardUnequipAfter, self.OnCardUnequipAfter, self)
+        Lib.EventSystem.Listen(Event.OnCardSellAfter, self.OnCardSellAfter, self)
     end
 end
 

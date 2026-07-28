@@ -25,7 +25,7 @@ function GachaComponent:ReceiveBeginPlay()
     if self:GetOwner():HasAuthority() == false then
         self:InitUI();
         GachaManager:RegisterComponentClass(self);
-        Lib.EventSystem.Listen(ClientEvent.OnRepCardData, self.OnRepCardData, self);
+        Lib.EventSystem.Listen(Event.OnRepCardData, self.OnRepCardData, self);
     end
 end
 
