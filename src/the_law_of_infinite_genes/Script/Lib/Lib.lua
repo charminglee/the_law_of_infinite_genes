@@ -1,5 +1,5 @@
 ---@class Lib
-Lib = {
+local Lib = {
     ---@type EventSystem
     EventSystem = UGCGameSystem.UGCRequire("Script.Lib.Utils.EventSystem"),
     ---@type Table

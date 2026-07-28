@@ -9,17 +9,20 @@ local UGCGameState = {
 }
 
 
-UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
+UGCGameSystem.UGCRequire("Script.Common.ue_enum_custom")
 UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
-UGCGameSystem.UGCRequire("Script.Lib.Lib")
 UGCGameSystem.UGCRequire("Script.Common.Const")
 UGCGameSystem.UGCRequire("Script.Common.Common")
-UGCGameSystem.UGCRequire("Script.Common.Config")
-UGCGameSystem.UGCRequire("Script.Common.Card")
-UGCGameSystem.UGCRequire("Script.Common.UGCLog")
-UGCGameSystem.UGCRequire("Script.Common.TweenManager")
-UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
-UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyFlow")
+
+
+Lib             = UGCGameSystem.UGCRequire("Script.Lib.Lib")
+UGCLog          = UGCGameSystem.UGCRequire("Script.Common.UGCLog")
+TweenManager    = UGCGameSystem.UGCRequire("Script.Common.TweenManager")
+Config          = UGCGameSystem.UGCRequire("Script.Common.Config")
+Card            = UGCGameSystem.UGCRequire("Script.Common.Card")
+GeneTree        = UGCGameSystem.UGCRequire("Script.Common.GeneTree")
+UGCGameData     = UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
+LobbyFlow       = UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyFlow")
 
 
 local function InitSubControl(mainUI)

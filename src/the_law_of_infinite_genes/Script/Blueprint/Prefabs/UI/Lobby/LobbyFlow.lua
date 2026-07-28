@@ -10,7 +10,7 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyEvent")
 
 
 ---@class LobbyFlow
-LobbyFlow = {}
+local LobbyFlow = {}
 
 
 ---@type LobbyStateSwitcher
@@ -78,3 +78,6 @@ function _LobbyFlowImpl:Go(To)
 
     self.CurrentState = To
 end
+
+
+return LobbyFlow

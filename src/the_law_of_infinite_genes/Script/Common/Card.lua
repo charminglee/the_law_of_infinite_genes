@@ -1,4 +1,4 @@
-Card = {}
+local Card = {}
 
 
 Card.Common = {

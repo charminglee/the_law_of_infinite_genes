@@ -1,6 +1,6 @@
-UGCLog = UGCLog or {}
+local UGCLog = {}
 
-UGC_DEV_LOG = true
+local UGC_DEV_LOG = true
 
 UGCLog.IsServerCached = nil;
 

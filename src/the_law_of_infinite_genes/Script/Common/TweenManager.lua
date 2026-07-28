@@ -4,7 +4,7 @@
 -- 依赖：TweenLibrary, UGCDelegateUtility, UGCGameSystem
 -- ============================================================
 
-TweenManager = TweenManager or {}
+local TweenManager = {}
 
 -- 缓动类型常量（方便引用，可根据实际环境调整）
 TweenManager.EEasingType = {

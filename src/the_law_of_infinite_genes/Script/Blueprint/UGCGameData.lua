@@ -1,4 +1,4 @@
-UGCGameData = UGCGameData or {}
+local UGCGameData = {}
 
 UGCGameData.ModeName = {
     Lobby = "大厅",
