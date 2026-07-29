@@ -94,6 +94,21 @@ function UGCPlayerState:SetIsLobbyTeamLeader(bIsTeamLeader)
     UnrealNetwork.RepLazyProperty(self, "bIsTeamLeader")
 end
 
+function UGCPlayerState:OnRep_SettleParams()
+    print(string.format("[UGCPlayerState] OnRep_SettleParams, bIsSettled is : %s, bIsFinished is : %s", tostring(self.SettleParams.bIsSettled), tostring(self.SettleParams.bIsFinished)))
+    if self.SettleParams and self.SettleParams.bIsSettled then
+        local PC = UGCGameSystem.GetPlayerControllerByPlayerState(self)
+        if PC then
+            PC:OnGameSettle()
+        else
+            print("[UGCPlayerState:OnRep_SettleParams] : PC is nil")
+        end
+    end
+    if self.bIsPlayerInPortalDoor then
+        -- 弹出跳转UI
+    end
+end
+
 --[[
 function UGCPlayerState:ReceiveTick(DeltaTime)
     UGCPlayerState.SuperClass.ReceiveTick(self, DeltaTime)

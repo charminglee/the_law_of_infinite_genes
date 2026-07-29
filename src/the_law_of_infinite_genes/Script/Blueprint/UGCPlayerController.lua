@@ -106,7 +106,7 @@ function UGCPlayerController:HandleBeginPlayInClientForLobby()
     LobbyFlow:Go(LobbyFlowState.LFS_Lobby)
     -- local NewIndex = TimingListUtils.NewList()
     -- TimingListUtils.Add(NewIndex, 0, self, "GamePartReady")
-    -- TimingListUtils.Add(NewIndex, 0, UGCGameSystem, "GameState", self, self.RecieveGamePartReady)
+    TimingListUtils.Add(NewIndex, 0, UGCGameSystem, "GameState", self, self.RecieveGamePartReady)
     -- TimingListUtils.Activate(NewIndex, 0.2, 20)
 end
 
@@ -119,7 +119,7 @@ function UGCPlayerController:HandleBeginPlayInClientForFighting()
     UGCGenericMessageSystem.ListenGlobalMessage(self, GamePartReadyMessage, self, ChangeGamePartReady)
     -- local NewIndex = TimingListUtils.NewList()
     -- TimingListUtils.Add(NewIndex, 0, self, "GamePartReady")
-    -- TimingListUtils.Add(NewIndex, 0, UGCGameSystem, "GameState", self, self.RecieveGamePartReady)
+    TimingListUtils.Add(NewIndex, 0, UGCGameSystem, "GameState", self, self.RecieveGamePartReady)
     -- TimingListUtils.Activate(NewIndex, 0.2, 20)
 end
 
@@ -170,6 +170,22 @@ function UGCPlayerController:OnPlayerExit(PlayerKey)
     end
 end
 
+function UGCPlayerController:RecieveGamePartReady()
+    ugcprint("[UGCPlayerController] ReceiveBeginPlay GamePartReady")
+
+    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
+
+    if not PlayerState then
+        print("[UGCPlayerController:RecieveGamePartReady] PlayerState is nil")
+        return
+    end
+
+    if not PlayerState.SettleParams.bIsSettled then 
+        PlayerState:OnRep_AliveState()
+    end
+    PlayerState:OnRep_SettleParams()
+end
+
 function UGCPlayerController:SetLobbyReadyStatus(bIsReady)
     UnrealNetwork.CallUnrealRPC(self, self, "RPC_Server_SetLobbyReadyStatus", bIsReady)
 end
@@ -209,6 +225,21 @@ function UGCPlayerController:RPC_Server_SetLobbybIsMatching(bIsMatching)
                 PC:SetLobbyInfo(self.LobbyInfo)
             end
         end
+    end
+end
+
+function UGCPlayerController:OnGameSettle()
+    print("[UGCPlayerController:OnGameSettle]")
+    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
+    if not PlayerState then
+        print("[UGCPlayerController:OnGameSettle] PlayerState is nil")
+    end
+    if PlayerState then
+        ugcprint("UGCPlayerController:OnRep_bIsSettled, IsFinish: ".. tostring(PlayerState.SettleParams.bIsFinished).. "IsModeUnLock: ".. tostring(PlayerState.IsModeUnLock))
+        local ModeID = UGCMultiMode.GetModeID()
+        ShopV2Manager:DeactivateRandomRefreshTab()
+        BreakthroughManager:OpenBattleResultUI(ModeID, PlayerState.SettleParams.bIsFinished, PlayerState.IsModeUnLock)
+        BreakthroughManager:CloseRespawnUI()
     end
 end
 
