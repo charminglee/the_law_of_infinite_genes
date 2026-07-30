@@ -1,4 +1,4 @@
----@class MobSpawner: AUGCMobSpawner
+---@class MobSpawner_C: AUGCMobSpawner
 local MobSpawner = {}
  
 
