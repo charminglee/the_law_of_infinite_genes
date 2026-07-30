@@ -12,13 +12,6 @@ end
 
 function SpecialEventManager:ReceiveBeginPlay()
     SpecialEventManager.SuperClass.ReceiveBeginPlay(self)
-    local delegate = ObjectExtend.CreateDelegate(
-        self, 
-        function()
-            self:TriggerSpecialEvent(SpecialEvent.PutridMiasma)
-        end
-    )
-    KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 25, false)
 end
 
 

@@ -15,6 +15,7 @@ Config.Debug = {
 
 Config.Common = {
     AutoSaveInterval = 30,  -- 玩家数据自动保存间隔，单位秒
+    SpawnerDelay = 10,      -- 刷怪延迟
 }
 
 

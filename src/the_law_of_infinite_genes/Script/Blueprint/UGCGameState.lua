@@ -1,15 +1,14 @@
 ---@class UGCGameState_C:BP_UGCGameState_C
 ---@field GlobalEventComponent GlobalEventComponent_C
 ---@field SpecialEventManager SpecialEventManager_C
+---@field MobSpawnerManager MobSpawnerManager_C
 --Edit Below--
 local UGCGameState = {
     isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
-    totalWaves = 10,    -- 总波数
-    waveIndex = -1,     -- 当前波数
 }
 
 
-UGCGameSystem.UGCRequire("Script.Common.ue_enum_custom")
+UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
 UGCGameSystem.UGCRequire("Script.Common.Const")
 UGCGameSystem.UGCRequire("Script.Common.Common")
@@ -52,6 +51,7 @@ end
 -- function UGCGameState:ReceiveEndPlay()
 -- end
 
+
 function UGCGameState:IsAllLobbyTeammateReady()
    local bIsUGCPIE = UGCGameSystem.IsUGCPIE();
 
@@ -80,6 +80,7 @@ function UGCGameState:IsAllLobbyTeammateReady()
    return bReady
 end
 
+
 function UGCGameState:SetUIWidget()
     -- UGCWidgetManagerSystem.HideWidget(UGCWidgetManagerSystem.GetMainControlUI());
     local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/MainWidget.MainWidget_C');
@@ -106,39 +107,21 @@ function UGCGameState:SetUIPosition()
 end
 
 
-function UGCGameState:_TpAllPlayers()
-    local levelStart = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.LevelStart)
-    local loc = levelStart:K2_GetActorLocation()
-    for _, c in pairs(UGCGameSystem.GetAllPlayerController(false)) do
-        UGCPlayerControllerSystem.TeleportTo(c, loc.X, loc.Y, loc.Z)
-    end
-end
-
-
-function UGCGameState:_StartMobSpawnerManager()
-    local sm = UGCActorComponentUtility.GetActorByActorInstancePath(InstancePath.MobSpawnerManager)
-    sm:StartSpawnerManager()
-end
-
-
----开始游戏。
+---【服务端】开始游戏。
 function UGCGameState:StartGame()
     if not self:HasAuthority() then
         return
     end
-
     self.isWaiting = false
-    -- self:_TpAllPlayers()
-    self:_StartMobSpawnerManager()
+    self.MobSpawnerManager:NextWave()
 end
 
 
----结束游戏。
+---【服务端】结束游戏。
 function UGCGameState:EndGame()
     if not self:HasAuthority() or self.isWaiting then
         return
     end
-
     self.isWaiting = true
 end
 
@@ -148,9 +131,11 @@ function UGCGameState:MulticastRPC_EquippedTitle(uid, id)
     ACHVManager.CacheEquippedTitle = id;
 end
 
+
 -- 是否在大厅中
 function UGCGameState.IsInLobby()
    return UGCGameData.GetGameModeName(UGCMultiMode.GetModeID()) == UGCGameData.ModeName.Lobby
 end
+
 
 return UGCGameState
