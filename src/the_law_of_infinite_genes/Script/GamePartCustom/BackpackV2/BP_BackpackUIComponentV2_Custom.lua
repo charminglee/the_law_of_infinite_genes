@@ -79,4 +79,30 @@ end
 -- function BP_BackpackUIComponentV2_Custom:OnOpenDropItemPanel(Panel)
 -- end
 
+function BP_BackpackUIComponentV2_Custom:EquipmentFortify()
+    ugcprint('点击强化')
+end
+
+function BP_BackpackUIComponentV2_Custom:EquipmentReinf()
+    ugcprint('点击洗练')
+end
+
+function BP_BackpackUIComponentV2_Custom:CheckFortify(DefineID, DataType)
+    --ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
+    if Config.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
+        return true;
+    else
+        return false;
+    end
+end
+
+function BP_BackpackUIComponentV2_Custom:CheckReinf(DefineID, DataType)
+    ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
+    if Config.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
+        return true;
+    else
+        return false;
+    end
+end
+
 return BP_BackpackUIComponentV2_Custom
