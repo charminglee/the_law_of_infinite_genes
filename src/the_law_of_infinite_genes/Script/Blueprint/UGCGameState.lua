@@ -22,6 +22,7 @@ UGCGameSystem.UGCRequire("Script.Common.TimingListUtils")
 UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")               
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyFlow")
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.UGCItem.UGCItemManager")
+UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Game.Breakthrough.BreakthroughManager")
 
 
 local function InitSubControl(mainUI)
