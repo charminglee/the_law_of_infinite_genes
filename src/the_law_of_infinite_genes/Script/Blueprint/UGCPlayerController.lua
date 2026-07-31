@@ -237,7 +237,7 @@ function UGCPlayerController:OnGameSettle()
     if PlayerState then
         ugcprint("UGCPlayerController:OnRep_bIsSettled, IsFinish: ".. tostring(PlayerState.SettleParams.bIsFinished).. "IsModeUnLock: ".. tostring(PlayerState.IsModeUnLock))
         local ModeID = UGCMultiMode.GetModeID()
-        ShopV2Manager:DeactivateRandomRefreshTab()
+        -- ShopV2Manager:DeactivateRandomRefreshTab()
         BreakthroughManager:OpenBattleResultUI(ModeID, PlayerState.SettleParams.bIsFinished, PlayerState.IsModeUnLock)
         BreakthroughManager:CloseRespawnUI()
     end
