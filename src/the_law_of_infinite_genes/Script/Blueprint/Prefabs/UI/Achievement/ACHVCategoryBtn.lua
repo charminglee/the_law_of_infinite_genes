@@ -27,7 +27,7 @@ function ACHVCategoryBtn:Refresh()
 end
 
 function ACHVCategoryBtn:Select()
-    self.PressedImg:SetVisibility(ESlateVisibility.Visible);
+    self.PressedImg:SetVisibility(ESlateVisibility.SelfHitTestInvisible);
 	self:SelectAnim(true);
 end
 

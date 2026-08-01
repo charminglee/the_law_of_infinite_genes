@@ -85,7 +85,7 @@ function GeneContent:PlayAnim()
         TweenManager.Stop(self.posAnim_1)
         self.posAnim_1 = nil
     end
-    self.GeneInfoBar.InfoPanel:SetVisibility(self.aniState and ESlateVisibility.Visible or ESlateVisibility.Hidden);
+    self.GeneInfoBar.InfoPanel:SetVisibility(self.aniState and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Hidden);
     self.posAnim_0 = TweenManager.PositionAnim(
         infoBarSlot,
         KismetMathLibrary.MakeVector2D(0, 0),
@@ -111,7 +111,7 @@ function GeneContent:PlayAnim()
     if self.posAnim_1 then
         TweenManager.OnComplete(self.posAnim_1, function()
             self.posAnim_1 = nil;
-            self.GeneInfoBar.InfoPanel:SetVisibility(self.aniState and ESlateVisibility.Visible or ESlateVisibility.Hidden);
+            self.GeneInfoBar.InfoPanel:SetVisibility(self.aniState and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Hidden);
         end);
     end
 end

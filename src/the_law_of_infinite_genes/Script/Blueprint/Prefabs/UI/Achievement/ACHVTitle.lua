@@ -59,8 +59,8 @@ end
 
 function ACHVTitle:SetLocked(locked)
     if locked then
-        self.LockImg:SetVisibility(ESlateVisibility.Visible);
-        self.LockBg:SetVisibility(ESlateVisibility.Visible);
+        self.LockImg:SetVisibility(ESlateVisibility.SelfHitTestInvisible);
+        self.LockBg:SetVisibility(ESlateVisibility.SelfHitTestInvisible);
     else
         self.LockImg:SetVisibility(ESlateVisibility.Hidden);
         self.LockBg:SetVisibility(ESlateVisibility.Collapsed);
@@ -74,8 +74,8 @@ function ACHVTitle:Refresh()
 end
 
 function ACHVTitle:Select()
-    self.PressedFrame:SetVisibility(ESlateVisibility.Visible);
-    self.PressedImg:SetVisibility(ESlateVisibility.Visible);
+    self.PressedFrame:SetVisibility(ESlateVisibility.SelfHitTestInvisible);
+    self.PressedImg:SetVisibility(ESlateVisibility.SelfHitTestInvisible);
 end
 
 function ACHVTitle:Deselect()

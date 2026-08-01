@@ -22,7 +22,7 @@ function ACHVMain:LuaInit()
 end
 
 function ACHVMain:Open()
-	self:SetVisibility(ESlateVisibility.Visible);
+	self:SetVisibility(ESlateVisibility.SelfHitTestInvisible);
     self:SetVisibleAnim(true);
 end
 

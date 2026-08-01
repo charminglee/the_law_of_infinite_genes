@@ -1,5 +1,6 @@
 ---@class GeneResetTip_C:UAEUserWidget
 ---@field Bg UImage
+---@field Content UCanvasPanel
 ---@field No UButton
 ---@field Yes UButton
 --Edit Below--
@@ -22,7 +23,7 @@ function GeneResetTip:LuaInit()
 end
 
 function GeneResetTip:Open()
-	self:SetVisibility(ESlateVisibility.Visible);
+	self:SetVisibility(ESlateVisibility.SelfHitTestInvisible);
 	self:SetVisibleAnim(true);
 end
 
@@ -47,7 +48,7 @@ function GeneResetTip:SetVisibleAnim(isVisible)
 		dur = GeneManager.Config.AnimDur.Reset
     end
     TweenManager.FloatAnim(
-		function(Object, value) self:SetRenderScale(KismetMathLibrary.MakeVector2D(value, 1)) end,
+		function(Object, value) self.Content:SetRenderScale(KismetMathLibrary.MakeVector2D(value, 1)) end,
         startScale, endScale, dur
     );
 end

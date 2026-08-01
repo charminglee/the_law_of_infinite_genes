@@ -73,8 +73,8 @@ function GeneSkillNode:CheckUnlockCondition()
 end
 
 function GeneSkillNode:SetLocked(unlocked)
-	self.LockImg:SetVisibility(unlocked and ESlateVisibility.Collapsed or ESlateVisibility.Visible);
-	self.LockBg:SetVisibility(unlocked and ESlateVisibility.Collapsed or ESlateVisibility.Visible);
+	self.LockImg:SetVisibility(unlocked and ESlateVisibility.Collapsed or ESlateVisibility.HitTestInvisible);
+	self.LockBg:SetVisibility(unlocked and ESlateVisibility.Collapsed or ESlateVisibility.HitTestInvisible);
 	self.LevelPanel:SetVisibility(unlocked and ESlateVisibility.HitTestInvisible or ESlateVisibility.Collapsed);
 end
 
@@ -89,7 +89,7 @@ end
 
 function GeneSkillNode:Select()
     self.PressedFrame:SetVisibility(ESlateVisibility.HitTestInvisible);
-    self.PressedImg:SetVisibility(ESlateVisibility.Visible);
+    self.PressedImg:SetVisibility(ESlateVisibility.HitTestInvisible);
 end
 
 function GeneSkillNode:Deselect()
@@ -102,7 +102,7 @@ function GeneSkillNode:FramePressed()
 	self.delay = 0;
 	if not self:Data().Unlocked then
 		self.GeneProgressBar:SetDuration(self.pressAndHoldDelay);
-		self.GeneProgressBar:SetVisibility(ESlateVisibility.Visible);
+		self.GeneProgressBar:SetVisibility(ESlateVisibility.HitTestInvisible);
 	end
 end
 
