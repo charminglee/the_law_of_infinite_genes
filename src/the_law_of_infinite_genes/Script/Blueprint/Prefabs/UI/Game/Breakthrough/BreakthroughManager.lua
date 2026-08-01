@@ -60,12 +60,12 @@ function BreakthroughManager:ShowMoreTips(MoreData)
     Anchors.Minimum = Vector2D.New(0, 0);
     Anchors.Maximum = Vector2D.New(1, 1);
     AnchorData.Anchors = Anchors;
-    UGCWidgetManagerSystem.AddChildToUISlotByWidget(self.TipsUI_BP,"UI.UISlot.MainUISlot_High", 50, AnchorData)
+    UGCWidgetManagerSystem.AddToSlot(self.TipsUI_BP,"UI.UISlot.MainUISlot_High", 50, AnchorData)
     self.TipsUI_BP:SetTips(MoreData)
 
 end
 
-function BreakthroughManager:OpenBattleResultUI(ModeID,State,IsShowUnlock)
+function BreakthroughManager:OpenBattleResultUI(ModeID, State, IsShowUnlock)
     ugcprint("BreakthroughManager:OpenBattleResultUI"..tostring(ModeID)..tostring(State)..tostring(IsShowUnlock))
     if self:CheckModeID(ModeID) then
         if self.Battle_MainUI_BP then
@@ -79,8 +79,8 @@ function BreakthroughManager:OpenBattleResultUI(ModeID,State,IsShowUnlock)
         Anchors.Minimum = Vector2D.New(0, 0);
         Anchors.Maximum = Vector2D.New(1, 1);
         AnchorData.Anchors = Anchors;
-        UGCWidgetManagerSystem.AddChildToUISlotByWidget(self.Battle_MainUI_BP,"UI.UISlot.MainUISlot_High", 10, AnchorData)
-        self.Battle_MainUI_BP:SetPlayerData(ModeID,State,IsShowUnlock)
+        UGCWidgetManagerSystem.AddToSlot(self.Battle_MainUI_BP,"UI.UISlot.MainUISlot_High", 10, AnchorData)
+        self.Battle_MainUI_BP:SetPlayerData(ModeID, State, IsShowUnlock)
     end
 end
 

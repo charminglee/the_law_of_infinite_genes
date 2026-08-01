@@ -36,7 +36,7 @@ function Breakthrough_Result_UIBP:LuaInit()
 	self.UGC_ReuseList2_Player.OnUpdateItem:Add(self.UGC_ReuseList2_Player_OnUpdateItem, self);
 	
 end
-function Breakthrough_Result_UIBP:SetPlayerData(ModeID,State,IsShowUnlock)
+function Breakthrough_Result_UIBP:SetPlayerData(ModeID, State, IsShowUnlock)
 	self.ModeID = ModeID
 	self.State = State
     self.IsShowUnlock = IsShowUnlock
@@ -46,7 +46,7 @@ function Breakthrough_Result_UIBP:SetPlayerData(ModeID,State,IsShowUnlock)
     self:SetPlayerInfo()
 end
 
-function Breakthrough_Result_UIBP:SetPlayerInfo()
+function Breakthrough_Result_UIBP:SetPlayerInfo() 
     if #BreakthroughManager.ResultPlayerState ~= 0 then
         self.WaitingNode:SetVisibility(ESlateVisibility.Collapsed)
     else
