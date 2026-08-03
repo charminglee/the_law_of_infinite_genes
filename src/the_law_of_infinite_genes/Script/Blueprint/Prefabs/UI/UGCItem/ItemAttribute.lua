@@ -22,7 +22,7 @@ function ItemAttribute:InitData(Data)
     local FQuality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineId)
 
     local EquipmentText = self:Line(
-            self:Inline(self:Font('品质\t\t', {size=20, color='FFFFFFFF'}, self:Font(Config.ItemQuality[FQuality].name, {size=20, color=Config.ItemQuality[FQuality].color}))),
+            self:Inline(self:Font('品质\t\t', {size=20, color='FFFFFFFF'}, self:Font(ItemCfg.ItemQuality[FQuality].name, {size=20, color=ItemCfg.ItemQuality[FQuality].color}))),
             self:Inline(self:Font("装备强化\t\t", { size = 18, color = 'FFFFFFFF'}), self:Font('+15', {size=20, color='FEEA42FF'})),
             self:Inline(self:Font("攻击力\t", { size = 14, color = "FFFFFFFF" }), self:Font('+10', {size=14, color='B8FFA1FF'})),
             self:Inline(self:Font("生命值\t", { size = 14, color = "FFFFFFFF" }), self:Font('+10', {size=14, color='B8FFA1FF'})),

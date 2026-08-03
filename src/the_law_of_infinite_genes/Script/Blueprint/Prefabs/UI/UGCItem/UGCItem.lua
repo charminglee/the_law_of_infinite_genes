@@ -305,11 +305,11 @@ function UGCItem:GetItemIconPath(ItemId)
 end
 
 function UGCItem:GetQualityPath(Quality)
-    if Config == nil or Config.ItemQuality == nil then
+    if Config == nil or ItemCfg.ItemQuality == nil then
         return nil;
     end
 
-    local QualityConfig = Config.ItemQuality[Quality] or Config.ItemQuality[1];
+    local QualityConfig = ItemCfg.ItemQuality[Quality] or ItemCfg.ItemQuality[1];
     if QualityConfig == nil then
         return nil;
     end

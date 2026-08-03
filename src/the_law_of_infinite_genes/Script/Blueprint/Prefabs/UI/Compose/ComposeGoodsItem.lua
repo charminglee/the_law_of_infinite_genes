@@ -32,7 +32,7 @@ function ComposeGoodsItem:Button_0_Clicked()
 end
 
 function ComposeGoodsItem:SetItem(ItemId)
-    local formula = Config.Formula[ItemId];
+    local formula = ItemCfg.Formula[ItemId];
 
 end
 
@@ -49,7 +49,7 @@ function ComposeGoodsItem:SetGoodItem(ItemId)
     else
         Q = 1;
     end
-    local QPath = Config.ItemQuality[Q].path;
+    local QPath = ItemCfg.ItemQuality[Q].path;
     local QTexture = LoadObject(QPath);
     self.quality:SetBrushFromTexture(QTexture);
 end
@@ -75,7 +75,7 @@ function ComposeGoodsItem:SetMaterial(dat)
     else
         Q = 7;
     end
-    local QPath = Config.ItemQuality[Q].path;
+    local QPath = ItemCfg.ItemQuality[Q].path;
     local QTexture = LoadObject(QPath);
     self.quality:SetBrushFromTexture(QTexture);
     self.Selected:SetVisibility(ESlateVisibility.Collapsed);

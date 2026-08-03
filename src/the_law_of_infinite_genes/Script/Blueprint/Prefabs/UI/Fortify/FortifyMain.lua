@@ -28,7 +28,7 @@ function FortifyMain:FilterEquipment(ItemList)
     local result = {};
     for key, item in ipairs(ItemList) do
         local itemId = item.TypeSpecificID;
-        if Config.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(itemId)] then
+        if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(itemId)] then
             table.insert(result, item);
         end
     end

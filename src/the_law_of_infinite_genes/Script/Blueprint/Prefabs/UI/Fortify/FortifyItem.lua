@@ -52,8 +52,8 @@ function FortifyItem:SetDefineID(DefineID)
     local ItemId = self.DefineID.TypeSpecificID;
     local quality = UGCItemSystemV2.GetItemQualityV2(ItemId);
     local icon = UGCItemSystemV2.GetItemIconTextureV2(ItemId);
-    self:AsyncSetTexture({AssetPathName=Config.ItemQuality[quality].Bg, SubPathString=nil}, self.Image_QualityBarBg);
-    self:AsyncSetTexture({AssetPathName=Config.ItemQuality[quality].bar, SubPathString=nil}, self.Image_QualityBar);
+    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].Bg, SubPathString=nil}, self.Image_QualityBarBg);
+    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].bar, SubPathString=nil}, self.Image_QualityBar);
     self:AsyncSetTexture(icon, self.Image_Icon);
 end
 

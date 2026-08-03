@@ -92,7 +92,7 @@ end
 --- 强化按钮显示逻辑
 function BP_BackpackUIComponentV2_Custom:CheckFortify(DefineID, DataType)
     --ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
-    if Config.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
+    if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
         return true;
     else
         return false;
@@ -102,7 +102,7 @@ end
 --- 洗练按钮显示逻辑
 function BP_BackpackUIComponentV2_Custom:CheckReinf(DefineID, DataType)
     ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
-    if Config.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
+    if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
         return true;
     else
         return false;

@@ -49,14 +49,14 @@ function ComposeMain:Tick(MyGeometry, InDeltaTime)
     end
     if self.TabSelectedIndex ~= ComposeManager.TabSelectedIndex then
         self.TabSelectedIndex = ComposeManager.TabSelectedIndex;
-        self.TabList:Reload(#Config.ItemDef);
-        self.GoodsList:Reload(#Config.ItemTable[self.TabSelectedIndex]);
+        self.TabList:Reload(#ItemCfg.ItemDef);
+        self.GoodsList:Reload(#ItemCfg.ItemTable[self.TabSelectedIndex]);
     end
     if self.GoodSelectedIndex ~= ComposeManager.GoodSelectedIndex then
         self:SetPreviewVisibility(true);
         self.GoodSelectedIndex = ComposeManager.GoodSelectedIndex;
-        self.GoodsList:Reload(#Config.ItemTable[self.TabSelectedIndex]);
-        local ItemId = Config.ItemTable[self.TabSelectedIndex][self.GoodSelectedIndex+1]
+        self.GoodsList:Reload(#ItemCfg.ItemTable[self.TabSelectedIndex]);
+        local ItemId = ItemCfg.ItemTable[self.TabSelectedIndex][self.GoodSelectedIndex+1]
         self:ReloadMaterial(ItemId);
         self:RefreshPreview(ItemId);
     end
@@ -94,7 +94,7 @@ function ComposeMain:IncreaseButtonClicked()
 end
 function ComposeMain:TabListUpdate(Item, Index)
     Item.Index = Index+1;
-    Item.ItemName:SetText(Config.ItemDef[Index+1]);
+    Item.ItemName:SetText(ItemCfg.ItemDef[Index+1]);
     if Index+1 == self.TabSelectedIndex then
         Item:SetSelected(true);
     else
@@ -103,7 +103,7 @@ function ComposeMain:TabListUpdate(Item, Index)
 end
 function ComposeMain:GoodsListUpdate(Item, Index)
     Item.Index = Index;
-    local ItemId = Config.ItemTable[self.TabSelectedIndex][Index+1];
+    local ItemId = ItemCfg.ItemTable[self.TabSelectedIndex][Index+1];
     Item:SetGoodItem(ItemId);
     if self.GoodSelectedIndex == Index then
         Item:SetSelected(true);
@@ -122,10 +122,10 @@ function ComposeMain:ReloadMaterial(ItemId)
         group = {false, false},
         item = {false, false, false, false},
     };
-    local Item1 = Config.Formula[ItemId][1];
-    local Item2 = Config.Formula[ItemId][2];
-    local Item3 = Config.Formula[ItemId][3];
-    local Item4 = Config.Formula[ItemId][4];
+    local Item1 = ItemCfg.Formula[ItemId][1];
+    local Item2 = ItemCfg.Formula[ItemId][2];
+    local Item3 = ItemCfg.Formula[ItemId][3];
+    local Item4 = ItemCfg.Formula[ItemId][4];
 
     DisplayList.item[1] = self:HasContent(Item1);
     DisplayList.item[2] = self:HasContent(Item2);
@@ -155,7 +155,7 @@ function ComposeMain:RefreshPreview(ItemId)
     else
         Q = 1;
     end
-    local QPath = Config.ItemQuality[Q].path;
+    local QPath = ItemCfg.ItemQuality[Q].path;
     local QTexture = LoadObject(QPath);
     self.SelectQuality:SetBrushFromTexture(QTexture);
     local Detail = UGCItemSystemV2.GetItemDetailV2(ItemId);
@@ -170,7 +170,7 @@ function ComposeMain:SetMaterialItem(item, dat)
 end
 
 function ComposeMain:GetFormula(ItemId)
-    local f = Config.Formula[ItemId]
+    local f = ItemCfg.Formula[ItemId]
     if f ~= nil then
         return f
     else

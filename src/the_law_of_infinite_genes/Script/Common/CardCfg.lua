@@ -1,4 +1,4 @@
-Card = Card or {}
+CardCfg = CardCfg or {}
 
 
 CardCfg.Common = {
@@ -1128,4 +1128,4 @@ CardCfg.Cards = {
 }
 
 
-return Card
+return CardCfg

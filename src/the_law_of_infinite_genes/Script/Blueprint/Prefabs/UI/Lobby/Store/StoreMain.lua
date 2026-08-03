@@ -80,7 +80,7 @@ function StoreMain:InitUI()
     self.StoreTabList:Reload(#self.TabLabelList);
     self:ReloadBackpackList();
     self.EquipSlotList:Reload(5);
-    self.StoreBackpackTabList:Reload(#Config.ItemType);
+    self.StoreBackpackTabList:Reload(#ItemCfg.ItemType);
 end
 
 function StoreMain:GetBackpackReloadCount()
