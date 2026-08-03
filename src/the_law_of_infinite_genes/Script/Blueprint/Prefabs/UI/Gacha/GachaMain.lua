@@ -169,7 +169,7 @@ function GachaMain:_CountUsed(list)
     return count
 end
 function GachaMain:RefreshInfo()
-    local maxSlotLv = Card.Common.MaxCardSlotLevel
+    local maxSlotLv = CardCfg.Common.MaxCardSlotLevel
     local level = self:_UnlockedSlotCount()
     if self.ShopLevel ~= nil then
         self.ShopLevel:SetText(tostring(level));
@@ -178,7 +178,7 @@ function GachaMain:RefreshInfo()
         self.SlotCount:SetText(tostring(level) .. "/" .. tostring(maxSlotLv));
     end
     if self.StoreCount ~= nil then
-        local storeSlotCount = Card.Common.StoreSlotCount
+        local storeSlotCount = CardCfg.Common.StoreSlotCount
         self.StoreCount:SetText(tostring(self:_CountUsed(card.store)) .. "/" .. tostring(storeSlotCount));
     end
     SetButtonVisible(self.LevelUpButton, level < maxSlotLv);
@@ -223,12 +223,12 @@ end
 function GachaMain:BuildAttributeTextList(data)
     local list = {};
     local cardIndex = data and data[1];
-    local Fcard = cardIndex and Card.Cards[cardIndex];
+    local Fcard = cardIndex and CardCfg.Cards[cardIndex];
     if Fcard == nil then
         return list;
     end
-    local suit = Card.Suit and Card.Suit[Fcard.suit];
-    local group = suit and Card.Group and Card.Group[suit.Group];
+    local suit = CardCfg.Suit and CardCfg.Suit[Fcard.suit];
+    local group = suit and CardCfg.Group and CardCfg.Group[suit.Group];
     if group ~= nil then
         AddAttributeText(list, group.name, group.HexColor);
     end
@@ -247,7 +247,7 @@ function GachaMain:BuildAttributeTextList(data)
         end
         table.sort(comboKeys);
         for _, comboIndex in ipairs(comboKeys) do
-            local combo = Card.Combo and Card.Combo[comboIndex];
+            local combo = CardCfg.Combo and CardCfg.Combo[comboIndex];
             local title = combo and combo.name or ("[" .. tostring(comboIndex) .. "]套效果");
             AddAttributeText(list, title, combo and combo.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR);
             for _, entry in ipairs(comboList[comboIndex]) do
@@ -313,7 +313,7 @@ function GachaMain:_AddActiveSuitText(list, activeSuitList)
     for _, activeSuit in ipairs(activeSuitList) do
         AddAttributeText(list, activeSuit.SuitName, activeSuit.SuitColor);
         for _, comboIndex in ipairs(activeSuit.ComboKeys) do
-            local combo = Card.Combo and Card.Combo[comboIndex];
+            local combo = CardCfg.Combo and CardCfg.Combo[comboIndex];
             local title = combo and combo.name or ("[" .. tostring(comboIndex) .. "]\229\165\151\230\149\136\230\158\156");
             AddAttributeText(list, title, combo and combo.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR);
             local entryList = activeSuit.ComboList and activeSuit.ComboList[comboIndex];
@@ -335,11 +335,11 @@ function GachaMain:BuildAttributeCountTextList()
     if equipped == nil then
         return list;
     end
-    local count = Card.Common.EquippedSlotCount;
+    local count = CardCfg.Common.EquippedSlotCount;
     for i = 1, count do
         local data = equipped[i];
         local cardIndex = data and data[1];
-        local Fcard = cardIndex and Card.Cards[cardIndex];
+        local Fcard = cardIndex and CardCfg.Cards[cardIndex];
         if Fcard ~= nil then
             local star = data[2] or 1;
             local bonusList = Fcard.bonus and (Fcard.bonus[star] or Fcard.bonus[1]);
@@ -355,7 +355,7 @@ function GachaMain:BuildAttributeCountTextList()
     end
     for _, suitId in ipairs(self:_SortedNumberKeys(suitCounts)) do
         local suitCount = suitCounts[suitId];
-        local suit = Card.Suit and Card.Suit[suitId];
+        local suit = CardCfg.Suit and CardCfg.Suit[suitId];
         local comboList = suit and suit.Combo;
         if comboList ~= nil then
             local activeComboKeys = {};
@@ -367,7 +367,7 @@ function GachaMain:BuildAttributeCountTextList()
                 end
             end
             if #activeComboKeys > 0 then
-                local group = suit.Group and Card.Group and Card.Group[suit.Group];
+                local group = suit.Group and CardCfg.Group and CardCfg.Group[suit.Group];
                 table.insert(activeSuitList, {
                     SuitName = group and group.name or ("\229\165\151\232\163\133" .. tostring(suitId)),
                     SuitColor = group and group.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR,
@@ -482,7 +482,7 @@ end
 function GachaMain:SetPreview(isShow)
     local data = GachaManager.PreviewDAT;
     local cardIndex = data and data[1];
-    local Fcard = cardIndex and Card.Cards[cardIndex];
+    local Fcard = cardIndex and CardCfg.Cards[cardIndex];
     if not isShow or data == nil or Fcard == nil then
         self.SelectedPreview:SetVisibility(ESlateVisibility.Collapsed);
         self.NilPreview:SetVisibility(ESlateVisibility.Visible);
@@ -495,10 +495,10 @@ function GachaMain:SetPreview(isShow)
     local Texture = LoadObject(Fcard.texture);
     local ItemName = Fcard.name;
     local StarText = GachaManager:GetStarText(data[2]);
-    local suit = Card.Suit[Fcard.suit];
-    local ItemColor = Card.Group[suit.Group].HexColor;
+    local suit = CardCfg.Suit[Fcard.suit];
+    local ItemColor = CardCfg.Group[suit.Group].HexColor;
     local grade = Fcard.grade;
-    local QualityColor = Card.Grade[grade].HexColor;
+    local QualityColor = CardCfg.Grade[grade].HexColor;
     self.PreviewItem:SetBrushFromTexture(Texture);
     self.PreviewItem:SetColorRGBStr(ItemColor);
     self.PreviewTop:SetColorRGBStr(QualityColor);

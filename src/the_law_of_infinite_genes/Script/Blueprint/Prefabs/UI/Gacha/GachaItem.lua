@@ -61,7 +61,7 @@ end
 
 function GachaItem:_ShowCard(data, emptyState)
     local cardIndex = data[1];
-    local Fcard = Card.Cards[cardIndex];
+    local Fcard = CardCfg.Cards[cardIndex];
     if Fcard == nil then
         self:_ShowEmpty(emptyState);
         return false;
@@ -70,10 +70,10 @@ function GachaItem:_ShowCard(data, emptyState)
     local Texture = LoadObject(Fcard.texture);
     local ItemName = Fcard.name;
     local StarText = GachaManager:GetStarText(data[2]);
-    local suit = Card.Suit[Fcard.suit];
-    local ItemColor = Card.Group[suit.Group].HexColor;
+    local suit = CardCfg.Suit[Fcard.suit];
+    local ItemColor = CardCfg.Group[suit.Group].HexColor;
     local grade = Fcard.grade;
-    local QualityColor = Card.Grade[grade].HexColor;
+    local QualityColor = CardCfg.Grade[grade].HexColor;
 
     self.ItemImage:SetBrushFromTexture(Texture);
     self.ItemImage:SetColorRGBStr(ItemColor);

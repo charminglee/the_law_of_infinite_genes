@@ -74,14 +74,14 @@ end
 function GachaSlotItem:SetItemTexture(Slot)
     local SlotIndex = Slot[1]
     local star = Slot[2]
-    local _card = Card.Cards[SlotIndex];
+    local _card = CardCfg.Cards[SlotIndex];
     self.GachaText:SetText(_card.name);
     local Texture = LoadObject(_card.texture);
     self.GachaImage:SetBrushFromTexture(Texture);
     local suitIndex = _card.suit;
     local gradeIndex = _card.grade;
-    self.GachaImage:SetColorRGBStr(Card.Group[suitIndex].HexColor);
-    self.quality:SetColorRGBStr(Card.Grade[gradeIndex].HexColor)
+    self.GachaImage:SetColorRGBStr(CardCfg.Group[suitIndex].HexColor);
+    self.quality:SetColorRGBStr(CardCfg.Grade[gradeIndex].HexColor)
 end
 
 

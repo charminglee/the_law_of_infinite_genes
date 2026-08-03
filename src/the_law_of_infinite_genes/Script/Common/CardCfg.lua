@@ -1,7 +1,7 @@
 Card = Card or {}
 
 
-Card.Common = {
+CardCfg.Common = {
     SellRefundRatio     = 1,    -- 出售卡牌返还比例
     RefreshBaseCost     = 10,   -- 刷新商店的首次价格
     RefreshStepCost     = 10,   -- 每次刷新相比上一次的加价
@@ -12,7 +12,7 @@ Card.Common = {
 }
 
 
-Card.StoreWeight = {
+CardCfg.StoreWeight = {
     [1]  = { [1]=1.00, [2]=0.00, [3]=0.00, [4]=0.00, [5]=0.00 },
     [2]  = { [1]=0.90, [2]=0.10, [3]=0.00, [4]=0.00, [5]=0.00 },
     [3]  = { [1]=0.70, [2]=0.30, [3]=0.00, [4]=0.00, [5]=0.00 },
@@ -28,7 +28,7 @@ Card.StoreWeight = {
 }
 
 
-Card.Grade = {
+CardCfg.Grade = {
     [1] = {cost=50, HexColor='FFFFFF', anno='一费卡'},
     [2] = {cost=100, HexColor='00FF00', anno='二费卡'},
     [3] = {cost=200, HexColor='0000FF', anno='三费卡'},
@@ -37,7 +37,7 @@ Card.Grade = {
 }
 
 
-Card.Group = {
+CardCfg.Group = {
     [1] = {name='畸变猎手', HexColor='FF0000'},
     [2] = {name='腐甲防御者', HexColor='FFFF00'},
     [3] = {name='疫毒反噬者', HexColor='EE82EE'},
@@ -45,7 +45,7 @@ Card.Group = {
 }
 
 
-Card.Combo = {
+CardCfg.Combo = {
     [1] = {name='4/12套装效果', HexColor='0DFF00'},
     [2] = {name='8/12套装效果', HexColor='FFD700'},
     [3] = {name='12/12套装效果', HexColor='FF424F'},
@@ -53,7 +53,7 @@ Card.Combo = {
 }
 
 
-Card.Suit = {
+CardCfg.Suit = {
     [1] = {
         Group = 1,
         Combo = {
@@ -142,7 +142,7 @@ Card.Suit = {
 }
 
 
-Card.Cards = {
+CardCfg.Cards = {
     [1] = {
         suit = 1,
         star = 1,

@@ -355,7 +355,7 @@ local function _BuildCardsByGrade()
         return _cardsByGrade
     end
     _cardsByGrade = {}
-    for cardId, info in pairs(Card.Cards) do
+    for cardId, info in pairs(CardCfg.Cards) do
         local list = _cardsByGrade[info.grade]
         if list == nil then
             list = {}
@@ -374,9 +374,9 @@ function PlayerDataManager:ResetCardData()
     end
     self._card = {
         shopLevel = 1,
-        store = {n = Card.Common.StoreSlotCount},
-        shop = {n = Card.Common.ShopSlotCount},
-        equipped = {n = Card.Common.EquippedSlotCount},
+        store = {n = CardCfg.Common.StoreSlotCount},
+        shop = {n = CardCfg.Common.ShopSlotCount},
+        equipped = {n = CardCfg.Common.EquippedSlotCount},
         refreshCount = 0,
     }
     self:SyncCardData()
@@ -387,7 +387,7 @@ end
 ---【双端】获取已解锁的卡牌穿戴槽数量。
 ---@return number @已解锁槽位数
 function PlayerDataManager:GetUnlockedCardSlotCount()
-    return math.min(Card.Common.MaxCardSlotLevel, self._card.shopLevel)
+    return math.min(CardCfg.Common.MaxCardSlotLevel, self._card.shopLevel)
 end
 
 
@@ -398,7 +398,7 @@ function PlayerDataManager:LevelUpCardSlot()
     end
 
     local level = self:GetUnlockedCardSlotCount()
-    if level >= Card.Common.MaxCardSlotLevel then
+    if level >= CardCfg.Common.MaxCardSlotLevel then
         return
     end
 
@@ -598,8 +598,8 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
         end
     end
 
-    local info = Card.Cards[card[1]]
-    local cost = Card.Grade[info.grade].cost
+    local info = CardCfg.Cards[card[1]]
+    local cost = CardCfg.Grade[info.grade].cost
     if self:GetCoin(ItemId.Coin_0) < cost then
         -- 资源点不足
         return  
@@ -625,8 +625,8 @@ function PlayerDataManager:_SellCard(from, slot, sync)
     if card == nil then
         return
     end
-    local info = Card.Cards[card[1]]
-    local refund = math.floor(Card.Grade[info.grade].cost * Card.Common.SellRefundRatio)
+    local info = CardCfg.Cards[card[1]]
+    local refund = math.floor(CardCfg.Grade[info.grade].cost * CardCfg.Common.SellRefundRatio)
     self:AddCoin(ItemId.Coin_0, refund)
     list[slot] = nil
     if sync ~= false then
@@ -662,14 +662,14 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if isFirstRefresh then
         self._card.refreshCount = 0
     end
-    local cost = Card.Common.RefreshBaseCost + Card.Common.RefreshStepCost * self._card.refreshCount
+    local cost = CardCfg.Common.RefreshBaseCost + CardCfg.Common.RefreshStepCost * self._card.refreshCount
     if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
         -- 资源点不足
         return  
     end
     self:AddCoin(ItemId.Coin_0, -cost)
 
-    local weights = Card.StoreWeight[self._card.shopLevel]
+    local weights = CardCfg.StoreWeight[self._card.shopLevel]
     local byGrade = _BuildCardsByGrade()
     local shop = self._card.shop
     for i = 1, shop.n do

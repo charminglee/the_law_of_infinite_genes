@@ -133,7 +133,7 @@ end
 ---计算单张卡牌提供的加成。
 local function _CardBonusOf(card)
     local id, star = card[1], card[2]
-    local bonus = Card.Cards[id].bonus[star]
+    local bonus = CardCfg.Cards[id].bonus[star]
     local result = {}
     for _, entry in pairs(bonus) do
         local prop = entry.property
