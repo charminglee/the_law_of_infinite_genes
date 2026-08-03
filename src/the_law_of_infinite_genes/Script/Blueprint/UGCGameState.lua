@@ -24,6 +24,19 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyFlow")
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.UGCItem.UGCItemManager")
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Game.Breakthrough.BreakthroughManager")
 
+-- 复活机会倒计时总时长（秒）
+UGCGameState.RespawnChanceCountDown = 10
+-- 当前复活机会剩余倒计时
+UGCGameState.CurrentRespawnChanceCountDown = 0
+-- 死亡玩家键值表（记录已死亡玩家）
+UGCGameState.DeadPlayerKeys = {}
+
+UGCGameState.LevelStateEnum = {
+   Game = 0,    -- 进行中
+   Victory = 1, -- 胜利
+   Failure = 2, -- 失败
+}
+UGCGameState.LevelState = UGCGameState.LevelStateEnum.Game
 
 local function InitSubControl(mainUI)
     if mainUI.index.topBar.IndexUIControl == nil then
@@ -36,7 +49,7 @@ function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
     self.bIsOpenShovelingAbility = true
     GameState = self ---@type UGCGameState_C
-
+    self:Listen()
     if not self:HasAuthority() then 
         -- 原生界面修改
         self:SetUIWidget();
@@ -44,14 +57,19 @@ function UGCGameState:ReceiveBeginPlay()
     end
 end
 
+function UGCGameState:Listen()
+   UGCGenericMessageSystem.ListenGlobalMessage(self, "UGC.LevelFlow.LevelBegin", self, self.ResetData)
+end
 
--- function UGCGameState:ReceiveTick(DeltaTime)
--- end
+function UGCGameState:ResetData()
+   self.LevelState = self.LevelStateEnum.Game
 
+   UGCGameState.DeadPlayerNum = 0
 
--- function UGCGameState:ReceiveEndPlay()
--- end
-
+   if not self:HasAuthority() and ShopV2Manager then
+      ShopV2Manager:CloseMainUI()
+   end
+end
 
 function UGCGameState:IsAllLobbyTeammateReady()
    local bIsUGCPIE = UGCGameSystem.IsUGCPIE();
@@ -81,6 +99,104 @@ function UGCGameState:IsAllLobbyTeammateReady()
    return bReady
 end
 
+function UGCGameState:StartRespawnChanceCountDown()
+   if UGCActorComponentUtility.HasAuthority(self) and self.CurrentRespawnChanceCountDown <= 0 then
+      ugcprint("UGCGameState:StartRespawnChanceCountDown")
+      self.RespawnChanceCountDownStartTime = UGCGameSystem.GetServerTimeSec()
+      self:CalCulateRespawnChanceCountDown()
+   end
+end
+
+function UGCGameState:StopRespawnChanceCountDown()
+   if UGCActorComponentUtility.HasAuthority(self) and self.CurrentRespawnChanceCountDown > 0 then
+      ugcprint("UGCGameState:StopRespawnChanceCountDown")
+      if self.RespawnChanceCountDownTimer ~= nil then
+         UGCTimerUtility.RemoveLuaTimer(self.RespawnChanceCountDownTimer)
+         self.RespawnChanceCountDownTimer = nil
+      end
+      
+      self.CurrentRespawnChanceCountDown = -1
+      UnrealNetwork.RepLazyProperty(self, "CurrentRespawnChanceCountDown")
+   end
+end
+
+function UGCGameState:CalCulateRespawnChanceCountDown()
+    local CurrentTime = UGCGameSystem.GetServerTimeSec()
+    self.CurrentRespawnChanceCountDown = self.RespawnChanceCountDown - (CurrentTime - self.RespawnChanceCountDownStartTime)
+    UnrealNetwork.RepLazyProperty(self, "CurrentRespawnChanceCountDown")
+
+    if self.CurrentRespawnChanceCountDown > 0 then
+        self.RespawnChanceCountDownTimer = UGCTimerUtility.CreateLuaTimer(1, 
+            function ()
+                self:CalCulateRespawnChanceCountDown()
+            end,
+            false
+        )
+    else
+        -- 触发结算
+        ugcprint("UGCGameState:CalCulateRespawnChanceCountDown Begin settlement")
+        self.RespawnChanceCountDownTimer = nil
+        if #self.PlayerArray > 0 then
+            UGCLevelFlowSystem.GameSettle(false)
+        end
+    end
+end
+
+function UGCGameState:OnPlayerDead(PlayerKey)
+   if self.DeadPlayerKeys[PlayerKey] == true then
+      return
+   end
+   self.DeadPlayerKeys[PlayerKey] = true
+
+   local DeadPlayerNum = 0
+   for PlayerKey, Value in pairs(self.DeadPlayerKeys) do
+      DeadPlayerNum = DeadPlayerNum + 1
+   end
+   ugcprint("UGCGameState:OnPlayerDead Current DeadPlayerNum=" .. tostring(DeadPlayerNum))
+
+   local PlayerNum = #self.PlayerArray
+   if DeadPlayerNum >= PlayerNum then
+      self:StartRespawnChanceCountDown()
+   end
+end
+
+function UGCGameState:OnPlayerAlive(PlayerKey)
+   if self.DeadPlayerKeys[PlayerKey] == nil then
+      return
+   end
+   self.DeadPlayerKeys[PlayerKey] = nil
+
+   local DeadPlayerNum = 0
+   for PlayerKey, Value in pairs(self.DeadPlayerKeys) do
+      DeadPlayerNum = DeadPlayerNum + 1
+   end
+   ugcprint("UGCGameState:OnPlayerAlive Current DeadPlayerNum=" .. tostring(DeadPlayerNum))
+
+   local PlayerNum = #self.PlayerArray
+   if DeadPlayerNum < PlayerNum then
+      self:StopRespawnChanceCountDown()
+   end
+end
+
+function UGCGameState:GetAvailableServerRPCs()
+   return
+end
+
+function UGCGameState:GetReplicatedProperties()
+   return {"CurrentRespawnChanceCountDown", "Lazy"}
+end
+
+function UGCGameState:OnRep_CurrentRespawnChanceCountDown()
+   BreakthroughManager:RefreshRespawnUICountDown(self.CurrentRespawnChanceCountDown)
+end
+
+function UGCGameState:OnRep_LobbyInfo()
+   print("UGCGameState:OnRep_LobbyInfo")
+
+   LobbyModel.CurrentSelectedModeID = LobbyModel:IsModeIDValid(self.LobbyInfo.SelectedModeID) and self.LobbyInfo.SelectedModeID or 1001
+   LobbyEvent.OnModeSelected(self.LobbyInfo.SelectedModeID)
+   LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { ModeID = self.LobbyInfo.SelectedModeID })
+end
 
 function UGCGameState:SetUIWidget()
     -- UGCWidgetManagerSystem.HideWidget(UGCWidgetManagerSystem.GetMainControlUI());
@@ -131,7 +247,6 @@ end
 function UGCGameState:MulticastRPC_EquippedTitle(uid, id)
     ACHVManager.CacheEquippedTitle = id;
 end
-
 
 -- 是否在大厅中
 function UGCGameState.IsInLobby()
