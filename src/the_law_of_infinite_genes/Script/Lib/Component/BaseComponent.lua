@@ -4,7 +4,7 @@
 ---@class BaseComponent_C:ActorComponent
 --Edit Below--
 local BaseComponent = {
-    owner = nil, ---@type Actor @属主Actor
+    owner = nil, ---@type Actor @属主 Actor
 }
 
 

@@ -37,28 +37,29 @@ end
 ---【双端】深拷贝一个表。
 ---@generic T
 ---@param t T @表
+---@param lookup table? @查找表，用于处理循环引用，一般无需传入
 ---@return T @深拷贝后的表
-function Table.DeepCopy(t, _lookup)
+function Table.DeepCopy(t, lookup)
     if type(t) ~= "table" then
         return t
     end
 
-    _lookup = _lookup or {}
-    if _lookup[t] then
-        return _lookup[t]
+    lookup = lookup or {}
+    if lookup[t] then
+        return lookup[t]
     end
 
     local copy = {}
-    _lookup[t] = copy
+    lookup[t] = copy
     for k, v in pairs(t) do
-        k = Table.DeepCopy(k, _lookup)
-        v = Table.DeepCopy(v, _lookup)
+        k = Table.DeepCopy(k, lookup)
+        v = Table.DeepCopy(v, lookup)
         copy[k] = v
     end
 
     local meta = getmetatable(t)
     if meta then
-        setmetatable(copy, Table.DeepCopy(meta, _lookup))
+        setmetatable(copy, Table.DeepCopy(meta, lookup))
     end
 
     return copy

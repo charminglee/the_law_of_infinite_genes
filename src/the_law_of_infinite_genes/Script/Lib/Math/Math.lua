@@ -13,9 +13,9 @@ function Math.Clamp(value, min, max)
 end
 
 
----以指定概率返回true。
+---以指定概率返回 true 。
 ---@param c number @概率值，范围 [0, 1]
----@return boolean @以c的概率返回true，1-c的概率返回false
+---@return boolean @以 c 的概率返回 true ， 1-c 的概率返回 false
 function Math.Chance(c)
     return math.random() <= c
 end

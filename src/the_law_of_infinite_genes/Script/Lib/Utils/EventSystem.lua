@@ -8,14 +8,14 @@ local EventSystem = {
 
 ---@class EventSystem.Listener
 ---@field func function @回调函数
----@field obj any @回调函数所在对象（通常为self）
+---@field obj any @回调函数所在对象（通常为 self ）
 ---@field alive boolean @是否活跃
 
 
 ---【双端】添加监听。
 ---@param eventName string @事件名
 ---@param func function @回调函数
----@param obj? any @回调函数所在对象（通常为self，非实例方法可忽略该参数）
+---@param obj? any @回调函数所在对象（通常为 self ，非实例方法可忽略该参数）
 function EventSystem.Listen(eventName, func, obj)
     local pool = EventSystem._pools[eventName]
     if pool == nil then
@@ -41,7 +41,7 @@ end
 ---【双端】移除监听。
 ---@param eventName string @事件名
 ---@param func function @回调函数
----@param obj? any @回调函数所在对象（通常为self，非实例方法可忽略该参数）
+---@param obj? any @回调函数所在对象（通常为 self ，非实例方法可忽略该参数）
 function EventSystem.Unlisten(eventName, func, obj)
     local pool = EventSystem._pools[eventName]
     if pool == nil then
@@ -58,7 +58,7 @@ end
 
 
 ---【双端】移除指定对象绑定的所有监听。
----@param obj any @回调函数所在对象（通常为self）
+---@param obj any @回调函数所在对象（通常为 self ）
 function EventSystem.UnlistenByOwner(obj)
     for _, pool in pairs(EventSystem._pools) do
         for i = #pool, 1, -1 do
@@ -111,7 +111,7 @@ end
 
 
 ---【服务端】发送事件到指定客户端。
----@param player UGCPlayerController|UGCPlayerState|UGCPlayerPawn @目标玩家的PlayerController/PlayerState/PlayerPawn
+---@param player UGCPlayerController|UGCPlayerState|UGCPlayerPawn @目标玩家的 PlayerController / PlayerState / PlayerPawn
 ---@param eventName string @事件名
 ---@param ... any @事件参数
 function EventSystem.SendToClient(player, eventName, ...)
