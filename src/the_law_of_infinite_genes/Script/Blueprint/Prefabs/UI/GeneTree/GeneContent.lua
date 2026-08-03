@@ -47,7 +47,7 @@ function GeneContent:SelectedNodeLvLimit()
 end
 
 function GeneContent:Reload()
-	self.ReuseList2:Reload(#GeneTree.SkillData + 1);
+	self.ReuseList2:Reload(#GeneTreeCfg.SkillData + 1);
 end
 
 function GeneContent:ReuseList2Update(item, index)

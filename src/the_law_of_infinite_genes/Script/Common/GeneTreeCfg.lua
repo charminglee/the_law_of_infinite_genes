@@ -1,8 +1,8 @@
-GeneTree = GeneTree or {}
+GeneTreeCfg = GeneTreeCfg or {}
 
 
 -- 称号类型文本
-GeneTree.BranchText = {
+GeneTreeCfg.BranchText = {
     [0] = "狂袭之径",
     [1] = "铁壁之径",
     [2] = "渴血之径",
@@ -12,7 +12,7 @@ GeneTree.BranchText = {
 
 
 ---@type table<number, GeneNodeDetail[]>
-GeneTree.SkillData = {
+GeneTreeCfg.SkillData = {
     [0] = {
         {
             -- 技能ID
@@ -331,12 +331,12 @@ GeneTree.SkillData = {
 
 
 ---@type table<number, GeneNode>
-GeneTree.NodeIdMap = {}
-for _, branch in pairs(GeneTree.SkillData) do
+GeneTreeCfg.NodeIdMap = {}
+for _, branch in pairs(GeneTreeCfg.SkillData) do
     for __, node in pairs(branch) do
-        GeneTree.NodeIdMap[node.Id] = node
+        GeneTreeCfg.NodeIdMap[node.Id] = node
     end
 end
 
 
-return GeneTree
+return GeneTreeCfg

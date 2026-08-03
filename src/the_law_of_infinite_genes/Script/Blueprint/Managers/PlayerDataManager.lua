@@ -95,7 +95,7 @@ function PlayerDataManager:_BuildDefaultData()
     for _, v in pairs(Statistics) do
         data.stat[v] = 0
     end
-    for _, branch in pairs(GeneTree.SkillData) do
+    for _, branch in pairs(GeneTreeCfg.SkillData) do
         for __, node in pairs(branch) do
             data.geneTree.nodes[node.Id] = {level = 0, isUnlocked = false, nodeId = node.Id}
         end
