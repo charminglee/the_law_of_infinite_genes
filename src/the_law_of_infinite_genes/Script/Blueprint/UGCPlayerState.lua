@@ -147,12 +147,9 @@ function UGCPlayerState:OnSpawnOrRespawn()
         end
         self.CustomData = Data
 
-        -- 获取英雄配置
         local ModeID = UGCMultiMode.GetModeID()
         if ModeID == 1001 then
             -- 大厅逻辑
-            -- self.GameCompletionRecord = self.CustomData.GameCompletionRecord
-            -- UnrealNetwork.RepLazyProperty(self, "GameCompletionRecord")
             print("[UGCPlayerState:OnSpawnOrRespawn]:初始游戏完成记录:")
             log_tree(Data.GameCompletionRecord)
         else
@@ -272,6 +269,12 @@ function UGCPlayerState:InitGameCompletionRecord()
     
 end
 
+function UGCPlayerState:UpdateCurrentStage(CurrentStage)
+    ugcprint("UGCPlayerState:UpdateCurrentStage CurrentStage="..tostring(CurrentStage))
+    self.GameRecordData.CurrentStage = CurrentStage
+    UnrealNetwork.RepLazyProperty(self, "GameRecordData")
+end
+
 function UGCPlayerState:SetLobbyReadyStatus(bIsReady)
     if not UGCGameSystem.IsServer() then
         return
@@ -290,6 +293,18 @@ function UGCPlayerState:SetIsLobbyTeamLeader(bIsTeamLeader)
     UnrealNetwork.RepLazyProperty(self, "bIsTeamLeader")
 end
 
+function UGCPlayerState:ReduceFreeRespawnCount()
+    self.RespawnConfig.CurrentFreeReviveCount = self.RespawnConfig.CurrentFreeReviveCount - 1
+    UnrealNetwork.RepLazyProperty(self, "RespawnConfig.CurrentFreeReviveCount")
+    ugcprint("RespawnConfigTable.CurrentFreeReviveCount = "..self.RespawnConfig.CurrentFreeReviveCount)
+end
+
+function UGCPlayerState:ReducePaidRespawnCount()
+    self.RespawnConfig.CurrentPaidReviveCount = self.RespawnConfig.CurrentPaidReviveCount - 1
+    UnrealNetwork.RepLazyProperty(self, "RespawnConfig.CurrentPaidReviveCount")
+    ugcprint("RespawnConfigTable.CurrentPaidReviveCount = "..self.RespawnConfig.CurrentPaidReviveCount)
+end
+
 function UGCPlayerState:OnRep_GameRecordData()
     ugcprint("[UGCPlayerState] OnRep_GameRecordData"..tostring(self.GameRecordData.TotalCriticalHit))
     self.PlayerGameGameRecordDataDelegate(self.GameRecordData)
@@ -297,6 +312,65 @@ function UGCPlayerState:OnRep_GameRecordData()
         BreakthroughManager:RefreshBattleResultUI()
     end
     BreakthroughManager:AddOrUpdateResultPlayerState({GameRecordData = self.GameRecordData, UID = self:GetInt64UID(), IconURL = self.IconURL, Gender = self.Gender, FrameLevel = self.FrameLevel, PlayerLevel = self.PlayerLevel, PlayerName = self.PlayerName, PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)})
+end
+
+function UGCPlayerState:OnRep_GameCompletionRecord()
+    ugcprint(string.format("[UGCPlayerState] OnRep_GameCompletionRecord : %s", table.concat(self.GameCompletionRecord, ",")))
+
+    local function DoWork()
+        local ModeID = UGCMultiMode.GetModeID()
+        if ModeID == 1001 then
+            -- 大厅逻辑
+            LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby)
+        else
+            -- 局内逻辑
+        end
+    end
+
+    PromiseFuture.New():Set(
+            function(P)
+                while true do
+                    local GameState = UGCGameSystem.GameState
+                    local IsLobby = LobbyFlow:CurrentState() == LobbyFlowState.LFS_Lobby
+
+                    if GameState and IsLobby then
+                        DoWork()
+                        return
+                    else
+                        P:Yield()
+                    end
+                end
+            end
+    ):AutoResume(self, 0.2, 60)
+end
+
+function UGCPlayerState:OnRep_bIsReadyInLobby()
+    local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
+    ugcprint(string.format("[UGCPlayerState:OnRep_bIsReadyInLobby] PlayerKey=%d, bIsReadyInLobby=%s", PlayerKey, tostring(self.bIsReadyInLobby)))
+
+    self.ReadyStateUpdateDelegate()
+    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, {})
+end
+
+function UGCPlayerState:OnRep_bIsLobbyTeamLeader()
+    local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
+    ugcprint(string.format("[UGCPlayerState:OnRep_bIsLobbyTeamLeader] PlayerKey=%d, bIsLobbyTeamLeader=%s", PlayerKey, tostring(self.bIsLobbyTeamLeader)))
+
+    self.ReadyStateUpdateDelegate()
+    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, {})
+end
+
+function UGCPlayerState:OnRep_bIsOnline()
+    local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
+    ugcprint(string.format("[UGCPlayerState:OnRep_bIsOnline] PlayerKey=%d, bIsOnline=%s", PlayerKey, tostring(self.bIsOnline)))
+
+    self.OnlineStateUpdateDelegate()
+end
+
+function UGCPlayerState:UpdateGameTime()
+    self.GameRecordData.GameTime = UGCGameSystem.GetServerTimeSec() - self.GameStartTime
+    UnrealNetwork.RepLazyProperty(self, "GameRecordData.GameTime")
+    ugcprint(string.format("[UGCPlayerState] UpdateGameTime : %d", self.GameRecordData.GameTime))
 end
 
 function UGCPlayerState:OnRep_SettleParams()
@@ -309,29 +383,28 @@ function UGCPlayerState:OnRep_SettleParams()
             print("[UGCPlayerState:OnRep_SettleParams] : PC is nil")
         end
     end
-    if self.bIsPlayerInPortalDoor then
-        -- 弹出跳转UI
+end
+
+function UGCPlayerState:OnRep_AliveState()
+    local PC = UGCGameSystem.GetPlayerControllerByPlayerState(self)
+    if not PC then
+        ugcprint("OnRep_AliveState: PC is nil")
+        return
+    end
+    if self.AliveState == UGCGameData.AliveState.Dying then
+        PC:OpenRespawnUI()
+    elseif self.AliveState == UGCGameData.AliveState.Dead then
+        PC:OpenRespawnUI()
+    elseif self.AliveState == UGCGameData.AliveState.Alive then
+        BreakthroughManager:CloseRespawnUI()
     end
 end
 
-function UGCPlayerState:UpdateCurrentStage(CurrentStage)
-    ugcprint("UGCPlayerState:UpdateCurrentStage CurrentStage="..tostring(CurrentStage))
-    self.GameRecordData.CurrentStage = CurrentStage
-    UnrealNetwork.RepLazyProperty(self, "GameRecordData")
-end
-
---[[
-function UGCPlayerState:ReceiveTick(DeltaTime)
-    UGCPlayerState.SuperClass.ReceiveTick(self, DeltaTime)
-end
---]]
-
-
---[[
 function UGCPlayerState:ReceiveEndPlay()
-    UGCPlayerState.SuperClass.ReceiveEndPlay(self) 
+    if UGCGameSystem.IsServer() then
+        self:UpdateGameTime()
+    end
 end
---]]
 
 
 return UGCPlayerState
