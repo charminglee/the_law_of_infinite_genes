@@ -84,12 +84,29 @@ function BP_BackpackUIComponentV2_Custom:EquipmentFortify(DefineID, DataType)
     FortifyManager:OpenMainUI(DefineID);
 end
 
+function BP_BackpackUIComponentV2_Custom:EquipmentPure(DefineID, DataType)
+
+end
+
 --- 点击洗练界面按钮
-function BP_BackpackUIComponentV2_Custom:EquipmentReinf(DefineID, DataType)
+function BP_BackpackUIComponentV2_Custom:KnelReinf(DefineID, DataType)
     ugcprint('点击洗练')
 end
 
---- 强化按钮显示逻辑
+function BP_BackpackUIComponentV2_Custom:KnelAppraisal(DefineID, DataType)
+    ugcprint('点击洗练')
+end
+
+function BP_BackpackUIComponentV2_Custom:KnelFusion(DefineID, DataType)
+    ugcprint('点击洗练')
+end
+
+--- 材料合成
+function BP_BackpackUIComponentV2_Custom:OpenCompose(DefineID, DataType)
+    ugcprint('点击洗练')
+end
+
+--- 装备按钮显示逻辑
 function BP_BackpackUIComponentV2_Custom:CheckFortify(DefineID, DataType)
     --ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
     if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
@@ -99,10 +116,44 @@ function BP_BackpackUIComponentV2_Custom:CheckFortify(DefineID, DataType)
     end
 end
 
---- 洗练按钮显示逻辑
-function BP_BackpackUIComponentV2_Custom:CheckReinf(DefineID, DataType)
-    ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
+function BP_BackpackUIComponentV2_Custom:CheckPure(DefineID, DataType)
+    --ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
     if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
+        return true;
+    else
+        return false;
+    end
+end
+
+--- 核心按钮显示逻辑
+function BP_BackpackUIComponentV2_Custom:CheckReinf(DefineID, DataType)
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.KenlType then
+        return true;
+    else
+        return false;
+    end
+end
+
+function BP_BackpackUIComponentV2_Custom:CheckAppraisal(DefineID, DataType)
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.KenlType then
+        return true;
+    else
+        return false;
+    end
+end
+
+function BP_BackpackUIComponentV2_Custom:CheckFusion(DefineID, DataType)
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.KenlType then
+        return true;
+    else
+        return false;
+    end
+end
+
+
+
+function BP_BackpackUIComponentV2_Custom:CheckCompose(DefineID, DataType)
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.MaterialType then
         return true;
     else
         return false;

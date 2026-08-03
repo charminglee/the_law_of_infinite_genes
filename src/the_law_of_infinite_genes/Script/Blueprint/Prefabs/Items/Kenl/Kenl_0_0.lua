@@ -1,4 +1,4 @@
----@class Kern_0_0_C:Template_Equipment_C
+---@class Kenl_0_0_C:Template_Equipment_C
 --Edit Below--
 local Kenl_0_0 = {} 
 

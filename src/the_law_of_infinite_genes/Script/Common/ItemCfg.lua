@@ -71,9 +71,10 @@ ItemCfg.CustomizeType = {
     Face = true,
     Head = true,
     Legs = true,
-    Kenl = true,
 }
+ItemCfg.KenlType = 'Kenl'
 
+ItemCfg.MaterialType = 'Material'
 
 ItemCfg.ItemDef = {
     [1] = '帽子',

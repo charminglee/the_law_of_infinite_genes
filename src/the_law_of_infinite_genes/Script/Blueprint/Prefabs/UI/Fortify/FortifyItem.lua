@@ -33,7 +33,7 @@ end
 
 function FortifyItem:Button_0_Clicked()
     ugcprint('clicked');
-    FortifyManager:Reload(self.DefineID);
+    FortifyManager:Reload(self.DefineID, FortifyManager.FilterType);
 end
 
 --- @param DefineID ItemDefineID

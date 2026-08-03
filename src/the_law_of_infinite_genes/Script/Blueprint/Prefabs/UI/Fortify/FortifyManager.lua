@@ -3,6 +3,16 @@ FortifyManager = FortifyManager or
 {
     MainUI = nil;
     ComponentClass = nil;
+    DefineId = nil;
+    FilterType = nil;
+    EquipmentType = {
+        [1] = {Type='ALL', Text='所有装备'},
+        [2] = {Type='Head', Text = '帽子'},
+        [3]= {Type='Face', Text = '脸饰'},
+        [4]= {Type='Body', Text = '衣服'},
+        [5]= {Type='Legs', Text = '裤子'},
+        [6]= {Type='Feet', Text = '鞋子'},
+    }
 }
 
 function FortifyManager:RegisterComponentClass(CompClass)
@@ -28,7 +38,7 @@ function FortifyManager:OpenMainUI(DefineID)
         return;
     end
     self.GoodSelectedIndex = nil;
-    self.MainUI:Open(DefineID)
+    self.MainUI:Open(DefineID);
 end
 
 function FortifyManager:CloseMainUI()
@@ -44,6 +54,6 @@ function FortifyManager:GetMainUI()
     return self.MainUI;
 end
 
-function FortifyManager:Reload(DefineID)
-    self.MainUI:Reload(DefineID);
+function FortifyManager:Reload(DefineID, FilterType)
+    self.MainUI:Reload(DefineID, FilterType);
 end
