@@ -305,18 +305,22 @@ end
 ---@param id number @货币ID
 ---@param value number @数量
 ---@param sync? boolean @是否立即同步数据，默认为 true
+---@return boolean @是否成功
 function PlayerDataManager:SetCoin(id, value, sync)
     local coin = self._data.coin
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil or coin[id] == value then
-        return
+        return false
+    end
+    if value < 0 then
+        return false
     end
     local old = coin[id]
-    local new = math.max(0, value)
-    coin[id] = new
+    coin[id] = value
     if sync ~= false then
         self:SyncData()
     end
-    Lib.EventSystem.Broadcast(Event.OnCoinChangeAfter, self.owner.UID, id, old, new)
+    Lib.EventSystem.Broadcast(Event.OnCoinChangeAfter, self.owner.UID, id, old, value)
+    return true
 end
 
 
@@ -324,19 +328,24 @@ end
 ---@param id number @货币ID
 ---@param delta? number @增加数量，默认为 1
 ---@param sync? boolean @是否立即同步数据，默认为 true
+---@return boolean @是否成功
 function PlayerDataManager:AddCoin(id, delta, sync)
     delta = delta or 1
     local coin = self._data.coin
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil then
-        return
+        return false
     end
     local old = coin[id]
-    local new = math.max(0, old + delta)
+    local new = old + delta
+    if new < 0 then
+        return false
+    end
     coin[id] = new
     if sync ~= false then
         self:SyncData()
     end
     Lib.EventSystem.Broadcast(Event.OnCoinChangeAfter, self.owner.UID, id, old, new)
+    return true
 end
 
 

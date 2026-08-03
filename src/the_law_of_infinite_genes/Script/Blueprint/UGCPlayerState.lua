@@ -1,4 +1,5 @@
 ---@class UGCPlayerState_C:BP_UGCPlayerState_C
+---@field ItemDataManager ItemDataManager_C
 ---@field PlayerDataManager PlayerDataManager_C
 --Edit Below--
 local Delegate = require("common.Delegate")

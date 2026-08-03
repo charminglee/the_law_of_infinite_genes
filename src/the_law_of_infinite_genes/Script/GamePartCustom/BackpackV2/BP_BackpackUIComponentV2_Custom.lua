@@ -127,7 +127,7 @@ end
 
 --- 核心按钮显示逻辑
 function BP_BackpackUIComponentV2_Custom:CheckReinf(DefineID, DataType)
-    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.KenlType then
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.ItemType.Kenl then
         return true;
     else
         return false;
@@ -135,7 +135,7 @@ function BP_BackpackUIComponentV2_Custom:CheckReinf(DefineID, DataType)
 end
 
 function BP_BackpackUIComponentV2_Custom:CheckAppraisal(DefineID, DataType)
-    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.KenlType then
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.ItemType.Kenl then
         return true;
     else
         return false;
@@ -143,7 +143,7 @@ function BP_BackpackUIComponentV2_Custom:CheckAppraisal(DefineID, DataType)
 end
 
 function BP_BackpackUIComponentV2_Custom:CheckFusion(DefineID, DataType)
-    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.KenlType then
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.ItemType.Kenl then
         return true;
     else
         return false;
@@ -153,7 +153,7 @@ end
 
 
 function BP_BackpackUIComponentV2_Custom:CheckCompose(DefineID, DataType)
-    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.MaterialType then
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.ItemType.Material then
         return true;
     else
         return false;

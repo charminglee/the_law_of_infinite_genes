@@ -21,4 +21,15 @@ function Math.Chance(c)
 end
 
 
+---四舍五入。
+---@param value number @数值
+---@param n number? @保留几位小数，默认不保留
+---@return number @四舍五入后的数值
+function Math.Round(value, n)
+    n = n or 0
+    local factor = 10 ^ n
+    return math.floor(value * factor + 0.5) / factor
+end
+
+
 return Math

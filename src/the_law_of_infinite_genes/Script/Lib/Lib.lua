@@ -6,6 +6,8 @@ Lib = {
     Table = UGCGameSystem.UGCRequire("Script.Lib.Utils.Table"),
     ---@type Math
     Math = UGCGameSystem.UGCRequire("Script.Lib.Math.Math"),
+    ---@type Random
+    Random = UGCGameSystem.UGCRequire("Script.Lib.Math.Random"),
 }
 
 
