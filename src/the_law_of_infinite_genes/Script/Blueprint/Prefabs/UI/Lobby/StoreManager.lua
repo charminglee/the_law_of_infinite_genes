@@ -9,6 +9,7 @@ StoreManager = StoreManager or
     StoreBackpackTabSelectIndex = 0;
     StoreStrengthenChoseItemIndex = 0;
     StoreRefinedChoseItemIndex = 0;
+    FortifyMainUI = nil;
     BackpackList = {
     [1] = {
         {
@@ -121,4 +122,16 @@ end
 
 function StoreManager:SetTabSelectIndex(Index)
     self.MainUI:SetTabSelectIndex(Index);
+end
+
+function StoreManager:OpenFortify(DefineID)
+    ugcprint('打开界面')
+    ugcprint(tostring(self.FortifyMainUI))
+    self.FortifyMainUI:Open(DefineID);
+end
+
+function StoreManager:RegisterFortify(UI)
+    if self.FortifyMainUI == nil then
+        self.FortifyMainUI = UI;
+    end
 end

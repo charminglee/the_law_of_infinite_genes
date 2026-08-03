@@ -77,13 +77,13 @@ Config.ItemType = {
 
 -- 物品品质配置
 Config.ItemQuality = {
-    [0] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_1.Image_BigQualityBg_1', name='普通', color='FFFFFFFF'},
-    [1] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_2.Image_BigQualityBg_2', name='平凡', color='2ECC71FF'},
-    [2] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_3.Image_BigQualityBg_3', name='精良', color='3498DBFF'},
-    [3] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_4.Image_BigQualityBg_4', name='稀有', color='9B59B6FF'},
-    [4] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_5.Image_BigQualityBg_5', name='传说', color='E67E22FF'},
-    [5] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_6.Image_BigQualityBg_6', name='史诗', color='F1C40FFF'},
-    [6] = {path='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话', color='E74C3CFF'}
+    [0] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_1.Image_BigQualityBg_1', name='普通', color='#FFFFFF', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_1.Image_QualityBar_1'},
+    [1] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_2.Image_BigQualityBg_2', name='平凡', color='#2ECC71', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_2.Image_QualityBar_2'},
+    [2] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_3.Image_BigQualityBg_3', name='精良', color='#3498DB', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_3.Image_QualityBar_3'},
+    [3] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_4.Image_BigQualityBg_4', name='稀有', color='#9B59B6', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_4.Image_QualityBar_4'},
+    [4] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_5.Image_BigQualityBg_5', name='传说', color='#E67E22', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_5.Image_QualityBar_5'},
+    [5] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_6.Image_BigQualityBg_6', name='史诗', color='#F1C40F', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_6.Image_QualityBar_6'},
+    [6] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话', color='#E74C3C', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_7.Image_QualityBar_7'}
 }
 
 Config.CustomizeType = {

@@ -1,6 +1,7 @@
 ---@class StoreComponent_C:ActorComponent
 ---@field MainUIClassPath FSoftClassPath
 ---@field StoreItemInfoDialogPath FSoftClassPath
+---@field FortifyPath FSoftClassPath
 --Edit Below--
 local StoreComponent = {}
 

@@ -79,14 +79,17 @@ end
 -- function BP_BackpackUIComponentV2_Custom:OnOpenDropItemPanel(Panel)
 -- end
 
-function BP_BackpackUIComponentV2_Custom:EquipmentFortify()
-    ugcprint('点击强化')
+--- 点击强化界面按钮
+function BP_BackpackUIComponentV2_Custom:EquipmentFortify(DefineID, DataType)
+    FortifyManager:OpenMainUI(DefineID);
 end
 
-function BP_BackpackUIComponentV2_Custom:EquipmentReinf()
+--- 点击洗练界面按钮
+function BP_BackpackUIComponentV2_Custom:EquipmentReinf(DefineID, DataType)
     ugcprint('点击洗练')
 end
 
+--- 强化按钮显示逻辑
 function BP_BackpackUIComponentV2_Custom:CheckFortify(DefineID, DataType)
     --ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
     if Config.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
@@ -96,6 +99,7 @@ function BP_BackpackUIComponentV2_Custom:CheckFortify(DefineID, DataType)
     end
 end
 
+--- 洗练按钮显示逻辑
 function BP_BackpackUIComponentV2_Custom:CheckReinf(DefineID, DataType)
     ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
     if Config.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
