@@ -11,21 +11,21 @@ LobbyWidgetType = {
         Path = 'Asset/Blueprint/Prefabs/UI/Lobby/Home/HomeMain.HomeMain_C',
         Instance = nil,
     },
-    -- LWT_ModeSelect = {
-    --     Name = "ModeSelect",
-    --     Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/UGC_ModeSelection_UIBP.UGC_ModeSelection_UIBP_C',
-    --     Instance = nil,
-    -- },
-    -- LWT_ClosePopupsTips = {
-    --     Name = "LWT_ClosePopupsTips",
-    --     Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/UGC_ClosePopupsTips_UIBP.UGC_ClosePopupsTips_UIBP_C',
-    --     Instance = nil
-    -- },
-    -- LWT_ModeDifficultyTip = {
-    --     Name = "LWT_ModeDifficultyTip",
-    --     Path = 'Asset/Blueprint/Arts_UI/Lobby/UIBP/Lobby/Item/UGC_DifficultyTips_UIBP.UGC_DifficultyTips_UIBP_C',
-    --     Instance = nil
-    -- },
+    LWT_ModeSelect = {
+        Name = "ModeSelect",
+        Path = 'Asset/Blueprint/Prefabs/UI/Lobby/Mode/UGC_ModeSelection_UIBP.UGC_ModeSelection_UIBP_C',
+        Instance = nil,
+    },
+    LWT_ClosePopupsTips = {
+        Name = "LWT_ClosePopupsTips",
+        Path = 'Asset/Blueprint/Prefabs/UI/Lobby/UGC_ClosePopupsTips_UIBP.UGC_ClosePopupsTips_UIBP_C',
+        Instance = nil
+    },
+    LWT_ModeDifficultyTip = {
+        Name = "LWT_ModeDifficultyTip",
+        Path = 'Asset/Blueprint/Prefabs/UI/Lobby/Mode/UGC_DifficultyTips_UIBP.UGC_DifficultyTips_UIBP_C',
+        Instance = nil
+    },
     LWT_RaidInstance = {
         Name = "RaidInstance",
         Path = 'Asset/Blueprint/Prefabs/UI/RaidInstance/RaidInstanceMain.RaidInstanceMain_C',
@@ -69,7 +69,6 @@ function LobbyUtils.OpenWidget(WidgetType, ...)
 
     if Widget.bIsOpened then return end
 
-    -- Widget:AddToViewport()
     Widget:SetVisibility(ESlateVisibility.SelfHitTestInvisible)
 
     if Widget.OnOpen then
