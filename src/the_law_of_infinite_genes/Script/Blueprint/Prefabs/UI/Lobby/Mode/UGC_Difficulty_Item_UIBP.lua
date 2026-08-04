@@ -14,11 +14,6 @@ function UGC_Difficulty_Item_UIBP:Construct()
     self.NewButton_Select.OnClicked:Add(self.OnSelectClicked, self)
 end
 
-function UGC_Difficulty_Item_UIBP:Destruct()
-    self.NewButton_Tips.OnClicked:Remove(self.OnTipsClicked, self)
-    self.NewButton_Select.OnClicked:Remove(self.OnSelectClicked, self)
-end
-
 function UGC_Difficulty_Item_UIBP:OnUpdate(Data)
     self.Data = Data
     self.Idx = Data.Idx

@@ -3,11 +3,10 @@
 ---@field Button_DifficultySelect UButton
 ---@field CanvasPanel_Difficulty UCanvasPanel
 ---@field CanvasPanel_SelectDifficulty UCanvasPanel
----@field ModeItem UUGC_ReuseList2_C
+---@field ModeItem UGC_ReuseList2_C
 ---@field NewButton_Close UButton
 ---@field TextBlock_Difficult UTextBlock
----@field UGC_DifficultyTips UUGC_DifficultyTips_UIBP_C
----@field UGC_ReuseList2_Difficulty UUGC_ReuseList2_C
+---@field UGC_ReuseList2_Difficulty UGC_ReuseList2_C
 ---@field WidgetSwitcher_Arrow UWidgetSwitcher
 --Edit Below--
 

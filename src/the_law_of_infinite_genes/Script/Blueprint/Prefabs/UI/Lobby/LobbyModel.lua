@@ -338,7 +338,7 @@ function LobbyModel:OnMatchStarted(bSucceeded)
     self.bIsMatching = bSucceeded
     LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { bIsMatching = self.bIsMatching })
     UGCWidgetManagerSystem.ShowTipsUI("匹配" .. (bSucceeded and "开始" or "失败"))
-    -- UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbybIsMatching", bSucceeded)
+    UnrealNetwork.CallUnrealRPC(PC, PC, "RPC_Server_SetLobbybIsMatching", bSucceeded)
 
     ugcprint("[LobbyEvent.OnStartMatch] bSucceeded = " .. tostring(bSucceeded))
     LobbyEvent.OnMatchStarted(bSucceeded)
