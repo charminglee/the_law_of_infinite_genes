@@ -1,18 +1,18 @@
----@class FortifyMain_C:UAEUserWidget
+---@class PureMain_C:UAEUserWidget
 ---@field After UUTRichTextBlock
 ---@field AfterLevel UUTRichTextBlock
 ---@field BackpackList UGC_ReuseList2_C
 ---@field Button_0 UButton
 ---@field Button_1 UButton
 ---@field CurrentLevel UUTRichTextBlock
----@field FortifyPreviewItem FortifyPreviewItem_C
----@field FortifyPreviewItem_0 FortifyPreviewItem_C
 ---@field Front UUTRichTextBlock
 ---@field Image_14 UImage
+---@field PreviewItem PurePreviewItem_C
+---@field PreviewItem_0 PurePreviewItem_C
 ---@field SuccessRate UTextBlock
 ---@field TabList UGC_ReuseList2_C
 --Edit Below--
-local FortifyMain = {
+local PureMain = {
     bInitDoOnce = false,
     Filter = nil,
     FilterType = nil,
@@ -20,46 +20,43 @@ local FortifyMain = {
 
 }
 
-function FortifyMain:Construct()
+function PureMain:Construct()
     self:LuaInit();
 end
 
-function FortifyMain:Open(DefineID)
+function PureMain:Open(DefineID)
     self:SetVisibility(ESlateVisibility.Visible);
-    self:Reload(DefineID, FortifyManager.EquipmentType[1].Type);
+    self:Reload(DefineID, PureManager.EquipmentType[1].Type);
 end
 
-function FortifyMain:Reload(DefineID, FilterType)
+function PureMain:Reload(DefineID, FilterType)
     local AllItem = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
     if FilterType == nil then
-        FilterType = EquipmentType[1].Type;
+        FilterType = PureManager.EquipmentType[1].Type;
     end
-    FortifyManager.DefineId = DefineID;
-    FortifyManager.FilterType = FilterType
+    PureManager.DefineId = DefineID;
+    PureManager.FilterType = FilterType
     self.Filter = self:FilterEquipment(AllItem, FilterType);
     self.BackpackList:Reload(#self.Filter);
-    self.TabList:Reload(#FortifyManager.EquipmentType)
+    self.TabList:Reload(#PureManager.EquipmentType)
     self:SetPreview(DefineID);
-
 end
 
 --- @param DefineID ItemDefineID
-function FortifyMain:SetPreview(DefineID)
+function PureMain:SetPreview(DefineID)
     --local ItemId = DefineID.TypeSpecificID;
-    self.FortifyPreviewItem:SetDefineID(DefineID);
-    self.FortifyPreviewItem_0:SetDefineID({TypeSpecificID=8310004})
+    self.PreviewItem:SetDefineID(DefineID);
+    self.PreviewItem_0:SetDefineID({TypeSpecificID=8310004})
 end
 
-function FortifyMain:FilterEquipment(ItemList, FilterType)
+function PureMain:FilterEquipment(ItemList, FilterType)
     local result = {};
-    ugcprint(FilterType)
     for key, item in ipairs(ItemList) do
         local itemId = item.TypeSpecificID;
         local itemType = UGCItemSystemV2.GetItemCustomizedTypeV2(itemId);
         local has_all = false
-        if FilterType == FortifyManager.EquipmentType[1].Type then
+        if FilterType == PureManager.EquipmentType[1].Type then
             has_all = true;
-            ugcprint('全部')
         end
         local has_equipment = ItemCfg.CustomizeType[itemType];
         if has_all and has_equipment then
@@ -73,39 +70,39 @@ function FortifyMain:FilterEquipment(ItemList, FilterType)
     return result;
 end
 
-function FortifyMain:LuaInit()
+function PureMain:LuaInit()
     if self.bInitDoOnce then
         return;
     end
     self.bInitDoOnce = true;
     self:Listen();
-    FortifyManager:RegisterMainUI(self);
+    PureManager:RegisterMainUI(self);
 end
 
-function FortifyMain:Listen()
+function PureMain:Listen()
     self.Button_0.OnClicked:Add(self.Exit, self);
     self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
     self.TabList.OnUpdateItem:Add(self.TabListUpdate, self)
 end
 
-function FortifyMain:Exit()
+function PureMain:Exit()
     self:SetVisibility(ESlateVisibility.Collapsed);
 end
 
-function FortifyMain:BackpackListUpdate(Item, Index)
+function PureMain:BackpackListUpdate(Item, Index)
     local DefineID = self.Filter[Index+1];
     Item:SetDefineID(DefineID);
-    Item:SetSelected(FortifyManager.DefineId);
+    Item:SetSelected(PureManager.DefineId);
 end
 
-function FortifyMain:TabListUpdate(Item, Index)
+function PureMain:TabListUpdate(Item, Index)
     Item.Index = Index;
-    Item:SetDAT(Index, FortifyManager.EquipmentType[Index+1].Text);
-    if FortifyManager.FilterType == FortifyManager.EquipmentType[Index+1].Type then
+    Item:SetDAT(Index, PureManager.EquipmentType[Index+1].Text);
+    if PureManager.FilterType == PureManager.EquipmentType[Index+1].Type then
         Item:SetSelected(true);
     else
         Item:SetSelected(false);
     end
 end
 
-return FortifyMain
+return PureMain

@@ -1,4 +1,5 @@
 ---@class UGCPlayerController_C:BP_UGCPlayerController_C
+---@field PureComponent PureComponent_C
 ---@field FortifyComponent FortifyComponent_C
 ---@field RecruitComponent RecruitComponent_C
 ---@field ComposeComponent ComposeComponent_C

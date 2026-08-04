@@ -85,7 +85,7 @@ function BP_BackpackUIComponentV2_Custom:EquipmentFortify(DefineID, DataType)
 end
 
 function BP_BackpackUIComponentV2_Custom:EquipmentPure(DefineID, DataType)
-
+    PureManager:OpenMainUI(DefineID);
 end
 
 --- 点击洗练界面按钮
