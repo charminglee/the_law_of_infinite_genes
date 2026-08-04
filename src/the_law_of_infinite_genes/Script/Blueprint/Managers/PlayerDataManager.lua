@@ -1,4 +1,4 @@
----管理玩家所有需要存档的数据，绑定于PlayerState，双端可见。
+---管理玩家所有需要存档的数据，绑定于 PlayerState，双端可见。
 ---@class PlayerDataManager_C:BaseManager_C
 --Edit Below--
 local PlayerDataManager = {
@@ -149,7 +149,7 @@ end
 ---【服务端】设置某个一级字段的值。
 ---@param key string @字段名
 ---@param value any @字段值
----@param sync? boolean @是否立即同步数据，默认为true
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:SetData(key, value, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -215,8 +215,8 @@ end
 
 ---【双端】升级基因树指定节点，并扣除相应的技能点。
 ---@param nodeId number @节点ID（技能ID）
----@param level number @要升的等级，默认为1
----@param sync? boolean @是否立即同步数据，默认为true
+---@param level number @要升的等级，默认为 1
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:LevelUpGeneTreeNode(nodeId, level, sync)
     if not self._isLoaded then
         return
@@ -263,7 +263,7 @@ end
 
 ---【服务端】设置基因树技能点。
 ---@param value number @技能点
----@param sync? boolean @是否立即同步数据，默认为true
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:SetGeneTreeSkillPoint(value, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -276,8 +276,8 @@ end
 
 
 ---【服务端】增加/扣除基因树技能点。
----@param delta? number @技能点增量，默认为1
----@param sync? boolean @是否立即同步数据，默认为true
+---@param delta? number @技能点增量，默认为 1
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:AddGeneTreeSkillPoint(delta, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -304,39 +304,48 @@ end
 ---【服务端】设置指定货币的数量。
 ---@param id number @货币ID
 ---@param value number @数量
----@param sync? boolean @是否立即同步数据，默认为true
+---@param sync? boolean @是否立即同步数据，默认为 true
+---@return boolean @是否成功
 function PlayerDataManager:SetCoin(id, value, sync)
     local coin = self._data.coin
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil or coin[id] == value then
-        return
+        return false
+    end
+    if value < 0 then
+        return false
     end
     local old = coin[id]
-    local new = math.max(0, value)
-    coin[id] = new
+    coin[id] = value
     if sync ~= false then
         self:SyncData()
     end
-    Lib.EventSystem.Broadcast(Event.OnCoinChangeAfter, self.owner.UID, id, old, new)
+    Lib.EventSystem.Broadcast(Event.OnCoinChangeAfter, self.owner.UID, id, old, value)
+    return true
 end
 
 
 ---【服务端】增加指定货币的数量，支持负值扣除。
 ---@param id number @货币ID
----@param delta? number @增加数量，默认为1
----@param sync? boolean @是否立即同步数据，默认为true
+---@param delta? number @增加数量，默认为 1
+---@param sync? boolean @是否立即同步数据，默认为 true
+---@return boolean @是否成功
 function PlayerDataManager:AddCoin(id, delta, sync)
     delta = delta or 1
     local coin = self._data.coin
     if not self:HasAuthority() or not self._isLoaded or coin[id] == nil then
-        return
+        return false
     end
     local old = coin[id]
-    local new = math.max(0, old + delta)
+    local new = old + delta
+    if new < 0 then
+        return false
+    end
     coin[id] = new
     if sync ~= false then
         self:SyncData()
     end
     Lib.EventSystem.Broadcast(Event.OnCoinChangeAfter, self.owner.UID, id, old, new)
+    return true
 end
 
 
@@ -349,7 +358,7 @@ end
 local _cardsByGrade = nil
 
 
----卡牌按grade分组的id缓存，首次刷新商店时构建。
+---卡牌按 grade 分组的 id 缓存，首次刷新商店时构建。
 local function _BuildCardsByGrade()
     if _cardsByGrade ~= nil then
         return _cardsByGrade
@@ -391,7 +400,7 @@ function PlayerDataManager:GetUnlockedCardSlotCount()
 end
 
 
----【服务端】提升卡牌槽位等级，每级解锁一个穿戴槽，最高12级。
+---【服务端】提升卡牌槽位等级，每级解锁一个穿戴槽，最高 12 级。
 function PlayerDataManager:LevelUpCardSlot()
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -433,7 +442,7 @@ end
 
 ---【双端】获取玩家仓库中指定槽位的卡牌。
 ---@param slot number @仓库槽位索引 1-20
----@return Card? @指定槽位的卡牌，结构为：{cardId, star}
+---@return Card? @指定槽位的卡牌，结构为 {cardId, star}
 function PlayerDataManager:GetStoreCard(slot)
     return Lib.Table.Copy(self._card.store[slot])
 end
@@ -441,7 +450,7 @@ end
 
 ---【双端】获取玩家卡牌商店中指定槽位的卡牌。
 ---@param slot number @卡牌商店槽位索引 1-6
----@return Card? @指定槽位的卡牌，结构为：{cardId, star}
+---@return Card? @指定槽位的卡牌，结构为 {cardId, star}
 function PlayerDataManager:GetShopCard(slot)
     return Lib.Table.Copy(self._card.shop[slot])
 end
@@ -449,7 +458,7 @@ end
 
 ---【双端】获取玩家已装备的指定槽位的卡牌。
 ---@param slot number @已装备槽位索引 1-12
----@return Card? @指定槽位的卡牌，结构为：{cardId, star}
+---@return Card? @指定槽位的卡牌，结构为 {cardId, star}
 function PlayerDataManager:GetEquippedCard(slot)
     return Lib.Table.Copy(self._card.equipped[slot])
 end
@@ -470,7 +479,7 @@ end
 
 
 ---【双端】判断是否拥有指定卡牌。
----@param card Card @卡牌，结构为{cardId, star}
+---@param card Card @卡牌，结构为 {cardId, star}
 ---@return boolean @是否拥有指定卡牌
 function PlayerDataManager:HasCard(card)
     for i = 1, self._card.store.n do
@@ -502,8 +511,8 @@ end
 
 ---【服务端】装备卡牌。
 ---@param fromSlot number @仓库槽位索引 1-20
----@param toSlot? number @卡牌槽位索引 1-12，默认为第一个空槽位
----@param sync? boolean @是否立即同步数据，默认为true
+---@param toSlot? number @卡牌槽位索引 1-12 ，默认为第一个空槽位
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -542,8 +551,8 @@ end
 
 ---【服务端】卸下卡牌。
 ---@param fromSlot number @卡牌槽位索引 1-12
----@param toSlot? number @仓库槽位索引 1-20，默认为第一个空槽位
----@param sync? boolean @是否立即同步数据，默认为true
+---@param toSlot? number @仓库槽位索引 1-20 ，默认为第一个空槽位
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:UnequipCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -576,8 +585,8 @@ end
 
 ---【服务端】购买卡牌。
 ---@param fromSlot number @商店槽位索引 1-6
----@param toSlot? number @仓库槽位索引 1-20，默认为第一个空槽位
----@param sync? boolean @是否立即同步数据，默认为true
+---@param toSlot? number @仓库槽位索引 1-20 ，默认为第一个空槽位
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -638,7 +647,7 @@ end
 
 ---【服务端】出售仓库卡牌。
 ---@param slot number @仓库槽位索引 1-20
----@param sync? boolean @是否立即同步数据，默认为true
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:SellCardFromStore(slot, sync)
     self:_SellCard("store", slot, sync)
 end
@@ -653,8 +662,8 @@ end
 
 
 ---【服务端】刷新卡牌商店。
----@param useCoin? boolean @是否消耗资源点，默认为true
----@param isFirstRefresh? boolean @是否为首次刷新，若为首次刷新，则刷新价格为首次价格；默认为false
+---@param useCoin? boolean @是否消耗资源点，默认为 true
+---@param isFirstRefresh? boolean @是否为首次刷新，若为首次刷新，则刷新价格为首次价格；默认为 false
 function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -704,7 +713,7 @@ end
 
 
 ---【双端】获取指定统计数据的值。
----@param name Statistics @统计数据名称，请使用Statistics枚举值
+---@param name Statistics @统计数据名称，请使用 Statistics 枚举值
 ---@return number @数据值
 function PlayerDataManager:GetStat(name)
     return (self._data.stat or {})[name] or 0
@@ -712,9 +721,9 @@ end
 
 
 ---【服务端】累加指定统计数据。
----@param name Statistics @统计数据名称，请使用Statistics枚举值
----@param delta? number @增量，默认为1
----@param sync? boolean @是否立即同步数据，默认为true
+---@param name Statistics @统计数据名称，请使用 Statistics 枚举值
+---@param delta? number @增量，默认为 1
+---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:AddStat(name, delta, sync)
     delta = delta or 1
     local stat = self._data.stat
@@ -735,7 +744,7 @@ end
 
 
 ---【双端】获取当前佩戴的称号。
----@return Title|nil @Title枚举值，若无佩戴则返回nil
+---@return Title|nil @Title 枚举值，若无佩戴则返回 nil
 function PlayerDataManager:GetEquippedTitle()
     if not self._isLoaded then
         return nil
@@ -745,7 +754,7 @@ end
 
 
 ---【服务端】佩戴称号。
----@param title Title|nil @称号ID，请使用Title枚举值，卸下称号可传nil
+---@param title Title|nil @称号ID，请使用 Title 枚举值，卸下称号可传 nil
 function PlayerDataManager:EquipTitle(title)
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -767,7 +776,7 @@ end
 
 
 ---【服务端】解锁称号。
----@param title Title @称号ID，请使用Title枚举值
+---@param title Title @称号ID，请使用 Title 枚举值
 function PlayerDataManager:UnlockTitle(title) 
     if not self:HasAuthority() or not self._isLoaded then
         return
@@ -784,8 +793,8 @@ function PlayerDataManager:UnlockTitle(title)
 end
 
 
----【双端】获取称号状态。0为未解锁，1为已解锁，2为已佩戴。
----@param title Title @称号ID，请使用Title枚举值
+---【双端】获取称号状态。 0 为未解锁， 1 为已解锁， 2 为已佩戴。
+---@param title Title @称号ID，请使用 Title 枚举值
 ---@return number @称号状态
 function PlayerDataManager:GetTitleState(title)
     if not self._isLoaded then

@@ -33,23 +33,42 @@ ItemCfg.AttributeEntryRange = {
     [Attribute.EpidemicToxinSettleRatio]    = { min=0, max=1 },
     [Attribute.BurstShootCDWrapper]         = { min=0, max=1 },
 }
+ItemCfg.AttributeEntryPool = {}
+for k, _ in pairs(ItemCfg.AttributeEntryRange) do
+    table.insert(ItemCfg.AttributeEntryPool, k)
+end
 
 
--- 每种装备的词条池
-ItemCfg.EquipmentAttributePool = {
-    -- [8310019] = {
-    --     Attribute.AttackPower,
-    --     Attribute.Defence,
-    -- },
+ItemCfg.EntryItemId = {
+    [0] = 8310042,
+    [1] = 8310046,
+    [2] = 8310044,
+    [3] = 8310049,
+    [4] = 8310050,
+}
+
+
+-- 鉴定消耗
+ItemCfg.IdentifyMaterial = 8310000
+ItemCfg.IdentifyCost = {
+    [8310042] = 100,
+    [8310046] = 150,
+    [8310044] = 200,
+    [8310049] = 250,
+    [8310050] = 300,
 }
 
 
 -- 物品类型配置
-ItemCfg.ItemType = {
+ItemCfg.ItemTypeName = {
     [1] = '装备',
     [2] = '消耗品',
     [3] = '材料',
     [4] = '其他'
+}
+ItemCfg.ItemType = {
+    Kenl = "Kenl",
+    Material = "Material",
 }
 
 
@@ -72,9 +91,7 @@ ItemCfg.CustomizeType = {
     Head = true,
     Legs = true,
 }
-ItemCfg.KenlType = 'Kenl'
 
-ItemCfg.MaterialType = 'Material'
 
 ItemCfg.ItemDef = {
     [1] = '帽子',

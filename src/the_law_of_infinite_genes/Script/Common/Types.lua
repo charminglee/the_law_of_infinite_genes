@@ -4,16 +4,14 @@
 ---@alias Card [number, number]
 
 
----@alias InvItem {itemId: ItemId, count: number, userData: table<string, any>?}
 ---@alias AttrEntry {property: Attribute, value: number}
----@alias InvItemEquipment {
----    itemId: ItemId, 
----    count: number, 
----    userData: {
----        strengthenLevel: number, 
----        refineAttributeSlot: ntable<AttrEntry>,
----        quality: number,
----    }
+---@alias EquipmentData {
+---    strengthenLevel: number, 
+---}
+---@alias KenlData {
+---    entries: AttrEntry[],
+---    isIdentified: boolean, 
+---    refineNum: number,
 ---}
 
 
