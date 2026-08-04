@@ -10,8 +10,8 @@ local Table = UGCGameSystem.UGCRequire("Script.Lib.Utils.Table")
 math.randomseed(os.time())
 
 
----随机打乱列表元素。
----@param list table @列表
+---【双端】随机打乱列表元素。
+---@param list any[] @列表
 function Random.Shuffle(list)
     local len = #list
     for i = len, 2, -1 do
@@ -21,9 +21,11 @@ function Random.Shuffle(list)
 end
 
 
----从列表中随机抽取 n 个元素。
----@param list table @列表
+---【双端】从列表中随机抽取 n 个元素。
+---@generic T
+---@param list T[] @列表
 ---@param n number? @要抽取的元素个数，默认为 1
+---@return T[] @抽取结果列表
 function Random.Pick(list, n)
     list = Table.Copy(list)
     n = n or 1

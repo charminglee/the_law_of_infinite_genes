@@ -48,6 +48,7 @@ end
 function HomeMain:Listen()
     self.UGC_ReuseList2_Difficulty.OnAfterNewItem:Add(self.UGC_ReuseList2_Difficulty_OnAfterNewItem, self);
 
+    self.NewButton_ModeSelect.OnClicked:Add(self.OnModeSelectClicked, self);
 	self.Button_Show.OnClicked:Add(self.OnMatchClicked, self);
     self.Button_CancelMatch.OnClicked:Add(self.OnCancelMatchClicked, self);
     self.Button_Ready.OnClicked:Add(self.OnReadyClicked, self);
@@ -55,9 +56,20 @@ function HomeMain:Listen()
 	self.Button_DifficultySelect.OnClicked:Add(self.OnDifficultySelectClicked, self);
 end
 
+function HomeMain:OnOpen(Data)
+    self:ToggleDifficulty(false)
+
+    local PC = UGCGameSystem.GetLocalPlayerController()
+
+    --处理断线重连（杀进程）
+    --PC.PlayerControllerReconnectedDelegate:Add(self.OnPlayerReconnect, self)
+    --处理静默重连（断网弱网）
+    PC.OnReconnected:Add(self.OnPlayerReconnected, self)
+end
+
 -- 刷新
 function HomeMain:OnUpdate(Data)
-    self.Data = Data
+    self.Data = Data 
 
     -- 更新模式信息
     self:UpdateMode()
@@ -65,6 +77,8 @@ function HomeMain:OnUpdate(Data)
     self:UpdateMatch()
     -- 更新难度信息
     self:UpdateDifficulty()
+    -- 更新玩家信息
+    UGCTimerUtility.CreateLuaTimer(0.2, function() self:UpdatePlayerData() end)
 
     local PC = UGCGameSystem.GetLocalPlayerController()
     if PC ~= nil and UGCGameSystem.GetLocalPlayerState() ~= nil then
@@ -80,19 +94,23 @@ function HomeMain:OnUpdate(Data)
     end
 end
 
+function HomeMain:OnPlayerReconnected()
+    ugcprint("UGC_Lobby_Main_UIBP:OnPlayerReconnected()")
+end
+
 -- 更新模式
 function HomeMain:UpdateMode()
-    -- print("UGC_Lobby_Main_UIBP:UpdateMode Data.ModeID="..tostring(self.Data.ModeID) .. "CurrentSelectedModeID=" .. tostring( LobbyModel:GetCurrentSelectedModeID()))
-    -- local ModeID = self.Data.ModeID or LobbyModel:GetCurrentSelectedModeID()
-    -- local ModeConfig = LobbyModel:GetModeConfig(ModeID)
+    print("UGC_Lobby_Main_UIBP:UpdateMode Data.ModeID="..tostring(self.Data.ModeID) .. "CurrentSelectedModeID=" .. tostring( LobbyModel:GetCurrentSelectedModeID()))
+    local ModeID = self.Data.ModeID or LobbyModel:GetCurrentSelectedModeID()
+    local ModeConfig = LobbyModel:GetModeConfig(ModeID)
 
-    -- -- 刷新模式名称
-    -- self.TextBlock_ModeName:SetText(LobbyUtils.GetTrimmedString(ModeConfig.ModeName, 6))
+    -- 刷新模式名称
+    self.TextBlock_ModeName:SetText(LobbyUtils.GetTrimmedString(ModeConfig.ModeName, 6))
 
-    -- -- 刷新模式图标
-    -- self.ImageEx_GameMode:SetBrushFromTexture(ModeConfig.ModeBanner, false)
+    -- 刷新模式图标
+    self.ImageEx_GameMode:SetBrushFromTexture(ModeConfig.ModeBanner, false)
 
-    -- --单人模式无需匹配队友
+    --单人模式无需匹配队友
     -- local ModeMaxPlayerNum = UGCMultiMode.GetModeSetting(LobbyModel.CurrentSelectedModeID).TeamPlayers
     -- if ModeMaxPlayerNum <= 1 then
     --     self.FillTeammatePanel:SetVisibility(ESlateVisibility.Collapsed)
@@ -143,6 +161,56 @@ function HomeMain:UpdateDifficulty()
     self.UGC_ReuseList2_Difficulty:Reload(#LobbyModel:GetModeListWithSameDetailID())
 end
 
+-- 更新玩家信息
+function HomeMain:UpdatePlayerData()
+    local PlayerState = UGCGameSystem.GetLocalPlayerState()
+    local PlayerKey = UGCPlayerStateSystem.GetPlayerKeyInt64(PlayerState)
+    local PlayerInfo = ScriptGameplayStatics.GetPlayerAccountInfo(UGCGameSystem.GameState, PlayerKey):Copy()
+
+    ---@type UGCLevelConfigRow
+    local UGCGameData = UGCGameSystem.UGCRequire('Script.Blueprint.UGCGameData')
+    local NowLevelConfig = UGCGameData.GetLevelConfig(PlayerState.UGCPlayerLevel)
+    local NowExp = PlayerState.PlayerExp
+    local TargetExp = NowLevelConfig.Exp
+    local ExpRatio = math.min(NowExp / TargetExp, 1)
+
+    ugcprint("UpdatePlayerData: PlayerName = " .. PlayerInfo.PlayerName ..
+            ", IconURL = " .. PlayerInfo.IconURL ..
+            ", Level = " .. PlayerState.UGCPlayerLevel ..
+            ", NowExp = " .. NowExp ..
+            ", TargetExp = " .. TargetExp ..
+            ", ExpRatio = " .. ExpRatio)
+
+    -- self.UGC_PlayerMessage:OnUpdate({
+    --     PlayerAccountInfo = PlayerInfo,
+    --     Level = PlayerState.UGCPlayerLevel,
+    --     NowExp = NowExp,
+    --     TargetExp = TargetExp,
+    --     ExpRatio = ExpRatio
+    -- })
+end
+
+-- 模式选择按钮
+function HomeMain:OnModeSelectClicked()
+    if LobbyModel:IsMatching() then
+        UGCWidgetManagerSystem.ShowTipsUI("匹配中无法设置")
+        return
+    end
+
+    local PC = UGCGameSystem.GetLocalPlayerController()
+    if PC and not PC.bIsTeamLeader then
+        UGCWidgetManagerSystem.ShowTipsUI("只有队长才能选择模式")
+        return
+    end
+
+    if PC and not PC.LobbyInfo.bTeamComplete then
+        UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
+        return
+    end
+
+    LobbyFlow:Go(LobbyFlowState.LFS_ModeSelect)
+end
+
 -- 刷新匹配按钮
 function HomeMain:RefreshMatchButton(bIsLeader)
     self.WidgetSwitcher_Matching:SetActiveWidgetIndex(bIsLeader and 0 or 1);
@@ -171,19 +239,19 @@ end
 
 -- 开始匹配
 function HomeMain:OnMatchClicked()
-    -- local ModeMaxPlayerNum = UGCMultiMode.GetModeSetting(LobbyModel.CurrentSelectedModeID).TeamPlayers
+    local ModeMaxPlayerNum = UGCMultiMode.GetModeSetting(LobbyModel.CurrentSelectedModeID).TeamPlayers
     local PlayerController = UGCGameSystem.GetLocalPlayerController()
-    -- local CurPlayerNum = #PlayerController.LobbyTeammatePlayerKeys
+    local CurPlayerNum = #PlayerController.LobbyTeammatePlayerKeys
     
-    -- if not PlayerController.LobbyInfo.bTeamComplete then
-    --     UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
-    --     return
-    -- end
+    if not PlayerController.LobbyInfo.bTeamComplete then
+        UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
+        return
+    end
 
-    -- if CurPlayerNum > ModeMaxPlayerNum then
-    --     UGCWidgetManagerSystem.ShowTipsUI("当前人数大于模式最大人数!")
-    --     return;
-    -- end
+    if CurPlayerNum > ModeMaxPlayerNum then
+        UGCWidgetManagerSystem.ShowTipsUI("当前人数大于模式最大人数!")
+        return;
+    end
 
     local bLeader = PlayerController.bIsTeamLeader
     if bLeader then
