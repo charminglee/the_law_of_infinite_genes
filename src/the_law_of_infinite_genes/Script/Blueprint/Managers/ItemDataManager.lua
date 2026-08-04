@@ -37,6 +37,23 @@ local function _MergeDefaults(data, defaults)
 end
 
 
+local function _RoundAttrValue(value, min, max)
+    if max - min <= 1 then
+        return Lib.Math.Round(value, 1)
+    else
+        return Lib.Math.Round(value, 0)
+    end
+end
+
+
+local function _GenAttrValue(attr)
+    local range = ItemCfg.AttributeEntryRange[attr]
+    local value = ItemCfg.AttrCurve(range.min, range.max)
+    value = _RoundAttrValue(value, range.min, range.max)
+    return value
+end
+
+
 ---【双端】获取物品自定义数据。
 ---@return (EquipmentData|KenlData|table)? @自定义数据
 function ItemDataManager:GetCustomData(defineId)
@@ -44,9 +61,8 @@ function ItemDataManager:GetCustomData(defineId)
     if not data then
         return nil
     else
-        local itemType = _GetItemType(defineId)
         local defaults
-        if itemType == ItemCfg.ItemType.Kenl then
+        if _GetItemType(defineId) == ItemCfg.ItemType.Kenl then
             defaults = {
                 entries = {}, 
                 isIdentified = false,
@@ -63,7 +79,7 @@ function ItemDataManager:GetCustomData(defineId)
 end
 
 
-function ItemDataManager:_SaveData(defineId, data)
+function ItemDataManager:_SaveCustomData(defineId, data)
     local oldData = self:GetCustomData(defineId)
     if not oldData then
         return false
@@ -83,8 +99,7 @@ function ItemDataManager:Identify(defineId)
         return nil
     end
     local itemId = defineId.TypeSpecificID
-    local itemType = _GetItemType(itemId)
-    if itemType ~= ItemCfg.ItemType.Kenl then
+    if _GetItemType(itemId) ~= ItemCfg.ItemType.Kenl then
         return nil
     end
     local data = self:GetCustomData(defineId)
@@ -93,8 +108,7 @@ function ItemDataManager:Identify(defineId)
     end
 
     -- 扣除鉴定材料
-    ---@type PlayerDataManager_C
-    local pdm = self.owner.PlayerDataManager
+    local pdm = self.owner.PlayerDataManager ---@type PlayerDataManager_C
     local cost = ItemCfg.Identify.Cost[itemId]
     if not pdm:AddCoin(ItemCfg.Identify.Material, -cost) then
         return nil
@@ -105,23 +119,18 @@ function ItemDataManager:Identify(defineId)
     local entries = {}
     local attrs = Lib.Random.Pick(ItemCfg.AttributeEntryPool, quality + 1)
     for _, attr in pairs(attrs) do
-        local range = ItemCfg.AttributeEntryRange[attr]
-        local value = math.random(range.min, range.max)
-        if range.max - range.min <= 1 then
-            value = Lib.Math.Round(value, 1)
-        else
-            value = Lib.Math.Round(value, 0)
-        end
+        local value = _GenAttrValue(attr)
         table.insert(entries, { property=attr, value=value })
     end
 
     -- 词条数据存入核心
     data.entries = entries
     data.isIdentified = true
-    if not self:_SaveData(defineId, data) then
+    if not self:_SaveCustomData(defineId, data) then
         return nil
     end
-    return entries
+
+    return Lib.Table.DeepCopy(entries)
 end
 
 
@@ -134,10 +143,8 @@ function ItemDataManager:Fusion(defineId1, defineId2)
         return nil
     end
     local itemId1 = defineId1.TypeSpecificID
-    local itemType1 = _GetItemType(itemId1)
     local itemId2 = defineId2.TypeSpecificID
-    local itemType2 = _GetItemType(itemId2)
-    if itemType1 ~= ItemCfg.ItemType.Kenl or itemType2 ~= ItemCfg.ItemType.Kenl then
+    if _GetItemType(itemId1) ~= ItemCfg.ItemType.Kenl or _GetItemType(itemId2) ~= ItemCfg.ItemType.Kenl then
         return nil
     end
     local data1 = self:GetCustomData(defineId1)
@@ -151,29 +158,47 @@ function ItemDataManager:Fusion(defineId1, defineId2)
     local entries = Lib.Table.Concat(data1.entries, data2.entries) ---@type AttrEntry[]
     local result = Lib.Random.Pick(entries, n)
     data1.entries = result
-    if not self:_SaveData(defineId1, data1) then
+    if not self:_SaveCustomData(defineId1, data1) then
         return nil
     end
 
     local pc = UGCGameSystem.GetPlayerControllerByPlayerState(self.owner)
     UGCBackpackSystemV2.RemoveItemByDefineIDV2(pc, defineId2, 1)
 
-    return result
+    return Lib.Table.DeepCopy(result)
 end
 
 
 ---【服务端】洗炼核心。
----@param defineId ItemDefineID @装备的 ItemDefineID
----@return boolean @是否成功
-function ItemDataManager:Refine(defineId)
+---@param defineId ItemDefineID @核心的 ItemDefineID
+---@param ... number @保留的词条索引
+---@return AttrEntry[]? @洗炼后的词条列表，洗炼失败时返回 nil
+function ItemDataManager:Refine(defineId, ...)
     if not self:HasAuthority() then
-        return false
-    end
-    local itemId = defineId.TypeSpecificID
-    local itemType = UGCItemSystemV2.GetItemCustomizedTypeV2(itemId)
-    if itemType ~= ItemCfg.ItemType.Kenl then
         return nil
     end
+    local itemId = defineId.TypeSpecificID
+    if _GetItemType(itemId) ~= ItemCfg.ItemType.Kenl then
+        return nil
+    end
+    local data = self:GetCustomData(defineId)
+    if not data or data.refineNum >= ItemCfg.Refine.Limit then
+        return nil
+    end
+
+    local keep = {...}
+    for i, entry in ipairs(data.entries) do
+        if not Lib.Table.Contain(keep, i) then
+            entry.value = _GenAttrValue(entry.property)
+        end
+    end
+    data.refineNum = data.refineNum + 1
+
+    if not self:_SaveCustomData(defineId, data) then
+        return nil
+    end
+
+    return Lib.Table.DeepCopy(data.entries)
 end
  
 
@@ -191,7 +216,7 @@ function ItemDataManager:Strengthen(defineId, level)
         return false
     end
     data.strengthenLevel = (data.strengthenLevel or 0) + level
-    self:_SaveData(defineId, data)
+    self:_SaveCustomData(defineId, data)
     return true
 end
 
