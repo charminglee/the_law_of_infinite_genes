@@ -48,14 +48,36 @@ ItemCfg.EntryItemId = {
 }
 
 
--- 鉴定消耗
-ItemCfg.IdentifyMaterial = 8310000
-ItemCfg.IdentifyCost = {
-    [8310042] = 100,
-    [8310046] = 150,
-    [8310044] = 200,
-    [8310049] = 250,
-    [8310050] = 300,
+-- 鉴定配置
+ItemCfg.Identify = {
+    Material = 8310000,
+    Cost = {
+        [8310042] = 100,
+        [8310046] = 150,
+        [8310044] = 200,
+        [8310049] = 250,
+        [8310050] = 300,
+    },
+}
+
+
+-- 融合配置
+ItemCfg.Fusion = {
+}
+
+
+-- 洗炼配置
+ItemCfg.Refine = {
+}
+
+
+-- 强化配置
+ItemCfg.Strengthen = {
+}
+
+
+-- 精炼配置
+ItemCfg.Reforge = {
 }
 
 

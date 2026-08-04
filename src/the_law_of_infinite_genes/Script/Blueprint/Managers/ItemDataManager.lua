@@ -4,10 +4,25 @@
 local ItemDataManager = {}
 
 
-local KENL_SLOT_NAME = "EquipmentSlot.Suit.Kenl"
+local function _GetQuality(itemId)
+    if type(itemId) == "number" then
+        return UGCItemSystemV2.GetItemQualityV2(itemId)
+    else
+        return UGCItemSystemV2.GetItemQualityV2(itemId.TypeSpecificID)
+    end
+end
 
 
-function ItemDataManager:_MergeDefaults(data, defaults)
+local function _GetItemType(itemId)
+    if type(itemId) == "number" then
+        return UGCItemSystemV2.GetItemCustomizedTypeV2(itemId)
+    else
+        return UGCItemSystemV2.GetItemCustomizedTypeV2(itemId.TypeSpecificID)
+    end
+end
+
+
+local function _MergeDefaults(data, defaults)
     for k, v in pairs(defaults) do
         if data[k] == nil then
             data[k] = v
@@ -29,9 +44,9 @@ function ItemDataManager:GetCustomData(defineId)
     if not data then
         return nil
     else
-        local itemType = UGCItemSystemV2.GetItemCustomizedTypeV2(defineId.TypeSpecificID)
+        local itemType = _GetItemType(defineId)
         local defaults
-        if itemType == "Kenl" then
+        if itemType == ItemCfg.ItemType.Kenl then
             defaults = {
                 entries = {}, 
                 isIdentified = false,
@@ -42,7 +57,7 @@ function ItemDataManager:GetCustomData(defineId)
                 strengthenLevel = 0, 
             }
         end
-        self:_MergeDefaults(data, defaults)
+        _MergeDefaults(data, defaults)
         return data
     end
 end
@@ -67,22 +82,26 @@ function ItemDataManager:Identify(defineId)
     if not self:HasAuthority() then
         return nil
     end
+    local itemId = defineId.TypeSpecificID
+    local itemType = _GetItemType(itemId)
+    if itemType ~= ItemCfg.ItemType.Kenl then
+        return nil
+    end
     local data = self:GetCustomData(defineId)
     if not data or data.isIdentified then
         return nil
     end
 
     -- 扣除鉴定材料
-    local itemId = defineId.TypeSpecificID
     ---@type PlayerDataManager_C
     local pdm = self.owner.PlayerDataManager
-    local cost = ItemCfg.IdentifyCost[itemId]
-    if not pdm:AddCoin(ItemCfg.IdentifyMaterial, -cost) then
+    local cost = ItemCfg.Identify.Cost[itemId]
+    if not pdm:AddCoin(ItemCfg.Identify.Material, -cost) then
         return nil
     end
     
     -- 生成随机词条
-    local quality = UGCItemSystemV2.GetItemQualityV2(itemId)
+    local quality = _GetQuality(itemId)
     local entries = {}
     local attrs = Lib.Random.Pick(ItemCfg.AttributeEntryPool, quality + 1)
     for _, attr in pairs(attrs) do
@@ -109,38 +128,81 @@ end
 ---【服务端】融合两个核心。
 ---@param defineId1 ItemDefineID @主核心的 ItemDefineID
 ---@param defineId2 ItemDefineID @另一核心的 ItemDefineID
+---@return AttrEntry[]? @新词条列表，融合失败时返回 nil
 function ItemDataManager:Fusion(defineId1, defineId2)
     if not self:HasAuthority() then
-        return
+        return nil
     end
+    local itemId1 = defineId1.TypeSpecificID
+    local itemType1 = _GetItemType(itemId1)
+    local itemId2 = defineId2.TypeSpecificID
+    local itemType2 = _GetItemType(itemId2)
+    if itemType1 ~= ItemCfg.ItemType.Kenl or itemType2 ~= ItemCfg.ItemType.Kenl then
+        return nil
+    end
+    local data1 = self:GetCustomData(defineId1)
+    local data2 = self:GetCustomData(defineId2)
+    if not data1 or not data2 then
+        return nil
+    end
+
+    local quality = _GetQuality(itemId1)
+    local n = quality + 1
+    local entries = Lib.Table.Concat(data1.entries, data2.entries) ---@type AttrEntry[]
+    local result = Lib.Random.Pick(entries, n)
+    data1.entries = result
+    if not self:_SaveData(defineId1, data1) then
+        return nil
+    end
+
+    local pc = UGCGameSystem.GetPlayerControllerByPlayerState(self.owner)
+    UGCBackpackSystemV2.RemoveItemByDefineIDV2(pc, defineId2, 1)
+
+    return result
 end
 
 
 ---【服务端】洗炼核心。
 ---@param defineId ItemDefineID @装备的 ItemDefineID
+---@return boolean @是否成功
 function ItemDataManager:Refine(defineId)
     if not self:HasAuthority() then
-        return
+        return false
+    end
+    local itemId = defineId.TypeSpecificID
+    local itemType = UGCItemSystemV2.GetItemCustomizedTypeV2(itemId)
+    if itemType ~= ItemCfg.ItemType.Kenl then
+        return nil
     end
 end
  
 
----【服务端】强化指定装备。
+---【服务端】强化装备。
 ---@param defineId ItemDefineID @装备的 ItemDefineID
 ---@param level number @要强化的等级，默认为 1
----@return number @返回强化后的等级，强化失败时返回 -1
+---@return boolean @是否成功
 function ItemDataManager:Strengthen(defineId, level)
     if not self:HasAuthority() then
-        return -1
+        return false
     end
     level = level or 1
     local data = self:GetCustomData(defineId)
     if not data then
-        return -1
+        return false
     end
     data.strengthenLevel = (data.strengthenLevel or 0) + level
     self:_SaveData(defineId, data)
-    return data.strengthenLevel
+    return true
+end
+
+
+---【服务端】精炼装备。
+---@param defineId ItemDefineID @装备的 ItemDefineID
+---@return boolean @是否成功
+function ItemDataManager:Reforge(defineId)
+    if not self:HasAuthority() then
+        return false
+    end
 end
 
 

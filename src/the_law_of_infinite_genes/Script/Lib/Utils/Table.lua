@@ -3,7 +3,60 @@
 local Table = {}
 
 
-----【双端】判断表是否为空。
+---【双端】截取列表的前 n 个元素。
+---@generic T
+---@param list T[] @列表
+---@param n number @要截取的元素个数
+---@return T[] @截取后的列表
+function Table.Cut(list, n)
+    local result = {}
+    for i = 1, n do
+        table.insert(result, list[i])
+    end
+    return result
+end
+
+
+---【双端】连接两个列表。
+---@generic T1
+---@generic T2
+---@param t1 T1[] @第一个列表
+---@param t2 T2[] @第二个列表
+---@return (T1|T2)[] @连接后的列表
+function Table.Concat(t1, t2)
+    local res = {}
+    local i = 1
+    for _, v in pairs(t1) do
+        res[i] = v
+        i = i + 1
+    end
+    for _, v in pairs(t2) do
+        res[i] = v
+        i = i + 1
+    end
+    return res
+end
+
+
+---【双端】合并两个表，第二个表的键值会覆盖第一个表。
+---@generic T1
+---@generic T2
+---@param t1 T1 @第一个表
+---@param t2 T2 @第二个表
+---@return T1 & T2 @合并后的表
+function Table.Merge(t1, t2)
+    local res = {}
+    for k, v in pairs(t1) do
+        res[k] = v
+    end
+    for k, v in pairs(t2) do
+        res[k] = v
+    end
+    return res
+end
+
+
+---【双端】判断表是否为空。
 ---@param t table @表
 ---@return boolean @是否为空
 function Table.IsEmpty(t)
