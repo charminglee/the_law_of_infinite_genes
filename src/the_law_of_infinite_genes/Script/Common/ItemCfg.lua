@@ -33,10 +33,7 @@ ItemCfg.AttributeEntryRange = {
     [Attribute.EpidemicToxinSettleRatio]    = { min=0, max=1 },
     [Attribute.BurstShootCDWrapper]         = { min=0, max=1 },
 }
-ItemCfg.AttributeEntryPool = {}
-for k, _ in pairs(ItemCfg.AttributeEntryRange) do
-    table.insert(ItemCfg.AttributeEntryPool, k)
-end
+ItemCfg.AttributeEntryPool = Lib.Table.Keys(ItemCfg.AttributeEntryRange)
 
 
 ItemCfg.EntryItemId = {
@@ -48,9 +45,18 @@ ItemCfg.EntryItemId = {
 }
 
 
+-- 词条数值曲线
+ItemCfg.AttrCurve = function(min, max, ...)
+    local p = math.random() ^ 2.2
+    return min + p * (max - min)
+end
+
+
 -- 鉴定配置
 ItemCfg.Identify = {
+    -- 消耗的材料ItemId
     Material = 8310000,
+    -- 消耗的材料数量
     Cost = {
         [8310042] = 100,
         [8310046] = 150,
@@ -68,6 +74,8 @@ ItemCfg.Fusion = {
 
 -- 洗炼配置
 ItemCfg.Refine = {
+    -- 洗炼次数上限
+    Limit = 5,
 }
 
 
