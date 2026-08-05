@@ -1,5 +1,4 @@
 ---@class RaidInstanceMain_C:UAEUserWidget
----@field Button_0 UButton
 ---@field CardButton UButton
 ---@field Image_35 UImage
 ---@field Image_36 UImage
@@ -26,7 +25,6 @@ end
 function RaidInstanceMain:Listen()
     self.CardButton.OnClicked:Add(self.OpenCardUI, self);
     self.ShopButton.OnClicked:Add(self.OpenShopUI, self);
-    self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
 end
 
 function RaidInstanceMain:OnOpen(...)
@@ -44,10 +42,6 @@ end
 
 function RaidInstanceMain:OpenShopUI()
     FightManager:OpenMainUI();
-end
-
-function RaidInstanceMain:Button_0_Clicked()
-    UGCGameSystem.GetLocalPlayerController():OnGameSettle();
 end
 
 return RaidInstanceMain
