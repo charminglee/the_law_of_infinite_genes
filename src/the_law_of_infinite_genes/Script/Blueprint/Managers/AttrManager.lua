@@ -1,4 +1,4 @@
----管理玩家属性数据，绑定于PlayerPawn，仅服务端可见。
+---管理玩家属性数据，绑定于 PlayerPawn ，双端可见。
 ---@class AttrManager_C:BaseManager_C
 --Edit Below--
 local AttrManager = {
@@ -21,6 +21,9 @@ local _PCT_MAP = nil
 
 function AttrManager:ReceiveBeginPlay()
     AttrManager.SuperClass.ReceiveBeginPlay(self)
+    if not self:HasAuthority() then
+        return
+    end
 
     _GAS_BACKED = _GAS_BACKED or {
         [Attribute.AttackPower]             = true,
@@ -82,16 +85,18 @@ function AttrManager:ReceiveBeginPlay()
         self:_UpdateFinal()
     end
 
-    if self:HasAuthority() then 
-        Lib.EventSystem.Listen(Event.OnResetCardData, self.OnResetCardData, self)
-        Lib.EventSystem.Listen(Event.OnCardEquipAfter, self.OnCardEquipAfter, self)
-        Lib.EventSystem.Listen(Event.OnCardUnequipAfter, self.OnCardUnequipAfter, self)
-        Lib.EventSystem.Listen(Event.OnCardSellAfter, self.OnCardSellAfter, self)
-    end
+    Lib.EventSystem.Listen(Event.OnResetCardData, self.OnResetCardData, self)
+    Lib.EventSystem.Listen(Event.OnCardEquipAfter, self.OnCardEquipAfter, self)
+    Lib.EventSystem.Listen(Event.OnCardUnequipAfter, self.OnCardUnequipAfter, self)
+    Lib.EventSystem.Listen(Event.OnCardSellAfter, self.OnCardSellAfter, self)
 end
 
 
 function AttrManager:ReceiveEndPlay()
+    AttrManager.SuperClass.ReceiveEndPlay(self)
+    if not self:HasAuthority() then
+        return
+    end
     self._attrCache = nil
     self._final = nil
     Lib.EventSystem.UnlistenByOwner(self)
@@ -209,9 +214,9 @@ function AttrManager:_RebuildFromEquipped()
 end
 
 
----【服务端】获取属性值。
----@param attr Attribute @Attribute枚举值
----@param includePct boolean? @是否包含百分比加成，默认为true
+---【双端】获取属性值。
+---@param attr Attribute @Attribute 枚举值
+---@param includePct boolean? @是否包含百分比加成，默认为 true
 ---@return number @属性值
 function AttrManager:GetAttr(attr, includePct)
     if attr == Attribute.HealthMax then
@@ -226,6 +231,20 @@ function AttrManager:GetAttr(attr, includePct)
     else
         return self._attrCache[attr]
     end
+end
+
+
+---【服务端】设置属性值。
+---@param attr Attribute @Attribute 枚举值
+---@param value number @属性值
+function AttrManager:SetAttr(attr, value)
+    if not self:HasAuthority() then
+        return
+    end
+    if attr == Attribute.HealthMax then
+        attr = Attribute._HealthMax
+    end
+    UGCAttributeSystem.SetGameAttributeValue(self.owner, attr, value)
 end
 
 

@@ -67,9 +67,7 @@ function UGCPlayerController:ReceiveBeginPlay()
                 local bulletId = Config.InitialWeapon.BulletId
                 if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
                     UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)  
-                    UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
-                    UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
-                    UGCBackpackSystemV2.AddItemV2(self, bulletId, 100)
+                    UGCBackpackSystemV2.AddItemV2(self, bulletId, 300)
                 end
 
                 if UGCGameSystem.IsUGCPIE() and Config.Debug.AutoStartGame then

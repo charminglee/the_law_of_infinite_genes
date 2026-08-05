@@ -1,4 +1,4 @@
----管理玩家背包/仓库中装备的自定义数据，绑定于 PlayerState，双端可见。
+---管理玩家背包/仓库中装备的自定义数据，绑定于 PlayerState ，双端可见。
 ---@class ItemDataManager_C:BaseManager_C
 --Edit Below--
 local ItemDataManager = {}

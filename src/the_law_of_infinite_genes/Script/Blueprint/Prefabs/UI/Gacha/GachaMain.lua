@@ -208,8 +208,8 @@ function GachaMain:_AttributeName(property)
             return "无后坐力";
         elseif attr.ReloadTime ~= nil and property == attr.ReloadTime then
             return "换弹时间";
-        elseif attr.BurstShootCDWrapper ~= nil and property == attr.BurstShootCDWrapper then
-            return "连发间隔";
+        elseif attr.ShootSpeedScale ~= nil and property == attr.ShootSpeedScale then
+            return "射击速度";
         end
     end
     return tostring(property);

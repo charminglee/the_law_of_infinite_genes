@@ -10,6 +10,10 @@ function UGCPlayerPawn:ReceiveBeginPlay()
     self.IsOpenShovelAbility = true
     if not self:HasAuthority() then
         LocalPlayerPawn = LocalPlayerPawn or self ---@type UGCPlayerPawn_C
+    else
+        if UGCGameSystem.IsUGCPIE() and Config.Debug.InfiniteAmmo then
+            self.AttrManager:SetAttr(Attribute.InfiniteAmmo, 1)
+        end
     end
 
     if UGCGameSystem.IsServer() then
@@ -18,6 +22,7 @@ function UGCPlayerPawn:ReceiveBeginPlay()
         self:OnRep_CoverAllAvatarMeshInfo()
     end
 end
+
 
 function UGCPlayerPawn:InitInServer()
     -- 玩家死亡不生成死亡盒子
@@ -29,6 +34,7 @@ function UGCPlayerPawn:InitInServer()
     self.DynamicStateEnterHandle:Add(self.ChangeState, self)
 end
 
+
 function UGCPlayerPawn:SetIsInvincible_Lua(_, PlayerKey)
     UGCPlayerPawnSystem.SetIsInvincible(UGCGameSystem.GetPlayerPawnByPlayerKey(PlayerKey), true)
     self.InvincibleTimer = UGCTimerUtility.CreateLuaTimer(
@@ -37,6 +43,7 @@ function UGCPlayerPawn:SetIsInvincible_Lua(_, PlayerKey)
         end, false
     )
 end
+
 
 function UGCPlayerPawn:ChangeState(CurState)
     ugcprint("[UGCPlayerPawn:ChangeState]")
@@ -84,6 +91,7 @@ function UGCPlayerPawn:ChangeState(CurState)
             ugcprint("[UGCPlayerPawn:EnterAliveState] PlayerController not found.")
         end
     end
+    self.CapsuleComponent:SetCollisionObjectType(16) -- PlayerPawn
 end
 
 

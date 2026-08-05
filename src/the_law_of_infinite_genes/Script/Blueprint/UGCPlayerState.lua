@@ -2,8 +2,6 @@
 ---@field ItemDataManager ItemDataManager_C
 ---@field PlayerDataManager PlayerDataManager_C
 --Edit Below--
-local Delegate = require("common.Delegate")
-local PromiseFuture = require("common.PromiseFuture")
 local UGCPlayerState = {
     -- 玩家等级变化委托，当玩家等级同步时触发（客户端）
     PlayerLevelChangedDelegate = Delegate.New(),
@@ -16,7 +14,13 @@ local UGCPlayerState = {
     -- 游戏完成记录表，存储玩家已解锁的游戏模式
     GameCompletionRecord = {},
 }
+
+
+local Delegate = require("common.Delegate")
+local PromiseFuture = require("common.PromiseFuture")
 local UGCGameData = UGCGameSystem.UGCRequire('Script.Blueprint.UGCGameData')
+
+
 UGCPlayerState.RespawnConfig = {}
 UGCPlayerState.GameRecordData = {
     LevelInfo = {},                      -- 每个关卡的分数
@@ -35,6 +39,7 @@ UGCPlayerState.GameRecordData = {
     Likes = {},                          -- 点赞列表
     ReceivedLikes = {},                  -- 收到的点赞列表
 }
+
 
 -- 初始化结算参数表
 -- 该表用于存储游戏结算相关的状态信息
@@ -66,9 +71,11 @@ function UGCPlayerState:GetReplicatedProperties()
     {"AliveState", "Lazy"}, {"bIsOnline", "Lazy"}, {"bIsLobbyTeamLeader", "Lazy"},{"GameStartTime", "Lazy"}
 end
 
+
 function UGCPlayerState:GetAvailableServerRPCs()
     return "RPC_Server_ReduceFreeReviveCount", "RPC_Server_ReducePaidReviveCount"
 end
+
 
 function UGCPlayerState:ReceiveBeginPlay()
     UGCPlayerState.SuperClass.ReceiveBeginPlay(self)
@@ -81,6 +88,7 @@ function UGCPlayerState:ReceiveBeginPlay()
         self:HandleBeginPlayInClientForFighting()
     end
 end
+
 
 function UGCPlayerState:HandleBeginPlayInServer()
     UGCPlayerState.GameStartTime = UGCGameSystem.GetServerTimeSec()
@@ -124,17 +132,21 @@ function UGCPlayerState:HandleBeginPlayInServer()
 
 end
 
+
 function UGCPlayerState:HandleBeginPlayInClientForFighting()
     BreakthroughManager:AddOrUpdateResultPlayerState({GameRecordData = self.GameRecordData, UID = self:GetInt64UID(), IconURL = self.IconURL, Gender = self.Gender, FrameLevel = self.FrameLevel, PlayerLevel = self.PlayerLevel, PlayerName = self.PlayerName, PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)})
 end
+
 
 function UGCPlayerState:OnPawnSpawn()
     self:OnSpawnOrRespawn()
 end
 
+
 function UGCPlayerState:OnPawnRespawn()
     self:OnSpawnOrRespawn()
 end
+
 
 function UGCPlayerState:OnSpawnOrRespawn()
     if UGCGameSystem.IsServer() then
@@ -158,6 +170,7 @@ function UGCPlayerState:OnSpawnOrRespawn()
         end
     end
 end
+
 
 function UGCPlayerState:OnPlayerEnter(_,PlayerKey)
     if UGCGameSystem.GetPlayerKeyByPlayerState(self) ~= PlayerKey then
@@ -189,12 +202,14 @@ function UGCPlayerState:OnPlayerEnter(_,PlayerKey)
     -- self:SetShowTeammatePositionUI(UGCMultiMode.GetModeID() ~= 1001)
 end
 
+
 function UGCPlayerState:OnPlayerLost(_, PlayerKey)
     if UGCGameSystem.GetPlayerKeyByPlayerState(self) == PlayerKey then
         self.bIsOnline = false
         UnrealNetwork.RepLazyProperty(self, "bIsOnline")
     end
 end
+
 
 function UGCPlayerState:OnPlayerReconnect(_, PlayerKey)
     if UGCGameSystem.GetPlayerKeyByPlayerState(self) == PlayerKey then
@@ -203,8 +218,8 @@ function UGCPlayerState:OnPlayerReconnect(_, PlayerKey)
     end
 end
 
-function UGCPlayerState:InitGameGameRecordData()
 
+function UGCPlayerState:InitGameGameRecordData()
     PromiseFuture.New():Set(
         function (PromiseFuture)
             while true do
@@ -232,6 +247,7 @@ function UGCPlayerState:InitGameGameRecordData()
         end
     ):AutoResume(self, 0.2, 5)
 end
+
 
 function UGCPlayerState:InitGameCompletionRecord()
     ugcprint("[UGCPlayerState] InitGameCompletionRecord")
@@ -267,14 +283,15 @@ function UGCPlayerState:InitGameCompletionRecord()
     self.GameCompletionRecord = PlayerData.GameCompletionRecord
     UnrealNetwork.RepLazyProperty(self, "GameCompletionRecord")
     UGCPlayerStateSystem.SavePlayerArchiveData(UID, PlayerData)    
-
 end
+
 
 function UGCPlayerState:UpdateCurrentStage(CurrentStage)
     ugcprint("UGCPlayerState:UpdateCurrentStage CurrentStage="..tostring(CurrentStage))
     self.GameRecordData.CurrentStage = CurrentStage
     UnrealNetwork.RepLazyProperty(self, "GameRecordData")
 end
+
 
 function UGCPlayerState:SetLobbyReadyStatus(bIsReady)
     if not UGCGameSystem.IsServer() then
@@ -285,6 +302,7 @@ function UGCPlayerState:SetLobbyReadyStatus(bIsReady)
     UnrealNetwork.RepLazyProperty(self, "bIsReadyInLobby")
 end
 
+
 function UGCPlayerState:SetIsLobbyTeamLeader(bIsTeamLeader)
     if not UGCGameSystem.IsServer() then
         return
@@ -294,17 +312,20 @@ function UGCPlayerState:SetIsLobbyTeamLeader(bIsTeamLeader)
     UnrealNetwork.RepLazyProperty(self, "bIsTeamLeader")
 end
 
+
 function UGCPlayerState:ReduceFreeRespawnCount()
     self.RespawnConfig.CurrentFreeReviveCount = self.RespawnConfig.CurrentFreeReviveCount - 1
     UnrealNetwork.RepLazyProperty(self, "RespawnConfig.CurrentFreeReviveCount")
     ugcprint("RespawnConfigTable.CurrentFreeReviveCount = "..self.RespawnConfig.CurrentFreeReviveCount)
 end
 
+
 function UGCPlayerState:ReducePaidRespawnCount()
     self.RespawnConfig.CurrentPaidReviveCount = self.RespawnConfig.CurrentPaidReviveCount - 1
     UnrealNetwork.RepLazyProperty(self, "RespawnConfig.CurrentPaidReviveCount")
     ugcprint("RespawnConfigTable.CurrentPaidReviveCount = "..self.RespawnConfig.CurrentPaidReviveCount)
 end
+
 
 function UGCPlayerState:OnRep_GameRecordData()
     ugcprint("[UGCPlayerState] OnRep_GameRecordData"..tostring(self.GameRecordData.TotalCriticalHit))
@@ -314,6 +335,7 @@ function UGCPlayerState:OnRep_GameRecordData()
     end
     BreakthroughManager:AddOrUpdateResultPlayerState({GameRecordData = self.GameRecordData, UID = self:GetInt64UID(), IconURL = self.IconURL, Gender = self.Gender, FrameLevel = self.FrameLevel, PlayerLevel = self.PlayerLevel, PlayerName = self.PlayerName, PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)})
 end
+
 
 function UGCPlayerState:OnRep_GameCompletionRecord()
     ugcprint(string.format("[UGCPlayerState] OnRep_GameCompletionRecord : %s", table.concat(self.GameCompletionRecord, ",")))
@@ -345,6 +367,7 @@ function UGCPlayerState:OnRep_GameCompletionRecord()
     ):AutoResume(self, 0.2, 60)
 end
 
+
 function UGCPlayerState:OnRep_bIsReadyInLobby()
     local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
     ugcprint(string.format("[UGCPlayerState:OnRep_bIsReadyInLobby] PlayerKey=%d, bIsReadyInLobby=%s", PlayerKey, tostring(self.bIsReadyInLobby)))
@@ -352,6 +375,7 @@ function UGCPlayerState:OnRep_bIsReadyInLobby()
     self.ReadyStateUpdateDelegate()
     LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, {})
 end
+
 
 function UGCPlayerState:OnRep_bIsLobbyTeamLeader()
     local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
@@ -361,6 +385,7 @@ function UGCPlayerState:OnRep_bIsLobbyTeamLeader()
     LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, {})
 end
 
+
 function UGCPlayerState:OnRep_bIsOnline()
     local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
     ugcprint(string.format("[UGCPlayerState:OnRep_bIsOnline] PlayerKey=%d, bIsOnline=%s", PlayerKey, tostring(self.bIsOnline)))
@@ -368,11 +393,13 @@ function UGCPlayerState:OnRep_bIsOnline()
     self.OnlineStateUpdateDelegate()
 end
 
+
 function UGCPlayerState:UpdateGameTime()
     self.GameRecordData.GameTime = UGCGameSystem.GetServerTimeSec() - self.GameStartTime
     UnrealNetwork.RepLazyProperty(self, "GameRecordData.GameTime")
     ugcprint(string.format("[UGCPlayerState] UpdateGameTime : %d", self.GameRecordData.GameTime))
 end
+
 
 function UGCPlayerState:OnRep_SettleParams()
     print(string.format("[UGCPlayerState] OnRep_SettleParams, bIsSettled is : %s, bIsFinished is : %s", tostring(self.SettleParams.bIsSettled), tostring(self.SettleParams.bIsFinished)))
@@ -385,6 +412,7 @@ function UGCPlayerState:OnRep_SettleParams()
         end
     end
 end
+
 
 function UGCPlayerState:OnRep_AliveState()
     local PC = UGCGameSystem.GetPlayerControllerByPlayerState(self)
@@ -400,6 +428,7 @@ function UGCPlayerState:OnRep_AliveState()
         BreakthroughManager:CloseRespawnUI()
     end
 end
+
 
 function UGCPlayerState:ReceiveEndPlay()
     if UGCGameSystem.IsServer() then

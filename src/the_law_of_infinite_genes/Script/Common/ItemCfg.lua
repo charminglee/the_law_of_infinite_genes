@@ -31,7 +31,6 @@ ItemCfg.AttributeEntryRange = {
     [Attribute.EpidemicToxinLevel]          = { min=0, max=1 },
     [Attribute.EpidemicToxinOverlyLimit]    = { min=0, max=1 },
     [Attribute.EpidemicToxinSettleRatio]    = { min=0, max=1 },
-    [Attribute.BurstShootCDWrapper]         = { min=0, max=1 },
 }
 ItemCfg.AttributeEntryPool = Lib.Table.Keys(ItemCfg.AttributeEntryRange)
 

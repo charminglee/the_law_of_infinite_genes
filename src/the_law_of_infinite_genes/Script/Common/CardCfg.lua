@@ -121,16 +121,16 @@ CardCfg.Suit = {
         Group = 4,
         Combo = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value = 0.10},
+                {property = Attribute.ShootSpeedScale, value = 0.10},
                 {property = Attribute.MoveSpeedScale, value = 0.05},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value = 0.20},
+                {property = Attribute.ShootSpeedScale, value = 0.20},
                 {property = Attribute.MoveSpeedScale, value = 0.10},
                 {property = Attribute.ReloadTime, value = 0.15},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value = 0.30},
+                {property = Attribute.ShootSpeedScale, value = 0.30},
                 {property = Attribute.MoveSpeedScale, value = 0.20},
                 {property = Attribute.ReloadTime, value = 0.25},
             },
@@ -950,13 +950,13 @@ CardCfg.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobLightning_1.CG020_SP_JobLightning_1',
         bonus = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.01},
+                {property = Attribute.ShootSpeedScale, value = 0.01},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.02},
+                {property = Attribute.ShootSpeedScale, value = 0.02},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.04},
+                {property = Attribute.ShootSpeedScale, value = 0.04},
             },
         }
     },
@@ -1004,13 +1004,13 @@ CardCfg.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG020_SP_JobLightning_1.CG020_SP_JobLightning_1',
         bonus = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value = 0.015},
+                {property = Attribute.ShootSpeedScale, value = 0.015},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.03},
+                {property = Attribute.ShootSpeedScale, value = 0.03},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.06},
+                {property = Attribute.ShootSpeedScale, value = 0.06},
             },
         }
     },
@@ -1043,15 +1043,15 @@ CardCfg.Cards = {
         texture = '/Game/Arts_Timeliness/GameMode/SuperPeople/Art_UI/NoAtlas/SkillIcon/CG029_SP_JobCyberSpider_3.CG029_SP_JobCyberSpider_3',
         bonus = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.025},
+                {property = Attribute.ShootSpeedScale, value = 0.025},
                 {property = Attribute.ReloadTime, value = -0.025},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.05},
+                {property = Attribute.ShootSpeedScale, value = 0.05},
                 {property = Attribute.ReloadTime, value = -0.05},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.1},
+                {property = Attribute.ShootSpeedScale, value = 0.1},
                 {property = Attribute.ReloadTime, value = -0.1},
             },
         }
@@ -1064,15 +1064,15 @@ CardCfg.Cards = {
         texture = '/Game/UGC/Repository/Icon/Skill/Icon_Skill_9.Icon_Skill_9',
         bonus = {
             [1] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.04},
+                {property = Attribute.ShootSpeedScale, value = 0.04},
                 {property = Attribute.ReloadTime, value = -0.04},
             },
             [2] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.08},
+                {property = Attribute.ShootSpeedScale, value = 0.08},
                 {property = Attribute.ReloadTime, value = -0.08},
             },
             [3] = {
-                {property = Attribute.BurstShootCDWrapper, value = -0.15},
+                {property = Attribute.ShootSpeedScale, value = 0.15},
                 {property = Attribute.ReloadTime, value = -0.15},
             },
         }
@@ -1108,18 +1108,18 @@ CardCfg.Cards = {
             [1] = {
                 {property = Attribute.MoveSpeedScale, value = 0.06},
                 {property = Attribute.DodgeChance, value = 0.06},
-                {property = Attribute.BurstShootCDWrapper, value = -0.06},
+                {property = Attribute.ShootSpeedScale, value = 0.06},
                 {property = Attribute.ReloadTime, value = -0.06},
             },
             [2] = {
                 {property = Attribute.MoveSpeedScale, value = 0.12},
                 {property = Attribute.DodgeChance, value = 0.12},
-                {property = Attribute.BurstShootCDWrapper, value = -0.12},
+                {property = Attribute.ShootSpeedScale, value = 0.12},
                 {property = Attribute.ReloadTime, value = -0.12},
             },
             [3] = {
                 {property = Attribute.Recoilless, value = 1},
-                {property = Attribute.BurstShootCDWrapper, value = -0.25},
+                {property = Attribute.ShootSpeedScale, value = 0.25},
                 {property = Attribute.MoveSpeedScale, value = 0.25},
                 {property = Attribute.DodgeChance, value = 0.25},
             },

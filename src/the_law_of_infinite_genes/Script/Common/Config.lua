@@ -10,12 +10,13 @@ Config.Debug = {
         [8310003] = 999999, -- Coin_3
         [8310012] = 999999, -- Coin_4
     },
+    InfiniteAmmo = true,
 }
 
 
 Config.Common = {
     AutoSaveInterval = 30,  -- 玩家数据自动保存间隔，单位秒
-    SpawnerDelay = 10,      -- 刷怪延迟
+    SpawnerDelay = 10,      -- 准备阶段时长
 }
 
 
@@ -71,7 +72,7 @@ Config.Damage = {
 -- 初始武器
 Config.InitialWeapon = {
     WeaponId = 8310018,
-    BulletId = 301001,
+    BulletId = 831301001,
 }
 
 

@@ -1,4 +1,4 @@
----管理玩家所有需要存档的数据，绑定于 PlayerState，双端可见。
+---管理玩家所有需要存档的数据，绑定于 PlayerState ，双端可见。
 ---@class PlayerDataManager_C:BaseManager_C
 --Edit Below--
 local PlayerDataManager = {
