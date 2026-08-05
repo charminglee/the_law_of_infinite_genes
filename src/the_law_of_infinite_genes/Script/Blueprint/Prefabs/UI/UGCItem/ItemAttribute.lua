@@ -21,15 +21,15 @@ function ItemAttribute:InitData(Data)
     local Slots = UGCItemSystemV2.GetAttachChildrenItem(DefineId) or {}
     local FQuality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineId)
 
-    local EquipmentText = self:Line(
-            self:Inline(self:Font('品质\t\t', {size=20, color='FFFFFFFF'}, self:Font(ItemCfg.ItemQuality[FQuality].name, {size=20, color=ItemCfg.ItemQuality[FQuality].color}))),
-            self:Inline(self:Font("装备强化\t\t", { size = 18, color = 'FFFFFFFF'}), self:Font('+15', {size=20, color='FEEA42FF'})),
-            self:Inline(self:Font("攻击力\t", { size = 14, color = "FFFFFFFF" }), self:Font('+10', {size=14, color='B8FFA1FF'})),
-            self:Inline(self:Font("生命值\t", { size = 14, color = "FFFFFFFF" }), self:Font('+10', {size=14, color='B8FFA1FF'})),
-            self:Inline(self:Font("防御力\t", { size = 14, color = "FFFFFFFF" }), self:Font('+10', {size=14, color='B8FFA1FF'})),
-            self:Font("赤锋套装", { size = 16, color = "B8FFB8FF" }),
-            self:Font("[2]套效果", { size = 15, color = "BFFFFFFF" }),
-            self:Font("暴击率 +5%", { size = 14, color = "FF5555FF" })
+    local EquipmentText = RichText.Line(
+            RichText.Inline(RichText.Font('品质\t\t', {size=20, color='FFFFFFFF'}, RichText.Font(ItemCfg.ItemQuality[FQuality].name, {size=20, color=ItemCfg.ItemQuality[FQuality].color}))),
+            RichText.Inline(RichText.Font("装备强化\t\t", { size = 18, color = 'FFFFFFFF'}), RichText.Font('+15', {size=20, color='FEEA42FF'})),
+            RichText.Inline(RichText.Font("攻击力\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('+10', {size=14, color='B8FFA1FF'})),
+            RichText.Inline(RichText.Font("生命值\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('+10', {size=14, color='B8FFA1FF'})),
+            RichText.Inline(RichText.Font("防御力\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('+10', {size=14, color='B8FFA1FF'})),
+            RichText.Font("赤锋套装", { size = 16, color = "B8FFB8FF" }),
+            RichText.Font("[2]套效果", { size = 15, color = "BFFFFFFF" }),
+            RichText.Font("暴击率 +5%", { size = 14, color = "FF5555FF" })
     )
 
     local KnelText = ""
@@ -38,11 +38,11 @@ function ItemAttribute:InitData(Data)
         local SlotItemId = Slot and Slot.TypeSpecificID or 0
 
         if SlotItemId and SlotItemId ~= 0 then
-            KnelText = self:Line(
-                    self:Inline(self:Font("核心属性\t", { size = 18, color = "FFFFFFFF" })),
-                    self:Inline(self:Font("属性一\t", { size = 14, color = "FFFFFFFF" }), self:Font('攻击力+10', {size=14, color='B8FFA1FF'})),
-                    self:Inline(self:Font("属性二\t", { size = 14, color = "FFFFFFFF" }), self:Font('攻击力+10', {size=14, color='B8FFA1FF'})),
-                    self:Inline(self:Font("属性三\t", { size = 14, color = "FFFFFFFF" }), self:Font('攻击力+10', {size=14, color='B8FFA1FF'}))
+            KnelText = RichText.Line(
+                    RichText.Inline(RichText.Font("核心属性\t", { size = 18, color = "FFFFFFFF" })),
+                    RichText.Inline(RichText.Font("属性一\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('攻击力+10', {size=14, color='B8FFA1FF'})),
+                    RichText.Inline(RichText.Font("属性二\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('攻击力+10', {size=14, color='B8FFA1FF'})),
+                    RichText.Inline(RichText.Font("属性三\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('攻击力+10', {size=14, color='B8FFA1FF'}))
             )
             break
         end

@@ -4,11 +4,17 @@
 ---@field BackpackList UGC_ReuseList2_C
 ---@field Button_0 UButton
 ---@field Button_1 UButton
+---@field Button_276 UButton
 ---@field CurrentLevel UUTRichTextBlock
 ---@field FortifyPreviewItem FortifyPreviewItem_C
 ---@field FortifyPreviewItem_0 FortifyPreviewItem_C
 ---@field Front UUTRichTextBlock
+---@field Image_12 UImage
+---@field Image_13 UImage
 ---@field Image_14 UImage
+---@field Image_16 UImage
+---@field Image_17 UImage
+---@field PureBtn UButton
 ---@field SuccessRate UTextBlock
 ---@field TabList UGC_ReuseList2_C
 --Edit Below--
@@ -40,7 +46,11 @@ function FortifyMain:Reload(DefineID, FilterType)
     self.BackpackList:Reload(#self.Filter);
     self.TabList:Reload(#FortifyManager.EquipmentType)
     self:SetPreview(DefineID);
-
+    --local imageT = RichText.Link('点击这里', {size='24', color='FFAAAAFF', under_line='1'})
+    --ugcprint(imageT)
+    self.Front:SetText(
+        '请点击<a2 src="/Engine/EngineFonts/Roboto.Roboto" size="30" color="A9FF00FF" flag="1">这里</>'
+    )
 end
 
 --- @param DefineID ItemDefineID
@@ -86,10 +96,25 @@ function FortifyMain:Listen()
     self.Button_0.OnClicked:Add(self.Exit, self);
     self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
     self.TabList.OnUpdateItem:Add(self.TabListUpdate, self)
+    self.PureBtn.OnClicked:Add(self.PureBtnClicked, self);
+    self.Front.OnHyperlinkClicked:Add(self.OnHyperlinkClicked, self)
+
 end
 
 function FortifyMain:Exit()
     self:SetVisibility(ESlateVisibility.Collapsed);
+end
+function FortifyMain:OnHyperlinkClicked(meta)
+    self:TestC(meta)
+end
+
+function FortifyMain:TestC(meta)
+    ugcprint(tostring(meta.Metadata.flag));
+    ugcprint_concat(meta, '  ');
+end
+function FortifyMain:PureBtnClicked()
+    self:Exit()
+    PureManager:OpenMainUI(FortifyManager.DefineID);
 end
 
 function FortifyMain:BackpackListUpdate(Item, Index)

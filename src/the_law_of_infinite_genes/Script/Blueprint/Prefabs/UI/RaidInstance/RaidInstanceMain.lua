@@ -1,6 +1,11 @@
 ---@class RaidInstanceMain_C:UAEUserWidget
 ---@field Button_0 UButton
 ---@field CardButton UButton
+---@field Image_35 UImage
+---@field Image_36 UImage
+---@field Image_37 UImage
+---@field Image_38 UImage
+---@field Right UCanvasPanel
 ---@field ShopButton UButton
 --Edit Below--
 local RaidInstanceMain = { bInitDoOnce = false } 

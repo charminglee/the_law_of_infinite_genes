@@ -89,15 +89,15 @@ function BP_BackpackUIComponentV2_Custom:EquipmentPure(DefineID, DataType)
 end
 
 --- 点击洗练界面按钮
-function BP_BackpackUIComponentV2_Custom:KnelReinf(DefineID, DataType)
+function BP_BackpackUIComponentV2_Custom:KenlReinf(DefineID, DataType)
     ugcprint('点击洗练')
 end
 
-function BP_BackpackUIComponentV2_Custom:KnelAppraisal(DefineID, DataType)
+function BP_BackpackUIComponentV2_Custom:KenlAppraisal(DefineID, DataType)
     ugcprint('点击洗练')
 end
 
-function BP_BackpackUIComponentV2_Custom:KnelFusion(DefineID, DataType)
+function BP_BackpackUIComponentV2_Custom:KenlFusion(DefineID, DataType)
     ugcprint('点击洗练')
 end
 

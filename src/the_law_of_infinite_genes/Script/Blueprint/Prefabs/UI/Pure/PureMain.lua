@@ -4,9 +4,15 @@
 ---@field BackpackList UGC_ReuseList2_C
 ---@field Button_0 UButton
 ---@field Button_1 UButton
+---@field Button_277 UButton
 ---@field CurrentLevel UUTRichTextBlock
+---@field FortifyBtn UButton
 ---@field Front UUTRichTextBlock
+---@field Image_12 UImage
+---@field Image_13 UImage
 ---@field Image_14 UImage
+---@field Image_17 UImage
+---@field Image_18 UImage
 ---@field PreviewItem PurePreviewItem_C
 ---@field PreviewItem_0 PurePreviewItem_C
 ---@field SuccessRate UTextBlock
@@ -83,12 +89,17 @@ function PureMain:Listen()
     self.Button_0.OnClicked:Add(self.Exit, self);
     self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
     self.TabList.OnUpdateItem:Add(self.TabListUpdate, self)
+    self.FortifyBtn.OnClicked:Add(self.FortifyBtnClicked, self);
 end
 
 function PureMain:Exit()
     self:SetVisibility(ESlateVisibility.Collapsed);
 end
 
+function PureMain:FortifyBtnClicked()
+    self:Exit();
+    FortifyManager:OpenMainUI(PureManager.DefineID);
+end
 function PureMain:BackpackListUpdate(Item, Index)
     local DefineID = self.Filter[Index+1];
     Item:SetDefineID(DefineID);
