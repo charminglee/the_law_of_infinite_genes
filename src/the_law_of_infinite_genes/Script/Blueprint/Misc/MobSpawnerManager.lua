@@ -97,11 +97,12 @@ end
 --]]
 
 
---[[
 function MobSpawnerManager:OnAllMobDie()
-    
+    local PlayerControllers = UGCGameSystem.GetAllPlayerController(true)
+    for k, v in pairs(PlayerControllers) do
+        UGCLevelFlowSystem.LevelAddScore(v.TeamID, 100)
+    end
 end
---]]
 
 
 return MobSpawnerManager
