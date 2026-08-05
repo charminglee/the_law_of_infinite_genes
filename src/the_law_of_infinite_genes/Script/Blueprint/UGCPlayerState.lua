@@ -262,12 +262,12 @@ function UGCPlayerState:InitGameCompletionRecord()
         end
     end
     
-    print("[UGCPlayerState:InitGameCompletionRecord]:最终游戏完成记录:")
+    UGCLog.Log("[UGCPlayerState:InitGameCompletionRecord]:最终游戏完成记录:")
     log_tree(PlayerData.GameCompletionRecord)
     self.GameCompletionRecord = PlayerData.GameCompletionRecord
     UnrealNetwork.RepLazyProperty(self, "GameCompletionRecord")
-    UGCPlayerStateSystem.SavePlayerArchiveData(UID, PlayerData)
-    
+    UGCPlayerStateSystem.SavePlayerArchiveData(UID, PlayerData)    
+
 end
 
 function UGCPlayerState:UpdateCurrentStage(CurrentStage)
