@@ -3,10 +3,6 @@
 local Random = {}
 
 
----@type Table
-local Table = UGCGameSystem.UGCRequire("Script.Lib.Utils.Table")
-
-
 math.randomseed(os.time())
 
 
@@ -45,7 +41,7 @@ end
 ---@param n number? @要抽取的元素个数，默认为 1
 ---@return T[] @抽取结果列表
 function Random.Pick(list, n)
-    list = Table.Copy(list)
+    list = Lib.Table.Copy(list)
     n = n or 1
     n = math.min(n, #list)
     Random.Shuffle(list)

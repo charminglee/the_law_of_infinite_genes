@@ -317,6 +317,16 @@ UGCCustomGameAttributeType = {
 	UGCAttributeGroup_Character_HealthMaxPct = 'HealthMaxPct',
 	--Character [换弹时间-ReloadTime],
 	UGCAttributeGroup_Character_ReloadTime = 'ReloadTime',
+	--Character [疫毒触发概率-EpidemicToxinRatio],
+	UGCAttributeGroup_Character_EpidemicToxinRatio = 'EpidemicToxinRatio',
+	--Character [疫毒等级-EpidemicToxinLevel],
+	UGCAttributeGroup_Character_EpidemicToxinLevel = 'EpidemicToxinLevel',
+	--Character [疫毒叠加上限-EpidemicToxinOverlyLimit],
+	UGCAttributeGroup_Character_EpidemicToxinOverlyLimit = 'EpidemicToxinOverlyLimit',
+	--Character [疫毒结算概率-EpidemicToxinSettleRatio],
+	UGCAttributeGroup_Character_EpidemicToxinSettleRatio = 'EpidemicToxinSettleRatio',
+	--Character [无限子弹-InfiniteAmmo],
+	UGCAttributeGroup_Character_InfiniteAmmo = 'InfiniteAmmo',
 }; 
 
 UGCCustomGameAttributeTypeCommentMap = { 
@@ -345,5 +355,10 @@ UGCCustomGameAttributeTypeCommentMap = {
 	['_HealthMax'] = 'Character [基础最大血量-_HealthMax]', 
 	['HealthMaxPct'] = 'Character [最大血量百分比-HealthMaxPct]', 
 	['ReloadTime'] = 'Character [换弹时间-ReloadTime]', 
+	['EpidemicToxinRatio'] = 'Character [疫毒触发概率-EpidemicToxinRatio]', 
+	['EpidemicToxinLevel'] = 'Character [疫毒等级-EpidemicToxinLevel]', 
+	['EpidemicToxinOverlyLimit'] = 'Character [疫毒叠加上限-EpidemicToxinOverlyLimit]', 
+	['EpidemicToxinSettleRatio'] = 'Character [疫毒结算概率-EpidemicToxinSettleRatio]', 
+	['InfiniteAmmo'] = 'Character [无限子弹-InfiniteAmmo]', 
 }; 
 

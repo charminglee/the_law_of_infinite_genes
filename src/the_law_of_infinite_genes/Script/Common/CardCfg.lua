@@ -1118,7 +1118,7 @@ CardCfg.Cards = {
                 {property = Attribute.ReloadTime, value = -0.12},
             },
             [3] = {
-                {property = Attribute.Recoilless, value = 1},
+                {property = Attribute.RecoilPct, value = -1},
                 {property = Attribute.ShootSpeedScale, value = 0.25},
                 {property = Attribute.MoveSpeedScale, value = 0.25},
                 {property = Attribute.DodgeChance, value = 0.25},

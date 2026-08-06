@@ -114,12 +114,11 @@ Attribute = {
     ReloadTimePct               = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ReloadTimePct,             -- 换弹时间百分比
     ShootSpeedScale             = UGCCustomGameAttributeType.UGCAttributeGroup_Character_ShootSpeedScale,           -- 射速百分比
 
-    EpidemicToxinRatio          = "EpidemicToxinRatio",                                                             -- 疫毒触发概率
-    EpidemicToxinLevel          = "EpidemicToxinLevel",                                                             -- 疫毒等级
-    EpidemicToxinOverlyLimit    = "EpidemicToxinOverlyLimit",                                                       -- 疫毒叠加上限
-    EpidemicToxinSettleRatio    = "EpidemicToxinSettleRatio",                                                       -- 疫毒结算概率
-    InfiniteAmmo                = "InfiniteAmmo",                                                                   -- 无限子弹
-    Recoilless                  = "Recoilless",                                                                     -- 无后坐力
+    EpidemicToxinRatio          = UGCCustomGameAttributeType.UGCAttributeGroup_Character_EpidemicToxinRatio,        -- 疫毒触发概率
+    EpidemicToxinLevel          = UGCCustomGameAttributeType.UGCAttributeGroup_Character_EpidemicToxinLevel,        -- 疫毒等级
+    EpidemicToxinOverlyLimit    = UGCCustomGameAttributeType.UGCAttributeGroup_Character_EpidemicToxinOverlyLimit,  -- 疫毒叠加上限
+    EpidemicToxinSettleRatio    = UGCCustomGameAttributeType.UGCAttributeGroup_Character_EpidemicToxinSettleRatio,  -- 疫毒结算概率
+    InfiniteAmmo                = UGCCustomGameAttributeType.UGCAttributeGroup_Character_InfiniteAmmo,              -- 无限子弹
 
     _HealthMax = UGCCustomGameAttributeType.UGCAttributeGroup_Character__HealthMax,
 }
@@ -154,6 +153,5 @@ AttributeMate = {
     [Attribute.EpidemicToxinSettleRatio]    = {index=26, anno="疫毒结算概率"},
     [Attribute.InfiniteAmmo]                = {index=27, anno="无限子弹"},
     [Attribute.HealthMaxPct]                = {index=29, anno="最大血量百分比"},
-    [Attribute.Recoilless]                  = {index=32, anno="无后坐力"},
     [Attribute.ReloadTime]                  = {index=34, anno="换弹时间"},
 }

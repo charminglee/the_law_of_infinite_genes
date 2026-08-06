@@ -204,8 +204,6 @@ function GachaMain:_AttributeName(property)
             return "闪避率";
         elseif attr.SeckillChance ~= nil and property == attr.SeckillChance then
             return "秒杀率";
-        elseif attr.Recoilless ~= nil and property == attr.Recoilless then
-            return "无后坐力";
         elseif attr.ReloadTime ~= nil and property == attr.ReloadTime then
             return "换弹时间";
         elseif attr.ShootSpeedScale ~= nil and property == attr.ShootSpeedScale then
