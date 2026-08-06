@@ -61,13 +61,13 @@ function ItemDataManager:GetCustomData(defineId)
     local defaults
     if _GetItemType(defineId) == ItemCfg.ItemType.Kenl then
         defaults = {
-            entries = {}, 
+            entries = {},
             isIdentified = false,
             refineNum = 0,
         }
     else
         defaults = {
-            strengthenLevel = 0, 
+            strengthenLevel = 0,
         }
     end
     _MergeDefaults(data, defaults)

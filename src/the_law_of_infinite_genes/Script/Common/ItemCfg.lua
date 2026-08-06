@@ -112,6 +112,122 @@ ItemCfg.ItemQuality = {
     [6] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话', color='#E74C3C', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_7.Image_QualityBar_7'}
 }
 
+ItemCfg.colorTable = {
+    -- ============ 凡尘（Lv.1 ~ Lv.9）============
+    [0] = { HexColor = '#3D3D3D', Text = '凡尘' },  -- Lv.1
+    [1] = { HexColor = '#3E4040', Text = '凡尘' },  -- Lv.2
+    [2] = { HexColor = '#3F4343', Text = '凡尘' },  -- Lv.3
+    [3] = { HexColor = '#404646', Text = '凡尘' },  -- Lv.4
+    [4] = { HexColor = '#414949', Text = '凡尘' },  -- Lv.5
+    [5] = { HexColor = '#424C4C', Text = '凡尘' },  -- Lv.6
+    [6] = { HexColor = '#434F4F', Text = '凡尘' },  -- Lv.7
+    [7] = { HexColor = '#445252', Text = '凡尘' },  -- Lv.8
+    [8] = { HexColor = '#455555', Text = '凡尘' },  -- Lv.9
+
+    -- ============ 百炼（Lv.10 ~ Lv.24）============
+    [9] = { HexColor = '#4A5A5A', Text = '百炼' },  -- Lv.10
+    [10] = { HexColor = '#475E5A', Text = '百炼' }, -- Lv.11
+    [11] = { HexColor = '#44625A', Text = '百炼' }, -- Lv.12
+    [12] = { HexColor = '#41665A', Text = '百炼' }, -- Lv.13
+    [13] = { HexColor = '#3E6A5A', Text = '百炼' }, -- Lv.14
+    [14] = { HexColor = '#3B6E5A', Text = '百炼' }, -- Lv.15
+    [15] = { HexColor = '#38725A', Text = '百炼' }, -- Lv.16
+    [16] = { HexColor = '#35765A', Text = '百炼' }, -- Lv.17
+    [17] = { HexColor = '#327A5A', Text = '百炼' }, -- Lv.18
+    [18] = { HexColor = '#2F7E5A', Text = '百炼' }, -- Lv.19
+    [19] = { HexColor = '#2C825A', Text = '百炼' }, -- Lv.20
+    [20] = { HexColor = '#29865A', Text = '百炼' }, -- Lv.21
+    [21] = { HexColor = '#268A5A', Text = '百炼' }, -- Lv.22
+    [22] = { HexColor = '#238E5A', Text = '百炼' }, -- Lv.23
+    [23] = { HexColor = '#20925A', Text = '百炼' }, -- Lv.24
+
+    -- ============ 凝气（Lv.25 ~ Lv.39）============
+    [24] = { HexColor = '#1D5C3A', Text = '凝气' }, -- Lv.25
+    [25] = { HexColor = '#1C623C', Text = '凝气' }, -- Lv.26
+    [26] = { HexColor = '#1B683E', Text = '凝气' }, -- Lv.27
+    [27] = { HexColor = '#1A6E40', Text = '凝气' }, -- Lv.28
+    [28] = { HexColor = '#197442', Text = '凝气' }, -- Lv.29
+    [29] = { HexColor = '#187A44', Text = '凝气' }, -- Lv.30
+    [30] = { HexColor = '#178046', Text = '凝气' }, -- Lv.31
+    [31] = { HexColor = '#168648', Text = '凝气' }, -- Lv.32
+    [32] = { HexColor = '#158C4A', Text = '凝气' }, -- Lv.33
+    [33] = { HexColor = '#14924C', Text = '凝气' }, -- Lv.34
+    [34] = { HexColor = '#13984E', Text = '凝气' }, -- Lv.35
+    [35] = { HexColor = '#129E50', Text = '凝气' }, -- Lv.36
+    [36] = { HexColor = '#11A452', Text = '凝气' }, -- Lv.37
+    [37] = { HexColor = '#10AA54', Text = '凝气' }, -- Lv.38
+    [38] = { HexColor = '#0FB056', Text = '凝气' }, -- Lv.39
+
+    -- ============ 化灵（Lv.40 ~ Lv.54）============
+    [39] = { HexColor = '#1050A0', Text = '化灵' }, -- Lv.40
+    [40] = { HexColor = '#125599', Text = '化灵' }, -- Lv.41
+    [41] = { HexColor = '#145A92', Text = '化灵' }, -- Lv.42
+    [42] = { HexColor = '#165F8B', Text = '化灵' }, -- Lv.43
+    [43] = { HexColor = '#186484', Text = '化灵' }, -- Lv.44
+    [44] = { HexColor = '#1A697D', Text = '化灵' }, -- Lv.45
+    [45] = { HexColor = '#1C6E76', Text = '化灵' }, -- Lv.46
+    [46] = { HexColor = '#1E736F', Text = '化灵' }, -- Lv.47
+    [47] = { HexColor = '#207868', Text = '化灵' }, -- Lv.48
+    [48] = { HexColor = '#227D61', Text = '化灵' }, -- Lv.49
+    [49] = { HexColor = '#24825A', Text = '化灵' }, -- Lv.50
+    [50] = { HexColor = '#268753', Text = '化灵' }, -- Lv.51
+    [51] = { HexColor = '#288C4C', Text = '化灵' }, -- Lv.52
+    [52] = { HexColor = '#2A9145', Text = '化灵' }, -- Lv.53
+    [53] = { HexColor = '#2C963E', Text = '化灵' }, -- Lv.54
+
+    -- ============ 道蕴（Lv.55 ~ Lv.69）============
+    [54] = { HexColor = '#5500AA', Text = '道蕴' }, -- Lv.55
+    [55] = { HexColor = '#5300A6', Text = '道蕴' }, -- Lv.56
+    [56] = { HexColor = '#5100A2', Text = '道蕴' }, -- Lv.57
+    [57] = { HexColor = '#4F009E', Text = '道蕴' }, -- Lv.58
+    [58] = { HexColor = '#4D009A', Text = '道蕴' }, -- Lv.59
+    [59] = { HexColor = '#4B0096', Text = '道蕴' }, -- Lv.60
+    [60] = { HexColor = '#490092', Text = '道蕴' }, -- Lv.61
+    [61] = { HexColor = '#47008E', Text = '道蕴' }, -- Lv.62
+    [62] = { HexColor = '#45008A', Text = '道蕴' }, -- Lv.63
+    [63] = { HexColor = '#430086', Text = '道蕴' }, -- Lv.64
+    [64] = { HexColor = '#410082', Text = '道蕴' }, -- Lv.65
+    [65] = { HexColor = '#3F007E', Text = '道蕴' }, -- Lv.66
+    [66] = { HexColor = '#3D007A', Text = '道蕴' }, -- Lv.67
+    [67] = { HexColor = '#3B0076', Text = '道蕴' }, -- Lv.68
+    [68] = { HexColor = '#390072', Text = '道蕴' }, -- Lv.69
+
+    -- ============ 涅槃（Lv.70 ~ Lv.84）============
+    [69] = { HexColor = '#B02800', Text = '涅槃' }, -- Lv.70
+    [70] = { HexColor = '#B43008', Text = '涅槃' }, -- Lv.71
+    [71] = { HexColor = '#B83810', Text = '涅槃' }, -- Lv.72
+    [72] = { HexColor = '#BC4018', Text = '涅槃' }, -- Lv.73
+    [73] = { HexColor = '#C04820', Text = '涅槃' }, -- Lv.74
+    [74] = { HexColor = '#C45028', Text = '涅槃' }, -- Lv.75
+    [75] = { HexColor = '#C85830', Text = '涅槃' }, -- Lv.76
+    [76] = { HexColor = '#CC6038', Text = '涅槃' }, -- Lv.77
+    [77] = { HexColor = '#D06840', Text = '涅槃' }, -- Lv.78
+    [78] = { HexColor = '#D47048', Text = '涅槃' }, -- Lv.79
+    [79] = { HexColor = '#D87850', Text = '涅槃' }, -- Lv.80
+    [80] = { HexColor = '#DC8058', Text = '涅槃' }, -- Lv.81
+    [81] = { HexColor = '#E08860', Text = '涅槃' }, -- Lv.82
+    [82] = { HexColor = '#E49068', Text = '涅槃' }, -- Lv.83
+    [83] = { HexColor = '#E89870', Text = '涅槃' }, -- Lv.84
+
+    -- ============ 造化（Lv.85 ~ Lv.100）============
+    [84] = { HexColor = '#CC8800', Text = '造化' }, -- Lv.85
+    [85] = { HexColor = '#D18E08', Text = '造化' }, -- Lv.86
+    [86] = { HexColor = '#D69410', Text = '造化' }, -- Lv.87
+    [87] = { HexColor = '#DB9A18', Text = '造化' }, -- Lv.88
+    [88] = { HexColor = '#E0A020', Text = '造化' }, -- Lv.89
+    [89] = { HexColor = '#E5A628', Text = '造化' }, -- Lv.90
+    [90] = { HexColor = '#EAAC30', Text = '造化' }, -- Lv.91
+    [91] = { HexColor = '#EFB238', Text = '造化' }, -- Lv.92
+    [92] = { HexColor = '#F4B840', Text = '造化' }, -- Lv.93
+    [93] = { HexColor = '#F9BE48', Text = '造化' }, -- Lv.94
+    [94] = { HexColor = '#FEC450', Text = '造化' }, -- Lv.95
+    [95] = { HexColor = '#FFCA58', Text = '造化' }, -- Lv.96
+    [96] = { HexColor = '#FFD060', Text = '造化' }, -- Lv.97
+    [97] = { HexColor = '#FFD668', Text = '造化' }, -- Lv.98
+    [98] = { HexColor = '#FFDC70', Text = '造化' }, -- Lv.99
+    [99] = { HexColor = '#FFD800', Text = '造化' }, -- Lv.100
+}
+
 
 ItemCfg.CustomizeType = {
     Body = true,
