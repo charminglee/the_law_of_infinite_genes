@@ -102,6 +102,7 @@ function MobSpawnerManager:OnAllMobDie()
     for k, v in pairs(PlayerControllers) do
         UGCLevelFlowSystem.LevelAddScore(v.TeamID, 100)
     end
+    self:NextWave()
 end
 
 

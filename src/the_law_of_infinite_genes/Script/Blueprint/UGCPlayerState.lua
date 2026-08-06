@@ -3,6 +3,10 @@
 ---@field PlayerDataManager PlayerDataManager_C
 --Edit Below--
 local UGCPlayerState = {
+    ---@type UGCPlayerController_C
+    PlayerController = nil,
+    ---@type UGCPlayerPawn_C
+    PlayerPawn = nil,
     -- 游戏记录数据表，存储玩家游戏过程中的各种统计数据
     GameRecordData = {},
     -- 游戏完成记录表，存储玩家已解锁的游戏模式
@@ -81,15 +85,51 @@ end
 
 function UGCPlayerState:ReceiveBeginPlay()
     UGCPlayerState.SuperClass.ReceiveBeginPlay(self)
-    if not self:HasAuthority() then
-        LocalPlayerState = LocalPlayerState or self ---@type UGCPlayerState_C
+
+    self.PlayerController = UGCGameSystem.GetPlayerControllerByPlayerState(self)
+    self.PlayerPawn = UGCGameSystem.GetPlayerPawnByPlayerState(self)
+    if UE.IsValid(self.PlayerController) then
+        self.PlayerController.PlayerState = self
     end
-    if UGCGameSystem.IsServer() and UGCActorComponentUtility.GetOwner(self) then
-        self:HandleBeginPlayInServer()
-    elseif not UGCGameSystem.IsServer() and not UGCGameState.IsInLobby() then
-        self:HandleBeginPlayInClientForFighting()
+    if UE.IsValid(self.PlayerPawn) then
+        self.PlayerPawn.PlayerState = self
+    end
+
+    if Lib.IsServer() then
+        if UGCActorComponentUtility.GetOwner(self) then
+            self:HandleBeginPlayInServer()
+        end
+    else
+        if self == UGCGameSystem.GetLocalPlayerState() then
+            LocalPlayerState = self ---@type UGCPlayerState_C
+        end
+
+        if not GameState.IsInLobby() then
+            self:HandleBeginPlayInClientForFighting()
+        end
     end
 end
+
+
+function UGCPlayerState:ReceiveEndPlay()
+    UGCPlayerState.SuperClass.ReceiveEndPlay(self)
+
+    if UE.IsValid(self.PlayerController) then
+        self.PlayerController.PlayerState = nil
+    end
+    if UE.IsValid(self.PlayerPawn) then
+        self.PlayerPawn.PlayerState = nil
+    end
+
+    if UGCGameSystem.IsServer() then
+        self:UpdateGameTime()
+    else
+        if self == UGCGameSystem.GetLocalPlayerState() then
+            LocalPlayerState = nil
+        end
+    end
+end
+
 
 
 function UGCPlayerState:HandleBeginPlayInServer()
@@ -428,13 +468,6 @@ function UGCPlayerState:OnRep_AliveState()
         PC:OpenRespawnUI()
     elseif self.AliveState == UGCGameData.AliveState.Alive then
         BreakthroughManager:CloseRespawnUI()
-    end
-end
-
-
-function UGCPlayerState:ReceiveEndPlay()
-    if UGCGameSystem.IsServer() then
-        self:UpdateGameTime()
     end
 end
 

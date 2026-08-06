@@ -1,16 +1,27 @@
 ---@class UGCGameMode_C:BP_UGCGameBase_C
 --Edit Below--
-local UGCGameMode = {}; 
+local UGCGameMode = {} 
+
+
 UGCGameMode.IsStartMatch = false
 
 
 function UGCGameMode:ReceiveBeginPlay()
     UGCGameMode.SuperClass.ReceiveBeginPlay(self)
-    self.bIsOpenShovelingAbility = true
+
     GameMode = self ---@type UGCGameMode_C
+
+    self.bIsOpenShovelingAbility = true
+
     local ModeID = UGCMultiMode.GetModeID()
     self:InitMode(ModeID)
 end
+
+
+function UGCGameMode:ReceiveEndPlay()
+    GameMode = nil
+end
+
 
 function UGCGameMode:InitMode(modeId)
     -- if GameState.IsInLobby() then
@@ -22,6 +33,7 @@ function UGCGameMode:InitMode(modeId)
     UGCLevelFlowSystem.EnableLevelFlow(UGCGameSystem.GetUGCResourcesFullPath(UGCGameData.GetGameModeActorMgrConfig(modeId)))
 end
 
+
 function UGCGameMode:PlayerEnter(playerKey)
     local ModeID = UGCMultiMode.GetModeID()
     if ModeID == 1002 then
@@ -29,13 +41,9 @@ function UGCGameMode:PlayerEnter(playerKey)
     end
 end
 
+
 -- function UGCGameMode:ReceiveTick(DeltaTime)
 
--- end
-
-
--- function UGCGameMode:ReceiveEndPlay()
- 
 -- end
 
 

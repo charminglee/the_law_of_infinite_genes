@@ -11,13 +11,42 @@ Lib = {
 }
 
 
+---【双端】创建一个定时器。
+---@param time number @定时时间，单位秒
+---@param isLoop boolean @是否循环
+---@param callback function @定时器回调函数
+---@param obj any @回调函数所在对象，静态函数传 nil 即可
+---@param ... any @回调函数参数
+---@return UGCLuaTimerInstance @定时器实例
+function Lib.CreateTimer(time, isLoop, callback, obj, ...)
+    local name = Lib.Random.GenString()
+    local args = {...}
+    local argCount = select("#", ...)
+    local f = function()
+        if obj then
+            callback(obj, table.unpack(args, 1, argCount))
+        else
+            callback(table.unpack(args, 1, argCount))
+        end
+    end
+    return UGCTimerUtility.CreateLuaTimer(time, f, isLoop, name, 0, false, false)
+end
+
+
+---【双端】移除定时器。
+---@param timer UGCLuaTimerInstance @定时器实例
+function Lib.RemoveTimer(timer)
+    UGCTimerUtility.RemoveLuaTimer(timer)
+end
+
+
 ---判断当前环境是否是服务端。
 ---@return boolean @是否是服务端
 function Lib.IsServer()
     if GameState then 
         return GameState:HasAuthority()
     end
-    return GameState ~= nil
+    return GameMode ~= nil
 end
 
 

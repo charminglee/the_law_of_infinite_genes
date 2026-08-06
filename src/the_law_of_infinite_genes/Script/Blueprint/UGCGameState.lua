@@ -26,12 +26,14 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyFlow")
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.UGCItem.UGCItemManager")
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Game.Breakthrough.BreakthroughManager")
 
+
 -- 复活机会倒计时总时长（秒）
 UGCGameState.RespawnChanceCountDown = 10
 -- 当前复活机会剩余倒计时
 UGCGameState.CurrentRespawnChanceCountDown = 0
 -- 死亡玩家键值表（记录已死亡玩家）
 UGCGameState.DeadPlayerKeys = {}
+
 
 UGCGameState.LevelStateEnum = {
    Game = 0,    -- 进行中
@@ -40,38 +42,44 @@ UGCGameState.LevelStateEnum = {
 }
 UGCGameState.LevelState = UGCGameState.LevelStateEnum.Game
 
-local function InitSubControl(mainUI)
-    if mainUI.index.topBar.IndexUIControl == nil then
-        mainUI.index.topBar.IndexUIControl = mainUI.index
-    end
-end
-
 
 function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
-    self.bIsOpenShovelingAbility = true
+
     GameState = self ---@type UGCGameState_C
+
+    self.bIsOpenShovelingAbility = true
+    
     self:Listen()
-    if not self:HasAuthority() then 
+    if not Lib.IsServer() then 
         -- 原生界面修改
         self:SetUIWidget();
         -- self:SetUIPosition();
     end
 end
 
+
+function UGCGameState:ReceiveEndPlay()
+    UGCGameState.SuperClass.ReceiveEndPlay(self)
+    GameState = nil
+end
+
+
 function UGCGameState:Listen()
    UGCGenericMessageSystem.ListenGlobalMessage(self, "UGC.LevelFlow.LevelBegin", self, self.ResetData)
 end
+
 
 function UGCGameState:ResetData()
    self.LevelState = self.LevelStateEnum.Game
 
    UGCGameState.DeadPlayerNum = 0
 
-   if not self:HasAuthority() and ShopV2Manager then
+   if not Lib.IsServer() and ShopV2Manager then
       ShopV2Manager:CloseMainUI()
    end
 end
+
 
 function UGCGameState:IsAllLobbyTeammateReady()
    local bIsUGCPIE = UGCGameSystem.IsUGCPIE();
@@ -101,16 +109,18 @@ function UGCGameState:IsAllLobbyTeammateReady()
    return bReady
 end
 
+
 function UGCGameState:StartRespawnChanceCountDown()
-   if UGCActorComponentUtility.HasAuthority(self) and self.CurrentRespawnChanceCountDown <= 0 then
+   if Lib.IsServer() and self.CurrentRespawnChanceCountDown <= 0 then
       ugcprint("UGCGameState:StartRespawnChanceCountDown")
       self.RespawnChanceCountDownStartTime = UGCGameSystem.GetServerTimeSec()
       self:CalCulateRespawnChanceCountDown()
    end
 end
 
+
 function UGCGameState:StopRespawnChanceCountDown()
-   if UGCActorComponentUtility.HasAuthority(self) and self.CurrentRespawnChanceCountDown > 0 then
+   if Lib.IsServer() and self.CurrentRespawnChanceCountDown > 0 then
       ugcprint("UGCGameState:StopRespawnChanceCountDown")
       if self.RespawnChanceCountDownTimer ~= nil then
          UGCTimerUtility.RemoveLuaTimer(self.RespawnChanceCountDownTimer)
@@ -121,6 +131,7 @@ function UGCGameState:StopRespawnChanceCountDown()
       UnrealNetwork.RepLazyProperty(self, "CurrentRespawnChanceCountDown")
    end
 end
+
 
 function UGCGameState:CalCulateRespawnChanceCountDown()
     local CurrentTime = UGCGameSystem.GetServerTimeSec()
@@ -144,6 +155,7 @@ function UGCGameState:CalCulateRespawnChanceCountDown()
     end
 end
 
+
 function UGCGameState:OnPlayerDead(PlayerKey)
    if self.DeadPlayerKeys[PlayerKey] == true then
       return
@@ -161,6 +173,7 @@ function UGCGameState:OnPlayerDead(PlayerKey)
       self:StartRespawnChanceCountDown()
    end
 end
+
 
 function UGCGameState:OnPlayerAlive(PlayerKey)
    if self.DeadPlayerKeys[PlayerKey] == nil then
@@ -180,17 +193,21 @@ function UGCGameState:OnPlayerAlive(PlayerKey)
    end
 end
 
+
 function UGCGameState:GetAvailableServerRPCs()
    return
 end
+
 
 function UGCGameState:GetReplicatedProperties()
    return {"CurrentRespawnChanceCountDown", "Lazy"}
 end
 
+
 function UGCGameState:OnRep_CurrentRespawnChanceCountDown()
    BreakthroughManager:RefreshRespawnUICountDown(self.CurrentRespawnChanceCountDown)
 end
+
 
 function UGCGameState:OnRep_LobbyInfo()
    print("UGCGameState:OnRep_LobbyInfo")
@@ -199,6 +216,7 @@ function UGCGameState:OnRep_LobbyInfo()
    LobbyEvent.OnModeSelected(self.LobbyInfo.SelectedModeID)
    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { ModeID = self.LobbyInfo.SelectedModeID })
 end
+
 
 function UGCGameState:SetUIWidget()
     -- UGCWidgetManagerSystem.HideWidget(UGCWidgetManagerSystem.GetMainControlUI());
@@ -228,7 +246,7 @@ end
 
 ---【服务端】开始游戏。
 function UGCGameState:StartGame()
-    if not self:HasAuthority() then
+    if not Lib.IsServer() or not self.isWaiting then
         return
     end
     self.isWaiting = false
@@ -238,7 +256,7 @@ end
 
 ---【服务端】结束游戏。
 function UGCGameState:EndGame()
-    if not self:HasAuthority() or self.isWaiting then
+    if not Lib.IsServer() or self.isWaiting then
         return
     end
     self.isWaiting = true
@@ -249,6 +267,7 @@ end
 function UGCGameState:MulticastRPC_EquippedTitle(uid, id)
     ACHVManager.CacheEquippedTitle = id;
 end
+
 
 -- 是否在大厅中
 function UGCGameState.IsInLobby()

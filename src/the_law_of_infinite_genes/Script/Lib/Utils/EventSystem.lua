@@ -1,15 +1,9 @@
 ---事件系统，提供事件监听与触发功能。
 ---@class EventSystem
 local EventSystem = {
-    ---@type table<string, EventSystem.Listener[]>
+    ---@type table<string, {func: function, obj: any, alive: boolean}[]>
     _pools = {}, 
 }
-
-
----@class EventSystem.Listener
----@field func function @回调函数
----@field obj any @回调函数所在对象（通常为 self ）
----@field alive boolean @是否活跃
 
 
 ---【双端】添加监听。
@@ -88,7 +82,7 @@ function EventSystem.Dispatch(eventName, ...)
     end
 
     -- 先做浅拷贝快照，派发期间增删监听不影响本次遍历，新加入者也不在本次触发
-    local snapshot = {} ---@type EventSystem.Listener[]
+    local snapshot = {}
     for i = 1, #pool do
         snapshot[i] = pool[i]
     end
@@ -127,7 +121,7 @@ function EventSystem.SendToClient(player, eventName, ...)
     elseif UE.IsA(player, Lib.GetPlayerPawnClass()) then
         pc = UGCGameSystem.GetPlayerControllerByPlayerPawn(player)
     end
-    if not pc then
+    if not UE.IsValid(pc) then
         return
     end
 
@@ -147,13 +141,15 @@ function EventSystem.SendToAllClients(eventName, ...)
     if not Lib.IsServer() then
         return
     end
-    for _, pc in ipairs(UGCGameSystem.GetAllPlayerController(false)) do
-        UnrealNetwork.CallUnrealRPC(
-            pc, 
-            pc.GlobalEventComponent, 
-            "ClientRPC_FromEventSystem", 
-            eventName, ...
-        )
+    for _, pc in pairs(UGCGameSystem.GetAllPlayerController(false)) do
+        if UE.IsValid(pc) then
+            UnrealNetwork.CallUnrealRPC(
+                pc, 
+                pc.GlobalEventComponent, 
+                "ClientRPC_FromEventSystem", 
+                eventName, ...
+            )
+        end
     end
     -- UnrealNetwork.CallUnrealRPC_Multicast(
     --     UGCGameSystem.GetGameState(), 
@@ -193,15 +189,6 @@ function EventSystem.Broadcast(eventName, ...)
     else
         EventSystem.SendToServer(eventName, ...)
     end
-end
-
-
----【双端】发送事件到指定对象的另一端。
----@param obj any @对象
----@param eventName string @事件名
----@param ... any @事件参数
-function EventSystem.Send(obj, eventName, ...)
-    
 end
 
 

@@ -9,17 +9,24 @@
 ---@field GlobalEventComponent GlobalEventComponent_C
 ---@field GachaComponent GachaComponent_C
 ---@field FightComponent FightComponent_C
----@field ACHVComponent CHVComponent_C
+---@field ACHVComponent ACHVComponent_C
 ---@field StoreComponent StoreComponent_C
 ---@field HomeComponent HomeComponent_C
 ---@field RankingListComponent RankingListComponent_C
 ---@field ShopV2Component ShopV2Component_C
 ---@field LotteryComponent LotteryComponent_C
 --Edit Below--
-local UGCPlayerController = {}
+local UGCPlayerController = {
+    ---@type UGCPlayerPawn_C
+    PlayerPawn = nil,
+    ---@type UGCPlayerState_C
+    PlayerState = nil,
+}
+
 
 local PromiseFuture = require("common.PromiseFuture")
 local Delegate = require("common.Delegate")
+
 
 -- GamePart是否加载完成
 UGCPlayerController.GamePartReady = false
@@ -29,6 +36,7 @@ UGCPlayerController.bIsTeamLeader = false
 UGCPlayerController.LobbyTeammatePlayerKeys = {}
 -- 大厅队友PlayerKey更新时的委托 
 UGCPlayerController.OnLobbyTeammatePlayerKeysUpdate = Delegate.New()
+
 
 -- 大厅信息配置
 UGCPlayerController.LobbyInfo = {
@@ -48,51 +56,70 @@ function UGCPlayerController:GetAvailableServerRPCs()
      "RPC_Server_TeleportToPortal", "RPC_Server_SetLobbySelectedModeID", "RPC_Server_SetFillTeammate", "RPC_Server_SetLobbybIsMatching","RPC_Server_LikeOther"
 end
 
+
 function UGCPlayerController:GetReplicatedProperties()
     return {"bIsTeamLeader", "Lazy"}, {"LobbyTeammatePlayerKeys", "Lazy"}, {"LobbyInfo", "Lazy"}
 end
 
+
 function UGCPlayerController:ReceiveBeginPlay()
     UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
-
-    if not self:HasAuthority() then
-        LocalPlayerController = self ---@type UGCPlayerController_C
-
-    else
-        local delegate = ObjectExtend.CreateDelegate(
-            self, 
-            function()
-                -- 初始武器
-                local weaponId = Config.InitialWeapon.WeaponId
-                local bulletId = Config.InitialWeapon.BulletId
-                if UGCBackpackSystemV2.GetWarehouseItemCount(self, weaponId) == 0 then
-                    UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)  
-                    UGCBackpackSystemV2.AddItemV2(self, bulletId, 300)
-                end
-
-                if UGCGameSystem.IsUGCPIE() and Config.Debug.AutoStartGame then
-                    GameState:StartGame()
-                end
-            end
-        )
-        KismetSystemLibrary.K2_SetTimerDelegateForLua(delegate, self, 2, false)
+    
+    self.PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
+    self.PlayerPawn = UGCGameSystem.GetPlayerPawnByPlayerController(self)
+    if UE.IsValid(self.PlayerState) then
+        self.PlayerState.PlayerController = self
+    end
+    if UE.IsValid(self.PlayerPawn) then
+        self.PlayerPawn.PlayerController = self
     end
 
-    if UGCGameSystem.IsServer() then
-        if UGCGameSystem.GameState.IsInLobby() then
+    if Lib.IsServer() then
+        Lib.CreateTimer(2, false, function()
+            -- 初始武器
+            local weaponId = Config.InitialWeapon.WeaponId
+            local bulletId = Config.InitialWeapon.BulletId
+            local ps = UGCGameSystem.GetPlayerStateByPlayerController(self)
+            local isNotFirstJoin = ps.PlayerDataManager:GetCustomData("isNotFirstJoin")
+            if isNotFirstJoin ~= 1 then
+                UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
+                UGCBackpackSystemV2.AddItemV2(self, bulletId, 300)
+                ps.PlayerDataManager:SaveCustomData("isNotFirstJoin", 1)
+            end
+        end)
+
+        if GameState.IsInLobby() then
             self:HandleBeginPlayInServerForLobby()
         else
             self:HandleBeginPlayInServerForFighting()
         end
     else
-        if UGCGameSystem.GameState.IsInLobby() then
+        LocalPlayerController = self ---@type UGCPlayerController_C
+
+        if GameState.IsInLobby() then
             self:HandleBeginPlayInClientForLobby()
         else
             self:HandleBeginPlayInClientForFighting()
         end
     end
-
 end
+
+
+function UGCPlayerController:ReceiveEndPlay()
+    UGCPlayerController.SuperClass.ReceiveEndPlay(self)
+
+    if UE.IsValid(self.PlayerState) then
+        self.PlayerState.PlayerController = nil
+    end
+    if UE.IsValid(self.PlayerPawn) then
+        self.PlayerPawn.PlayerController = nil
+    end
+    
+    if not Lib.IsServer() then
+        LocalPlayerController = nil
+    end
+end
+
 
 function UGCPlayerController:HandleBeginPlayInServerForLobby()
     LobbyFlow:Go(LobbyFlowState.LFS_Lobby)

@@ -1,25 +1,56 @@
 ---@class UGCPlayerPawn_C:BP_UGCPlayerPawn_C
 ---@field AttrManager AttrManager_C
 --Edit Below--
-local UGCPlayerPawn = {}
- 
+local UGCPlayerPawn = {
+    ---@type UGCPlayerController_C
+    PlayerController = nil,
+    ---@type UGCPlayerState_C
+    PlayerState = nil,
+}
+
 
 function UGCPlayerPawn:ReceiveBeginPlay()
-    UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self)
+    UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self) 
+    
+    self.PlayerController = UGCGameSystem.GetPlayerControllerByPlayerPawn(self)
+    self.PlayerState = UGCGameSystem.GetPlayerStateByPlayerPawn(self)
+    if UE.IsValid(self.PlayerController) then
+        self.PlayerController.PlayerPawn = self
+    end
+    if UE.IsValid(self.PlayerState) then
+        self.PlayerState.PlayerPawn = self
+    end
+
     self.bVaultIsOpen = true
     self.IsOpenShovelAbility = true
-    if not self:HasAuthority() then
-        LocalPlayerPawn = LocalPlayerPawn or self ---@type UGCPlayerPawn_C
-    else
+
+    if Lib.IsServer() then
+        self:InitInServer()
         if UGCGameSystem.IsUGCPIE() and Config.Debug.InfiniteAmmo then
             self.AttrManager:SetAttr(Attribute.InfiniteAmmo, 1)
         end
+    else
+        if self == UGCGameSystem.GetLocalPlayerPawn() then
+            LocalPlayerPawn = self ---@type UGCPlayerPawn_C
+        end
+
+        self:OnRep_CoverAllAvatarMeshInfo()
+    end
+end
+
+
+function UGCPlayerPawn:ReceiveEndPlay()
+    UGCPlayerPawn.SuperClass.ReceiveEndPlay(self)
+
+    if UE.IsValid(self.PlayerController) then
+        self.PlayerController.PlayerPawn = nil
+    end
+    if UE.IsValid(self.PlayerState) then
+        self.PlayerState.PlayerPawn = nil
     end
 
-    if UGCGameSystem.IsServer() then
-        self:InitInServer()
-    else
-        self:OnRep_CoverAllAvatarMeshInfo()
+    if not Lib.IsServer() and self == UGCGameSystem.GetLocalPlayerPawn() then
+        LocalPlayerPawn = nil
     end
 end
 
@@ -51,7 +82,7 @@ function UGCPlayerPawn:ChangeState(CurState)
     local DyingTag = UGCGameplayTagSystem.RequestGameplayTag("PawnState.Dying")
     local DeadTag = UGCGameplayTagSystem.RequestGameplayTag("PawnState.Dead")
     
-    if not UGCGameSystem.IsServer() then 
+    if not Lib.IsServer() then 
         return 
     end
     ugcprint("[UGCPlayerPawn:ChangeState] : IsServer")
