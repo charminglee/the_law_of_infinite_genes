@@ -6,6 +6,7 @@ local PlayerDataManager = {
     _tick = 0,
 
     ---@type {
+    ---    custom: table<string, any>,
     ---    coin: table<ItemId, number>, 
     ---    stat: table<Statistics, number>, 
     ---    title: {equipped: Title?, unlocked: Title[]}, 
@@ -73,8 +74,9 @@ end
 -- region: 通用 ==================================================
 
 
-function PlayerDataManager:_BuildDefaultData()
+local function _BuildDefaultData()
     local data = {
+        custom = {},
         coin = {
             [ItemId.Coin_0] = 0,
             [ItemId.Coin_1] = 0,
@@ -104,8 +106,8 @@ function PlayerDataManager:_BuildDefaultData()
 end
 
 
-function PlayerDataManager:_MergeDefaults(data)
-    local defaults = self:_BuildDefaultData()
+local function _MergeDefaults(data)
+    local defaults = _BuildDefaultData()
     for k, v in pairs(defaults) do
         if data[k] == nil then
             data[k] = v
@@ -127,9 +129,9 @@ function PlayerDataManager:_LoadData()
 
     local data = UGCPlayerStateSystem.GetPlayerArchiveData(self.owner.UID)
     if data == nil then
-        data = self:_BuildDefaultData()
+        data = _BuildDefaultData()
     else
-        self:_MergeDefaults(data)
+        _MergeDefaults(data)
     end
 
     self._data = data
@@ -138,23 +140,23 @@ function PlayerDataManager:_LoadData()
 end
 
 
----【双端】获取某个一级字段的值。
----@param key string @字段名
+---【双端】获取自定义数据。
+---@param key string @数据名
 ---@return any @数据值
-function PlayerDataManager:GetData(key)
-    return self._data[key]
+function PlayerDataManager:GetCustomData(key)
+    return self._data.custom[key]
 end
 
 
----【服务端】设置某个一级字段的值。
----@param key string @字段名
----@param value any @字段值
+---【服务端】保存自定义数据。
+---@param key string @数据名
+---@param value any @数据值
 ---@param sync? boolean @是否立即同步数据，默认为 true
-function PlayerDataManager:SetData(key, value, sync)
+function PlayerDataManager:SaveCustomData(key, value, sync)
     if not self:HasAuthority() or not self._isLoaded then
         return
     end
-    self._data[key] = value
+    self._data.custom[key] = value
     if sync ~= false then
         self:SyncData()
     end
