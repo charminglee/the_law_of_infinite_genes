@@ -57,25 +57,21 @@ end
 ---【双端】获取物品自定义数据。
 ---@return (EquipmentData|KenlData|table)? @自定义数据
 function ItemDataManager:GetCustomData(defineId)
-    local data = UGCItemSystemV2.LoadItemCustomData(defineId)
-    if not data then
-        return nil
+    local data = UGCItemSystemV2.LoadItemCustomData(defineId) or {}
+    local defaults
+    if _GetItemType(defineId) == ItemCfg.ItemType.Kenl then
+        defaults = {
+            entries = {},
+            isIdentified = false,
+            refineNum = 0,
+        }
     else
-        local defaults
-        if _GetItemType(defineId) == ItemCfg.ItemType.Kenl then
-            defaults = {
-                entries = {}, 
-                isIdentified = false,
-                refineNum = 0,
-            }
-        else
-            defaults = {
-                strengthenLevel = 0, 
-            }
-        end
-        _MergeDefaults(data, defaults)
-        return data
+        defaults = {
+            strengthenLevel = 0,
+        }
     end
+    _MergeDefaults(data, defaults)
+    return data
 end
 
 

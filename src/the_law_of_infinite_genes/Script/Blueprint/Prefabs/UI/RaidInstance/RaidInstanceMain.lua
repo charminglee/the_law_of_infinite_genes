@@ -15,6 +15,7 @@ function RaidInstanceMain:LuaInit()
     end
     self.bInitDoOnce = true;
     self:Listen();
+    self.RaidInstanceTop:SetVisibility(ESlateVisibility.Collapsed);
     RaidInstanceManager:RegisterMainUI(self);
 end
 

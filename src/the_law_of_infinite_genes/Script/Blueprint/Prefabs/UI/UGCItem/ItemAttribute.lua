@@ -12,53 +12,86 @@ end
 function ItemAttribute:InitData(Data)
     if type(Data) ~= "table" or not Data[1] or not Data[1].ItemDefineID then
         self.Equipment:SetText("")
-        self.Knel:SetText("")
+        self.Knel:SetText("");
         self.Knel:SetVisibility(ESlateVisibility.Collapsed)
         return
     end
-
     local DefineId = Data[1].ItemDefineID
     local Slots = UGCItemSystemV2.GetAttachChildrenItem(DefineId) or {}
-    local FQuality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineId)
-
-    local EquipmentText = RichText.Line(
-            RichText.Inline(RichText.Font('品质\t\t', {size=20, color='FFFFFFFF'}, RichText.Font(ItemCfg.ItemQuality[FQuality].name, {size=20, color=ItemCfg.ItemQuality[FQuality].color}))),
-            RichText.Inline(RichText.Font("装备强化\t\t", { size = 18, color = 'FFFFFFFF'}), RichText.Font('+15', {size=20, color='FEEA42FF'})),
-            RichText.Inline(RichText.Font("攻击力\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('+10', {size=14, color='B8FFA1FF'})),
-            RichText.Inline(RichText.Font("生命值\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('+10', {size=14, color='B8FFA1FF'})),
-            RichText.Inline(RichText.Font("防御力\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('+10', {size=14, color='B8FFA1FF'})),
-            RichText.Font("赤锋套装", { size = 16, color = "B8FFB8FF" }),
-            RichText.Font("[2]套效果", { size = 15, color = "BFFFFFFF" }),
-            RichText.Font("暴击率 +5%", { size = 14, color = "FF5555FF" })
-    )
-
-    local KnelText = ""
-
+    local KenlText = ""
+    if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineId.TypeSpecificID)] then
+        self.Equipment:SetText(self:GetEquipmentDAT(DefineId));
+    else
+        self.Equipment:SetVisibility(ESlateVisibility.Collapsed);
+        self.Knel:SetVisibility(ESlateVisibility.Visible);
+        self.Knel:SetText(self:GetKenlDAT(DefineId));
+        return;
+    end
     for _, Slot in pairs(Slots) do
         local SlotItemId = Slot and Slot.TypeSpecificID or 0
-
         if SlotItemId and SlotItemId ~= 0 then
-            KnelText = RichText.Line(
-                    RichText.Inline(RichText.Font("核心属性\t", { size = 18, color = "FFFFFFFF" })),
-                    RichText.Inline(RichText.Font("属性一\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('攻击力+10', {size=14, color='B8FFA1FF'})),
-                    RichText.Inline(RichText.Font("属性二\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('攻击力+10', {size=14, color='B8FFA1FF'})),
-                    RichText.Inline(RichText.Font("属性三\t", { size = 14, color = "FFFFFFFF" }), RichText.Font('攻击力+10', {size=14, color='B8FFA1FF'}))
-            )
+            KenlText = self:GetKenlDAT(DefineId);
             break
         end
     end
 
-    self.Equipment:SetText(EquipmentText)
-
-    if KnelText ~= "" then
+    if KenlText ~= "" then
         self.Knel:SetVisibility(ESlateVisibility.Visible)
-        self.Knel:SetText(KnelText)
+        self.Knel:SetText(KenlText)
     else
         self.Knel:SetText("")
         self.Knel:SetVisibility(ESlateVisibility.Collapsed)
     end
 end
 
+--- @param DefineID ItemDefineID
+function ItemAttribute:GetEquipmentDAT(DefineID)
+    local FQuality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineID)
+    local customDat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID)
+    local strengthenLevel = customDat.strengthenLevel
+    local EquipmentText = RichText.Line(
+            RichText.Inline(
+                    RichText.Font(string.format('品质\t\t\t%s',ItemCfg.ItemQuality[FQuality].name), {size=20, color=ItemCfg.ItemQuality[strengthenLevel].color})
+            ),
+            RichText.Inline(
+                    RichText.Font("装备强化\t\t", { size = 18, color = 'FFFFFFFF'}),
+                    RichText.Font(string.format('+%s',strengthenLevel, ItemCfg.colorTable[strengthenLevel].Text),{size=20, color=ItemCfg.colorTable[strengthenLevel].HexColor})
+            ),
+            RichText.Inline(
+                    RichText.Font("--生命值\t\t\t", {size=16, color = 'FFFFFFFF'}),
+                    RichText.Font("200", {size=16, color='41ff4cFF'})
+            ),
+            RichText.Inline(
+                    RichText.Font("--防御力\t\t\t", {size=16, color = 'FFFFFFFF'}),
+                    RichText.Font("200", {size=16, color='00fffcFF'})
+            ),
+            RichText.Inline(
+                    RichText.Font("--攻击力\t\t\t", {size=16, color = 'FFFFFFFF'}),
+                    RichText.Font("200", {size=16, color='ff8b49FF'})
+            )
+    )
+    return EquipmentText;
+end
+
+--- @param DefineID ItemDefineID
+function ItemAttribute:GetKenlDAT(DefineID)
+    local KenlText = RichText.Line(
+            RichText.Inline(RichText.Font("核心属性", { size = 18, color = "FFFFFFFF" })),
+            RichText.Inline(
+                    RichText.Font("--属性一\t\t\t", { size = 16, color = "FFFFFFFF" }),
+                    RichText.Font('攻击力+10', {size=16, color='B8FFA1FF'})
+            ),
+            RichText.Inline(
+                    RichText.Font("--属性二\t\t\t", { size = 16, color = "FFFFFFFF" }),
+                    RichText.Font('攻击力+10', {size=16, color='B8FFA1FF'})
+            ),
+            RichText.Inline(
+                    RichText.Font("--属性三\t\t\t", { size = 16, color = "FFFFFFFF" }),
+                    RichText.Font('攻击力+10', {size=16, color='B8FFA1FF'})
+            )
+    )
+    return KenlText;
+end
 
 function ItemAttribute:EscapeText(Text)
     Text = tostring(Text or "")
