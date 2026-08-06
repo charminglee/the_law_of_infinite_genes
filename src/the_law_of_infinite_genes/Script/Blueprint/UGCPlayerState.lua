@@ -3,12 +3,6 @@
 ---@field PlayerDataManager PlayerDataManager_C
 --Edit Below--
 local UGCPlayerState = {
-    -- 玩家等级变化委托，当玩家等级同步时触发（客户端）
-    PlayerLevelChangedDelegate = Delegate.New(),
-    -- 玩家经验变化委托，当玩家经验同步时触发（客户端）
-    PlayerExpChangedDelegate = Delegate.New(),
-    -- 玩家游戏记录数据变化委托，当游戏GameGameRecord数据同步时触发（客户端）
-    PlayerGameGameRecordDataDelegate = Delegate.New(),
     -- 游戏记录数据表，存储玩家游戏过程中的各种统计数据
     GameRecordData = {},
     -- 游戏完成记录表，存储玩家已解锁的游戏模式
@@ -19,6 +13,14 @@ local UGCPlayerState = {
 local Delegate = require("common.Delegate")
 local PromiseFuture = require("common.PromiseFuture")
 local UGCGameData = UGCGameSystem.UGCRequire('Script.Blueprint.UGCGameData')
+
+
+-- 玩家等级变化委托，当玩家等级同步时触发（客户端）
+UGCPlayerState.PlayerLevelChangedDelegate = Delegate.New()
+-- 玩家经验变化委托，当玩家经验同步时触发（客户端）
+UGCPlayerState.PlayerExpChangedDelegate = Delegate.New()
+-- 玩家游戏记录数据变化委托，当游戏GameGameRecord数据同步时触发（客户端）
+UGCPlayerState.PlayerGameGameRecordDataDelegate = Delegate.New()
 
 
 UGCPlayerState.RespawnConfig = {}
