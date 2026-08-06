@@ -21,7 +21,7 @@ function ACHVComponent:ReceiveBeginPlay()
     ACHVComponent.SuperClass.ReceiveBeginPlay(self);
     ACHVManager:RegisterComponentClass(self);
     self._Event = _Event;
-    if self:GetOwner():HasAuthority() == false then
+    if Lib.IsServer() == false then
         self:InitHomeUI();
     end
 end

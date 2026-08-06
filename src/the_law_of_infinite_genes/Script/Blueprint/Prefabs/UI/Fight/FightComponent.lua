@@ -6,7 +6,7 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Fight.FightManager");
 
 function FightComponent:ReceiveBeginPlay()
     FightComponent.SuperClass.ReceiveBeginPlay(self);
-    if self:GetOwner():HasAuthority() == false then
+    if Lib.IsServer() == false then
         self:InitUI();
     end
 

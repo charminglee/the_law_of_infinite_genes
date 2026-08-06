@@ -22,7 +22,7 @@ end
 
 function GachaComponent:ReceiveBeginPlay()
     GachaComponent.SuperClass.ReceiveBeginPlay(self);
-    if self:GetOwner():HasAuthority() == false then
+    if Lib.IsServer() == false then
         self:InitUI();
         GachaManager:RegisterComponentClass(self);
         Lib.EventSystem.Listen(Event.OnRepCardData, self.OnRepCardData, self);

@@ -91,7 +91,7 @@ end
 ---@param defineId ItemDefineID @核心的 ItemDefineID
 ---@return AttrEntry[]? @鉴定结果词条列表，鉴定失败时返回 nil
 function ItemDataManager:Identify(defineId)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return nil
     end
     local itemId = defineId.TypeSpecificID
@@ -135,7 +135,7 @@ end
 ---@param defineId2 ItemDefineID @另一核心的 ItemDefineID
 ---@return AttrEntry[]? @新词条列表，融合失败时返回 nil
 function ItemDataManager:Fusion(defineId1, defineId2)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return nil
     end
     local itemId1 = defineId1.TypeSpecificID
@@ -170,7 +170,7 @@ end
 ---@param ... number @保留的词条索引
 ---@return AttrEntry[]? @洗炼后的词条列表，洗炼失败时返回 nil
 function ItemDataManager:Refine(defineId, ...)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return nil
     end
     local itemId = defineId.TypeSpecificID
@@ -203,7 +203,7 @@ end
 ---@param level number @要强化的等级，默认为 1
 ---@return boolean @是否成功
 function ItemDataManager:Strengthen(defineId, level)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return false
     end
     level = level or 1
@@ -221,7 +221,7 @@ end
 ---@param defineId ItemDefineID @装备的 ItemDefineID
 ---@return boolean @是否成功
 function ItemDataManager:Reforge(defineId)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return false
     end
 end

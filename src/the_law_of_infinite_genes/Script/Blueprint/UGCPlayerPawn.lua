@@ -26,7 +26,7 @@ function UGCPlayerPawn:ReceiveBeginPlay()
 
     if Lib.IsServer() then
         self:InitInServer()
-        if UGCGameSystem.IsUGCPIE() and Config.Debug.InfiniteAmmo then
+        if Lib.IsPIE() and Config.Debug.InfiniteAmmo then
             self.AttrManager:SetAttr(Attribute.InfiniteAmmo, 1)
         end
     else

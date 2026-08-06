@@ -92,7 +92,7 @@ end
 ---@param PlayerController BP_UGCPlayerController_C
 ---@return LotteryComponent_C
 function LotteryManager:GetLotteryComponent(PlayerController)
-    if PlayerController == nil and UGCGameSystem.GameState:HasAuthority() == false then
+    if PlayerController == nil and Lib.IsServer() == false then
         if self.LotteryComponent == nil then
             if self.LotteryComponentClass ~= nil and UGCGameSystem.GameState ~= nil then
                 local PlayerController = STExtraGameplayStatics.GetFirstPlayerController(UGCGameSystem.GameState);

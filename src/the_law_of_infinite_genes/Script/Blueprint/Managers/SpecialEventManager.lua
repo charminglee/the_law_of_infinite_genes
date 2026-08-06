@@ -32,7 +32,7 @@ end
 ---触发特殊事件。
 ---@param specialEvent SpecialEvent @SpecialEvent 枚举值
 function SpecialEventManager:TriggerSpecialEvent(specialEvent)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return
     end
 
@@ -64,7 +64,7 @@ end
 
 ---结束当前正在进行的特殊事件。
 function SpecialEventManager:StopSpecialEvent()
-    if not self:HasAuthority() or self.currEvent == -1 then
+    if not Lib.IsServer() or self.currEvent == -1 then
         return
     end
 
@@ -75,7 +75,7 @@ end
 
 ---为所有怪物添加腐秽瘴潮效果。
 function SpecialEventManager:SetPutridMiasmaForAllMonsters()
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return
     end
     

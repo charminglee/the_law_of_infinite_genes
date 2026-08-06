@@ -10,8 +10,8 @@ local Table = UGCGameSystem.UGCRequire("Script.Lib.Utils.Table")
 math.randomseed(os.time())
 
 
-local CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-local CHARS_LEN = #CHARS
+local _CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+local _CHARS_LEN = #_CHARS
 
 
 ---【双端】生成一个指定长度的随机字符串。
@@ -21,8 +21,8 @@ function Random.GenString(length)
     length = length or 16
     local result = {}
     for i = 1, length do
-        local index = math.random(CHARS_LEN)
-        result[i] = CHARS:sub(index, index)
+        local index = math.random(_CHARS_LEN)
+        result[i] = _CHARS:sub(index, index)
     end
     return table.concat(result)
 end

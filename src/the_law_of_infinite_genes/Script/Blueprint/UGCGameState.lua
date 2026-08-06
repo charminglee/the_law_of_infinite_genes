@@ -82,7 +82,7 @@ end
 
 
 function UGCGameState:IsAllLobbyTeammateReady()
-   local bIsUGCPIE = UGCGameSystem.IsUGCPIE();
+   local bIsUGCPIE = Lib.IsPIE();
 
    local bReady = true
    if bIsUGCPIE then ---PIE 默认全部玩家都是一个大厅队伍

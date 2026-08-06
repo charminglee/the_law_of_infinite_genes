@@ -8,7 +8,7 @@ local RaidInstanceComponent = {}
 
 function RaidInstanceComponent:ReceiveBeginPlay()
     RaidInstanceComponent.SuperClass.ReceiveBeginPlay(self);
-    if self:GetOwner():HasAuthority() == false then
+    if Lib.IsServer() == false then
         RaidInstanceManager:RegisterComponentClass(self);
     end
 end

@@ -40,13 +40,27 @@ function Lib.RemoveTimer(timer)
 end
 
 
----判断当前环境是否是服务端。
----@return boolean @是否是服务端
+---【双端】判断当前是否处于服务端。
+---@return boolean @是否处于服务端
 function Lib.IsServer()
     if GameState then 
         return GameState:HasAuthority()
     end
     return GameMode ~= nil
+end
+
+
+---【双端】判断当前是否是 PIE 环境。
+---@return boolean @是否是 PIE 环境
+function Lib.IsPIE()
+    return UGCGameSystem.IsUGCPIE()
+end
+
+
+---【双端】判断当前是否是调试环境。
+---@return boolean @是否是调试环境
+function Lib.IsDebug()
+    return UGCGameSystem.IsDebug()
 end
 
 
@@ -59,7 +73,7 @@ local _PP_CLS_PATH = "Asset/Blueprint/UGCPlayerPawn.UGCPlayerPawn_C"
 local _clsCache = {}
 
 
----获取一个类。
+---【双端】获取一个类。
 ---@param clsPath string @类路径（由 "Asset/" 开始）
 ---@return UClass|nil @类
 function Lib.GetClass(clsPath)
@@ -70,21 +84,21 @@ function Lib.GetClass(clsPath)
 end
 
 
----获取 PlayerController 类。
+---【双端】获取 PlayerController 类。
 ---@return UClass|nil @PlayerController 类
 function Lib.GetPlayerControllerClass()
     return Lib.GetClass(_PC_CLS_PATH)
 end
 
 
----获取 PlayerState 类。
+---【双端】获取 PlayerState 类。
 ---@return UClass|nil @PlayerState 类
 function Lib.GetPlayerStateClass()
     return Lib.GetClass(_PS_CLS_PATH)
 end
 
 
----获取 PlayerPawn 类。
+---【双端】获取 PlayerPawn 类。
 ---@return UClass|nil @PlayerPawn 类
 function Lib.GetPlayerPawnClass()
     return Lib.GetClass(_PP_CLS_PATH)

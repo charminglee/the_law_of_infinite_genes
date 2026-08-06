@@ -46,7 +46,7 @@ function PlayerDataManager:ReceiveBeginPlay()
     self:_LoadData()
     self:ResetCardData()
     
-    if UGCGameSystem.IsUGCPIE() then
+    if Lib.IsPIE() then
         for k, v in pairs(Config.Debug.Coin) do
             self:SetCoin(k, v, false)
         end
@@ -123,7 +123,7 @@ end
 
 
 function PlayerDataManager:_LoadData()
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return
     end
 
@@ -153,7 +153,7 @@ end
 ---@param value any @数据值
 ---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:SaveCustomData(key, value, sync)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     self._data.custom[key] = value
@@ -166,7 +166,7 @@ end
 ---【服务端】立即保存所有存档数据。
 ---@return boolean @是否成功
 function PlayerDataManager:Save()
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return false
     end
     return UGCPlayerStateSystem.SavePlayerArchiveData(self.owner.UID, self._data)
@@ -175,7 +175,7 @@ end
 
 ---【服务端】将存档数据同步到客户端。
 function PlayerDataManager:SyncData()
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     UnrealNetwork.RepLazyProperty(self, "_data")
@@ -184,7 +184,7 @@ end
 
 ---【服务端】将卡牌数据同步到客户端。
 function PlayerDataManager:SyncCardData()
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return
     end
     UnrealNetwork.RepLazyProperty(self, "_card")
@@ -239,7 +239,7 @@ end
 
 ---【服务端】重置基因树，并返还所消耗的所有技能点。
 function PlayerDataManager:ResetGeneTree()
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     local geneTree = self._data.geneTree
@@ -267,7 +267,7 @@ end
 ---@param value number @技能点
 ---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:SetGeneTreeSkillPoint(value, sync)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     self._data.geneTree.skillPoint = value
@@ -281,7 +281,7 @@ end
 ---@param delta? number @技能点增量，默认为 1
 ---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:AddGeneTreeSkillPoint(delta, sync)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     delta = delta or 1
@@ -310,7 +310,7 @@ end
 ---@return boolean @是否成功
 function PlayerDataManager:SetCoin(id, value, sync)
     local coin = self._data.coin
-    if not self:HasAuthority() or not self._isLoaded or coin[id] == nil or coin[id] == value then
+    if not Lib.IsServer() or not self._isLoaded or coin[id] == nil or coin[id] == value then
         return false
     end
     if value < 0 then
@@ -334,7 +334,7 @@ end
 function PlayerDataManager:AddCoin(id, delta, sync)
     delta = delta or 1
     local coin = self._data.coin
-    if not self:HasAuthority() or not self._isLoaded or coin[id] == nil then
+    if not Lib.IsServer() or not self._isLoaded or coin[id] == nil then
         return false
     end
     local old = coin[id]
@@ -380,7 +380,7 @@ end
 
 ---【服务端】重置卡牌数据。
 function PlayerDataManager:ResetCardData()
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return
     end
     self._card = {
@@ -404,7 +404,7 @@ end
 
 ---【服务端】提升卡牌槽位等级，每级解锁一个穿戴槽，最高 12 级。
 function PlayerDataManager:LevelUpCardSlot()
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
 
@@ -516,7 +516,7 @@ end
 ---@param toSlot? number @卡牌槽位索引 1-12 ，默认为第一个空槽位
 ---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
 
@@ -556,7 +556,7 @@ end
 ---@param toSlot? number @仓库槽位索引 1-20 ，默认为第一个空槽位
 ---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:UnequipCard(fromSlot, toSlot, sync)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
 
@@ -590,7 +590,7 @@ end
 ---@param toSlot? number @仓库槽位索引 1-20 ，默认为第一个空槽位
 ---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
 
@@ -628,7 +628,7 @@ end
 
 
 function PlayerDataManager:_SellCard(from, slot, sync)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     local list = self._card[from]
@@ -667,7 +667,7 @@ end
 ---@param useCoin? boolean @是否消耗资源点，默认为 true
 ---@param isFirstRefresh? boolean @是否为首次刷新，若为首次刷新，则刷新价格为首次价格；默认为 false
 function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     if isFirstRefresh then
@@ -729,7 +729,7 @@ end
 function PlayerDataManager:AddStat(name, delta, sync)
     delta = delta or 1
     local stat = self._data.stat
-    if not self:HasAuthority() or not self._isLoaded or stat[name] == nil then
+    if not Lib.IsServer() or not self._isLoaded or stat[name] == nil then
         return
     end
     stat[name] = stat[name] + delta
@@ -758,7 +758,7 @@ end
 ---【服务端】佩戴称号。
 ---@param title Title|nil @称号ID，请使用 Title 枚举值，卸下称号可传 nil
 function PlayerDataManager:EquipTitle(title)
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     self._data.title.equipped = title
@@ -780,7 +780,7 @@ end
 ---【服务端】解锁称号。
 ---@param title Title @称号ID，请使用 Title 枚举值
 function PlayerDataManager:UnlockTitle(title) 
-    if not self:HasAuthority() or not self._isLoaded then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
     local unlocked = self._data.title.unlocked

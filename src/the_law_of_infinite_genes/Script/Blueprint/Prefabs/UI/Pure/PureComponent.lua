@@ -5,7 +5,7 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Pure.PureManager");
 local PureComponent = {}
 function PureComponent:ReceiveBeginPlay()
     PureComponent.SuperClass.ReceiveBeginPlay(self);
-    if self:GetOwner():HasAuthority() == false then
+    if Lib.IsServer() == false then
         self:InitUI();
     end
 end

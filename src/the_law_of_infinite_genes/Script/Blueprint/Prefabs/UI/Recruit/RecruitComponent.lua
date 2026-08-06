@@ -8,7 +8,7 @@ local RecruitComponent = {}
 
 function RecruitComponent:ReceiveBeginPlay()
     RecruitComponent.SuperClass.ReceiveBeginPlay(self);
-    if self:GetOwner():HasAuthority() == false then
+    if Lib.IsServer() == false then
         self:InitUI();
         RecruitManager:RegisterComponentClass(self);
     end

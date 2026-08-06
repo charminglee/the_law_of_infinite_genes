@@ -7,7 +7,7 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.GeneTree.GeneManager");
 
 function GeneComponent:ReceiveBeginPlay()
     GeneComponent.SuperClass.ReceiveBeginPlay(self);
-    if self:GetOwner():HasAuthority() == false then
+    if Lib.IsServer() == false then
         self:InitHomeUI();
     end
 end

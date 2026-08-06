@@ -34,7 +34,7 @@ function LotteryComponent:ReceiveBeginPlay()
     LotteryManager:RegisterComponentClass(GameplayStatics.GetObjectClass(self));
     LotteryManager:GetLotteryData();
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         if UE.IsValid(self:GetVirtualItemManager()) then
             self.VirtualItemInited = true
             self:GetVirtualItemManager().AddItemResultDelegate:Add(self.OnAddVirtualItem, self);
@@ -73,7 +73,7 @@ end
 function LotteryComponent:ReceiveEndPlay()
     LotteryComponent.SuperClass.ReceiveEndPlay(self);
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         if self.RefreshTodayDrawTimesTimer then
             if Timer.IsTimerExistByName("RefreshTodayDrawTimesTimer") then
                 Timer.RemoveTimerByName("RefreshTodayDrawTimesTimer");
@@ -123,7 +123,7 @@ function LotteryComponent:InitGamePart(GamePartName)
         print(string.format("[LotteryComponent:InitGamePart] VirtualItemManager Is Nil: %s", self:GetVirtualItemManager() == nil));
         if UE.IsValid(self:GetVirtualItemManager()) and self.VirtualItemInited == nil then
             self.VirtualItemInited = true
-            if PlayerController:HasAuthority() == true then
+            if Lib.IsServer() == true then
                 self:GetVirtualItemManager().AddItemResultDelegate:Add(self.OnAddVirtualItem, self);
                 self:GetVirtualItemManager().RemoveItemResultDelegate:Add(self.OnRemoveVirtualItem, self);
             else
@@ -135,7 +135,7 @@ function LotteryComponent:InitGamePart(GamePartName)
             self.CommodityManager = UGCBlueprintFunctionLibrary.GetGamePartGlobalActor(UGCGameSystem.GameState, "CommodityOperationManager");
         end
         print(string.format("[LotteryComponent:InitGamePart] CommodityManager Is Nil: %s", self.CommodityManager == nil));
-        if PlayerController:HasAuthority() == false and self.CommodityInited == nil then
+        if Lib.IsServer() == false and self.CommodityInited == nil then
             self.CommodityInited = true
             if UE.IsValid(self:GetCommodityManager()) then
                 self:GetCommodityManager().BuyProductResultDelegate:Add(self.OnBuyProduct, self);
@@ -499,7 +499,7 @@ end
 
 function LotteryComponent:Client_WriteOneLotteryRecord(LotteryID, DropRecord, DrawTime)
     local PlayerController = self:GetOwner()
-    if PlayerController:HasAuthority() then
+    if Lib.IsServer() then
         return
     end
     local DropItemInfo = {ID = -1, Num = 0};
@@ -649,7 +649,7 @@ end
 
 function LotteryComponent:Client_WriteTenLotteryRecord(LotteryID, TenDropRecord, DrawTime)
     local PlayerController = self:GetOwner()
-    if PlayerController:HasAuthority() then
+    if Lib.IsServer() then
         return
     end
     -- 先判断是不是抽奖组
@@ -793,7 +793,7 @@ end
 ---@param LotteryID number
 function LotteryComponent:DrawOnce(LotteryID)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
     print("LotteryComponent:DrawOnce");
@@ -844,7 +844,7 @@ end
 ---@param LotteryID number
 function LotteryComponent:DrawTenth(LotteryID)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
     print("LotteryComponent:DrawTenth");
@@ -888,7 +888,7 @@ end
 function LotteryComponent:Server_DrawOnce(LotteryID)
     print("LotteryComponent: Server_DrawOnce Excute");
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
     -- 计算消耗的货币
@@ -907,7 +907,7 @@ end
 function LotteryComponent:Server_DrawTenth(LotteryID)
     print("LotteryComponent: Server_DrawTenth Excute");
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
 
@@ -1161,7 +1161,7 @@ end
 ---@return boolean
 function LotteryComponent:IsGuarantDrop(GuarantDropID, GuarantDropGroupID, LotteryID, TempLotteryRecord)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
 
@@ -1289,7 +1289,7 @@ end
 ---@param IsDrawTenth boolean
 function LotteryComponent:UseCurrencyToDraw(LotteryID, CostNum, IsDrawTenth)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
     -- 判断是否是绿洲币
@@ -1319,7 +1319,7 @@ end
 ---@param DrawRecordLimit number
 function LotteryComponent:WriteOneLotteryRecord(LotteryID, DropRecord, DrawRecordLimit)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
 
@@ -1477,7 +1477,7 @@ end
 ---@param DrawRecordLimit number
 function LotteryComponent:WriteTenLotteryRecord(LotteryID, TenDropRecord, DrawRecordLimit)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
 
@@ -1657,7 +1657,7 @@ end
 ---@return boolean
 function LotteryComponent:WritePlayerData(PlayerData)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
 
@@ -1680,7 +1680,7 @@ end
 function LotteryComponent:ReadPlayerData()
     print("LotteryComponent:ReadPlayerData")
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
     if self.LotteryPlayerData == nil then
@@ -1813,7 +1813,7 @@ end
 ---@return boolean
 function LotteryComponent:CheckCanDraw(LotteryID, CostCurrencyNum)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
 
@@ -1867,7 +1867,7 @@ end
 function LotteryComponent:ExchangeProduct(ProductID, ExchangeNum)
     print("LotteryComponent:ExchangeProduct");
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
     local ProductData = self:GetProductDataByID(ProductID);
@@ -1907,7 +1907,7 @@ end
 function LotteryComponent:PurchaseProduct(ProductID, Price, PurchasNum)
     print("LotteryComponent:PurchaseProduct");
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
     local ProductData = self:GetProductDataByID(ProductID);
@@ -1948,7 +1948,7 @@ end
 
 function LotteryComponent:Server_GetProgressReward(LotteryID, Progress)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
     local LotteryData = LotteryManager:GetLotteryConfigData(LotteryID);
@@ -2024,7 +2024,7 @@ end
 ---@param IsSkipAnim boolean
 function LotteryComponent:WriteSkipAnim(IsSkipAnim)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
 
@@ -2034,7 +2034,7 @@ end
 
 function LotteryComponent:Server_ChangeSkipAnim(IsSkipAnim)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
     local PlayerData = self:ReadPlayerData();
@@ -2076,7 +2076,7 @@ end
 function LotteryComponent:InitLotteryMainUI()
     print("LotteryComponent:InitLotteryMainUI");
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
 
@@ -2091,7 +2091,7 @@ end
 function LotteryComponent:OpenPanel()
     print("LotteryComponent:OpenPanel");
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
     if self.LotteryMainUI then
@@ -2145,7 +2145,7 @@ end
 --生效范围：客户端
 function LotteryComponent:ClosePanel()
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
     print("LotteryComponent:ClosePanel");
@@ -2172,7 +2172,7 @@ end
 function LotteryComponent:SelectLottery(LotteryID)
     print("LotteryComponent:SelectLottery");
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         return;
     end
     if self.LotteryMainUI then
@@ -2431,7 +2431,7 @@ end
 ---@return boolean
 function LotteryComponent:AddVirtualItems(AwardList)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return false;
     end
     if UE.IsValid(self:GetVirtualItemManager()) then
@@ -2457,7 +2457,7 @@ end
 ---@param Callback function
 function LotteryComponent:RemoveVirtualItem(ItemID, Num, Callback)
     local PlayerController = self:GetOwner();
-    if PlayerController:HasAuthority() == false then
+    if Lib.IsServer() == false then
         return;
     end
     if UE.IsValid(self:GetVirtualItemManager()) then
@@ -2630,7 +2630,7 @@ function LotteryComponent:DrawLotteryOnce(LotteryID, PlayerController)
     if PlayerController == nil then
         PlayerController = self:GetOwner();
     end
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         self:Server_DrawOnce(LotteryID);
     else
         UnrealNetwork.CallUnrealRPC(PlayerController, self, "Server_DrawOnce", LotteryID);
@@ -2654,7 +2654,7 @@ function LotteryComponent:DrawLotteryTenTimes(LotteryID, PlayerController)
     if PlayerController == nil then
         PlayerController = self:GetOwner();
     end
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         self:Server_DrawTenth(LotteryID);
     else
         UnrealNetwork.CallUnrealRPC(PlayerController, self, "Server_DrawTenth", LotteryID);
@@ -2679,7 +2679,7 @@ function LotteryComponent:AddGiftPackage(LotteryID, ProgressLevel, PlayerControl
     if PlayerController == nil then
         PlayerController = self:GetOwner();
     end
-    if PlayerController:HasAuthority() == true then
+    if Lib.IsServer() == true then
         self:Server_GetProgressReward(LotteryID, ProgressLevel);
     else
         UnrealNetwork.CallUnrealRPC(PlayerController, self, "Server_GetProgressReward", LotteryID, ProgressLevel);

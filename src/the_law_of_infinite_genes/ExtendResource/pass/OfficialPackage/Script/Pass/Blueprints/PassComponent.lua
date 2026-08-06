@@ -93,7 +93,7 @@ function PassComponent:Init()
         self:LoadConfig(self.PassConfig) 
     end
 
-    if PC:HasAuthority() then
+    if Lib.IsServer() then
         self.ActivePassID = PassManager:GetActivePassID()
         UnrealNetwork.RepLazyProperty(self, "ActivePassID")
 

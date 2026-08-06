@@ -19,7 +19,7 @@ end
 ---@param DamageEvent DamageEvent 伤害事件
 ---@param DamageTypeID int32 伤害类型
 function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
-    if not self:HasAuthority() or not EventInstigator:IsPlayerController() then
+    if not Lib.IsServer() or not EventInstigator:IsPlayerController() then
 		return
 	end
 

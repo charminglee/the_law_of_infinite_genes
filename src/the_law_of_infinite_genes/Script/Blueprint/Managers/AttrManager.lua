@@ -21,7 +21,7 @@ local _PCT_MAP = nil
 
 function AttrManager:ReceiveBeginPlay()
     AttrManager.SuperClass.ReceiveBeginPlay(self)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return
     end
 
@@ -94,7 +94,7 @@ end
 
 function AttrManager:ReceiveEndPlay()
     AttrManager.SuperClass.ReceiveEndPlay(self)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return
     end
     self._attrCache = nil
@@ -183,7 +183,7 @@ end
 
 ---从已装备卡牌列表重算全部卡牌加成并同步属性。
 function AttrManager:_RebuildFromEquipped()
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return false
     end
 
@@ -238,7 +238,7 @@ end
 ---@param attr Attribute @Attribute 枚举值
 ---@param value number @属性值
 function AttrManager:SetAttr(attr, value)
-    if not self:HasAuthority() then
+    if not Lib.IsServer() then
         return
     end
     if attr == Attribute.HealthMax then

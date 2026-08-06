@@ -5,7 +5,7 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Fortify.FortifyManager");
 local FortifyComponent = {}
 function FortifyComponent:ReceiveBeginPlay()
     FortifyComponent.SuperClass.ReceiveBeginPlay(self);
-    if self:GetOwner():HasAuthority() == false then
+    if Lib.IsServer() == false then
         self:InitUI();
     end
 end

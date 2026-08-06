@@ -154,7 +154,7 @@ function UGCPlayerController:HandleBeginPlayInClientForFighting()
 end
 
 function UGCPlayerController:InitInServer(PlayerKey)
-    local bIsUGCPIE = UGCGameSystem.IsUGCPIE();
+    local bIsUGCPIE = Lib.IsPIE();
     if PlayerKey == UGCGameSystem.GetPlayerKeyByPlayerController(self) then
         self.bIsTeamLeader = bIsUGCPIE and PlayerKey == 10001 or UGCTeamSystem.GetIsLeaderOrNotByPlayerKey(PlayerKey)
         UnrealNetwork.RepLazyProperty(self, "bIsTeamLeader")
@@ -221,7 +221,7 @@ function UGCPlayerController:SetLobbyReadyStatus(bIsReady)
 end
 
 function UGCPlayerController:SetLobbyInfo(LobbyInfo)
-    if UGCActorComponentUtility.HasAuthority(self) == false then
+    if Lib.IsServer() == false then
         return
     end
 
@@ -309,7 +309,7 @@ function UGCPlayerController:RPC_Server_RequestRespawn(bFreeRespawn)
 end
 
 function UGCPlayerController:RPC_Server_SetLobbySelectedModeID(ModeID)
-    if not UGCActorComponentUtility.HasAuthority(self) then
+    if not Lib.IsServer() then
        return
     end
  
@@ -337,7 +337,7 @@ function UGCPlayerController:RPC_Server_SetLobbySelectedModeID(ModeID)
 end
 
 function UGCPlayerController:RPC_Server_SetFillTeammate(bFillTeammate)
-    if not UGCActorComponentUtility.HasAuthority(self) then
+    if not Lib.IsServer() then
        return
     end
  
@@ -360,7 +360,7 @@ function UGCPlayerController:RPC_Server_SetFillTeammate(bFillTeammate)
 end
 
 function UGCPlayerController:RPC_Server_SetLobbybIsMatching(bIsMatching)
-    if not UGCActorComponentUtility.HasAuthority(self) then
+    if not Lib.IsServer() then
         return
      end
   
