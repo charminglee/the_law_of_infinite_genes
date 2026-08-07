@@ -11,6 +11,20 @@ Lib = {
 }
 
 
+local _UGCGameSystem = UGCGameSystem
+UGCGameSystem = setmetatable({}, {
+    __index = _UGCGameSystem,
+    __newindex = function(t, k, v)
+        if k == "GameMode" then
+            GameMode = v ---@type UGCGameMode_C
+        elseif k == "GameState" then
+            GameState = v ---@type UGCGameState_C
+        end
+        _UGCGameSystem[k] = v
+    end
+})
+
+
 ---【双端】创建一个定时器。
 ---@param time number @定时时间，单位秒
 ---@param isLoop boolean @是否循环

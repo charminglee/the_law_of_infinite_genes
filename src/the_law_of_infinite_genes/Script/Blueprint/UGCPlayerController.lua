@@ -88,7 +88,7 @@ function UGCPlayerController:ReceiveBeginPlay()
             end
         end)
 
-        if UGCGameSystem.GameState.IsInLobby() then
+        if GameState.IsInLobby() then
             self:HandleBeginPlayInServerForLobby()
         else
             self:HandleBeginPlayInServerForFighting()
@@ -96,7 +96,7 @@ function UGCPlayerController:ReceiveBeginPlay()
     else
         LocalPlayerController = self ---@type UGCPlayerController_C
 
-        if UGCGameSystem.GameState.IsInLobby() then
+        if GameState.IsInLobby() then
             self:HandleBeginPlayInClientForLobby()
         else
             self:HandleBeginPlayInClientForFighting()
@@ -132,8 +132,7 @@ function UGCPlayerController:HandleBeginPlayInServerForFighting()
     print("[UGCPlayerController] HandleBeginPlayInServerForFighting "..#ld)
 end
 
-function UGCPlayerController:HandleBeginPlayInClientForLobby()
-    UGCLog.Log('HandleBeginPlayInClientForLobby')
+function UGCPlayerController:HandleBeginPlayInClientForLobby()    
     LobbyFlow:Go(LobbyFlowState.LFS_Lobby)
     local NewIndex = TimingListUtils.NewList()
     TimingListUtils.Add(NewIndex, 0, self, "GamePartReady")
