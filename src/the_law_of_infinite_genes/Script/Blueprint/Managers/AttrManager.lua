@@ -1,9 +1,11 @@
----管理玩家属性数据，绑定于 PlayerPawn ，双端可见。
+---管理玩家/怪物属性数据，绑定于 PlayerPawn / 怪物角色类，双端可见。
 ---@class AttrManager_C:BaseManager_C
 --Edit Below--
 local AttrManager = {
     ---@type table<Attribute, number>
     _attrCache = nil,
+    ---@type table<Attribute, number>
+    _attrOverrides = nil,
     ---@type table<Attribute, number>
     _base = nil,
     ---@type table<Attribute, number>
@@ -15,6 +17,11 @@ local AttrManager = {
 local _ATTR_MIN_MAX = nil
 ---@type table<Attribute, Attribute>
 local _PCT_MAP = nil
+
+
+function AttrManager:GetReplicatedProperties()
+    return "_attrCache", "_final"
+end
 
 
 function AttrManager:ReceiveBeginPlay()
@@ -36,26 +43,41 @@ function AttrManager:ReceiveBeginPlay()
     }
 
     if Lib.IsServer() then
-        if not self._base then
-            self._base = {}
-            for k, v in pairs(Attribute) do
-                if k ~= Attribute.HealthMax then
-                    self._base[k] = UGCAttributeSystem.GetGameAttributeValue(self.owner, v)
+        Lib.CreateTimer(4, false, function()
+            if not self._base then
+                self._base = {}
+                for k, v in pairs(Attribute) do
+                    if k ~= Attribute.HealthMax then
+                        self._base[k] = UGCAttributeSystem.GetGameAttributeValue(self.owner, v)
+                    end
                 end
             end
-        end
-        if not self._attrCache then
-            self._attrCache = Lib.Table.Copy(self._base)
-        end
-        if not self._final then
-            self._final = {}
-            self:_UpdateFinal()
-        end
+            if not self._attrCache then
+                self._attrCache = Lib.Table.Copy(self._base)
+            end
+            if not self._final then
+                self._final = {}
+            end
+            
+            if Lib.IsPlayer(self) then 
+                if Lib.IsPIE() and Config.Debug.InfiniteAmmo then
+                    self:SetAttr(Attribute.InfiniteAmmo, 1)
+                end
 
-        Lib.EventSystem.Listen(Event.OnResetCardData, self.OnResetCardData, self)
-        Lib.EventSystem.Listen(Event.OnCardEquipAfter, self.OnCardEquipAfter, self)
-        Lib.EventSystem.Listen(Event.OnCardUnequipAfter, self.OnCardUnequipAfter, self)
-        Lib.EventSystem.Listen(Event.OnCardSellAfter, self.OnCardSellAfter, self)
+                UGCGenericMessageSystem.ListenGlobalMessage(
+                    self,
+                    UGCGenericMessageSystem.Messages.UGC.Weapon.SwitchWeapon,
+                    self,
+                    self.OnPlayerSwitchWeapon
+                )
+                Lib.EventSystem.Listen(Event.OnResetCardData, self.OnResetCardData, self)
+                Lib.EventSystem.Listen(Event.OnCardEquipAfter, self.OnCardEquipAfter, self)
+                Lib.EventSystem.Listen(Event.OnCardUnequipAfter, self.OnCardUnequipAfter, self)
+                Lib.EventSystem.Listen(Event.OnCardSellAfter, self.OnCardSellAfter, self)
+            end
+
+            self:_RebuildAllAttr()
+        end)
     end
 end
 
@@ -63,10 +85,28 @@ end
 function AttrManager:ReceiveEndPlay()
     AttrManager.SuperClass.ReceiveEndPlay(self)
     self._attrCache = nil
+    self._attrOverrides = nil
     self._base = nil
     self._final = nil
-    if Lib.IsServer() then
+    if Lib.IsServer() and Lib.IsPlayer(self) then
+        UGCGenericMessageSystem.UnListenMessage(
+            self,
+            UGCGenericMessageSystem.Messages.UGC.Weapon.SwitchWeapon
+        )
         Lib.EventSystem.UnlistenByOwner(self)
+    end
+end
+
+
+function AttrManager:OnPlayerSwitchWeapon(newWeapon, oldWeapon, owner)
+    if owner ~= self.owner then
+        return
+    end
+    if newWeapon then
+        UGCGunSystem.EnableClipInfiniteBullets(newWeapon, self:GetAttr(Attribute.InfiniteAmmo) == 1)
+    end
+    if oldWeapon and oldWeapon ~= newWeapon then
+        UGCGunSystem.EnableClipInfiniteBullets(oldWeapon, false)
     end
 end
 
@@ -105,6 +145,9 @@ end
 
 ---计算单张卡牌提供的加成。
 local function _CardBonusOf(card)
+    if not card then
+        return nil
+    end
     local id, star = card[1], card[2]
     local bonus = CardCfg.Cards[id].bonus[star]
     local result = {}
@@ -141,16 +184,24 @@ function AttrManager:_RebuildAllAttr()
         return false
     end
 
-    local pdm = self.owner.PlayerState.PlayerDataManager
-    local equipped = pdm:GetAllEquippedCards()
-    local slotCount = pdm:GetUnlockedCardSlotCount()
     local attrTable = Lib.Table.Copy(self._base)
-    for slot = 1, slotCount do
-        local bonus = _CardBonusOf(equipped[slot])
-        if bonus ~= nil then
-            for attr, value in pairs(bonus) do
-                attrTable[attr] = (attrTable[attr] or 0) + value
+    if Lib.IsPlayer(self) then
+        local pdm = UGCGameSystem.GetPlayerStateByPlayerPawn(self.owner).PlayerDataManager
+        local equipped = pdm:GetAllEquippedCards()
+        local slotCount = pdm:GetUnlockedCardSlotCount()
+        for slot = 1, slotCount do
+            local bonus = _CardBonusOf(equipped[slot])
+            if bonus ~= nil then
+                for attr, value in pairs(bonus) do
+                    attrTable[attr] = (attrTable[attr] or 0) + value
+                end
             end
+        end
+    end
+
+    if self._attrOverrides then
+        for attr, value in pairs(self._attrOverrides) do
+            attrTable[attr] = value
         end
     end
 
@@ -204,12 +255,13 @@ function AttrManager:_ApplyAttr(attr)
     if attr == Attribute._HealthMax then
         local hm = self._final[Attribute._HealthMax]
         UGCAttributeSystem.SetGameAttributeValue(self.owner, Attribute.HealthMax, hm)
-    elseif attr == Attribute.InfiniteAmmo then
+    elseif attr == Attribute.InfiniteAmmo and Lib.IsPlayer(self) then
         local weapon = UGCWeaponManagerSystem.GetCurrentWeapon(self.owner)
-        UGCGunSystem.EnableClipInfiniteBullets(weapon, value == 1)
+        if weapon then
+            UGCGunSystem.EnableClipInfiniteBullets(weapon, value == 1)
+        end
     end
 end
-
 
 
 ---【服务端】设置属性值。
@@ -219,6 +271,11 @@ function AttrManager:SetAttr(attr, value)
     if not Lib.IsServer() then
         return
     end
+    if attr == Attribute.HealthMax then
+        attr = Attribute._HealthMax
+    end
+    self._attrOverrides = self._attrOverrides or {}
+    self._attrOverrides[attr] = value
     self:_SetAttr(attr, value)
     self:_UpdateFinal()
     self:_ApplyAttr(attr)

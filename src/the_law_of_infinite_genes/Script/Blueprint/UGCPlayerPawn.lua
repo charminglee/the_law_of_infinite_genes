@@ -1,34 +1,29 @@
 ---@class UGCPlayerPawn_C:BP_UGCPlayerPawn_C
 ---@field AttrManager AttrManager_C
 --Edit Below--
-local UGCPlayerPawn = {
-    ---@type UGCPlayerController_C
-    PlayerController = nil,
-    ---@type UGCPlayerState_C
-    PlayerState = nil,
-}
+local UGCPlayerPawn = {}
 
 
 function UGCPlayerPawn:ReceiveBeginPlay()
     UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self) 
     
-    self.PlayerController = UGCGameSystem.GetPlayerControllerByPlayerPawn(self)
-    self.PlayerState = UGCGameSystem.GetPlayerStateByPlayerPawn(self)
-    if UE.IsValid(self.PlayerController) then
-        self.PlayerController.PlayerPawn = self
-    end
-    if UE.IsValid(self.PlayerState) then
-        self.PlayerState.PlayerPawn = self
-    end
-
     self.bVaultIsOpen = true
     self.IsOpenShovelAbility = true
 
     if Lib.IsServer() then
+        Lib.CreateTimer(4, false, function()
+            -- 初始武器
+            local weaponId = Config.InitialWeapon.WeaponId
+            local bulletId = Config.InitialWeapon.BulletId
+            local pdm = UGCGameSystem.GetPlayerStateByPlayerPawn(self).PlayerDataManager
+            local isNotFirstJoin = pdm:GetCustomData("isNotFirstJoin")
+            if isNotFirstJoin ~= 1 then
+                UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
+                UGCBackpackSystemV2.AddItemV2(self, bulletId, 300)
+                pdm:SaveCustomData("isNotFirstJoin", 1)
+            end
+        end)
         self:InitInServer()
-        if Lib.IsPIE() and Config.Debug.InfiniteAmmo then
-            self.AttrManager:SetAttr(Attribute.InfiniteAmmo, 1)
-        end
     else
         if self == UGCGameSystem.GetLocalPlayerPawn() then
             LocalPlayerPawn = self ---@type UGCPlayerPawn_C
@@ -41,14 +36,6 @@ end
 
 function UGCPlayerPawn:ReceiveEndPlay()
     UGCPlayerPawn.SuperClass.ReceiveEndPlay(self)
-
-    if UE.IsValid(self.PlayerController) then
-        self.PlayerController.PlayerPawn = nil
-    end
-    if UE.IsValid(self.PlayerState) then
-        self.PlayerState.PlayerPawn = nil
-    end
-
     if not Lib.IsServer() and self == UGCGameSystem.GetLocalPlayerPawn() then
         LocalPlayerPawn = nil
     end
