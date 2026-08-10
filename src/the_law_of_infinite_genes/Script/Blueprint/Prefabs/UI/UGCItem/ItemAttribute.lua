@@ -17,6 +17,7 @@ function ItemAttribute:InitData(Data)
         return
     end
     local DefineId = Data[1].ItemDefineID
+    ugcprint_concat(UGCItemSystemV2.GetItemNameV2(DefineId.TypeSpecificID));
     local Slots = UGCItemSystemV2.GetAttachChildrenItem(DefineId) or {}
     local KenlText = ""
     if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineId.TypeSpecificID)] then
@@ -49,47 +50,57 @@ function ItemAttribute:GetEquipmentDAT(DefineID)
     local FQuality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineID)
     local customDat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID)
     local strengthenLevel = customDat.strengthenLevel
+    local ItemName = UGCItemSystemV2.GetItemNameV2(DefineID.TypeSpecificID);
+    local Attr = ItemCfg.EquipmentAttribute[ItemName]
+    local Base = Attr.Base
+    local Factor = Attr.Factor[FQuality]
     local EquipmentText = RichText.Line(
             RichText.Inline(
-                    RichText.Font(string.format('品质\t\t\t%s',ItemCfg.ItemQuality[FQuality].name), {size=20, color=ItemCfg.ItemQuality[strengthenLevel].color})
+                    RichText.Font(string.format('品质\t\t\t%s',ItemCfg.ItemQuality[FQuality].name), {size=20, color=ItemCfg.ItemQuality[FQuality].color})
             ),
             RichText.Inline(
                     RichText.Font("装备强化\t\t", { size = 18, color = 'FFFFFFFF'}),
                     RichText.Font(string.format('+%s',strengthenLevel, ItemCfg.colorTable[strengthenLevel].Text),{size=20, color=ItemCfg.colorTable[strengthenLevel].HexColor})
             ),
             RichText.Inline(
-                    RichText.Font("--生命值\t\t\t", {size=16, color = 'FFFFFFFF'}),
-                    RichText.Font("200", {size=16, color='41ff4cFF'})
+                    RichText.Font(string.format("--%s\t\t\t", AttributeMate[Base[1].property].anno), {size=16, color = 'FFFFFFFF'}),
+                    RichText.Font(tostring(math.floor(Base[1].value * Factor)), {size=16, color='41ff4cFF'})
             ),
             RichText.Inline(
-                    RichText.Font("--防御力\t\t\t", {size=16, color = 'FFFFFFFF'}),
-                    RichText.Font("200", {size=16, color='00fffcFF'})
+                    RichText.Font(string.format("--%s\t\t\t", AttributeMate[Base[2].property].anno), {size=16, color = 'FFFFFFFF'}),
+                    RichText.Font(tostring(math.floor(Base[2].value * Factor)), {size=16, color='ff8b49FF'})
             ),
             RichText.Inline(
-                    RichText.Font("--攻击力\t\t\t", {size=16, color = 'FFFFFFFF'}),
-                    RichText.Font("200", {size=16, color='ff8b49FF'})
+                    RichText.Font(string.format("--%s\t\t\t", AttributeMate[Base[3].property].anno), {size=16, color = 'FFFFFFFF'}),
+                    RichText.Font(tostring(math.floor(Base[3].value * Factor)), {size=16,  color='00fffcFF'})
             )
     )
     return EquipmentText;
 end
 
+
 --- @param DefineID ItemDefineID
 function ItemAttribute:GetKenlDAT(DefineID)
-    local KenlText = RichText.Line(
-            RichText.Inline(RichText.Font("核心属性", { size = 18, color = "FFFFFFFF" })),
-            RichText.Inline(
-                    RichText.Font("--属性一\t\t\t", { size = 16, color = "FFFFFFFF" }),
-                    RichText.Font('攻击力+10', {size=16, color='B8FFA1FF'})
-            ),
-            RichText.Inline(
-                    RichText.Font("--属性二\t\t\t", { size = 16, color = "FFFFFFFF" }),
-                    RichText.Font('攻击力+10', {size=16, color='B8FFA1FF'})
-            ),
-            RichText.Inline(
-                    RichText.Font("--属性三\t\t\t", { size = 16, color = "FFFFFFFF" }),
-                    RichText.Font('攻击力+10', {size=16, color='B8FFA1FF'})
-            )
-    )
+    local Dat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID);
+
+    if not Dat.isIdentified then
+        return RichText.Line(RichText.Font('核心属性未鉴定', {size=18, color='FFFFFFFF'}));
+    end
+    local KenlTable = {
+        RichText.Font('核心属性', {size = 20, color = "FFFFFFFF"})
+    };
+    local ItemFlag = 1
+    for k, v in ipairs(Dat.entries) do
+        local attrName = AttributeMate[v.property].anno;
+        table.insert(KenlTable,
+                RichText.Inline(
+                        RichText.Font(string.format('--属性%s\t\t\t', tostring(ItemFlag)), {size = 18, color = "FFFFFFFF"}),
+                        RichText.Font(string.format('%s+%s',attrName, v.value), {size=16, color='B8FFA1FF'})
+                )
+        )
+        ItemFlag = ItemFlag + 1;
+    end
+    local KenlText =table.concat(KenlTable, "\n");
     return KenlText;
 end
 

@@ -14,6 +14,8 @@ function RichText.EscapeText(Text)
     return Text
 end
 
+--- @param Text string
+--- @param Style table
 function RichText.Font(Text, Style)
     Style = Style or {}
 

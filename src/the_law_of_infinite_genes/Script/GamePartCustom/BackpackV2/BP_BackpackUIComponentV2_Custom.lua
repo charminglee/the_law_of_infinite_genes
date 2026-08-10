@@ -90,15 +90,15 @@ end
 
 --- 点击洗练界面按钮
 function BP_BackpackUIComponentV2_Custom:KenlReinf(DefineID, DataType)
-    ugcprint('点击洗练')
+    ReinfManager:OpenMainUI(DefineID);
 end
 
 function BP_BackpackUIComponentV2_Custom:KenlAppraisal(DefineID, DataType)
-    ugcprint('点击洗练')
+    AppraisalManager:OpenMainUI(DefineID);
 end
 
 function BP_BackpackUIComponentV2_Custom:KenlFusion(DefineID, DataType)
-    ugcprint('点击洗练')
+    ReinfManager:OpenMainUI(DefineID);
 end
 
 --- 材料合成
@@ -117,7 +117,6 @@ function BP_BackpackUIComponentV2_Custom:CheckFortify(DefineID, DataType)
 end
 
 function BP_BackpackUIComponentV2_Custom:CheckPure(DefineID, DataType)
-    --ugcprint('类型:'..UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID));
     if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID)] then
         return true;
     else
@@ -128,6 +127,9 @@ end
 --- 核心按钮显示逻辑
 function BP_BackpackUIComponentV2_Custom:CheckReinf(DefineID, DataType)
     if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.ItemType.Kenl then
+        if not LocalPlayerState.ItemDataManager:GetCustomData(DefineID).isIdentified then
+            return false;
+        end
         return true;
     else
         return false;
@@ -136,6 +138,9 @@ end
 
 function BP_BackpackUIComponentV2_Custom:CheckAppraisal(DefineID, DataType)
     if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.ItemType.Kenl then
+        if LocalPlayerState.ItemDataManager:GetCustomData(DefineID).isIdentified then
+            return false;
+        end
         return true;
     else
         return false;
@@ -144,6 +149,9 @@ end
 
 function BP_BackpackUIComponentV2_Custom:CheckFusion(DefineID, DataType)
     if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID) == ItemCfg.ItemType.Kenl then
+        if not LocalPlayerState.ItemDataManager:GetCustomData(DefineID).isIdentified then
+            return false;
+        end
         return true;
     else
         return false;

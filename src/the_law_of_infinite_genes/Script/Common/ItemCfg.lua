@@ -251,30 +251,30 @@ ItemCfg.ItemDef = {
 
 
 ItemCfg.ItemTable = {
-    [1] = {
+    Head = {
         8310021,
         8310026,
         8310031
     },
-    [2] = {
+    Face = {
         8310020,
         8310025,
         8310030,
         8310009,
     },
-    [3] = {
+    Body = {
         8310023,
         8310028,
         8310033,
         8310007,
     },
-    [4] = {
+    Legs = {
         8310019,
         8310024,
         8310029,
         8310008
     },
-    [5] = {
+    Feet = {
         8310022,
         8310027,
         8310032,
@@ -283,7 +283,7 @@ ItemCfg.ItemTable = {
     [6] = {
 
     },
-    [7] = {
+    Material = {
         8310014,
         8310015,
         8310016,
@@ -433,5 +433,78 @@ ItemCfg.Formula = {
     },
 }
 
+ItemCfg.EquipmentAttribute = {
+    ['基础帽子'] = {
+        Base = {
+            {property = Attribute.HealthMax, value = 20},
+            {property = Attribute.AttackPower, value = 20},
+            {property = Attribute.Defence, value = 10}
+        },
+        Factor = {
+            [0] = 1.00,
+            [1] = 1.20,
+            [2] = 1.60,
+            [3] = 1.80,
+            [4] = 2.00
+        }
+    },
+    ['基础脸饰'] = {
+        Base = {
+            {property = Attribute.HealthMax, value = 20},
+            {property = Attribute.AttackPower, value = 20},
+            {property = Attribute.Defence, value = 10}
+        },
+        Factor = {
+            [0] = 1.00,
+            [1] = 1.20,
+            [2] = 1.60,
+            [3] = 1.80,
+            [4] = 2.00
+        }
+    },
+    ['基础上衣'] = {
+        Base = {
+            {property = Attribute.HealthMax, value = 20},
+            {property = Attribute.AttackPower, value = 20},
+            {property = Attribute.Defence, value = 10}
+        },
+        Factor = {
+            [0] = 1.00,
+            [1] = 1.20,
+            [2] = 1.60,
+            [3] = 1.80,
+            [4] = 2.00
+        }
+    },
+    ['基础裤子'] = {
+        Base = {
+            {property = Attribute.HealthMax, value = 20},
+            {property = Attribute.AttackPower, value = 20},
+            {property = Attribute.Defence, value = 10}
+        },
+        Factor = {
+            [0] = 1.00,
+            [1] = 1.20,
+            [2] = 1.60,
+            [3] = 1.80,
+            [4] = 2.00
+        }
+    },
+    ['基础鞋子'] = {
+        Base = {
+            {property = Attribute.HealthMax, value = 20},
+            {property = Attribute.AttackPower, value = 20},
+            {property = Attribute.Defence, value = 10}
+        },
+        Factor = {
+            [0] = 1.00,
+            [1] = 1.20,
+            [2] = 1.60,
+            [3] = 1.80,
+            [4] = 2.00
+        }
+    },
+
+}
 
 return ItemCfg
