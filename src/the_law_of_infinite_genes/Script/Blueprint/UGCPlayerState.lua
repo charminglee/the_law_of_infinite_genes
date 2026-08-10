@@ -3,10 +3,6 @@
 ---@field PlayerDataManager PlayerDataManager_C
 --Edit Below--
 local UGCPlayerState = {
-    ---@type UGCPlayerController_C
-    PlayerController = nil,
-    ---@type UGCPlayerPawn_C
-    PlayerPawn = nil,
     -- 游戏记录数据表，存储玩家游戏过程中的各种统计数据
     GameRecordData = {},
     -- 游戏完成记录表，存储玩家已解锁的游戏模式
@@ -85,16 +81,6 @@ end
 
 function UGCPlayerState:ReceiveBeginPlay()
     UGCPlayerState.SuperClass.ReceiveBeginPlay(self)
-
-    self.PlayerController = UGCGameSystem.GetPlayerControllerByPlayerState(self)
-    self.PlayerPawn = UGCGameSystem.GetPlayerPawnByPlayerState(self)
-    if UE.IsValid(self.PlayerController) then
-        self.PlayerController.PlayerState = self
-    end
-    if UE.IsValid(self.PlayerPawn) then
-        self.PlayerPawn.PlayerState = self
-    end
-
     if Lib.IsServer() then
         if UGCActorComponentUtility.GetOwner(self) then
             self:HandleBeginPlayInServer()
@@ -113,14 +99,6 @@ end
 
 function UGCPlayerState:ReceiveEndPlay()
     UGCPlayerState.SuperClass.ReceiveEndPlay(self)
-
-    if UE.IsValid(self.PlayerController) then
-        self.PlayerController.PlayerState = nil
-    end
-    if UE.IsValid(self.PlayerPawn) then
-        self.PlayerPawn.PlayerState = nil
-    end
-
     if UGCGameSystem.IsServer() then
         self:UpdateGameTime()
     else

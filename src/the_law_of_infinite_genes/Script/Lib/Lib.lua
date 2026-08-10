@@ -31,9 +31,8 @@ UGCGameSystem = setmetatable({}, {
 ---@param callback function @定时器回调函数
 ---@param obj any @回调函数所在对象，静态函数传 nil 即可
 ---@param ... any @回调函数参数
----@return UGCLuaTimerInstance @定时器实例
+---@return FTimerHandle @定时器句柄
 function Lib.CreateTimer(time, isLoop, callback, obj, ...)
-    local name = Lib.Random.GenString()
     local args = {...}
     local argCount = select("#", ...)
     local f = function()
@@ -43,14 +42,15 @@ function Lib.CreateTimer(time, isLoop, callback, obj, ...)
             callback(table.unpack(args, 1, argCount))
         end
     end
-    return UGCTimerUtility.CreateLuaTimer(time, f, isLoop, name, 0, false, false)
+    local handle, _ = UGCTimerUtility.CreateUETimer(f, time, isLoop)
+    return handle
 end
 
 
 ---【双端】移除定时器。
----@param timer UGCLuaTimerInstance @定时器实例
+---@param timer FTimerHandle @定时器句柄
 function Lib.RemoveTimer(timer)
-    UGCTimerUtility.RemoveLuaTimer(timer)
+    UGCTimerUtility.RemoveUETimer(timer)
 end
 
 
@@ -116,6 +116,28 @@ end
 ---@return UClass|nil @PlayerPawn 类
 function Lib.GetPlayerPawnClass()
     return Lib.GetClass(_PP_CLS_PATH)
+end
+
+
+local function _IsPlayer(actor)
+    return UE.IsA(actor, Lib.GetPlayerControllerClass()) 
+        or UE.IsA(actor, Lib.GetPlayerStateClass()) 
+        or UE.IsA(actor, Lib.GetPlayerPawnClass())
+end
+
+
+---【双端】判断一个 actor 是否属于玩家。
+---@param actor AActor @Actor
+---@return boolean @是否是玩家
+function Lib.IsPlayer(actor)
+    if not actor then
+        return false
+    end
+    if _IsPlayer(actor) then
+        return true
+    end
+    local owner = actor:GetOwner()
+    return owner and _IsPlayer(owner)
 end
 
 

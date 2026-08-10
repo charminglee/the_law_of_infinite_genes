@@ -18,12 +18,7 @@
 ---@field ShopV2Component ShopV2Component_C
 ---@field LotteryComponent LotteryComponent_C
 --Edit Below--
-local UGCPlayerController = {
-    ---@type UGCPlayerPawn_C
-    PlayerPawn = nil,
-    ---@type UGCPlayerState_C
-    PlayerState = nil,
-}
+local UGCPlayerController = {}
 
 
 local PromiseFuture = require("common.PromiseFuture")
@@ -66,30 +61,7 @@ end
 
 function UGCPlayerController:ReceiveBeginPlay()
     UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
-    
-    self.PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
-    self.PlayerPawn = UGCGameSystem.GetPlayerPawnByPlayerController(self)
-    if UE.IsValid(self.PlayerState) then
-        self.PlayerState.PlayerController = self
-    end
-    if UE.IsValid(self.PlayerPawn) then
-        self.PlayerPawn.PlayerController = self
-    end
-
     if Lib.IsServer() then
-        Lib.CreateTimer(2, false, function()
-            -- 初始武器
-            local weaponId = Config.InitialWeapon.WeaponId
-            local bulletId = Config.InitialWeapon.BulletId
-            local ps = UGCGameSystem.GetPlayerStateByPlayerController(self)
-            local isNotFirstJoin = ps.PlayerDataManager:GetCustomData("isNotFirstJoin")
-            if isNotFirstJoin ~= 1 then
-                UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
-                UGCBackpackSystemV2.AddItemV2(self, bulletId, 300)
-                ps.PlayerDataManager:SaveCustomData("isNotFirstJoin", 1)
-            end
-        end)
-
         if GameState.IsInLobby() then
             self:HandleBeginPlayInServerForLobby()
         else
@@ -109,14 +81,6 @@ end
 
 function UGCPlayerController:ReceiveEndPlay()
     UGCPlayerController.SuperClass.ReceiveEndPlay(self)
-
-    if UE.IsValid(self.PlayerState) then
-        self.PlayerState.PlayerController = nil
-    end
-    if UE.IsValid(self.PlayerPawn) then
-        self.PlayerPawn.PlayerController = nil
-    end
-    
     if not Lib.IsServer() then
         LocalPlayerController = nil
     end
