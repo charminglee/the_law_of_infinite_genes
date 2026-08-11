@@ -1,9 +1,8 @@
----@class FortifyPreviewItem_C:UUserWidget
+---@class ReinfPreviewItem_C:UUserWidget
 ---@field CanvasPanel_Icon UCanvasPanel
 ---@field Image_Icon UImage
 ---@field Image_QualityBar UImage
 ---@field Image_QualityBarBg UImage
----@field Image_Select UImage
 ---@field TextBlock_Fortify UTextBlock
 ---@field TextBlock_Num UTextBlock
 ---@field Size FVector2D

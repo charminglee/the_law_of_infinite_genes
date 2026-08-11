@@ -1,35 +1,35 @@
 
-ReinfManager = ReinfManager or
+KenlComposeManager = KenlComposeManager or
 {
     MainUI = nil;
     ComponentClass = nil;
     DefineId = nil;
     FilterType = nil;
-    KenlType = {
+    EquipmentType = {
         [1] = {Type='ALL', Text='所有核心'}
     }
 
 }
 
-function ReinfManager:RegisterComponentClass(CompClass)
+function KenlComposeManager:RegisterComponentClass(CompClass)
 
     if CompClass ~= nil then
         self.ComponentClass = CompClass;
     end
 end
 
-function ReinfManager:RegisterMainUI(MainUI)
+function KenlComposeManager:RegisterMainUI(MainUI)
     ugcprint('注册强化界面')
     if self.MainUI == nil then
         self.MainUI = MainUI;
     end
 end
 
-function ReinfManager:UnregisterMainUI()
+function KenlComposeManager:UnregisterMainUI()
     self.MainUI = nil;
 end
 
-function ReinfManager:OpenMainUI(DefineID)
+function KenlComposeManager:OpenMainUI(DefineID)
     if self.MainUI == nil then
         return;
     end
@@ -37,7 +37,7 @@ function ReinfManager:OpenMainUI(DefineID)
     self.MainUI:Open(DefineID);
 end
 
-function ReinfManager:CloseMainUI()
+function KenlComposeManager:CloseMainUI()
     if self.MainUI == nil then
         return;
     end
@@ -46,10 +46,10 @@ function ReinfManager:CloseMainUI()
     self.MainUI:Exit();
 end
 
-function ReinfManager:GetMainUI()
+function KenlComposeManager:GetMainUI()
     return self.MainUI;
 end
 
-function ReinfManager:Reload(DefineID, FilterType)
+function KenlComposeManager:Reload(DefineID, FilterType)
     self.MainUI:Reload(DefineID, FilterType);
 end
