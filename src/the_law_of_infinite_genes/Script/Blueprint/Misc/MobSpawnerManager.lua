@@ -33,6 +33,12 @@ function MobSpawnerManager:ReceiveBeginPlay()
 end
 
 
+function MobSpawnerManager:ReceiveEndPlay()
+    MobSpawnerManager.SuperClass.ReceiveEndPlay(self)
+    GameState.MobSpawnerManager = nil
+end
+
+
 function MobSpawnerManager:_StartWave()
     self.waveIndex = self.waveIndex + 1
     self.isInSpawnInterval = false
@@ -51,6 +57,7 @@ function MobSpawnerManager:_StartWave()
     self:SetMobConfigOverride(mobConfig)
 
     self:StartSpawnerManager()
+    Lib.EventSystem.Broadcast(Event.OnWaveStart, self.waveIndex)
 end
 
 
@@ -62,7 +69,7 @@ function MobSpawnerManager:NextWave()
     end
     self.isInSpawnInterval = true
     UGCTimerUtility.CreateUETimer(
-        function()
+        function ()
             self:_StartWave()
         end, 
         Config.Common.SpawnerDelay, 

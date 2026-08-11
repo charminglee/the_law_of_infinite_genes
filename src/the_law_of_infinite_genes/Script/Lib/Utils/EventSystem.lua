@@ -179,13 +179,27 @@ function EventSystem.SendToServer(eventName, ...)
 end
 
 
----【双端】广播事件到所有客户端和服务端。
+---【双端】广播事件到服务端和所有玩家的客户端。
 ---@param eventName string @事件名
 ---@param ... any @事件参数
 function EventSystem.Broadcast(eventName, ...)
     EventSystem.Dispatch(eventName, ...)
     if Lib.IsServer() then
         EventSystem.SendToAllClients(eventName, ...)
+    else
+        EventSystem.SendToServer(eventName, ...)
+    end
+end
+
+
+---【双端】广播事件到服务端和指定玩家的客户端。
+---@param player UGCPlayerController|UGCPlayerState|UGCPlayerPawn @目标玩家的 PlayerController / PlayerState / PlayerPawn
+---@param eventName string @事件名
+---@param ... any @事件参数
+function EventSystem.Broadcast_SinglePlayer(player, eventName, ...)
+    EventSystem.Dispatch(eventName, ...)
+    if Lib.IsServer() then
+        EventSystem.SendToClient(player, eventName, ...)
     else
         EventSystem.SendToServer(eventName, ...)
     end

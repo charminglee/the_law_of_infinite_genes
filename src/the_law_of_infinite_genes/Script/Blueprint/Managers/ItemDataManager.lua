@@ -55,6 +55,7 @@ end
 
 
 ---【双端】获取物品自定义数据。
+---@param defineId ItemDefineID @物品的 ItemDefineID
 ---@return (EquipmentData|KenlData|table)? @自定义数据
 function ItemDataManager:GetCustomData(defineId)
     local data = UGCItemSystemV2.LoadItemCustomData(defineId) or {}
@@ -80,10 +81,22 @@ function ItemDataManager:_SaveCustomData(defineId, data)
     if not oldData then
         return false
     end
+    local newData = Lib.Table.DeepCopy(oldData)
     for k, v in pairs(data) do
-        oldData[k] = v
+        newData[k] = v
     end
-    return UGCItemSystemV2.SaveItemCustomData(defineId, oldData)
+    local success = UGCItemSystemV2.SaveItemCustomData(defineId, newData)
+    if success then
+        Lib.EventSystem.Broadcast_SinglePlayer(
+            self.owner,
+            Event.OnItemCustomDataUpdateAfter, 
+            self.owner.UID, 
+            defineId, 
+            oldData,
+            newData
+        )
+    end
+    return success
 end
 
 

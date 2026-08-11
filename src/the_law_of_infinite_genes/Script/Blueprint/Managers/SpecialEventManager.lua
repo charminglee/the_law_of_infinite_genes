@@ -42,7 +42,7 @@ function SpecialEventManager:TriggerSpecialEvent(specialEvent)
     -- 持续时间结束后自动触发事件结束
     local dur = Config.SpecialEvent[specialEvent].Duration
     UGCTimerUtility.CreateUETimer(
-        function() 
+        function () 
             self:StopSpecialEvent() 
         end, 
         dur, 

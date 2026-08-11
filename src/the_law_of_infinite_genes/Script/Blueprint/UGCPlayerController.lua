@@ -110,7 +110,7 @@ end
 function UGCPlayerController:HandleBeginPlayInClientForFighting()
     LobbyUtils.OpenWidget(LobbyWidgetType.LWT_RaidInstance)
     local GamePartReadyMessage = UGCGenericMessageSystem.Messages.UGC.GamePart.GamePartLoaded
-    local ChangeGamePartReady = function()
+    local ChangeGamePartReady = function ()
         self.GamePartReady = true
     end
     UGCGenericMessageSystem.ListenGlobalMessage(self, GamePartReadyMessage, self, ChangeGamePartReady)

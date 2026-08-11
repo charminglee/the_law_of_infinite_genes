@@ -131,7 +131,7 @@ function UGCGameState:CalCulateRespawnChanceCountDown()
     UnrealNetwork.RepLazyProperty(self, "CurrentRespawnChanceCountDown")
 
     if self.CurrentRespawnChanceCountDown > 0 then
-        self.RespawnChanceCountDownTimer = UGCTimerUtility.CreateLuaTimer(1, function()
+        self.RespawnChanceCountDownTimer = UGCTimerUtility.CreateLuaTimer(1, function ()
             self:CalCulateRespawnChanceCountDown()
         end, false)
     else

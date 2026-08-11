@@ -292,6 +292,9 @@ function PlayerDataManager:AddGeneTreeSkillPoint(delta, sync)
 end
 
 
+-- endregion
+
+
 -- region: 货币 ==================================================
 
 
@@ -415,6 +418,7 @@ function PlayerDataManager:LevelUpCardSlot()
 
     self._card.shopLevel = level + 1
     self:SyncCardData()
+    Lib.EventSystem.Broadcast(Event.OnCardShopLevelUpAfter, self.owner.UID, level, self._card.shopLevel)
 end
 
 

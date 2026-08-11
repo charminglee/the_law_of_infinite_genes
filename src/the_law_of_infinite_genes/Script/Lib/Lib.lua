@@ -35,7 +35,7 @@ UGCGameSystem = setmetatable({}, {
 function Lib.CreateTimer(time, isLoop, callback, obj, ...)
     local args = {...}
     local argCount = select("#", ...)
-    local f = function()
+    local f = function ()
         if obj then
             callback(obj, table.unpack(args, 1, argCount))
         else

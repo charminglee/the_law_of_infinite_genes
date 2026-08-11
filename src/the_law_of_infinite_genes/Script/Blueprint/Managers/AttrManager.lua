@@ -43,7 +43,7 @@ function AttrManager:ReceiveBeginPlay()
     }
 
     if Lib.IsServer() then
-        Lib.CreateTimer(4, false, function()
+        Lib.CreateTimer(4, false, function ()
             if not self._base then
                 self._base = {}
                 for k, v in pairs(Attribute) do

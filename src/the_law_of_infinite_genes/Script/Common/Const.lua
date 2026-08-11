@@ -3,17 +3,20 @@ local ROOT = UGCMapInfoLib.GetRootLongPackagePath().."Asset/Blueprint/"
 
 ---@enum Event
 Event = {
-    OnResetCardData         = "OnResetCardData",
-    OnRepCardData           = "OnRepCardData",
-    OnCardShopRefreshAfter  = "OnCardShopRefreshAfter",
-    OnCardEquipAfter        = "OnCardEquipAfter",
-    OnCardUnequipAfter      = "OnCardUnequipAfter",
-    OnCardPurchaseAfter     = "OnCardPurchaseAfter",
-    OnCardSellAfter         = "OnCardSellAfter",
-    OnCoinChangeAfter       = "OnCoinChangeAfter",
-    OnTitleEquipAfter       = "OnTitleEquipAfter",
-    OnTitleUnlockAfter      = "OnTitleUnlockAfter",
-    OnCardShopLevelUpAfter  = "OnCardShopLevelUpAfter",
+    OnItemCustomDataUpdateAfter = "OnItemCustomDataUpdateAfter",
+    OnWaveStart                 = "OnWaveStart",
+    OnWaveEnd                   = "OnWaveEnd",
+    OnResetCardData             = "OnResetCardData",
+    OnRepCardData               = "OnRepCardData",
+    OnCardShopRefreshAfter      = "OnCardShopRefreshAfter",
+    OnCardEquipAfter            = "OnCardEquipAfter",
+    OnCardUnequipAfter          = "OnCardUnequipAfter",
+    OnCardPurchaseAfter         = "OnCardPurchaseAfter",
+    OnCardSellAfter             = "OnCardSellAfter",
+    OnCoinChangeAfter           = "OnCoinChangeAfter",
+    OnTitleEquipAfter           = "OnTitleEquipAfter",
+    OnTitleUnlockAfter          = "OnTitleUnlockAfter",
+    OnCardShopLevelUpAfter      = "OnCardShopLevelUpAfter",
 }
 
 

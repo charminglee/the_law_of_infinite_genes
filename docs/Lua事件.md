@@ -1,6 +1,6 @@
 # Lua事件
 
-事件的监听与触发使用 `Lib.EventSystem.Listen()` 与 `Lib.EventSystem.Emit()` 实现。
+事件的监听与触发使用 `Lib.EventSystem` 库提供的接口实现。
 
 ### 监听示例
 
@@ -28,13 +28,44 @@
     Lib.EventSystem.Listen("OnCardEquipAfter", OnCardEquipAfter)
     ```
 
-### 触发示例
+### 触发接口
 
 ```lua
-Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
+Lib.EventSystem.Dispatch(eventName, ...)
+Lib.EventSystem.SendToClient(player, eventName, ...)
+Lib.EventSystem.SendToAllClients(eventName, ...)
+Lib.EventSystem.SendToServer(eventName, ...)
+Lib.EventSystem.Broadcast(eventName, ...)
 ```
 
 ## 事件列表
+
+### OnItemCustomDataUpdateAfter
+
+【双端】背包物品自定义数据更新时触发。
+
+| 序号 | 参数 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| 1 | uid | number | 玩家 UID |
+| 2 | itemDefineId | ItemDefineID | 物品的 ItemDefineId |
+| 3 | oldData | table | 旧数据 |
+| 4 | newData | table | 新数据 |
+
+### OnWaveStart
+
+【双端】波次开始时触发。
+
+| 序号 | 参数 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| 1 | waveIndex | number | 波次索引 |
+
+### OnWaveEnd
+
+【双端】波次结束时触发。
+
+| 序号 | 参数 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| 1 | waveIndex | number | 波次索引 |
 
 ### OnResetCardData
 
@@ -133,3 +164,13 @@ Lib.EventSystem.Emit("OnCardEquipAfter", fromSlot, toSlot, card)
 | --- | --- | --- | --- |
 | 1 | uid | number | 玩家 UID |
 | 2 | title | Title | 解锁的称号 |
+
+### OnCardShopLevelUpAfter
+
+【双端】卡牌商店升级后触发。
+
+| 序号 | 参数 | 类型 | 说明 |
+| --- | --- | --- | --- |
+| 1 | uid | number | 玩家 UID |
+| 2 | oldLevel | number | 升级前等级 |
+| 2 | newLevel | number | 升级后等级 |

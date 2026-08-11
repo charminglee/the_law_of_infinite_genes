@@ -11,7 +11,7 @@ function UGCPlayerPawn:ReceiveBeginPlay()
     self.IsOpenShovelAbility = true
 
     if Lib.IsServer() then
-        Lib.CreateTimer(4, false, function()
+        Lib.CreateTimer(4, false, function ()
             -- 初始武器
             local weaponId = Config.InitialWeapon.WeaponId
             local bulletId = Config.InitialWeapon.BulletId
@@ -56,7 +56,7 @@ end
 function UGCPlayerPawn:SetIsInvincible_Lua(_, PlayerKey)
     UGCPlayerPawnSystem.SetIsInvincible(UGCGameSystem.GetPlayerPawnByPlayerKey(PlayerKey), true)
     self.InvincibleTimer = UGCTimerUtility.CreateLuaTimer(
-        5, function()
+        5, function ()
             UGCPlayerPawnSystem.SetIsInvincible(UGCGameSystem.GetPlayerPawnByPlayerKey(PlayerKey), false)
         end, false
     )
