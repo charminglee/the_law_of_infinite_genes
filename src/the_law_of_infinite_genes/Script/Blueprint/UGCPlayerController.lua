@@ -1,4 +1,5 @@
 ---@class UGCPlayerController_C:BP_UGCPlayerController_C
+---@field KenlComposeComponent KenlComposeComponent_C
 ---@field AppraisalComponent ppraisalComponent_C
 ---@field ReinfComponent ReinfComponent_C
 ---@field PureComponent PureComponent_C

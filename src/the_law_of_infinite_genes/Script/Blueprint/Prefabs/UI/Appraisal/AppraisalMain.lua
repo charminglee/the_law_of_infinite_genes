@@ -1,12 +1,21 @@
 ---@class AppraisalMain_C:UAEUserWidget
+---@field Appraisal UButton
 ---@field AppraisalPreviewItem ppraisalPreviewItem_C
 ---@field BackpackList UGC_ReuseList2_C
 ---@field Button_0 UButton
 ---@field Button_1 UButton
+---@field Compose UButton
 ---@field ConsumeBox USizeBox
 ---@field ConsumeText UUTRichTextBlock
 ---@field Front UUTRichTextBlock
+---@field Image_6 UImage
+---@field Image_8 UImage
+---@field Image_12 UImage
+---@field Image_13 UImage
 ---@field Image_14 UImage
+---@field Image_16 UImage
+---@field Image_17 UImage
+---@field Reinf UButton
 ---@field TabList UGC_ReuseList2_C
 ---@field UTRichTextBlock_0 UUTRichTextBlock
 --Edit Below--
@@ -34,11 +43,23 @@ function AppraisalMain:Listen()
     self.TabList.OnUpdateItem:Add(self.TabListUpdate, self);
     self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
     self.Button_1.OnClicked:Add(self.Request, self);
+    self.Reinf.OnClicked:Add(self.ReinfClick, self);
+    self.Compose.OnClicked:Add(self.ComposeClick, self)
 end
 
 function AppraisalMain:Open(DefineID, FilterType)
     self:SetVisibility(ESlateVisibility.Visible);
     self:Reload(DefineID, FilterType);
+end
+
+function AppraisalMain:ReinfClick()
+    self:Exit();
+    ReinfManager:OpenMainUI(AppraisalManager.DefineId);
+end
+
+function AppraisalMain:ComposeClick()
+    self:Exit();
+    KenlComposeManager:OpenMainUI(AppraisalManager.DefineId);
 end
 
 function AppraisalMain:Exit()
@@ -47,7 +68,7 @@ end
 
 --- 发送请求
 function AppraisalMain:Request()
-
+    LocalPlayerState.ItemDataManager:Identify(AppraisalManager.DefineId)
 end
 
 function AppraisalMain:TabListUpdate(Item, Index)
@@ -120,6 +141,16 @@ function AppraisalMain:SetPreview(DefineID)
 end
 
 function AppraisalMain:GetAttributeText(Dat)
+    Dat = {
+        entries = {
+            {property=Attribute.AttackPower, value=200},
+            {property=Attribute.AttackPower, value=200},
+            {property=Attribute.AttackPower, value=200},
+            {property=Attribute.AttackPower, value=200}
+        },
+        isIdentified = false,
+        refineNum = 0,
+    }
     local result = {
         RichText.Font('核心属性', {size=20, color='FFFFFFFF'})
     }
@@ -127,7 +158,7 @@ function AppraisalMain:GetAttributeText(Dat)
     for k, v in ipairs(Dat.entries) do
         local attrName = AttributeMate[v.property].anno;
         table.insert(result, RichText.Inline(
-                RichText.Font(string.format('-- 属性%s', tostring(flag)), {size=18, color='FFFFFFFF'}),
+                RichText.Font(string.format('-- 属性%s\t\t', tostring(flag)), {size=18, color='FFFFFFFF'}),
                 RichText.Font(string.format('%s +%s', attrName, tostring(v.value)), {size=18, color='B8FFA1FF'})
         ))
         flag = flag + 1;
