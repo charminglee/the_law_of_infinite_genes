@@ -95,6 +95,12 @@ function RichText.Link(Text, Style)
         table.insert(AttrList, string.format('under_line="%s"', tostring(Style.under_line)))
     end
 
+    if Style.flag then
+        table.insert(AttrList, string.format('flag="%s"', tostring(Style.flag)))
+    end
+    if Style.lock then
+        table.insert(AttrList, string.format('lock="%s"', tostring(Style.lock)))
+    end
     if #AttrList <= 0 then
         return RichText.EscapeText(Text)
     end

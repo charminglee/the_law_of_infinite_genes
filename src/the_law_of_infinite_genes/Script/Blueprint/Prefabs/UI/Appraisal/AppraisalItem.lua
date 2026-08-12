@@ -32,7 +32,6 @@ function AppraisalItem:Listen()
 end
 
 function AppraisalItem:Button_0_Clicked()
-    ugcprint('clicked');
     AppraisalManager:Reload(self.DefineID, AppraisalManager.FilterType);
 end
 

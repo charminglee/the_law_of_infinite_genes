@@ -17,6 +17,7 @@ Event = {
     OnTitleEquipAfter           = "OnTitleEquipAfter",
     OnTitleUnlockAfter          = "OnTitleUnlockAfter",
     OnCardShopLevelUpAfter      = "OnCardShopLevelUpAfter",
+    OnRepAppraisalData          = "OnRepAppraisalData",
 }
 
 

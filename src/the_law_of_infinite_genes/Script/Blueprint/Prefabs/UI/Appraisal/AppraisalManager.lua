@@ -3,6 +3,7 @@ AppraisalManager = AppraisalManager or
 {
     MainUI = nil;
     ComponentClass = nil;
+    RefreshUI= false;
     DefineId = nil;
     FilterType = nil;
     KenlType = {

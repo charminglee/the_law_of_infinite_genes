@@ -37,6 +37,8 @@ end
 
 function FortifyMain:Reload(DefineID, FilterType)
     local AllItem = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
+    ugcprint('刷新数据')
+    ugcprint_concat(AllItem);
     if FilterType == nil then
         FilterType = EquipmentType[1].Type;
     end

@@ -28,6 +28,12 @@ local AppraisalMain = {
 function AppraisalMain:Construct()
 	self:LuaInit();
 end
+function AppraisalMain:Tick(MyGemetry,FGeometry)
+    if AppraisalManager.RefreshUI then
+        AppraisalManager.RefreshUI = false;
+        self:Reload(AppraisalManager.DefineId, AppraisalManager.FilterType);
+    end
+end
 
 function AppraisalMain:LuaInit()
     if self.bInitDoOnce then
@@ -68,7 +74,9 @@ end
 
 --- 发送请求
 function AppraisalMain:Request()
-    LocalPlayerState.ItemDataManager:Identify(AppraisalManager.DefineId)
+    ugcprint('点击发送请求')
+    ugcprint_concat(AppraisalManager.DefineId)
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, AppraisalManager.ComponentClass, "AppraisalSubmit", LocalPlayerController.PlayerKey, AppraisalManager.DefineId);
 end
 
 function AppraisalMain:TabListUpdate(Item, Index)
@@ -93,8 +101,10 @@ function AppraisalMain:Reload(DefineID, FilterType)
         FilterType = AppraisalManager.KenlType[1].Type;
     end
     AppraisalManager.FilterType = FilterType;
-    AppraisalManager.DefineId = DefineID;
+    AppraisalManager.DefineId = totable(DefineID);
     local AllItem = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
+    ugcprint('刷新数据')
+    ugcprint_concat(AllItem);
     self.Filter = self:FilterKenl(AllItem, FilterType)
     self.BackpackList:Reload(#self.Filter);
     self.TabList:Reload(#AppraisalManager.KenlType);
@@ -124,7 +134,7 @@ end
 
 --- @param DefineID ItemDefineID
 function AppraisalMain:SetPreview(DefineID)
-    local Dat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID.TypeSpecificID);
+    local Dat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID);
     self.AppraisalPreviewItem:SetDefineID(DefineID);
     if Dat.isIdentified then
         self.UTRichTextBlock_0:SetText('已鉴定的核心');
@@ -141,16 +151,6 @@ function AppraisalMain:SetPreview(DefineID)
 end
 
 function AppraisalMain:GetAttributeText(Dat)
-    Dat = {
-        entries = {
-            {property=Attribute.AttackPower, value=200},
-            {property=Attribute.AttackPower, value=200},
-            {property=Attribute.AttackPower, value=200},
-            {property=Attribute.AttackPower, value=200}
-        },
-        isIdentified = false,
-        refineNum = 0,
-    }
     local result = {
         RichText.Font('核心属性', {size=20, color='FFFFFFFF'})
     }

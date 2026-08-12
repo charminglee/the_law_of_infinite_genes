@@ -24,6 +24,7 @@
 local ReinfMain = {
     bInitDoOnce = false,
     Filter = {},
+    attrBuff = {},
 }
 
 function ReinfMain:Construct()
@@ -45,12 +46,12 @@ function ReinfMain:Open(DefineID, FilterType)
 end
 
 function ReinfMain:Reload(DefineID, FilterType)
+    local AllItem = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
     if FilterType == nil then
         FilterType = ReinfManager.KenlType[1].Type;
     end
     ReinfManager.FilterType = FilterType;
-    ReinfManager.DefineId = DefineID;
-    local AllItem = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
+    ReinfManager.DefineId = totable(DefineID);
     self.Filter = self:FilterKenl(AllItem, FilterType)
     self.BackpackList:Reload(#self.Filter);
     self.TabList:Reload(#ReinfManager.KenlType);
@@ -80,7 +81,7 @@ end
 
 --- @param DefineId ItemDefineID
 function ReinfMain:HasLegalKenl(DefineId)
-    if DefineId.TypeSpecificID == ItemCfg.ItemType.Kenl then
+    if UGCItemSystemV2.GetItemCustomizedTypeV2(DefineId.TypeSpecificID) == ItemCfg.ItemType.Kenl then
         local dat = LocalPlayerState.ItemDataManager:GetCustomData(DefineId);
         if dat.isIdentified then
             return true
@@ -91,8 +92,25 @@ end
 
 --- @param DefineID ItemDefineID
 function ReinfMain:SetPreview(DefineID)
-    local Dat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID.TypeSpecificID);
+    local Dat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID);
     self.ReinfPreviewItem:SetDefineID(DefineID);
+    self.attrBuff = self:GetReinfText(Dat);
+    self.UTRichTextBlock_0:SetText(table.concat(self.attrBuff, '\n'));
+end
+
+function ReinfMain:GetReinfText(Dat)
+    local result = {}
+    local flag = 1;
+    for k, v in ipairs(Dat.entries) do
+        local attrName = AttributeMate[v.property].anno;
+        table.insert(result, RichText.Inline(
+                RichText.Font(string.format('-- 属性%s\t\t', tostring(flag)), {size=18, color='FFFFFFFF'}),
+                RichText.Font(string.format('%s +%s', attrName, tostring(v.value)), {size=18, color='B8FFA1FF'}),
+                RichText.Link('\t\t锁定', {size=18, color='88FFFFFF', flag=flag, lock=0}))
+        )
+        flag = flag + 1;
+    end
+    return result
 end
 
 function ReinfMain:Listen()
@@ -101,6 +119,8 @@ function ReinfMain:Listen()
     self.Compose.OnClicked:Add(self.ComposeClick, self);
     self.TabList.OnUpdateItem:Add(self.TabListUpdate, self);
     self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
+    self.UTRichTextBlock_0.OnHyperlinkClicked:Add(self.OnHyperlinkClicked, self)
+
 end
 
 function ReinfMain:Exit()
@@ -132,4 +152,34 @@ function ReinfMain:BackpackListUpdate(Item, Index)
     Item:SetDefineID(DefineID);
     Item:SetSelected(ReinfManager.DefineId);
 end
+
+function ReinfMain:OnHyperlinkClicked(meta)
+    self:LockAttribute(meta);
+    self.UTRichTextBlock_0:SetText(table.concat(self.attrBuff));
+end
+
+function ReinfMain:LockAttribute(meta)
+    ugcprint_concat(self.attrBuff);
+    local flag = tonumber(meta.Metadata.flag);
+    ugcprint('1')
+    ugcprint_concat(ReinfManager.DefineId)
+    local Dat = LocalPlayerState.ItemDataManager:GetCustomData(ReinfManager.DefineId).entries;
+    ugcprint_concat('h');
+    local attrName = AttributeMate[Dat[flag].property].anno;
+    if meta.Metadata.lock == '0' then
+        self.attrBuff[flag] = RichText.Inline(
+                RichText.Font(string.format('-- 属性%s\t\t', tostring(flag)), {size=18, color='FFFFFFFF'}),
+                RichText.Font(string.format('%s +%s', attrName, tostring(Dat[flag].value)), {size=18, color='B8FFA1FF'}),
+                RichText.Link('\t\t解除', {size=18, color='FFFF00FF', flag=flag, lock=1})
+        )
+    else
+        self.attrBuff[flag] = RichText.Inline(
+                RichText.Font(string.format('-- 属性%s\t\t', tostring(flag)), {size=18, color='FFFFFFFF'}),
+                RichText.Font(string.format('%s +%s', attrName, tostring(Dat[flag].value)), {size=18, color='B8FFA1FF'}),
+                RichText.Link('\t\t锁定', {size=18, color='88FFFFFF', flag=flag, lock=0})
+        )
+    end
+
+end
+
 return ReinfMain

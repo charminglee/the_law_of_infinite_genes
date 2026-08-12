@@ -94,6 +94,7 @@ function BP_BackpackUIComponentV2_Custom:KenlReinf(DefineID, DataType)
 end
 
 function BP_BackpackUIComponentV2_Custom:KenlAppraisal(DefineID, DataType)
+    ugcprint_concat(DefineID)
     AppraisalManager:OpenMainUI(DefineID);
 end
 
