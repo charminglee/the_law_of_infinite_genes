@@ -31,10 +31,15 @@ function AppraisalComponent:GetAvailableServerRPCs()
 end
 
 function AppraisalComponent:OnItemCustomDataUpdateAfter(uid, itemDefineId, oldData, newData)
-    AppraisalManager.RefreshUI = true;
+    ugcprint('接收回调数据')
+    ugcprint_concat(oldData);
+    if oldData.isIdentified == false then
+        AppraisalManager.RefreshUI = true;
+    end
 end
 
 function AppraisalComponent:AppraisalSubmit(PlayerKey, DefineId)
+    ugcprint('接收请求数据')
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.ItemDataManager;
     manager:Identify(DefineId);

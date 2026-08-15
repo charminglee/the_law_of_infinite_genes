@@ -6,7 +6,9 @@ local ReinfComponent = {}
 function ReinfComponent:ReceiveBeginPlay()
     ReinfComponent.SuperClass.ReceiveBeginPlay(self);
     if Lib.IsServer() == false then
+        ReinfManager:RegisterComponentClass(self);
         self:InitUI();
+        Lib.EventSystem.Listen(Event.OnItemCustomDataUpdateAfter, self.OnItemCustomDataUpdateAfter, self);
     end
 end
 function ReinfComponent:InitUI()
@@ -21,4 +23,23 @@ function ReinfComponent:InitUI()
             end
     );
 end
+
+
+function ReinfComponent:GetAvailableServerRPCs()
+    return
+    "ReinfSubmit"
+end
+
+function ReinfComponent:OnItemCustomDataUpdateAfter(uid, itemDefineId, oldData, newData)
+    if  oldData.isIdentified == true then
+        ReinfManager.RefreshUI = true;
+    end
+end
+
+function ReinfComponent:ReinfSubmit(PlayerKey, DefineId, ...)
+    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
+    local manager = PlayerState.ItemDataManager;
+    manager:Refine(DefineId, ...);
+end
+
 return ReinfComponent

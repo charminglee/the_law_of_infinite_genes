@@ -71,6 +71,9 @@ function RichText.Image(Style)
         table.insert(AttrList, string.format('baseline="%s"', tostring(Style.baseline)))
     end
 
+    if Style.color then
+        table.insert(AttrList, string.format('color="%s"', tostring(Style.color)));
+    end
     return string.format("<pic %s/>", table.concat(AttrList, " "))
 end
 
