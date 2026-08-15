@@ -8,13 +8,7 @@ local ReplicatedStateFactory = UGCGameSystem.UGCRequire(
 local TablePaths = {
     Level = "Asset/Data/Level/UGCLevelConfig.UGCLevelConfig",
     GlobalLevel = "Asset/Data/Level/UGCLevelGlobal.UGCLevelGlobal",
-    Monster = "Asset/Data/Table/DT_MonsterDetails.DT_MonsterDetails",
-    EquipmentAffix = "Asset/Data/Table/UGCEquippmentRandomAffix.UGCEquippmentRandomAffix",
-    AffixDetails = "Asset/Data/Table/UGCAffixDetails.UGCAffixDetails",
-    SkillDetails = "Asset/Data/Table/UGCSkillDetails.UGCSkillDetails",
-    ItemAffixMap = "Asset/Data/Table/UGCItemMapAffixId.UGCItemMapAffixId",
-    GameMode = "Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig",
-    AttributeDisplay = "Asset/Data/Table/UGCTotalAttributeShowConfig.UGCTotalAttributeShowConfig",
+    GameMode = "Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig"
 }
 
 local TableCache = {}
@@ -72,41 +66,6 @@ function GameConfigRepository.GetGlobalLevelConfig()
     return GetRow("GlobalLevel", "Global")
 end
 
----获取指定怪物的详情配置。
-function GameConfigRepository.GetMonsterConfig(MonsterID)
-    return GetRow("Monster", MonsterID)
-end
-
----获取指定装备的随机词缀配置。
-function GameConfigRepository.GetEquippmentAffixConfig(EquipmentID)
-    return GetRow("EquipmentAffix", EquipmentID)
-end
-
----获取全部词缀详情配置。
-function GameConfigRepository.GetAffixDetailsAllConfig()
-    return GetTable("AffixDetails")
-end
-
----获取指定词缀的详情配置。
-function GameConfigRepository.GetAffixDetailsConfig(AffixID)
-    return GetRow("AffixDetails", AffixID)
-end
-
----获取指定技能的详情配置。
-function GameConfigRepository.GetSkillDetailsConfig(SkillID)
-    return GetRow("SkillDetails", SkillID)
-end
-
----获取全部物品与词缀映射配置。
-function GameConfigRepository.GetItemMapAffixIDAllConfig()
-    return GetTable("ItemAffixMap")
-end
-
----获取指定物品的词缀映射配置。
-function GameConfigRepository.GetItemMapAffixIDConfig(ItemID)
-    return GetRow("ItemAffixMap", ItemID)
-end
-
 ---获取指定模式的完整配置行。
 function GameConfigRepository.GetGameModeConfig(ModeID)
     return FindGameModeConfig(ModeID)
@@ -133,20 +92,6 @@ end
 function GameConfigRepository.GetUnlockModeID(ModeID)
     local Config = FindGameModeConfig(ModeID)
     return Config and Config.UnlockMode or nil
-end
-
----把游戏属性类型映射为界面显示名称。
-function GameConfigRepository.GetAttributeName(GameAttributeType)
-    if not GameAttributeType then
-        return nil
-    end
-    for _, Config in pairs(GetTable("AttributeDisplay")) do
-        local AttributeType = totable(Config.GameAttributeType)
-        if AttributeType and AttributeType.AttributeName == GameAttributeType.AttributeName then
-            return Config.AttributeName
-        end
-    end
-    return nil
 end
 
 ---获取指定模式、关卡阶段结束后的商店掉落组 ID。

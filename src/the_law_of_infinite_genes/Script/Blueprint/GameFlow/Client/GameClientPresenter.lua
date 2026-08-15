@@ -101,7 +101,7 @@ end
 ---解锁记录复制后，在大厅就绪时刷新难度锁定状态。
 ---@param PlayerState UGCPlayerState_C
 function GameClientPresenter.OnGameCompletionRecordReplicated(PlayerState)
-    if tonumber(UGCMultiMode.GetModeID()) ~= GameTypes.ModeID.Lobby then
+    if not UGCGameData.IsLobbyMode(UGCMultiMode.GetModeID()) then
         return
     end
 

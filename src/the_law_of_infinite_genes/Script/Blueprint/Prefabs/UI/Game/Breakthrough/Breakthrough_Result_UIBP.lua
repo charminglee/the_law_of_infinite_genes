@@ -4,7 +4,6 @@
 ---@field Button_Share UButton
 ---@field CanvasPanel_DataList UCanvasPanel
 ---@field HorizontalBox_2 UHorizontalBox
----@field Image_Logo UImage
 ---@field Rank UCanvasPanel
 ---@field Text_BackNumber UTextBlock
 ---@field TextBlock_0 UTextBlock
@@ -150,7 +149,7 @@ end
 
 
 function Breakthrough_Result_UIBP:ReturnToLobby()
-    UGCMultiMode.RequestMatch(1001, nil, self)
+    UGCMultiMode.RequestMatch(UGCGameData.ModeID.Lobby, nil, self)
 	return nil;
 end
 

@@ -22,41 +22,6 @@ function UGCGameData.GetGlobalLevelConfig()
     return GameFlow.Config.GetGlobalLevelConfig()
 end
 
----获取指定怪物的详情配置。
-function UGCGameData.GetMonsterConfig(MonsterID)
-    return GameFlow.Config.GetMonsterConfig(MonsterID)
-end
-
----获取指定装备的随机词缀配置。
-function UGCGameData.GetEquippmentAffixConfig(EquipmentID)
-    return GameFlow.Config.GetEquippmentAffixConfig(EquipmentID)
-end
-
----获取全部词缀详情配置。
-function UGCGameData.GetAffixDetailsAllConfig()
-    return GameFlow.Config.GetAffixDetailsAllConfig()
-end
-
----获取指定词缀的详情配置。
-function UGCGameData.GetAffixDetailsConfig(AffixID)
-    return GameFlow.Config.GetAffixDetailsConfig(AffixID)
-end
-
----获取指定技能的详情配置。
-function UGCGameData.GetSkillDetailsConfig(SkillID)
-    return GameFlow.Config.GetSkillDetailsConfig(SkillID)
-end
-
----获取全部物品与词缀映射配置。
-function UGCGameData.GetItemMapAffixIDAllConfig()
-    return GameFlow.Config.GetItemMapAffixIDAllConfig()
-end
-
----获取指定物品的词缀映射配置。
-function UGCGameData.GetItemMapAffixIDConfig(ItemID)
-    return GameFlow.Config.GetItemMapAffixIDConfig(ItemID)
-end
-
 ---获取指定模式的完整配置行。
 function UGCGameData.GetGameModeConfig(ModeID)
     return GameFlow.Config.GetGameModeConfig(ModeID)
@@ -80,11 +45,6 @@ end
 ---获取完成指定模式后可解锁的模式 ID。
 function UGCGameData.GetUnlockModeID(ModeID)
     return GameFlow.Config.GetUnlockModeID(ModeID)
-end
-
----把游戏属性类型映射为界面显示名称。
-function UGCGameData.GetAttributeName(GameAttributeType)
-    return GameFlow.Config.GetAttributeName(GameAttributeType)
 end
 
 ---获取指定模式、关卡阶段结束后的商店掉落组 ID。

@@ -1,7 +1,6 @@
 ---@class UGCGameMode_C:BP_UGCGameBase_C
 --Edit Below--
 local UGCGameMode = {}
-local UGCGameData = UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
 
 ---GameMode 生命周期入口：开启基础能力并初始化当前模式流程。
 function UGCGameMode:ReceiveBeginPlay()

@@ -3,6 +3,7 @@
 ---@field SpecialEventManager SpecialEventManager_C
 ---@field MobSpawnerManager MobSpawnerManager_C
 --Edit Below--
+UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 local UGCGameState = {}
 
 UGCGameSystem.UGCRequire("Script.Common.ue_enum_custom")
@@ -19,6 +20,7 @@ UGCGameSystem.UGCRequire("Script.Common.TweenManager")
 UGCGameSystem.UGCRequire("Script.Common.TimingListUtils")
 UGCGameSystem.UGCRequire("Script.Common.RichText")
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.UGCItem.UGCItemManager")
+UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
 
 local GameFlow = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.GameFlow")
 
@@ -153,12 +155,6 @@ end
 ---@param ID number
 function UGCGameState:MulticastRPC_EquippedTitle(UID, ID)
     ACHVManager.CacheEquippedTitle = ID
-end
-
----判断当前多模式 ID 是否处于大厅。
----@return boolean
-function UGCGameState.IsInLobby()
-    return tonumber(UGCMultiMode.GetModeID()) == GameFlow.Types.ModeID.Lobby
 end
 
 return UGCGameState
