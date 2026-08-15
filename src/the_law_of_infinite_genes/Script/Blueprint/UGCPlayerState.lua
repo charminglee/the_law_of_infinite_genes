@@ -2,452 +2,284 @@
 ---@field ItemDataManager ItemDataManager_C
 ---@field PlayerDataManager PlayerDataManager_C
 --Edit Below--
-local UGCPlayerState = {
-    -- 游戏记录数据表，存储玩家游戏过程中的各种统计数据
-    GameRecordData = {},
-    -- 游戏完成记录表，存储玩家已解锁的游戏模式
-    GameCompletionRecord = {},
-}
-
+local UGCPlayerState = {}
 
 local Delegate = require("common.Delegate")
-local PromiseFuture = require("common.PromiseFuture")
-local UGCGameData = UGCGameSystem.UGCRequire('Script.Blueprint.UGCGameData')
+local UGCGameData = UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
+local GameFlow = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.GameFlow")
 
-
--- 玩家等级变化委托，当玩家等级同步时触发（客户端）
 UGCPlayerState.PlayerLevelChangedDelegate = Delegate.New()
--- 玩家经验变化委托，当玩家经验同步时触发（客户端）
 UGCPlayerState.PlayerExpChangedDelegate = Delegate.New()
--- 玩家游戏记录数据变化委托，当游戏GameGameRecord数据同步时触发（客户端）
 UGCPlayerState.PlayerGameGameRecordDataDelegate = Delegate.New()
-
+UGCPlayerState.ReadyStateUpdateDelegate = Delegate.New()
+UGCPlayerState.OnlineStateUpdateDelegate = Delegate.New()
 
 UGCPlayerState.RespawnConfig = {}
-UGCPlayerState.GameRecordData = {
-    LevelInfo = {},                      -- 每个关卡的分数
-    TotalDamage = 0,                     -- 总伤害
-    TotalMonsterKill = 0,                -- 总击杀怪物
-    TotalMonsterKillByType = {           -- 击杀不同类型的怪物
-        Monster = 0,                     -- 普通怪物
-        EliteMonster = 0,                -- 精英怪物
-        Boss = 0                         -- BOSS
-    },
-    PlayerExp = 0,                       -- 玩家经验
-    GameTime = 0,                        -- 游戏时间
-    TotalCriticalHit = 0,                -- 总暴击
-    CurrentStage = 1,                    -- 当前关卡
-    LikeNum = 0,                         -- 点赞数
-    Likes = {},                          -- 点赞列表
-    ReceivedLikes = {},                  -- 收到的点赞列表
-}
-
-
--- 初始化结算参数表
--- 该表用于存储游戏结算相关的状态信息
-UGCPlayerState.SettleParams = {}
-UGCPlayerState.SettleParams.bIsSettled = false  -- 标记当前是否已结算
-UGCPlayerState.SettleParams.bIsFinished = true  -- 标记结算时流程是否已完成（是否胜利）
-UGCPlayerState.IsModeUnLock = false  -- 标记模式是否已解锁
---判断玩家所处的状态（Alive、Dying、Dead）
-UGCPlayerState.AliveState = UGCGameData.AliveState.Alive;
-
--- 玩家在大厅中的准备状态，初始为未准备
+UGCPlayerState.GameRecordData = GameFlow.StateFactory.NewGameRecordData()
+UGCPlayerState.GameCompletionRecord = {}
+UGCPlayerState.SettleParams = GameFlow.StateFactory.NewSettleParams()
+UGCPlayerState.IsModeUnLock = false
+UGCPlayerState.AliveState = UGCGameData.AliveState.Alive
 UGCPlayerState.bIsReadyInLobby = false
--- 准备状态更新委托，用于通知准备状态变化（客户端）
-UGCPlayerState.ReadyStateUpdateDelegate = Delegate.New()
--- 在线状态更新委托，用于通知玩家在线状态变化（客户端）
-UGCPlayerState.OnlineStateUpdateDelegate = Delegate.New()
--- 判断当前玩家是否进入传送门，判断UI显隐
 UGCPlayerState.bIsPlayerInPortalDoor = false
-
--- 玩家在线状态
-UGCPlayerState.bIsOnline = true 
-
+UGCPlayerState.bIsOnline = true
 UGCPlayerState.bIsLobbyTeamLeader = false
 
-
+---声明玩家存档、战斗统计和大厅状态等复制字段。
 function UGCPlayerState:GetReplicatedProperties()
-    return {"RespawnConfig", "Lazy"}, {"HeroID", "Lazy"}, {"GameRecordData", "Lazy"}, {"GameCompletionRecord", "Lazy"},
-    {"bIsReadyInLobby", "Lazy"}, {"SettleParams", "Lazy"}, {"bIsPlayerInPortalDoor", "Lazy"}, {"IsModeUnLock", "Lazy"},
-    {"AliveState", "Lazy"}, {"bIsOnline", "Lazy"}, {"bIsLobbyTeamLeader", "Lazy"},{"GameStartTime", "Lazy"}
+    return { "RespawnConfig", "Lazy" }, { "GameRecordData", "Lazy" },
+        { "GameCompletionRecord", "Lazy" }, { "bIsReadyInLobby", "Lazy" },
+        { "SettleParams", "Lazy" }, { "bIsPlayerInPortalDoor", "Lazy" },
+        { "IsModeUnLock", "Lazy" }, { "AliveState", "Lazy" },
+        { "bIsOnline", "Lazy" }, { "bIsLobbyTeamLeader", "Lazy" },
+        { "GameStartTime", "Lazy" }
 end
 
-
+---声明 PlayerState 不直接接收客户端 Lua RPC。
 function UGCPlayerState:GetAvailableServerRPCs()
-    return "RPC_Server_ReduceFreeReviveCount", "RPC_Server_ReducePaidReviveCount"
+    return
 end
 
+---只在服务端创建每个玩家独立的可变复制状态。
+function UGCPlayerState:InitializeRuntimeState()
+    if not UGCGameSystem.IsServer() then
+        return
+    end
+    self.RespawnConfig = {}
+    self.GameRecordData = GameFlow.StateFactory.NewGameRecordData()
+    self.GameCompletionRecord = {}
+    self.SettleParams = GameFlow.StateFactory.NewSettleParams()
+    self.IsModeUnLock = false
+    self.AliveState = UGCGameData.AliveState.Alive
+    self.bIsReadyInLobby = false
+    self.bIsPlayerInPortalDoor = false
+    self.bIsOnline = true
+    self.bIsLobbyTeamLeader = false
+end
 
+---PlayerState 生命周期入口，按运行端初始化权威数据或本地战斗展示。
 function UGCPlayerState:ReceiveBeginPlay()
     UGCPlayerState.SuperClass.ReceiveBeginPlay(self)
-    if Lib.IsServer() then
+    if UGCGameSystem.IsServer() then
+        self:InitializeRuntimeState()
         if UGCActorComponentUtility.GetOwner(self) then
             self:HandleBeginPlayInServer()
         end
-    else
-        if self == UGCGameSystem.GetLocalPlayerState() then
-            LocalPlayerState = self ---@type UGCPlayerState_C
-        end
+        return
+    end
 
-        if not GameState.IsInLobby() then
-            self:HandleBeginPlayInClientForFighting()
-        end
+    if self == UGCGameSystem.GetLocalPlayerState() then
+        LocalPlayerState = self ---@type UGCPlayerState_C
+    end
+    if not UGCGameData.IsLobbyMode(UGCMultiMode.GetModeID()) then
+        self:HandleBeginPlayInClientForFighting()
     end
 end
 
-
+---PlayerState 销毁时结算游戏时长或清理本地引用。
 function UGCPlayerState:ReceiveEndPlay()
     UGCPlayerState.SuperClass.ReceiveEndPlay(self)
     if UGCGameSystem.IsServer() then
         self:UpdateGameTime()
-    else
-        if self == UGCGameSystem.GetLocalPlayerState() then
-            LocalPlayerState = nil
-        end
+    elseif self == UGCGameSystem.GetLocalPlayerState() then
+        LocalPlayerState = nil
     end
 end
 
-
-
+---服务端初始化计时、全局消息监听、复活配置和战斗统计。
 function UGCPlayerState:HandleBeginPlayInServer()
-    UGCPlayerState.GameStartTime = UGCGameSystem.GetServerTimeSec()
-    UnrealNetwork.RepLazyProperty(self,"GameStartTime")
-    local MsgPawnSpawn = UGCGenericMessageSystem.Messages.UGC.PlayerPawn.PawnSpawn
-    local MsgPawnRespawn = UGCGenericMessageSystem.Messages.UGC.PlayerPawn.PawnRespawn
-    UGCGenericMessageSystem.ListenGlobalMessage(self, MsgPawnSpawn, self, self.OnPawnSpawn)
-    UGCGenericMessageSystem.ListenGlobalMessage(self, MsgPawnRespawn, self, self.OnPawnRespawn)
-    UGCGenericMessageSystem.ListenGlobalMessage(self, UGCGenericMessageSystem.Messages.UGC.LevelFlow.LevelBegin, self, self.UpdateCurrentStage)
+    if not UGCGameSystem.IsServer() then
+        return
+    end
 
-    -- 在玩家PostLogin之后执行初始化逻辑
-    local Message = UGCGenericMessageSystem.Messages.UGC.Player.PlayerEnter
-    UGCGenericMessageSystem.ListenGlobalMessage(self, Message, UGCActorComponentUtility.GetOwner(self), 
-        function (...)
-            self:OnPlayerEnter(...) 
-        end
-    );
+    GameFlow.Record.StartSession(self)
+    local Messages = UGCGenericMessageSystem.Messages.UGC
+    UGCGenericMessageSystem.ListenGlobalMessage(self, Messages.PlayerPawn.PawnSpawn, self, self.OnPawnSpawn)
+    UGCGenericMessageSystem.ListenGlobalMessage(self, Messages.PlayerPawn.PawnRespawn, self, self.OnPawnRespawn)
+    UGCGenericMessageSystem.ListenGlobalMessage(self, Messages.LevelFlow.LevelBegin, self, self.UpdateCurrentStage)
 
-    Message = UGCGenericMessageSystem.Messages.UGC.Player.PlayerLost
-    UGCGenericMessageSystem.ListenGlobalMessage(self, Message, UGCActorComponentUtility.GetOwner(self),
-        function (...)
-            self:OnPlayerLost(...)
-        end
-    )
-
-    Message = UGCGenericMessageSystem.Messages.UGC.Player.PlayerReconnect
-    UGCGenericMessageSystem.ListenGlobalMessage(self, Message, UGCActorComponentUtility.GetOwner(self),
-        function (...)
-            self:OnPlayerReconnect(...)
-        end
-    )
+    local Owner = UGCActorComponentUtility.GetOwner(self)
+    UGCGenericMessageSystem.ListenGlobalMessage(self, Messages.Player.PlayerEnter, Owner, function(...)
+        self:OnPlayerEnter(...)
+    end)
+    UGCGenericMessageSystem.ListenGlobalMessage(self, Messages.Player.PlayerLost, Owner, function(...)
+        self:OnPlayerLost(...)
+    end)
+    UGCGenericMessageSystem.ListenGlobalMessage(self, Messages.Player.PlayerReconnect, Owner, function(...)
+        self:OnPlayerReconnect(...)
+    end)
 
     self.OnLevelChanged = Delegate.New()
-
-    -- 获取复活配置
-    self.RespawnConfig = UGCGameData.GetRespawnConfig(UGCMultiMode.GetModeID())
-    UnrealNetwork.RepLazyProperty(self, "RespawnConfig")
-
-    -- 初始化暂时无法通
+    GameFlow.Respawn.InitializeConfig(self, UGCMultiMode.GetModeID())
     self:InitGameGameRecordData()
-
 end
 
+---组装结算界面需要的玩家展示与战绩快照。
+---@return table
+function UGCPlayerState:BuildResultPlayerData()
+    return GameFlow.ClientPresenter.BuildResultPlayerData(self)
+end
 
+---客户端战斗侧首次注册结算玩家数据。
 function UGCPlayerState:HandleBeginPlayInClientForFighting()
-    BreakthroughManager:AddOrUpdateResultPlayerState({GameRecordData = self.GameRecordData, UID = self:GetInt64UID(), IconURL = self.IconURL, Gender = self.Gender, FrameLevel = self.FrameLevel, PlayerLevel = self.PlayerLevel, PlayerName = self.PlayerName, PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)})
+    GameFlow.ClientPresenter.RegisterResultPlayerState(self)
 end
 
-
-function UGCPlayerState:OnPawnSpawn()
-    self:OnSpawnOrRespawn()
+---所属 Pawn 生成时刷新该玩家的存档快照。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCPlayerState:OnPawnSpawn(MessageOrPlayerKey, PlayerKey)
+    PlayerKey = PlayerKey or MessageOrPlayerKey
+    if PlayerKey == nil or UGCGameSystem.GetPlayerKeyByPlayerState(self) == PlayerKey then
+        self:OnSpawnOrRespawn()
+    end
 end
 
-
-function UGCPlayerState:OnPawnRespawn()
-    self:OnSpawnOrRespawn()
+---所属 Pawn 复活时刷新该玩家的存档快照。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCPlayerState:OnPawnRespawn(MessageOrPlayerKey, PlayerKey)
+    PlayerKey = PlayerKey or MessageOrPlayerKey
+    if PlayerKey == nil or UGCGameSystem.GetPlayerKeyByPlayerState(self) == PlayerKey then
+        self:OnSpawnOrRespawn()
+    end
 end
 
-
+---服务端读取所属玩家的归档数据并写入运行时 CustomData。
 function UGCPlayerState:OnSpawnOrRespawn()
-    if UGCGameSystem.IsServer() then
-        ugcprint("[UGCPlayerState:OnSpawnOrRespawn] Called")
-
-        local Uid = UGCGameSystem.GetUIDByPlayerState(self)
-        local Data = UGCPlayerStateSystem.GetPlayerArchiveData(Uid)
-        ugcprint("[UGCPlayerState] Data: " .. tostring(Data))
-        if not Data then
-            Data = {}
-        end
-        self.CustomData = Data
-
-        local ModeID = UGCMultiMode.GetModeID()
-        if ModeID == 1001 then
-            -- 大厅逻辑
-            print("[UGCPlayerState:OnSpawnOrRespawn]:初始游戏完成记录:")
-            log_tree(Data.GameCompletionRecord)
-        else
-            -- 局内逻辑
-        end
-    end
+    GameFlow.Archive.RefreshCustomData(self)
 end
 
-
-function UGCPlayerState:OnPlayerEnter(_,PlayerKey)
-    if UGCGameSystem.GetPlayerKeyByPlayerState(self) ~= PlayerKey then
-        return
-    end
-
-    self.bIsOnline = true
-    UnrealNetwork.RepLazyProperty(self, "bIsOnline")
-
-    local Uid = UGCGameSystem.GetUIDByPlayerState(self)
-    local Data = UGCPlayerStateSystem.GetPlayerArchiveData(Uid)
-    ugcprint("[UGCPlayerState] Data: "..tostring(Data))
-    if not Data then
-        Data = {}
-    end
-    if not Data.UGCPlayerLevel or Data.UGCPlayerLevel <= 0 then
-        Data.UGCPlayerLevel = 1
-    end
-    self.CustomData = Data
-    self.PlayerExp = Data.PlayerExp
-    self.UGCPlayerLevel = Data.UGCPlayerLevel
-
-    -- 获取等级配置
-    ugcprint("[UGCPlayerState] Init Level: "..tostring(self.UGCPlayerLevel))
-    ugcprint("[UGCPlayerState] Init Exp: "..tostring(self.PlayerExp))
-
-    self:InitGameCompletionRecord()
-
-    -- self:SetShowTeammatePositionUI(UGCMultiMode.GetModeID() ~= 1001)
+---所属玩家进入时恢复等级、经验和模式解锁记录。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCPlayerState:OnPlayerEnter(MessageOrPlayerKey, PlayerKey)
+    GameFlow.Archive.OnPlayerEnter(self, MessageOrPlayerKey, PlayerKey)
 end
 
-
-function UGCPlayerState:OnPlayerLost(_, PlayerKey)
+---所属玩家掉线时同步离线状态。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCPlayerState:OnPlayerLost(MessageOrPlayerKey, PlayerKey)
+    PlayerKey = PlayerKey or MessageOrPlayerKey
     if UGCGameSystem.GetPlayerKeyByPlayerState(self) == PlayerKey then
-        self.bIsOnline = false
-        UnrealNetwork.RepLazyProperty(self, "bIsOnline")
+        self:SetOnlineState(false)
     end
 end
 
-
-function UGCPlayerState:OnPlayerReconnect(_, PlayerKey)
+---所属玩家重连时同步在线状态。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCPlayerState:OnPlayerReconnect(MessageOrPlayerKey, PlayerKey)
+    PlayerKey = PlayerKey or MessageOrPlayerKey
     if UGCGameSystem.GetPlayerKeyByPlayerState(self) == PlayerKey then
-        self.bIsOnline = true
-        UnrealNetwork.RepLazyProperty(self, "bIsOnline")
+        self:SetOnlineState(true)
     end
 end
 
+---服务端设置并复制玩家在线状态。
+---@param bIsOnline boolean
+function UGCPlayerState:SetOnlineState(bIsOnline)
+    GameFlow.Archive.SetOnlineState(self, bIsOnline)
+end
 
+---等待关卡流就绪后，为每个关卡创建独立统计记录。
 function UGCPlayerState:InitGameGameRecordData()
-    PromiseFuture.New():Set(
-        function (PromiseFuture)
-            while true do
-                local TotalLevelCount = UGCLevelFlowSystem.GetTotalLevelCount()
-                if TotalLevelCount then
-                    for i = 1, TotalLevelCount do
-                        self.GameRecordData.LevelInfo[i] = {
-                            LevelDamage = 0,                 -- 该关卡总伤害
-                            LevelMonsterKill = 0,            -- 该关卡总击杀怪物
-                            LevelMonsterKillByType = {       -- 击杀不同类型的怪物
-                                Monster = 0,                 -- 普通怪物
-                                EliteMonster = 0,            -- 精英怪物
-                                Boss = 0                     -- BOSS
-                            },
-                            LevelPlayerExp = 0,              -- 该关卡总经验
-                            LevelTime = 0,                   -- 该关卡游戏时间
-                            LevelCriticalHit = 0             -- 该关卡总暴击
-                        }
-                    end
-                    UnrealNetwork.RepLazyProperty(self, "GameRecordData")
-                    return
-                end
-                PromiseFuture:Yield()
-            end
-        end
-    ):AutoResume(self, 0.2, 5)
+    GameFlow.Record.InitializeLevelRecords(self)
 end
 
-
+---合并必解锁模式与玩家存档，并保存、复制最终解锁列表。
 function UGCPlayerState:InitGameCompletionRecord()
-    ugcprint("[UGCPlayerState] InitGameCompletionRecord")
-    local UID = UGCGameSystem.GetUIDByPlayerState(self)
-    local PlayerData = UGCPlayerStateSystem.GetPlayerArchiveData(UID)
-
-    if PlayerData == nil then
-        PlayerData = {}
-    end
-
-    -- 必须解锁的关卡列表
-    local requiredLevels = {1001, 1002}
-    
-    -- 初始化或合并存档数据
-    PlayerData.GameCompletionRecord = PlayerData.GameCompletionRecord or {}
-    
-    -- 创建哈希表用于快速查找已存在关卡
-    local existingLevels = {}
-    for _, level in ipairs(PlayerData.GameCompletionRecord) do
-        existingLevels[level] = true
-    end
-    
-    -- 添加缺失的必须关卡
-    for _, level in ipairs(requiredLevels) do
-        if not existingLevels[level] then
-            table.insert(PlayerData.GameCompletionRecord, level)
-            existingLevels[level] = true  -- 更新哈希表防止重复插入
-        end
-    end
-    
-    UGCLog.Log("[UGCPlayerState:InitGameCompletionRecord]:最终游戏完成记录:")
-    log_tree(PlayerData.GameCompletionRecord)
-    self.GameCompletionRecord = PlayerData.GameCompletionRecord
-    UnrealNetwork.RepLazyProperty(self, "GameCompletionRecord")
-    UGCPlayerStateSystem.SavePlayerArchiveData(UID, PlayerData)    
+    GameFlow.Archive.InitializeCompletionRecord(self)
 end
 
-
-function UGCPlayerState:UpdateCurrentStage(CurrentStage)
-    ugcprint("UGCPlayerState:UpdateCurrentStage CurrentStage="..tostring(CurrentStage))
-    self.GameRecordData.CurrentStage = CurrentStage
-    UnrealNetwork.RepLazyProperty(self, "GameRecordData")
+---服务端更新当前关卡阶段并复制战斗统计。
+---@param MessageOrStage any
+---@param CurrentStage number|nil
+function UGCPlayerState:UpdateCurrentStage(MessageOrStage, CurrentStage)
+    GameFlow.Record.UpdateCurrentStage(self, MessageOrStage, CurrentStage)
 end
 
-
+---服务端设置并复制玩家大厅准备状态。
+---@param bIsReady boolean
 function UGCPlayerState:SetLobbyReadyStatus(bIsReady)
-    if not UGCGameSystem.IsServer() then
-        return
+    if UGCGameSystem.IsServer() then
+        self.bIsReadyInLobby = bIsReady == true
+        UnrealNetwork.RepLazyProperty(self, "bIsReadyInLobby")
     end
-    
-    self.bIsReadyInLobby = bIsReady
-    UnrealNetwork.RepLazyProperty(self, "bIsReadyInLobby")
 end
 
-
+---服务端设置并复制玩家大厅队长身份。
+---@param bIsTeamLeader boolean
 function UGCPlayerState:SetIsLobbyTeamLeader(bIsTeamLeader)
-    if not UGCGameSystem.IsServer() then
-        return
+    if UGCGameSystem.IsServer() then
+        self.bIsLobbyTeamLeader = bIsTeamLeader == true
+        UnrealNetwork.RepLazyProperty(self, "bIsLobbyTeamLeader")
     end
-
-    self.bIsLobbyTeamLeader = bIsTeamLeader
-    UnrealNetwork.RepLazyProperty(self, "bIsTeamLeader")
 end
 
+---唯一的生存状态写入口，并通知 GameState 维护全灭状态。
+---@param State number
+---@return boolean
+function UGCPlayerState:SetAliveState(State)
+    return GameFlow.Respawn.SetAliveState(self, State)
+end
 
+---服务端扣除一次免费复活次数，最小值限制为零。
 function UGCPlayerState:ReduceFreeRespawnCount()
-    self.RespawnConfig.CurrentFreeReviveCount = self.RespawnConfig.CurrentFreeReviveCount - 1
-    UnrealNetwork.RepLazyProperty(self, "RespawnConfig.CurrentFreeReviveCount")
-    ugcprint("RespawnConfigTable.CurrentFreeReviveCount = "..self.RespawnConfig.CurrentFreeReviveCount)
+    GameFlow.Respawn.ReduceFreeCount(self)
 end
 
-
+---服务端扣除一次付费复活次数，最小值限制为零。
 function UGCPlayerState:ReducePaidRespawnCount()
-    self.RespawnConfig.CurrentPaidReviveCount = self.RespawnConfig.CurrentPaidReviveCount - 1
-    UnrealNetwork.RepLazyProperty(self, "RespawnConfig.CurrentPaidReviveCount")
-    ugcprint("RespawnConfigTable.CurrentPaidReviveCount = "..self.RespawnConfig.CurrentPaidReviveCount)
+    GameFlow.Respawn.ReducePaidCount(self)
 end
 
-
+---客户端收到战绩复制后刷新结算缓存与结果界面。
 function UGCPlayerState:OnRep_GameRecordData()
-    ugcprint("[UGCPlayerState] OnRep_GameRecordData"..tostring(self.GameRecordData.TotalCriticalHit))
-    self.PlayerGameGameRecordDataDelegate(self.GameRecordData)
-    if self.SettleParams.bIsSettled then
-        BreakthroughManager:RefreshBattleResultUI()
-    end
-    BreakthroughManager:AddOrUpdateResultPlayerState({GameRecordData = self.GameRecordData, UID = self:GetInt64UID(), IconURL = self.IconURL, Gender = self.Gender, FrameLevel = self.FrameLevel, PlayerLevel = self.PlayerLevel, PlayerName = self.PlayerName, PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)})
+    GameFlow.ClientPresenter.OnGameRecordDataReplicated(self)
 end
 
-
+---客户端收到解锁记录后刷新大厅难度锁定状态。
 function UGCPlayerState:OnRep_GameCompletionRecord()
-    ugcprint(string.format("[UGCPlayerState] OnRep_GameCompletionRecord : %s", table.concat(self.GameCompletionRecord, ",")))
-
-    local function DoWork()
-        local ModeID = UGCMultiMode.GetModeID()
-        if ModeID == 1001 then
-            -- 大厅逻辑
-            LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby)
-        else
-            -- 局内逻辑
-        end
-    end
-
-    PromiseFuture.New():Set(
-            function(P)
-                while true do
-                    local GameState = UGCGameSystem.GameState
-                    local IsLobby = LobbyFlow:CurrentState() == LobbyFlowState.LFS_Lobby
-
-                    if GameState and IsLobby then
-                        DoWork()
-                        return
-                    else
-                        P:Yield()
-                    end
-                end
-            end
-    ):AutoResume(self, 0.2, 60)
+    GameFlow.ClientPresenter.OnGameCompletionRecordReplicated(self)
 end
 
-
+---客户端收到准备状态后广播委托并刷新大厅操作区。
 function UGCPlayerState:OnRep_bIsReadyInLobby()
-    local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
-    ugcprint(string.format("[UGCPlayerState:OnRep_bIsReadyInLobby] PlayerKey=%d, bIsReadyInLobby=%s", PlayerKey, tostring(self.bIsReadyInLobby)))
-
-    self.ReadyStateUpdateDelegate()
-    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, {})
+    GameFlow.ClientPresenter.OnLobbyReadyReplicated(self)
 end
 
-
+---客户端收到队长身份后广播委托并刷新大厅操作区。
 function UGCPlayerState:OnRep_bIsLobbyTeamLeader()
-    local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
-    ugcprint(string.format("[UGCPlayerState:OnRep_bIsLobbyTeamLeader] PlayerKey=%d, bIsLobbyTeamLeader=%s", PlayerKey, tostring(self.bIsLobbyTeamLeader)))
-
-    self.ReadyStateUpdateDelegate()
-    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, {})
+    GameFlow.ClientPresenter.OnLobbyLeaderReplicated(self)
 end
 
-
+---客户端收到在线状态后广播在线状态更新委托。
 function UGCPlayerState:OnRep_bIsOnline()
-    local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(self)
-    ugcprint(string.format("[UGCPlayerState:OnRep_bIsOnline] PlayerKey=%d, bIsOnline=%s", PlayerKey, tostring(self.bIsOnline)))
-
-    self.OnlineStateUpdateDelegate()
+    GameFlow.ClientPresenter.OnOnlineStateReplicated(self)
 end
 
-
+---服务端根据开始时间更新并复制累计游戏时长。
 function UGCPlayerState:UpdateGameTime()
-    self.GameRecordData.GameTime = UGCGameSystem.GetServerTimeSec() - self.GameStartTime
-    UnrealNetwork.RepLazyProperty(self, "GameRecordData.GameTime")
-    ugcprint(string.format("[UGCPlayerState] UpdateGameTime : %d", self.GameRecordData.GameTime))
+    GameFlow.Record.UpdateGameTime(self)
 end
 
+---服务端完成玩家结算，并统一处理解锁、存档和复制。
+---@param IsFinish boolean|nil
+---@return boolean
+function UGCPlayerState:Settle(IsFinish)
+    return GameFlow.Settlement.Settle(self, IsFinish)
+end
 
+---客户端收到结算参数后打开结算界面。
 function UGCPlayerState:OnRep_SettleParams()
-    print(string.format("[UGCPlayerState] OnRep_SettleParams, bIsSettled is : %s, bIsFinished is : %s", tostring(self.SettleParams.bIsSettled), tostring(self.SettleParams.bIsFinished)))
-    if self.SettleParams and self.SettleParams.bIsSettled then
-        local PC = UGCGameSystem.GetPlayerControllerByPlayerState(self)
-        if PC then
-            PC:OnGameSettle()
-        else
-            print("[UGCPlayerState:OnRep_SettleParams] : PC is nil")
-        end
-    end
+    GameFlow.ClientPresenter.OnSettleParamsReplicated(self)
 end
 
-
+---客户端收到生存状态后切换复活界面。
 function UGCPlayerState:OnRep_AliveState()
-    local PC = UGCGameSystem.GetPlayerControllerByPlayerState(self)
-    if not PC then
-        ugcprint("OnRep_AliveState: PC is nil")
-        return
-    end
-    if self.AliveState == UGCGameData.AliveState.Dying then
-        PC:OpenRespawnUI()
-    elseif self.AliveState == UGCGameData.AliveState.Dead then
-        PC:OpenRespawnUI()
-    elseif self.AliveState == UGCGameData.AliveState.Alive then
-        BreakthroughManager:CloseRespawnUI()
-    end
+    GameFlow.ClientPresenter.OnAliveStateReplicated(self)
 end
-
 
 return UGCPlayerState

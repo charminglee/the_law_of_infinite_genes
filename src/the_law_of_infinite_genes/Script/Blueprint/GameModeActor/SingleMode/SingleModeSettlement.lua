@@ -1,108 +1,38 @@
+---单人模式最终结算节点。只负责收集本关玩家并分发结算命令。
 local SingleModeSettlement = {}
-local UGCGameData = UGCGameSystem.UGCRequire('Script.Blueprint.UGCGameData')
 
-function SingleModeSettlement:LuaExecuteWithFinish(_, IsFinish)
-
-    ugcprint("Mgr2Settlement:LuaExecuteWithFinish")
-
-    -- 获取当前InstanceId内的所有玩家
-    local AllPlayer = UGCLevelFlowSystem.GetAllPlayerControllerInCurrentLevel()
-    if AllPlayer and #AllPlayer > 0 then
-
-        for k, Player in pairs(AllPlayer) do
-            
-
-            local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(Player)
-            -- 在玩家结算的时候更新游戏时间
-            PlayerState:UpdateGameTime()
-            UGCLog.Log("[SingleModeSettlement:LuaExecuteWithFinish] Player: %s , PlayerState.SettleParams.bIsSettled : %s , PlayerState.SettleParams.bIsFinished : %s", tostring(Player.PlayerKey), tostring(PlayerState.SettleParams.bIsSettled), tostring(PlayerState.SettleParams.bIsFinished))
-
-            if not PlayerState.SettleParams.bIsSettled then
-
-                if IsFinish then
-                    -- 保存玩家通关数据，将解锁的下一关保存到玩家数据中
-                    local UID = tonumber(Player.PlayerUID)
-                    ugcprint(string.format("[Mgr2Settlement:LuaExecuteWithFinish] UID: %d", UID))
-                    local PlayerData = UGCPlayerStateSystem.GetPlayerArchiveData(UID)
-
-                    if PlayerData == nil then
-                        ugcprint(string.format("[Mgr2Settlement:LuaExecuteWithFinish] UID: %d PlayerData is empty, creating new one.", UID))
-                        PlayerData = {
-                            GameCompletionRecord = {}
-                        }
-                    end
-
-                    local ModeID = UGCMultiMode.GetModeID()
-                    local UnlockModeIDs = UGCGameData.GetUnlockModeID(ModeID)
-                    PlayerState.IsModeUnLock = false
-
-                    -- 遍历所有需要解锁的模式ID
-                    for _, modeId in ipairs(UnlockModeIDs) do
-                        local bIsFind = false
-                        -- 检查是否已存在解锁记录
-                        for _, v in pairs(PlayerState.GameCompletionRecord) do
-                            if v == modeId then
-                                bIsFind = true
-                                break
-                            end
-                        end
-                        -- 如果未找到则添加新记录
-                        if not bIsFind then
-                            PlayerState.IsModeUnLock = true  -- 只要有一个新模式解锁就标记
-                            table.insert(PlayerState.GameCompletionRecord, modeId)
-                        end
-                    end
-                    UnrealNetwork.RepLazyProperty(PlayerState, "IsModeUnLock")
-                    
-                    -- UGCPlayerStateSystem.SavePlayerArchiveData(tonumber(Player.PlayerUID), PlayerData)
-
-                    -- ugcprint(string.format("[Mgr2Settlement:LuaExecuteWithFinish] UID: %d PlayerData.GameCompletionRecord: %s", UID, table.concat( PlayerData.GameCompletionRecord, ", ")))
-
-                end
-
-                -- 通知玩家结算
-                PlayerState.SettleParams.bIsSettled = true
-                PlayerState.SettleParams.bIsFinished = IsFinish == nil and true or IsFinish
-                
-                UGCLog.Log('SettleParams:bIsFinished', IsFinish)
-
-                UnrealNetwork.RepLazyProperty(PlayerState, "SettleParams")
-            end
-        end
-    else
-        ugcprint("SingleModeSettlement:LuaExecuteWithFinish AllPlayer is nil")
+---为当前关卡中的所有有效玩家执行一次幂等结算。
+---@param InstanceID any 当前关卡实例 ID，由关卡流传入
+---@param IsFinish boolean|nil nil 按成功处理，false 表示失败
+function SingleModeSettlement:LuaExecuteWithFinish(InstanceID, IsFinish)
+    if not UGCGameSystem.IsServer() then
+        return
     end
 
-end
+    local PlayerControllers = UGCLevelFlowSystem.GetAllPlayerControllerInCurrentLevel()
+    if not PlayerControllers or #PlayerControllers == 0 then
+        UGCLog.Log(
+            "[SingleModeSettlement] no player in current level, InstanceID=%s",
+            tostring(InstanceID)
+        )
+        return
+    end
 
---[[
-function SingleModeSettlement:ReceiveBeginPlay()
-    SingleModeSettlement.SuperClass.ReceiveBeginPlay(self)
-end
---]]
+    local SettledCount = 0
+    for _, PlayerController in pairs(PlayerControllers) do
+        local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(PlayerController)
+        if PlayerState and PlayerState:Settle(IsFinish) then
+            SettledCount = SettledCount + 1
+        end
+    end
 
---[[
-function SingleModeSettlement:ReceiveTick(DeltaTime)
-    SingleModeSettlement.SuperClass.ReceiveTick(self, DeltaTime)
+    UGCLog.Log(
+        "[SingleModeSettlement] InstanceID=%s, IsFinish=%s, PlayerCount=%d, SettledCount=%d",
+        tostring(InstanceID),
+        tostring(IsFinish ~= false),
+        #PlayerControllers,
+        SettledCount
+    )
 end
---]]
-
---[[
-function SingleModeSettlement:ReceiveEndPlay()
-    SingleModeSettlement.SuperClass.ReceiveEndPlay(self) 
-end
---]]
-
---[[
-function SingleModeSettlement:GetReplicatedProperties()
-    return
-end
---]]
-
---[[
-function SingleModeSettlement:GetAvailableServerRPCs()
-    return
-end
---]]
 
 return SingleModeSettlement

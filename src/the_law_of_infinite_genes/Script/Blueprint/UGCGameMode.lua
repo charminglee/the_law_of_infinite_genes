@@ -1,43 +1,45 @@
 ---@class UGCGameMode_C:BP_UGCGameBase_C
 --Edit Below--
-local UGCGameMode = {} 
+local UGCGameMode = {}
+local UGCGameData = UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
 
-
-UGCGameMode.IsStartMatch = false
-
-
+---GameMode 生命周期入口：开启基础能力并初始化当前模式流程。
 function UGCGameMode:ReceiveBeginPlay()
     UGCGameMode.SuperClass.ReceiveBeginPlay(self)
-
     self.bIsOpenShovelingAbility = true
-
-    local ModeID = UGCMultiMode.GetModeID()
-    self:InitMode(ModeID)
+    self:InitializeGameFlow(UGCMultiMode.GetModeID())
 end
 
+---服务端流程入口：绑定玩家进入事件，并启动所选模式的关卡流。
+function UGCGameMode:InitializeGameFlow(ModeID)
+    if not self.bPlayerEnterListenerBound then
+        UGCGenericMessageSystem.ListenGlobalMessage(
+            self,
+            UGCGenericMessageSystem.Messages.UGC.Player.PlayerEnter,
+            self,
+            self.PlayerEnter
+        )
+        self.bPlayerEnterListenerBound = true
+    end
 
-function UGCGameMode:InitMode(modeId)
-    -- if GameState.IsInLobby() then
-    --     -- UGCGameSystem.LoadStreamLevel("LobbySkyBox", true, false)
-    -- else
-    --     -- UGCGameSystem.LoadStreamLevel("BattleSkyBox", true, false)
-    -- end
-    UGCGenericMessageSystem.ListenGlobalMessage(self,  UGCGenericMessageSystem.Messages.UGC.Player.PlayerEnter, self, self.PlayerEnter)
-    UGCLevelFlowSystem.EnableLevelFlow(UGCGameSystem.GetUGCResourcesFullPath(UGCGameData.GetGameModeActorMgrConfig(modeId)))
+    local ActorManagerPath = UGCGameData.GetGameModeActorMgrConfig(ModeID)
+    if not ActorManagerPath then
+        ugcprint("[UGCGameMode] missing GameModeActorMgr for ModeID=" .. tostring(ModeID))
+        return false
+    end
+    UGCLevelFlowSystem.EnableLevelFlow(UGCGameSystem.GetUGCResourcesFullPath(ActorManagerPath))
+    return true
 end
 
-
-function UGCGameMode:PlayerEnter(playerKey)
+---玩家进入默认战斗模式时，通知 GameState 正式启动游戏。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCGameMode:PlayerEnter(MessageOrPlayerKey, PlayerKey)
+    PlayerKey = PlayerKey or MessageOrPlayerKey
     local ModeID = UGCMultiMode.GetModeID()
-    if ModeID == 1002 then
-        GameState:StartGame();
+    if ModeID == UGCGameData.ModeID.DefaultGameplay and UGCGameSystem.GameState then
+        UGCGameSystem.GameState:StartGame()
     end
 end
 
-
--- function UGCGameMode:ReceiveTick(DeltaTime)
-
--- end
-
-
-return UGCGameMode;
+return UGCGameMode

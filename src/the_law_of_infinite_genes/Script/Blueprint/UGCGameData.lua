@@ -1,154 +1,110 @@
+---静态配置兼容门面。旧调用保持不变，具体查询交给 GameConfigRepository。
 UGCGameData = UGCGameData or {}
 
-UGCGameData.ModeName = {
-    Lobby = "大厅",
-    SingleMode = "单人闯关",
-}
+local GameFlow = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.GameFlow")
 
-UGCGameData.AliveState = {
-    Alive = 0,
-    Dying = 1,
-    Dead = 2,
-}
+UGCGameData.ModeID = GameFlow.Types.ModeID
+UGCGameData.ModeName = GameFlow.Types.ModeName
+UGCGameData.AliveState = GameFlow.Types.AliveState
 
-function UGCGameData.GetLevelConfig(Lv)
-    return UGCGameSystem.GetTableDataByRowName(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Level/UGCLevelConfig.UGCLevelConfig'), tostring(Lv))
+---清空配置仓库缓存。
+function UGCGameData.ClearCache()
+    GameFlow.Config.ClearCache()
 end
 
+---获取指定玩家等级的成长配置。
+function UGCGameData.GetLevelConfig(Level)
+    return GameFlow.Config.GetLevelConfig(Level)
+end
+
+---获取全局等级配置。
 function UGCGameData.GetGlobalLevelConfig()
-    return UGCGameSystem.GetTableDataByRowName(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Level/UGCLevelGlobal.UGCLevelGlobal'), "Global")
+    return GameFlow.Config.GetGlobalLevelConfig()
 end
 
+---获取指定怪物的详情配置。
 function UGCGameData.GetMonsterConfig(MonsterID)
-    return UGCGameSystem.GetTableDataByRowName(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/DT_MonsterDetails.DT_MonsterDetails'), tostring(MonsterID))
+    return GameFlow.Config.GetMonsterConfig(MonsterID)
 end
 
-function UGCGameData.GetEquippmentAffixConfig(EquippmentID)
-    return UGCGameSystem.GetTableDataByRowName(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCEquippmentRandomAffix.UGCEquippmentRandomAffix'), tostring(EquippmentID))
+---获取指定装备的随机词缀配置。
+function UGCGameData.GetEquippmentAffixConfig(EquipmentID)
+    return GameFlow.Config.GetEquippmentAffixConfig(EquipmentID)
 end
 
+---获取全部词缀详情配置。
 function UGCGameData.GetAffixDetailsAllConfig()
-    return UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCAffixDetails.UGCAffixDetails'));
+    return GameFlow.Config.GetAffixDetailsAllConfig()
 end
 
+---获取指定词缀的详情配置。
 function UGCGameData.GetAffixDetailsConfig(AffixID)
-    return UGCGameSystem.GetTableDataByRowName(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCAffixDetails.UGCAffixDetails'), tostring(AffixID))
+    return GameFlow.Config.GetAffixDetailsConfig(AffixID)
 end
 
+---获取指定技能的详情配置。
 function UGCGameData.GetSkillDetailsConfig(SkillID)
-    return UGCGameSystem.GetTableDataByRowName(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCSkillDetails.UGCSkillDetails'), tostring(SkillID))
+    return GameFlow.Config.GetSkillDetailsConfig(SkillID)
 end
 
+---获取全部物品与词缀映射配置。
 function UGCGameData.GetItemMapAffixIDAllConfig()
-    return UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCItemMapAffixId.UGCItemMapAffixId'));
+    return GameFlow.Config.GetItemMapAffixIDAllConfig()
 end
 
+---获取指定物品的词缀映射配置。
 function UGCGameData.GetItemMapAffixIDConfig(ItemID)
-    return UGCGameSystem.GetTableDataByRowName(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCItemMapAffixId.UGCItemMapAffixId'), tostring(ItemID))
+    return GameFlow.Config.GetItemMapAffixIDConfig(ItemID)
 end
 
+---获取指定模式的完整配置行。
+function UGCGameData.GetGameModeConfig(ModeID)
+    return GameFlow.Config.GetGameModeConfig(ModeID)
+end
+
+---根据模式配置创建独立的复活资源快照。
 function UGCGameData.GetRespawnConfig(ModeID)
-    local RespawnConfigTable = {}
-    local GameModeConfigTable = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig'))
-    for _, GameModeConfig in pairs(GameModeConfigTable) do
-        if GameModeConfig.ModeID == ModeID then
-            if GameModeConfig.FreeReviveCount then
-                RespawnConfigTable.TotalFreeReviveCount = GameModeConfig.FreeReviveCount
-                RespawnConfigTable.CurrentFreeReviveCount = GameModeConfig.FreeReviveCount
-            else
-                ugcprint("Warning: UGCGameData.GetRespawnConfig(ModeID) Table not found FreeReviveCount")
-                RespawnConfigTable.TotalFreeReviveCount = 0
-                RespawnConfigTable.CurrentFreeReviveCount = 0
-            end
-
-            if GameModeConfig.PaidReviveCount then
-                RespawnConfigTable.TotalPaidReviveCount = GameModeConfig.PaidReviveCount
-                RespawnConfigTable.CurrentPaidReviveCount = GameModeConfig.PaidReviveCount
-            else
-                ugcprint("Warning: UGCGameData.GetRespawnConfig(ModeID) Table not found PaidReviveCount")
-                RespawnConfigTable.TotalPaidReviveCount = 0
-                RespawnConfigTable.CurrentPaidReviveCount = 0
-            end
-            
-            if GameModeConfig.Price then
-                RespawnConfigTable.CurrencyID = GameModeConfig.Price[1]
-                RespawnConfigTable.Price = GameModeConfig.Price[2]
-            end
-            if not RespawnConfigTable.CurrencyID then
-                ugcprint("Warning: UGCGameData.GetRespawnConfig(ModeID) Table not found CurrencyID")
-                RespawnConfigTable.CurrencyID = 0
-            end
-            if not RespawnConfigTable.Price then
-                ugcprint("Warning: UGCGameData.GetRespawnConfig(ModeID) Table not found Price")
-                RespawnConfigTable.Price = 0
-            end
-        end
-    end
-    return RespawnConfigTable
+    return GameFlow.Config.GetRespawnConfig(ModeID)
 end
 
+---获取指定模式的显示名称。
 function UGCGameData.GetGameModeName(ModeID)
-    local GameModeConfigTable = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig'))
-    for _, GameModeConfig in pairs(GameModeConfigTable) do
-        if GameModeConfig.ModeID == ModeID then
-            return GameModeConfig.ModeName
-        end
-    end
+    return GameFlow.Config.GetGameModeName(ModeID)
 end
 
+---获取指定模式使用的关卡流程 ActorManager 路径。
 function UGCGameData.GetGameModeActorMgrConfig(ModeID)
-    local GameModeConfigTable = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig'))
-    for _, GameModeConfig in pairs(GameModeConfigTable) do
-        if GameModeConfig.ModeID == ModeID then
-            return GameModeConfig.GameModeActorMgr
-        end
-    end
+    return GameFlow.Config.GetGameModeActorMgrConfig(ModeID)
 end
 
+---获取完成指定模式后可解锁的模式 ID。
 function UGCGameData.GetUnlockModeID(ModeID)
-    local GameModeConfigTable = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig'))
-    for _, GameModeConfig in pairs(GameModeConfigTable) do
-        if GameModeConfig.ModeID == ModeID then
-            return GameModeConfig.UnlockMode
-        end
-    end
+    return GameFlow.Config.GetUnlockModeID(ModeID)
 end
 
-function UGCGameData.GetAttributeName(GameAttrubteType)
-    local TotalAttributeShowConfig = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCTotalAttributeShowConfig.UGCTotalAttributeShowConfig'))
-    for _, Config in pairs(TotalAttributeShowConfig) do
-        local AttributeType = totable(Config.GameAttributeType)
-        if AttributeType.AttributeName == GameAttrubteType.AttributeName then
-            return Config.AttributeName
-        end
-    end
+---把游戏属性类型映射为界面显示名称。
+function UGCGameData.GetAttributeName(GameAttributeType)
+    return GameFlow.Config.GetAttributeName(GameAttributeType)
 end
 
+---获取指定模式、关卡阶段结束后的商店掉落组 ID。
 function UGCGameData.GetShopAfterLevelDropGroupID(ModeID, CurrentStage)
-    local GameModeConfigTable = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig'))
-    for _, GameModeConfig in pairs(GameModeConfigTable) do
-        if GameModeConfig.ModeID == ModeID then
-            return GameModeConfig.ShopAfterLevel[CurrentStage]
-        end
-    end
+    return GameFlow.Config.GetShopAfterLevelDropGroupID(ModeID, CurrentStage)
 end
 
+---获取指定模式结算时奖励的经验数量。
 function UGCGameData.GetSettlementExpCount(ModeID)
-    local GameModeConfigTable = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig'))
-    for _, GameModeConfig in pairs(GameModeConfigTable) do
-        if GameModeConfig.ModeID == ModeID then
-            return GameModeConfig.SettlementExpCount
-        end
-    end
+    return GameFlow.Config.GetSettlementExpCount(ModeID)
 end
 
+---获取指定模式结算时奖励的天赋点数量。
 function UGCGameData.GetSettlementTalentCount(ModeID)
-    local GameModeConfigTable = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath('Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig'))
-    for _, GameModeConfig in pairs(GameModeConfigTable) do
-        if GameModeConfig.ModeID == ModeID then
-            return GameModeConfig.SettlementTalentCount
-        end
-    end
+    return GameFlow.Config.GetSettlementTalentCount(ModeID)
+end
+
+---判断给定 ModeID 是否为大厅模式。
+function UGCGameData.IsLobbyMode(ModeID)
+    return tonumber(ModeID) == GameFlow.Types.ModeID.Lobby
 end
 
 return UGCGameData

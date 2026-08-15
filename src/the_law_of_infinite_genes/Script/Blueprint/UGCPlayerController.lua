@@ -1,7 +1,5 @@
 ---@class UGCPlayerController_C:BP_UGCPlayerController_C
 ---@field KenlComposeComponent KenlComposeComponent_C
----@field AppraisalComponent ppraisalComponent_C
----@field ReinfComponent ReinfComponent_C
 ---@field PureComponent PureComponent_C
 ---@field FortifyComponent FortifyComponent_C
 ---@field RecruitComponent RecruitComponent_C
@@ -12,7 +10,7 @@
 ---@field GlobalEventComponent GlobalEventComponent_C
 ---@field GachaComponent GachaComponent_C
 ---@field FightComponent FightComponent_C
----@field ACHVComponent CHVComponent_C
+---@field ACHVComponent ACHVComponent_C
 ---@field StoreComponent StoreComponent_C
 ---@field HomeComponent HomeComponent_C
 ---@field RankingListComponent RankingListComponent_C
@@ -21,423 +19,222 @@
 --Edit Below--
 local UGCPlayerController = {}
 
-
-local PromiseFuture = require("common.PromiseFuture")
 local Delegate = require("common.Delegate")
+local GameFlow = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.GameFlow")
 
-
--- GamePart是否加载完成
 UGCPlayerController.GamePartReady = false
--- 是否是队长
 UGCPlayerController.bIsTeamLeader = false
--- 大厅队友的PlayerKey
 UGCPlayerController.LobbyTeammatePlayerKeys = {}
--- 大厅队友PlayerKey更新时的委托 
+UGCPlayerController.LobbyInfo = GameFlow.StateFactory.NewLobbyInfo()
 UGCPlayerController.OnLobbyTeammatePlayerKeysUpdate = Delegate.New()
 
-
--- 大厅信息配置
-UGCPlayerController.LobbyInfo = {
-    -- 当前选择的模式ID（默认1002）
-    SelectedModeID = 1002,
-    -- 是否自动填充队友
-    bFillTeammate = false,
-    -- 是否队伍状态完整
-    bTeamComplete = true,
-    -- 是否在匹配中
-    bIsMatching = false
-}
-
-
+---声明允许客户端请求的服务端 RPC 白名单。
 function UGCPlayerController:GetAvailableServerRPCs()
-    return "RPC_Server_RespawnPlayer", "RPC_Server_RequestRespawn", "RPC_Server_SetLobbyReadyStatus", "RPC_Server_EnterSpectating",
-     "RPC_Server_TeleportToPortal", "RPC_Server_SetLobbySelectedModeID", "RPC_Server_SetFillTeammate", "RPC_Server_SetLobbybIsMatching","RPC_Server_LikeOther"
+    return "RPC_Server_EnterSpectating", "RPC_Server_SetLobbybIsMatching",
+        "RPC_Server_RequestRespawn", "RPC_Server_SetLobbyReadyStatus",
+        "RPC_Server_SetLobbySelectedModeID", "RPC_Server_SetFillTeammate",
+        "RPC_Server_LikeOther"
 end
 
-
+---声明 Controller 负责复制的队长、队伍成员和大厅快照字段。
 function UGCPlayerController:GetReplicatedProperties()
-    return {"bIsTeamLeader", "Lazy"}, {"LobbyTeammatePlayerKeys", "Lazy"}, {"LobbyInfo", "Lazy"}
+    return { "bIsTeamLeader", "Lazy" }, { "LobbyInfo", "Lazy" },
+        { "LobbyTeammatePlayerKeys", "Lazy" }
 end
 
+---初始化非复制客户端状态和服务端权威大厅状态。
+function UGCPlayerController:InitializeRuntimeState()
+    self.GamePartReady = false
+    GameFlow.Lobby.InitializeRuntimeState(self)
+end
 
+---Controller 生命周期入口，按服务端/客户端及大厅/战斗分派初始化。
 function UGCPlayerController:ReceiveBeginPlay()
     UGCPlayerController.SuperClass.ReceiveBeginPlay(self)
-    if Lib.IsServer() then
-        if GameState.IsInLobby() then
+    self:InitializeRuntimeState()
+
+    if UGCGameSystem.IsServer() then
+        if UGCGameData.IsLobbyMode(UGCMultiMode.GetModeID()) then
             self:HandleBeginPlayInServerForLobby()
         else
             self:HandleBeginPlayInServerForFighting()
         end
-    else
-        LocalPlayerController = self ---@type UGCPlayerController_C
+        return
+    end
 
-        if GameState.IsInLobby() then
-            self:HandleBeginPlayInClientForLobby()
-        else
-            self:HandleBeginPlayInClientForFighting()
-        end
+    LocalPlayerController = self ---@type UGCPlayerController_C
+    if UGCGameData.IsLobbyMode(UGCMultiMode.GetModeID()) then
+        self:HandleBeginPlayInClientForLobby()
+    else
+        self:HandleBeginPlayInClientForFighting()
     end
 end
 
-
+---Controller 销毁时清理客户端全局引用。
 function UGCPlayerController:ReceiveEndPlay()
     UGCPlayerController.SuperClass.ReceiveEndPlay(self)
-    if not Lib.IsServer() then
+    if not UGCGameSystem.IsServer() and LocalPlayerController == self then
         LocalPlayerController = nil
     end
 end
 
-
+---服务端大厅职责：绑定队伍进入和退出事件。
 function UGCPlayerController:HandleBeginPlayInServerForLobby()
-    LobbyFlow:Go(LobbyFlowState.LFS_Lobby)
-    UGCGenericMessageSystem.ListenGlobalMessage(self, UGCGenericMessageSystem.Messages.UGC.Player.PlayerEnter, self, self.InitInServer) -- 在PlayerEnter时初始化
-    UGCGenericMessageSystem.ListenGlobalMessage(self, UGCGenericMessageSystem.Messages.UGC.Player.PlayerExit, self, self.OnPlayerExit)
+    GameFlow.Lobby.BindServerEvents(self)
 end
 
+---服务端战斗侧初始化预留入口。
 function UGCPlayerController:HandleBeginPlayInServerForFighting()
-    local ld = UGCTeamSystem.GetTeamLeaderKeyByTeamID(UGCTeamSystem.GetTeamIDByPlayerKey(UGCGameSystem.GetPlayerKeyByPlayerController(self)))
-    print("[UGCPlayerController] HandleBeginPlayInServerForFighting "..#ld)
 end
 
-function UGCPlayerController:HandleBeginPlayInClientForLobby()    
-    LobbyFlow:Go(LobbyFlowState.LFS_Lobby)
-    local NewIndex = TimingListUtils.NewList()
-    TimingListUtils.Add(NewIndex, 0, self, "GamePartReady")
-    TimingListUtils.Add(NewIndex, 0, UGCGameSystem, "GameState", self, self.RecieveGamePartReady)
-    TimingListUtils.Activate(NewIndex, 0.2, 20)
+---客户端大厅侧初始化：进入大厅 UI 流程并等待组件就绪。
+function UGCPlayerController:HandleBeginPlayInClientForLobby()
+    GameFlow.ClientBootstrap.InitializeLobby(self)
 end
 
+---客户端战斗侧初始化：打开战斗界面并等待组件就绪。
 function UGCPlayerController:HandleBeginPlayInClientForFighting()
-    LobbyUtils.OpenWidget(LobbyWidgetType.LWT_RaidInstance)
-    local GamePartReadyMessage = UGCGenericMessageSystem.Messages.UGC.GamePart.GamePartLoaded
-    local ChangeGamePartReady = function ()
-        self.GamePartReady = true
-    end
-    UGCGenericMessageSystem.ListenGlobalMessage(self, GamePartReadyMessage, self, ChangeGamePartReady)
-    local NewIndex = TimingListUtils.NewList()
-    TimingListUtils.Add(NewIndex, 0, self, "GamePartReady")
-    TimingListUtils.Add(NewIndex, 0, UGCGameSystem, "GameState", self, self.RecieveGamePartReady)
-    TimingListUtils.Activate(NewIndex, 0.2, 20)
+    GameFlow.ClientBootstrap.InitializeFighting(self)
 end
 
-function UGCPlayerController:InitInServer(PlayerKey)
-    local bIsUGCPIE = Lib.IsPIE();
-    if PlayerKey == UGCGameSystem.GetPlayerKeyByPlayerController(self) then
-        self.bIsTeamLeader = bIsUGCPIE and PlayerKey == 10001 or UGCTeamSystem.GetIsLeaderOrNotByPlayerKey(PlayerKey)
-        UnrealNetwork.RepLazyProperty(self, "bIsTeamLeader")
-        UGCGameSystem.GetPlayerStateByPlayerController(self):SetIsLobbyTeamLeader(self.bIsTeamLeader)
-        
-        ---如果是队长则默认已准备
-        self:RPC_Server_SetLobbyReadyStatus(self.bIsTeamLeader)
-    end
-    
-    if bIsUGCPIE then
-        self.LobbyTeammatePlayerKeys = UGCTeamSystem.GetPlayerKeysByTeamID(UGCTeamSystem.GetTeamIDByPlayerKey(UGCGameSystem.GetPlayerKeyByPlayerController(self)), true)
-        -- self.LobbyTeammatePlayerKeys = {self.PlayerKey}
-    else
-        self.LobbyTeammatePlayerKeys = UGCTeamSystem.GetLobbyTeammatePlayerKeysByPlayerKey(UGCGameSystem.GetPlayerKeyByPlayerController(self))
-    end
-    UnrealNetwork.RepLazyProperty(self, "LobbyTeammatePlayerKeys")
-
-    -- 给加入游戏的队友同步大厅信息
-    if self.bIsTeamLeader then
-        if not bIsUGCPIE then
-            self.LobbyInfo.bTeamComplete = #UGCTeamSystem.GetLobbyTeammatePlayerKeysByPlayerKey(self.PlayerKey) == #UGCTeamSystem.GetLobbyTeammateUIDsByUID(UGCGameSystem.GetUIDByPlayerController(self))
-            UnrealNetwork.RepLazyProperty(self, "LobbyInfo.bTeamComplete")
-        end
-
-        for _, TeammatePlayerKey in ipairs(self.LobbyTeammatePlayerKeys) do
-            if TeammatePlayerKey == PlayerKey then
-                local PC = UGCGameSystem.GetPlayerControllerByPlayerKey(PlayerKey)
-                PC:SetLobbyInfo(self.LobbyInfo)
-                break     
-            end
-        end
-    end
+---创建时序检查，等待 GamePart 与 GameState 同时可用。
+function UGCPlayerController:WaitForGamePartReady()
+    GameFlow.ClientBootstrap.WaitForGamePartReady(self)
 end
 
-function UGCPlayerController:OnPlayerExit(PlayerKey)
-    local bIsUGCPIE = UGCBlueprintFunctionLibrary.IsUGCPIE(self)
-    
-    for Index, TeammatePlayerKey in ipairs(self.LobbyTeammatePlayerKeys) do
-        if TeammatePlayerKey == PlayerKey then
-            self.LobbyInfo.bTeamComplete = false
-            UnrealNetwork.RepLazyProperty(self, "LobbyInfo.bTeamComplete")
-        end
-    end
+---服务端刷新当前玩家的大厅队友 PlayerKey。
+function UGCPlayerController:RefreshLobbyTeammates()
+    GameFlow.Lobby.RefreshTeammates(self)
 end
 
+---玩家进入时初始化队长身份、准备状态和大厅快照。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCPlayerController:InitInServer(MessageOrPlayerKey, PlayerKey)
+    GameFlow.Lobby.OnPlayerEnter(self, MessageOrPlayerKey, PlayerKey)
+end
+
+---玩家退出时把队伍标记为不完整并同步大厅快照。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCPlayerController:OnPlayerExit(MessageOrPlayerKey, PlayerKey)
+    GameFlow.Lobby.OnPlayerExit(self, MessageOrPlayerKey, PlayerKey)
+end
+
+---GamePart 与 GameState 就绪后恢复生存 UI 和结算 UI。
 function UGCPlayerController:RecieveGamePartReady()
-    ugcprint("[UGCPlayerController] ReceiveBeginPlay GamePartReady")
-
-    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
-
-    if not PlayerState then
-        print("[UGCPlayerController:RecieveGamePartReady] PlayerState is nil")
-        return
-    end
-
-    if not PlayerState.SettleParams.bIsSettled then 
-        PlayerState:OnRep_AliveState()
-    end
-    PlayerState:OnRep_SettleParams()
+    GameFlow.ClientPresenter.OnGamePartReady(self)
 end
 
-function UGCPlayerController:SetLobbyReadyStatus(bIsReady)
-    UnrealNetwork.CallUnrealRPC(self, self, "RPC_Server_SetLobbyReadyStatus", bIsReady)
-end
-
-function UGCPlayerController:SetLobbyInfo(LobbyInfo)
-    if Lib.IsServer() == false then
-        return
-    end
-
-    print(string.format("UGCPlayerController:SetLobbyInfo ModeID=%d, bFillTeammate=%s", LobbyInfo.SelectedModeID, tostring(LobbyInfo.bFillTeammate)))
-
-    self.LobbyInfo = LobbyInfo
-    UnrealNetwork.RepLazyProperty(self, "LobbyInfo")
-end
-
-function UGCPlayerController:RPC_Server_SetLobbyReadyStatus(bIsReady)
-    UGCGameSystem.GetPlayerStateByPlayerController(self):SetLobbyReadyStatus(bIsReady)
-end
-
-function UGCPlayerController:RPC_Server_RespawnPlayer()
-
-    local pawn = UGCGameSystem.GetPlayerPawnByPlayerController(self)
-        --判断是倒地还是死亡
-    local DyingTag = UGCGameplayTagSystem.RequestGameplayTag("PawnState.Dying")
-
-    if pawn and UGCPersistEffectSystem.HasDynamicState(pawn, DyingTag) then
-        ugcprint("[UGCPlayerController:RPC_Server_RespawnPlayer]")
-        UGCPlayerPawnSystem.ConfirmRescueOtherImmediately(pawn, pawn)
-        UGCAttributeSystem.SetGameAttributeValue(
-            pawn, 
-            UGCNativeGameAttributeType.Character_Health,
-            UGCAttributeSystem.GetGameAttributeValueMax(pawn, UGCNativeGameAttributeType.Character_HealthMax)
-        )
-    else
-        local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerController(self)
-        ugcprint("UGCPlayerController:RPC_Server_RespawnPlayer")
-        UGCPlayerPawnSystem.RespawnPlayer(PlayerKey)
-
-        local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
-
-        if not PlayerState then
-            print("[UGCPlayerController:RPC_Server_RespawnPlayer]:PlayerState is nil")
-            return
-        end
-
-        PlayerState.AliveState = UGCGameData.AliveState.Alive
-        UnrealNetwork.RepLazyProperty(PlayerState, "AliveState")
-    end
-end
-
-function UGCPlayerController:OpenRespawnUI()
+---服务端处理玩家进入观战状态请求。
+function UGCPlayerController:RPC_Server_EnterSpectating()
     if UGCGameSystem.IsServer() then
-        return
+        UGCGameSystem.EnterSpectating(self)
     end
-    local ModeID = UGCMultiMode.GetModeID()
-    BreakthroughManager:OpenRespawnUI(ModeID)
 end
 
+---客户端请求修改大厅准备状态。
+---@param bIsReady boolean
+function UGCPlayerController:SetLobbyReadyStatus(bIsReady)
+    UnrealNetwork.CallUnrealRPC(self, self, "RPC_Server_SetLobbyReadyStatus", bIsReady == true)
+end
+
+---服务端将队长大厅快照复制到当前 Controller。
+---@param LobbyInfo table|nil
+function UGCPlayerController:SetLobbyInfo(LobbyInfo)
+    GameFlow.Lobby.SetLobbyInfo(self, LobbyInfo)
+end
+
+---服务端队长把当前大厅快照同步给自己和所有队友。
+function UGCPlayerController:BroadcastLobbyInfo()
+    GameFlow.Lobby.BroadcastLobbyInfo(self)
+end
+
+---服务端处理玩家准备状态请求。
+---@param bIsReady boolean
+function UGCPlayerController:RPC_Server_SetLobbyReadyStatus(bIsReady)
+    GameFlow.Lobby.SetReady(self, bIsReady)
+end
+
+---服务端执行救援或重新生成玩家。
+---@return boolean
+function UGCPlayerController:RPC_Server_RespawnPlayer()
+    return GameFlow.Respawn.ExecuteRespawn(self)
+end
+
+---客户端根据当前模式打开复活界面。
+function UGCPlayerController:OpenRespawnUI()
+    GameFlow.ClientPresenter.OpenRespawnUI()
+end
+
+---服务端校验复活次数或货币，成功后执行复活并扣除资源。
+---@param bFreeRespawn boolean
 function UGCPlayerController:RPC_Server_RequestRespawn(bFreeRespawn)
-    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
-
-    if PlayerState == nil then
-        print("[UGCPlayerController:RPC_Server_RequestRespawn] PlayerState is nil")
-        return
-    end
-
-    if bFreeRespawn then
-        self:RPC_Server_RespawnPlayer()
-        PlayerState:ReduceFreeRespawnCount()
-    else
-        local VirtualItemManager = UGCGamePartSystem.VirtualItemManager.GetGlobalActor()
-        if VirtualItemManager == nil then
-            ugcprint("UGCPlayerController:RPC_Server_RequestCoinRespawn VirtualItemManager is nil")
-            return
-        end
-        
-        local CoinItemID = PlayerState.RespawnConfig.CurrencyID
-        local Price = PlayerState.RespawnConfig.Price
-
-        VirtualItemManager:RemoveItem(self, CoinItemID, Price, 
-            function (Result)
-                if Result.bSucceeded then
-                    self:RPC_Server_RespawnPlayer()
-                    PlayerState:ReducePaidRespawnCount()
-                else
-                    ugcprint("UGCPlayerController:RPC_Server_RequestCoinRespawn Coin respawn failed")
-                end
-            end
-        )
-    end
+    GameFlow.Respawn.RequestRespawn(self, bFreeRespawn)
 end
 
+---队长切换模式后，将所有非队长成员重置为未准备。
+function UGCPlayerController:ResetTeammateReadyStates()
+    GameFlow.Lobby.ResetTeammateReadyStates(self)
+end
+
+---服务端校验队长权限、解锁状态及人数后更新所选模式。
+---@param ModeID number|string
 function UGCPlayerController:RPC_Server_SetLobbySelectedModeID(ModeID)
-    if not Lib.IsServer() then
-       return
-    end
- 
-    if not self.bIsTeamLeader then
-       print("UGCPlayerController:RPC_Server_SetLobbySelectedModeID PlayerKey="..tostring(UGCGameSystem.GetPlayerKeyByPlayerController(self)).." is not team leader!")
-       return
-    end
-
-    --队长修改模式队友取消准备
-    if self.LobbyInfo.SelectedModeID ~= ModeID then
-        self.LobbyInfo.SelectedModeID = ModeID
-        UnrealNetwork.RepLazyProperty(self, "LobbyInfo.SelectedModeID")
-
-        local LeaderPlayerKey = UGCGameSystem.GetPlayerKeyByPlayerController(self)
-        for _, PlayerKey in ipairs(self.LobbyTeammatePlayerKeys) do
-            if PlayerKey ~= LeaderPlayerKey then
-                local PC = UGCGameSystem.GetPlayerControllerByPlayerKey(PlayerKey)
-                if PC ~= nil then
-                    UGCGameSystem.GetPlayerStateByPlayerController(PC):SetLobbyReadyStatus(false)
-                    PC:SetLobbyInfo(self.LobbyInfo)
-                end
-            end
-        end
-    end
+    GameFlow.Lobby.SetSelectedMode(self, ModeID)
 end
 
+---服务端队长更新自动填充队友选项并广播大厅快照。
+---@param bFillTeammate boolean
 function UGCPlayerController:RPC_Server_SetFillTeammate(bFillTeammate)
-    if not Lib.IsServer() then
-       return
-    end
- 
-    if not self.bIsTeamLeader then
-       print("UGCGameState:Server_ChangeLobbySelectedModeID PlayerKey="..tostring(UGCGameSystem.GetPlayerKeyByPlayerController(self)).." is not team leader!")
-    end
- 
-    self.LobbyInfo.bFillTeammate = bFillTeammate
-    UnrealNetwork.RepLazyProperty(self, "LobbyInfo.bFillTeammate")
-
-    local LeaderPlayerKey = UGCGameSystem.GetPlayerKeyByPlayerController(self)
-    for _, PlayerKey in ipairs(self.LobbyTeammatePlayerKeys) do
-        if PlayerKey ~= LeaderPlayerKey then
-            local PC = UGCGameSystem.GetPlayerControllerByPlayerKey(PlayerKey)
-            if PC ~= nil then
-                PC:SetLobbyInfo(self.LobbyInfo)
-            end
-        end
-    end
+    GameFlow.Lobby.SetFillTeammate(self, bFillTeammate)
 end
 
+---服务端队长更新匹配状态并广播大厅快照。
+---@param bIsMatching boolean
 function UGCPlayerController:RPC_Server_SetLobbybIsMatching(bIsMatching)
-    if not Lib.IsServer() then
-        return
-     end
-  
-    if not self.bIsTeamLeader then
-        print("UGCGameState:Server_ChangeLobbySelectedModeID PlayerKey="..tostring(UGCGameSystem.GetPlayerKeyByPlayerController(self)).." is not team leader!")
-    end
-
-    self.LobbyInfo.bIsMatching = bIsMatching
-    UnrealNetwork.RepLazyProperty(self, "LobbyInfo.bIsMatching")
-
-    local LeaderPlayerKey = UGCGameSystem.GetPlayerKeyByPlayerController(self)
-    for _, PlayerKey in ipairs(self.LobbyTeammatePlayerKeys) do
-        if PlayerKey ~= LeaderPlayerKey then
-            local PC = UGCGameSystem.GetPlayerControllerByPlayerKey(PlayerKey)
-            if PC ~= nil then
-                PC:SetLobbyInfo(self.LobbyInfo)
-            end
-        end
-    end
+    GameFlow.Lobby.SetMatching(self, bIsMatching)
 end
 
-function UGCPlayerController:RPC_Server_LikeOther(otherPlayerKey)
-    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
-    if PlayerState == nil then
-        print("[UGCPlayerController:RPC_Server_LikeOther] PlayerState is nil")
-        return
-    end
-    
-    local otherPlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(otherPlayerKey)
-    if otherPlayerState == nil then
-        print("[UGCPlayerController:RPC_Server_LikeOther] otherPlayerState is nil")
-        return
-    end
-
-    otherPlayerState.GameRecordData.LikeNum = otherPlayerState.GameRecordData.LikeNum + 1
-
-    local PlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(PlayerState)
-    local otherPlayerKey = UGCGameSystem.GetPlayerKeyByPlayerState(otherPlayerState)
-
-    otherPlayerState.GameRecordData.ReceivedLikes[PlayerKey] = true
-    PlayerState.GameRecordData.Likes[otherPlayerKey] = true
-    
-    UnrealNetwork.RepLazyProperty(otherPlayerState, "GameRecordData")
-    UnrealNetwork.RepLazyProperty(PlayerState, "GameRecordData")
+---服务端记录一次不可重复的玩家点赞。
+---@param OtherPlayerKey number
+function UGCPlayerController:RPC_Server_LikeOther(OtherPlayerKey)
+    GameFlow.Record.LikeOther(self, OtherPlayerKey)
 end
 
+---客户端根据 PlayerState 结算快照打开战斗结果界面。
 function UGCPlayerController:OnGameSettle()
-    print("[UGCPlayerController:OnGameSettle]")
-    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
-    if not PlayerState then
-        print("[UGCPlayerController:OnGameSettle] PlayerState is nil")
-    end
-    if PlayerState then
-        ugcprint("UGCPlayerController:OnRep_bIsSettled, IsFinish: ".. tostring(PlayerState.SettleParams.bIsFinished).. "IsModeUnLock: ".. tostring(PlayerState.IsModeUnLock))
-        local ModeID = UGCMultiMode.GetModeID()
-        -- ShopV2Manager:DeactivateRandomRefreshTab()
-        BreakthroughManager:OpenBattleResultUI(ModeID, PlayerState.SettleParams.bIsFinished, PlayerState.IsModeUnLock)
-        BreakthroughManager:CloseRespawnUI()
-    end
+    GameFlow.ClientPresenter.OpenBattleResult(self)
 end
 
+---客户端收到队伍成员列表后广播本地更新委托。
 function UGCPlayerController:OnRep_LobbyTeammatePlayerKeys()
-    ugcprint("UGCPlayerController:OnRep_LobbyTeammatePlayerKeys")
-    self.OnLobbyTeammatePlayerKeysUpdate()
+    GameFlow.ClientPresenter.OnLobbyTeammatesReplicated(self)
 end
 
+---客户端收到大厅快照后交给 LobbyModel 统一应用。
 function UGCPlayerController:OnRep_LobbyInfo()
-    print(string.format("UGCPlayerController:OnRep_LobbyInfo PlayerKey=%s ModeID=%d", tostring(UGCGameSystem.GetPlayerKeyByPlayerController(self)), self.LobbyInfo.SelectedModeID))
-
-    -- if not self.LobbyInfo.bTeamComplete then
-    --     UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
-    --     return
-    -- end
-
-    LobbyModel.CurrentSelectedModeID = self.LobbyInfo.SelectedModeID
-    LobbyModel.bIsMatching = self.LobbyInfo.bIsMatching
-    LobbyEvent.OnModeSelected(self.LobbyInfo.SelectedModeID)
-    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { ModeID = self.LobbyInfo.SelectedModeID, bIsMatching = self.LobbyInfo.bIsMatching })
+    GameFlow.ClientPresenter.OnLobbyInfoReplicated(self)
 end
 
+---Pawn 状态上报入口：把权威状态写入所属 PlayerState。
+---@param State number
 function UGCPlayerController:ChangeState(State)
-    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
-
-    if PlayerState == nil then
-        print("[UGCPlayerController:ChangeState] PlayerState is nil")
+    if not UGCGameSystem.IsServer() then
         return
     end
-
-    PlayerState.AliveState = State
-    UnrealNetwork.RepLazyProperty(PlayerState, "AliveState")
-
-    if State == UGCGameData.AliveState.Dead then
-        UGCGameSystem.SetPlayerRespawnInfo(UGCGameSystem.GetPlayerKeyByPlayerController(self), true, UGCActorComponentUtility.GetActorTransform(UGCGameSystem.GetPlayerPawnByPlayerController(self)):Copy())
-        UGCGameSystem.GameState:OnPlayerDead(UGCGameSystem.GetPlayerKeyByPlayerController(self))
-    elseif State == UGCGameData.AliveState.Alive then
-        UGCGameSystem.GameState:OnPlayerAlive(UGCGameSystem.GetPlayerKeyByPlayerController(self))
+    local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(self)
+    if PlayerState then
+        GameFlow.Respawn.SetAliveState(PlayerState, State)
     end
 end
 
+---保留给蓝图调用的一次性 Lua 初始化入口。
 function UGCPlayerController:LuaInit()
-	if self.bInitDoOnce then
-		return;
-	end
-	self.bInitDoOnce = true;
-	-- [Editor Generated Lua] BindingProperty Begin:
-	-- [Editor Generated Lua] BindingProperty End;
-	
-	-- [Editor Generated Lua] BindingEvent Begin:
-	-- [Editor Generated Lua] BindingEvent End;
+    if self.bInitDoOnce then
+        return
+    end
+    self.bInitDoOnce = true
 end
-
 
 return UGCPlayerController

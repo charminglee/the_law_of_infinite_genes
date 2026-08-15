@@ -73,7 +73,6 @@ function TimingListUtils.Activate(Index, Interval, Timeout)
             TimingListUtils.TempTimingList[TempIndex] = TimingListUtils.DeepCopy(TimingListUtils.TimingList[Index])
             while #TimingListUtils.TempTimingList[TempIndex] > 0 do
                 local v = TimingListUtils.TempTimingList[TempIndex][1]
-                ugcprint("[TimingListUtils] TempTimingList: ")
 
                 local conditionMet = false
                 -- 新写法：使用条件函数

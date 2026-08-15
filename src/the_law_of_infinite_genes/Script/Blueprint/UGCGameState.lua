@@ -3,12 +3,9 @@
 ---@field SpecialEventManager SpecialEventManager_C
 ---@field MobSpawnerManager MobSpawnerManager_C
 --Edit Below--
-local UGCGameState = {
-    isWaiting = true,   -- 在大厅等待阶段时为true，否则为false
-}
+local UGCGameState = {}
 
-
-UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
+UGCGameSystem.UGCRequire("Script.Common.ue_enum_custom")
 UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
 UGCGameSystem.UGCRequire("Script.Lib.Lib")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
@@ -21,244 +18,147 @@ UGCGameSystem.UGCRequire("Script.Common.GeneTreeCfg")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
 UGCGameSystem.UGCRequire("Script.Common.TimingListUtils")
 UGCGameSystem.UGCRequire("Script.Common.RichText")
-UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
-UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Lobby.LobbyFlow")
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.UGCItem.UGCItemManager")
-UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Game.Breakthrough.BreakthroughManager")
 
+local GameFlow = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.GameFlow")
 
--- 复活机会倒计时总时长（秒）
-UGCGameState.RespawnChanceCountDown = 10
--- 当前复活机会剩余倒计时
-UGCGameState.CurrentRespawnChanceCountDown = 0
--- 死亡玩家键值表（记录已死亡玩家）
 UGCGameState.DeadPlayerKeys = {}
-
-
+UGCGameState.RespawnChanceCountDown = 10
+UGCGameState.CurrentRespawnChanceCountDown = 0
 UGCGameState.LevelStateEnum = {
-    Game = 0,    -- 进行中
-    Victory = 1, -- 胜利
-    Failure = 2, -- 失败
+    Waiting = -1,
+    Game = 0,
+    Victory = 1,
+    Failure = 2,
 }
-UGCGameState.LevelState = UGCGameState.LevelStateEnum.Game
+UGCGameState.LevelState = UGCGameState.LevelStateEnum.Waiting
 
-
+---GameState 生命周期入口：初始化全局运行状态并绑定关卡事件。
 function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
-
     self.bIsOpenShovelingAbility = true
-
+    self:InitializeRuntimeState()
     self:Listen()
-    if not Lib.IsServer() then
-        -- 原生界面修改
+
+    if not UGCGameSystem.IsServer() then
         self:SetUIWidget()
-        -- self:SetUIPosition();
     end
 end
 
+---GameState 销毁时清理全灭倒计时。
+function UGCGameState:ReceiveEndPlay()
+    GameFlow.TeamWipe.Shutdown(self)
+    UGCGameState.SuperClass.ReceiveEndPlay(self)
+end
 
+---初始化每局独立的服务端权威状态；客户端不覆盖复制属性。
+function UGCGameState:InitializeRuntimeState()
+    GameFlow.Session.Initialize(self)
+    GameFlow.TeamWipe.Initialize(self)
+end
+
+---监听关卡开始事件，用于重置每关战斗数据。
 function UGCGameState:Listen()
     UGCGenericMessageSystem.ListenGlobalMessage(self, "UGC.LevelFlow.LevelBegin", self, self.ResetData)
 end
 
-
+---重置关卡会话、全灭状态和客户端临时界面。
 function UGCGameState:ResetData()
-    self.LevelState = self.LevelStateEnum.Game
-
-    UGCGameState.DeadPlayerNum = 0
-
-    if not Lib.IsServer() and ShopV2Manager then
-        ShopV2Manager:CloseMainUI()
+    if UGCGameSystem.IsServer() then
+        GameFlow.Session.ResetLevel(self)
+        GameFlow.TeamWipe.Reset(self)
+    else
+        GameFlow.ClientPresenter.OnLevelReset()
     end
 end
 
-
+---根据已同步的队员列表与 PlayerState 判断大厅成员是否全部准备。
+---@return boolean
 function UGCGameState:IsAllLobbyTeammateReady()
-    local bIsUGCPIE = Lib.IsPIE()
-
-    local bReady = true
-    if bIsUGCPIE then --- PIE 默认全部玩家都是一个大厅队伍
-        for _, PlayerState in ipairs(self.PlayerArray) do
-            bReady = bReady and PlayerState.bIsReadyInLobby
-        end
-    else
-        local PC = UGCGameSystem.GetLocalPlayerController()
-
-        if PC ~= nil then
-            for _, PlayerKey in ipairs(PC.LobbyTeammatePlayerKeys) do
-                for _, PlayerState in ipairs(self.PlayerArray) do
-                    if UGCGameSystem.GetPlayerKeyByPlayerState(PlayerState) == PlayerKey then
-                        bReady = bReady and PlayerState.bIsReadyInLobby
-                        break
-                    end
-                end
-            end
-        else
-            bReady = false
-        end
-    end
-
-    return bReady
+    return GameFlow.Lobby.IsAllTeammatesReady(self)
 end
 
-
+---服务端在全员死亡时启动唯一的复活机会倒计时。
 function UGCGameState:StartRespawnChanceCountDown()
-    if Lib.IsServer() and self.CurrentRespawnChanceCountDown <= 0 then
-        ugcprint("UGCGameState:StartRespawnChanceCountDown")
-        self.RespawnChanceCountDownStartTime = UGCGameSystem.GetServerTimeSec()
-        self:CalCulateRespawnChanceCountDown()
-    end
+    GameFlow.TeamWipe.StartCountdown(self)
 end
 
+---移除倒计时 Timer，并把指定剩余值同步给客户端。
+---@param ReplicatedValue number
+function UGCGameState:ClearRespawnCountdown(ReplicatedValue)
+    GameFlow.TeamWipe.ClearCountdown(self, ReplicatedValue)
+end
 
+---服务端停止全灭倒计时。
 function UGCGameState:StopRespawnChanceCountDown()
-    if Lib.IsServer() and self.CurrentRespawnChanceCountDown > 0 then
-        ugcprint("UGCGameState:StopRespawnChanceCountDown")
-        if self.RespawnChanceCountDownTimer ~= nil then
-            UGCTimerUtility.RemoveLuaTimer(self.RespawnChanceCountDownTimer)
-            self.RespawnChanceCountDownTimer = nil
-        end
-
-        self.CurrentRespawnChanceCountDown = -1
-        UnrealNetwork.RepLazyProperty(self, "CurrentRespawnChanceCountDown")
-    end
+    GameFlow.TeamWipe.StopCountdown(self)
 end
 
-
+---服务端计算剩余复活时间；归零时触发失败结算。
 function UGCGameState:CalCulateRespawnChanceCountDown()
-    local CurrentTime = UGCGameSystem.GetServerTimeSec()
-    self.CurrentRespawnChanceCountDown = self.RespawnChanceCountDown - (CurrentTime - self.RespawnChanceCountDownStartTime)
-    UnrealNetwork.RepLazyProperty(self, "CurrentRespawnChanceCountDown")
-
-    if self.CurrentRespawnChanceCountDown > 0 then
-        self.RespawnChanceCountDownTimer = UGCTimerUtility.CreateLuaTimer(1, function ()
-            self:CalCulateRespawnChanceCountDown()
-        end, false)
-    else
-        -- 触发结算
-        ugcprint("UGCGameState:CalCulateRespawnChanceCountDown Begin settlement")
-        self.RespawnChanceCountDownTimer = nil
-        if #self.PlayerArray > 0 then
-            UGCLevelFlowSystem.GameSettle(false)
-        end
-    end
+    GameFlow.TeamWipe.TickCountdown(self)
 end
 
-
+---记录死亡玩家；全员死亡后启动复活机会倒计时。
+---@param PlayerKey number
 function UGCGameState:OnPlayerDead(PlayerKey)
-    if self.DeadPlayerKeys[PlayerKey] == true then
-        return
-    end
-    self.DeadPlayerKeys[PlayerKey] = true
-
-    local DeadPlayerNum = 0
-    for PlayerKey, Value in pairs(self.DeadPlayerKeys) do
-        DeadPlayerNum = DeadPlayerNum + 1
-    end
-    ugcprint("UGCGameState:OnPlayerDead Current DeadPlayerNum=" .. tostring(DeadPlayerNum))
-
-    local PlayerNum = #self.PlayerArray
-    if DeadPlayerNum >= PlayerNum then
-        self:StartRespawnChanceCountDown()
-    end
+    GameFlow.TeamWipe.OnPlayerDead(self, PlayerKey)
 end
 
-
+---移除已复活玩家；只要有人存活就取消全灭倒计时。
+---@param PlayerKey number
 function UGCGameState:OnPlayerAlive(PlayerKey)
-    if self.DeadPlayerKeys[PlayerKey] == nil then
-        return
-    end
-    self.DeadPlayerKeys[PlayerKey] = nil
-
-    local DeadPlayerNum = 0
-    for PlayerKey, Value in pairs(self.DeadPlayerKeys) do
-        DeadPlayerNum = DeadPlayerNum + 1
-    end
-    ugcprint("UGCGameState:OnPlayerAlive Current DeadPlayerNum=" .. tostring(DeadPlayerNum))
-
-    local PlayerNum = #self.PlayerArray
-    if DeadPlayerNum < PlayerNum then
-        self:StopRespawnChanceCountDown()
-    end
+    GameFlow.TeamWipe.OnPlayerAlive(self, PlayerKey)
 end
 
-
+---声明 GameState 不对客户端开放 Lua 服务端 RPC。
 function UGCGameState:GetAvailableServerRPCs()
     return
 end
 
-
+---声明需要复制的全局复活倒计时字段。
 function UGCGameState:GetReplicatedProperties()
     return { "CurrentRespawnChanceCountDown", "Lazy" }
 end
 
-
+---客户端收到倒计时复制后刷新复活界面。
 function UGCGameState:OnRep_CurrentRespawnChanceCountDown()
-    BreakthroughManager:RefreshRespawnUICountDown(self.CurrentRespawnChanceCountDown)
+    GameFlow.ClientPresenter.OnRespawnCountdownReplicated(self)
 end
 
-
-function UGCGameState:OnRep_LobbyInfo()
-    print("UGCGameState:OnRep_LobbyInfo")
-
-    LobbyModel.CurrentSelectedModeID = LobbyModel:IsModeIDValid(self.LobbyInfo.SelectedModeID)
-        and self.LobbyInfo.SelectedModeID
-        or 1001
-    LobbyEvent.OnModeSelected(self.LobbyInfo.SelectedModeID)
-    LobbyUtils.UpdateWidget(LobbyWidgetType.LWT_MainLobby, { ModeID = self.LobbyInfo.SelectedModeID })
-end
-
-
+---客户端替换主界面布局并隐藏不需要的原生控件。
 function UGCGameState:SetUIWidget()
-    -- UGCWidgetManagerSystem.HideWidget(UGCWidgetManagerSystem.GetMainControlUI());
-    local path = UGCGameSystem.GetUGCResourcesFullPath('Asset/Blueprint/MainWidget.MainWidget_C')
-    UGCWidgetManagerSystem.SetWidgetLayout(path)
-    UGCWidgetManagerSystem.GetMainControlUI().NavigatorPanel:SetVisibility(ESlateVisibility.Collapsed)
-    UGCWidgetManagerSystem.GetMainControlUI().Image_0:SetVisibility(ESlateVisibility.Collapsed)
+    GameFlow.ClientPresenter.SetMainUIWidget()
 end
 
-
+---按项目布局调整原生设置、语音和聊天控件位置。
 function UGCGameState:SetUIPosition()
-    local widget = {
-        UGCWidgetManagerSystem.GetMainControlUI().CanvasEnterSetting,
-        UGCWidgetManagerSystem.GetMainControlUI().Canvas_Speaker,
-        UGCWidgetManagerSystem.GetMainControlUI().ChatAndChatPanelCanvas
-    }
-    local vector2D = { { X = -250, Y = 52 }, { X = -250, Y = 104 }, { X = -350, Y = 156 } }
-    for k, v in pairs(widget) do
-        UGCWidgetManagerSystem.SlotAsCanvasSlot(v):SetPosition(vector2D[k])
-    end
+    GameFlow.ClientPresenter.SetMainUIPosition()
 end
 
-
----【服务端】开始游戏。
+---服务端从等待状态进入战斗，并启动第一波刷怪。
+---@return boolean
 function UGCGameState:StartGame()
-    if not Lib.IsServer() or not self.isWaiting then
-        return
-    end
-    self.isWaiting = false
-    self.MobSpawnerManager:NextWave()
+    return GameFlow.Session.Start(self)
 end
 
-
----【服务端】结束游戏。
+---服务端结束当前战斗并恢复等待状态。
+---@return boolean
 function UGCGameState:EndGame()
-    if not Lib.IsServer() or self.isWaiting then
-        return
-    end
-    self.isWaiting = true
+    return GameFlow.Session.Finish(self)
 end
 
-
-function UGCGameState:MulticastRPC_EquippedTitle(uid, id)
-    ACHVManager.CacheEquippedTitle = id
+---多播同步玩家当前装备的称号缓存。
+---@param UID number|string
+---@param ID number
+function UGCGameState:MulticastRPC_EquippedTitle(UID, ID)
+    ACHVManager.CacheEquippedTitle = ID
 end
 
-
--- 是否在大厅中
+---判断当前多模式 ID 是否处于大厅。
+---@return boolean
 function UGCGameState.IsInLobby()
-    return UGCGameData.GetGameModeName(UGCMultiMode.GetModeID()) == UGCGameData.ModeName.Lobby
+    return tonumber(UGCMultiMode.GetModeID()) == GameFlow.Types.ModeID.Lobby
 end
-
 
 return UGCGameState

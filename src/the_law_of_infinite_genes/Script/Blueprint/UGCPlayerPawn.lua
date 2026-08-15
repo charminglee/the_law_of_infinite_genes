@@ -3,126 +3,123 @@
 --Edit Below--
 local UGCPlayerPawn = {}
 
+local RESPAWN_INVINCIBLE_DURATION = 5
 
+---Pawn 生命周期入口，按运行端初始化物品、状态监听或本地引用。
 function UGCPlayerPawn:ReceiveBeginPlay()
-    UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self) 
-    
+    UGCPlayerPawn.SuperClass.ReceiveBeginPlay(self)
     self.bVaultIsOpen = true
     self.IsOpenShovelAbility = true
+    self.LastState = nil
 
     if Lib.IsServer() then
-        Lib.CreateTimer(4, false, function ()
-            -- 初始武器
-            local weaponId = Config.InitialWeapon.WeaponId
-            local bulletId = Config.InitialWeapon.BulletId
-            local pdm = UGCGameSystem.GetPlayerStateByPlayerPawn(self).PlayerDataManager
-            local isNotFirstJoin = pdm:GetCustomData("isNotFirstJoin")
-            if isNotFirstJoin ~= 1 then
-                UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
-                UGCBackpackSystemV2.AddItemV2(self, bulletId, 300)
-                pdm:SaveCustomData("isNotFirstJoin", 1)
-            end
-        end)
+        self:InitializeStarterItems()
         self:InitInServer()
-    else
-        if self == UGCGameSystem.GetLocalPlayerPawn() then
-            LocalPlayerPawn = self ---@type UGCPlayerPawn_C
-        end
-
-        self:OnRep_CoverAllAvatarMeshInfo()
+        return
     end
+
+    if self == UGCGameSystem.GetLocalPlayerPawn() then
+        LocalPlayerPawn = self ---@type UGCPlayerPawn_C
+    end
+    self:OnRep_CoverAllAvatarMeshInfo()
 end
 
-
+---Pawn 销毁时清理无敌 Timer 和本地 Pawn 引用。
 function UGCPlayerPawn:ReceiveEndPlay()
     UGCPlayerPawn.SuperClass.ReceiveEndPlay(self)
+    if self.InvincibleTimer then
+        UGCTimerUtility.RemoveLuaTimer(self.InvincibleTimer)
+        self.InvincibleTimer = nil
+    end
     if not Lib.IsServer() and self == UGCGameSystem.GetLocalPlayerPawn() then
         LocalPlayerPawn = nil
     end
 end
 
+---服务端一次性发放初始物品；存档标记归 PlayerDataManager 管理。
+function UGCPlayerPawn:InitializeStarterItems()
+    Lib.CreateTimer(4, false, function ()
+        -- 初始武器
+        local weaponId = Config.InitialWeapon.WeaponId
+        local bulletId = Config.InitialWeapon.BulletId
+        local pdm = UGCGameSystem.GetPlayerStateByPlayerPawn(self).PlayerDataManager
+        local isNotFirstJoin = pdm:GetCustomData("isNotFirstJoin")
+        if isNotFirstJoin ~= 1 then
+            UGCBackpackSystemV2.AddItemV2(self, weaponId, 1)
+            UGCBackpackSystemV2.AddItemV2(self, bulletId, 300)
+            pdm:SaveCustomData("isNotFirstJoin", 1)
+        end
+    end)
+end
 
+---服务端关闭死亡盒、监听复活消息并绑定动态状态变化。
 function UGCPlayerPawn:InitInServer()
-    -- 玩家死亡不生成死亡盒子
     UGCPlayerPawnSystem.SkipSpawnDeadTombBox(self, true)
-
-    -- 玩家每次出生或者复活后无敌一段时间
-    UGCGenericMessageSystem.ListenGlobalMessage(self, UGCGenericMessageSystem.Messages.UGC.PlayerPawn.PawnRespawn, self, self.SetIsInvincible_Lua)
-
-    self.DynamicStateEnterHandle:Add(self.ChangeState, self)
-end
-
-
-function UGCPlayerPawn:SetIsInvincible_Lua(_, PlayerKey)
-    UGCPlayerPawnSystem.SetIsInvincible(UGCGameSystem.GetPlayerPawnByPlayerKey(PlayerKey), true)
-    self.InvincibleTimer = UGCTimerUtility.CreateLuaTimer(
-        5, function ()
-            UGCPlayerPawnSystem.SetIsInvincible(UGCGameSystem.GetPlayerPawnByPlayerKey(PlayerKey), false)
-        end, false
+    UGCGenericMessageSystem.ListenGlobalMessage(
+        self,
+        UGCGenericMessageSystem.Messages.UGC.PlayerPawn.PawnRespawn,
+        self,
+        self.SetIsInvincible_Lua
     )
+    self.DynamicStateEnterHandle:Add(self.ChangeState, self)
+    if self.DynamicStateExitHandle then
+        self.DynamicStateExitHandle:Add(self.ChangeState, self)
+    end
 end
 
+---目标 Pawn 复活后获得一段限时无敌效果。
+---@param MessageOrPlayerKey any
+---@param PlayerKey number|nil
+function UGCPlayerPawn:SetIsInvincible_Lua(MessageOrPlayerKey, PlayerKey)
+    PlayerKey = PlayerKey or MessageOrPlayerKey
+    local OwnPlayerKey = UGCGameSystem.GetPlayerKeyByPlayerPawn(self)
+    if PlayerKey ~= OwnPlayerKey then
+        return
+    end
+    if self.InvincibleTimer then
+        UGCTimerUtility.RemoveLuaTimer(self.InvincibleTimer)
+    end
 
+    UGCPlayerPawnSystem.SetIsInvincible(self, true)
+    self.InvincibleTimer = UGCTimerUtility.CreateLuaTimer(RESPAWN_INVINCIBLE_DURATION, function()
+        self.InvincibleTimer = nil
+        UGCPlayerPawnSystem.SetIsInvincible(self, false)
+    end, false)
+end
+
+---Pawn 只解释 GameplayTag，并把生存状态上报给 Controller。
 function UGCPlayerPawn:ChangeState(CurState)
-    ugcprint("[UGCPlayerPawn:ChangeState]")
-    -- 获取状态标签
+    if not Lib.IsServer() then
+        return
+    end
+
     local DyingTag = UGCGameplayTagSystem.RequestGameplayTag("PawnState.Dying")
     local DeadTag = UGCGameplayTagSystem.RequestGameplayTag("PawnState.Dead")
-    
-    if not Lib.IsServer() then 
-        return 
+    local bDying = UGCGameplayTagSystem.IsValidTag(DyingTag)
+        and UGCPersistEffectSystem.HasDynamicState(self, DyingTag)
+    local bDead = UGCGameplayTagSystem.IsValidTag(DeadTag)
+        and UGCPersistEffectSystem.HasDynamicState(self, DeadTag)
+
+    local NewState = UGCGameData.AliveState.Alive
+    if bDead then
+        NewState = UGCGameData.AliveState.Dead
+    elseif bDying then
+        NewState = UGCGameData.AliveState.Dying
     end
-    ugcprint("[UGCPlayerPawn:ChangeState] : IsServer")
-    -- 处理倒地状态
-    if UGCGameplayTagSystem.IsValidTag(DyingTag) and UGCPersistEffectSystem.HasDynamicState(self, DyingTag) then
-        ugcprint("[UGCPlayerPawn:EnterDyingState] Already in Dying State.")
-        --弹出复活UI
+
+    if self.LastState ~= NewState then
         local PC = UGCGameSystem.GetPlayerControllerByPlayerPawn(self)
-        if PC and self.LastState ~= UGCGameData.AliveState.Dying then
-            PC:ChangeState(UGCGameData.AliveState.Dying)
-            self.LastState = UGCGameData.AliveState.Dying
-        else
-            ugcprint("[UGCPlayerPawn:EnterDyingState] PlayerController not found.")
-        end
-    -- 处理死亡状态
-    elseif UGCGameplayTagSystem.IsValidTag(DeadTag) and UGCPersistEffectSystem.HasDynamicState(self, DeadTag) then
-        ugcprint("[UGCPlayerPawn:EnterDeadState] Entering Dead State." .. tostring(self))
-        -- 处理死亡状态逻辑
-        local PC = UGCGameSystem.GetPlayerControllerByPlayerPawn(self)
-        if PC and self.LastState ~= UGCGameData.AliveState.Dead then
-            -- 可能需要显示游戏结束UI或者重生选项UI
-            PC:ChangeState(UGCGameData.AliveState.Dead)
-            self.LastState = UGCGameData.AliveState.Dead
-        else
-            ugcprint("[UGCPlayerPawn:EnterDeadState] PlayerController not found.")
-        end
-    -- 处理存活状态（既不是倒地也不是死亡）
-    elseif not (UGCPersistEffectSystem.HasDynamicState(self, DyingTag) or UGCPersistEffectSystem.HasDynamicState(self, DeadTag)) then
-        ugcprint("[UGCPlayerPawn:EnterAliveState] Entering Alive State." .. tostring(self))
-        -- 处理存活状态逻辑
-        local PC = UGCGameSystem.GetPlayerControllerByPlayerPawn(self)
-        if PC and self.LastState ~= UGCGameData.AliveState.Alive then
-            -- 可能需要关闭之前的UI或者重置角色状态
-            PC:ChangeState(UGCGameData.AliveState.Alive)
-            self.LastState = UGCGameData.AliveState.Alive
-        else
-            ugcprint("[UGCPlayerPawn:EnterAliveState] PlayerController not found.")
+        if PC then
+            PC:ChangeState(NewState)
+            self.LastState = NewState
         end
     end
-    self.CapsuleComponent:SetCollisionObjectType(16) -- PlayerPawn
+    self.CapsuleComponent:SetCollisionObjectType(16)
 end
 
-
---[[
-function UGCPlayerPawn:GetAvailableServerRPCs()
-    return
-end
---]]
-
-
+---声明 Pawn 需要复制的子对象列表。
 function UGCPlayerPawn:GetReplicatedProperties()
-    return {"__SubObjectRepList", "Lazy"}
+    return { "__SubObjectRepList", "Lazy" }
 end
-
 
 return UGCPlayerPawn
