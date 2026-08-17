@@ -52,5 +52,7 @@ function AppraisalManager:GetMainUI()
 end
 
 function AppraisalManager:Reload(DefineID, FilterType)
+    ugcprint('AppraisalManager 重置')
+    ugcprint_concat(DefineID);
     self.MainUI:Reload(DefineID, FilterType);
 end

@@ -12,10 +12,14 @@
 ---@field Size FVector2D
 ---@field DurabilityPercent float
 --Edit Below--
-local KComposeItem = { bInitDoOnce = false, DefineID=nil}
+local KComposeItem = {
+    bInitDoOnce = false,
+    DefineID = nil,
+    Mode = 'Primary'
+}
 
 function KComposeItem:Construct()
-	self:LuaInit()
+    self:LuaInit();
 end
 
 function KComposeItem:LuaInit()
@@ -23,47 +27,62 @@ function KComposeItem:LuaInit()
         return;
     end
     self.bInitDoOnce = true;
-    self:Listen();
+    self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
 end
 
-function KComposeItem:Listen()
-    self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
-
+function KComposeItem:SetMode(Mode)
+    self.Mode = Mode or 'Primary';
 end
 
 function KComposeItem:Button_0_Clicked()
-    ugcprint('clicked');
-    KenlComposeManager:Reload(self.DefineID, KenlComposeManager.FilterType);
-end
+    if self.DefineID == nil then
+        return;
+    end
 
---- @param DefineID ItemDefineID
-function KComposeItem:SetSelected(DefineID)
-    if DefineID.InstanceID == self.DefineID.InstanceID then
-        self.Image_Select:SetVisibility(ESlateVisibility.Visible);
+    if self.Mode == 'Material' then
+        KenlComposeManager:SelectMaterial(self.DefineID);
     else
-        self.Image_Select:SetVisibility(ESlateVisibility.Collapsed);
+        KenlComposeManager:SelectPrimary(self.DefineID);
     end
 end
 
---- @param DefineID ItemDefineID
+---@param DefineID ItemDefineID
+function KComposeItem:SetSelected(DefineID)
+    local selected = DefineID ~= nil and self.DefineID ~= nil
+            and DefineID.InstanceID == self.DefineID.InstanceID;
+    self.Image_Select:SetVisibility(selected and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
+end
+
+---@param DefineID ItemDefineID
 function KComposeItem:SetDefineID(DefineID)
     self.DefineID = DefineID;
+    if DefineID == nil then
+        self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Collapsed);
+        return;
+    end
 
-    local ItemId = self.DefineID.TypeSpecificID;
-    local quality = UGCItemSystemV2.GetItemQualityV2(ItemId);
-    local icon = UGCItemSystemV2.GetItemIconTextureV2(ItemId);
-    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].Bg, SubPathString=nil}, self.Image_QualityBarBg);
-    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].bar, SubPathString=nil}, self.Image_QualityBar);
+    self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Visible);
+    local itemId = DefineID.TypeSpecificID;
+    local quality = UGCItemSystemV2.GetItemQualityV2(itemId);
+    local icon = UGCItemSystemV2.GetItemIconTextureV2(itemId);
+    local qualityCfg = ItemCfg.ItemQuality[quality];
+    if qualityCfg ~= nil then
+        self:AsyncSetTexture({AssetPathName=qualityCfg.Bg, SubPathString=nil}, self.Image_QualityBarBg);
+        self:AsyncSetTexture({AssetPathName=qualityCfg.bar, SubPathString=nil}, self.Image_QualityBar);
+    end
     self:AsyncSetTexture(icon, self.Image_Icon);
 end
 
-function KComposeItem:AsyncSetTexture(path, UI)
-    Common.LoadObjectWithSoftPathAsync(path,
-            function (PATH)
-                if self == nil or PATH == nil then
+function KComposeItem:AsyncSetTexture(Path, UI)
+    if Path == nil or UI == nil then
+        return;
+    end
+    Common.LoadObjectWithSoftPathAsync(Path,
+            function(Texture)
+                if self == nil or Texture == nil or UI == nil then
                     return;
                 end
-                UI:SetBrushFromTexture(PATH);
+                UI:SetBrushFromTexture(Texture);
             end
     );
 end

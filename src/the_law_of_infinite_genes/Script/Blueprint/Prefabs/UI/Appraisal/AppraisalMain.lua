@@ -75,8 +75,7 @@ end
 
 --- 发送请求
 function AppraisalMain:Request()
-    ugcprint(tostring(AppraisalManager.ComponentClass));
-    UnrealNetwork.CallUnrealRPC(LocalPlayerController, AppraisalManager.ComponentClass, "AppraisalSubmit", LocalPlayerController.PlayerKey, ReinfManager.DefineId);
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, AppraisalManager.ComponentClass, "AppraisalSubmit", LocalPlayerController.PlayerKey, AppraisalManager.DefineId);
 end
 
 function AppraisalMain:TabListUpdate(Item, Index)
@@ -106,7 +105,7 @@ function AppraisalMain:Reload(DefineID, FilterType)
     self.Filter = self:FilterKenl(AllItem, FilterType)
     self.BackpackList:Reload(#self.Filter);
     self.TabList:Reload(#AppraisalManager.KenlType);
-    self:SetPreview(DefineID);
+    self:SetPreview(AppraisalManager.DefineId );
 end
 
 function AppraisalMain:FilterKenl(ItemList, FilterType)

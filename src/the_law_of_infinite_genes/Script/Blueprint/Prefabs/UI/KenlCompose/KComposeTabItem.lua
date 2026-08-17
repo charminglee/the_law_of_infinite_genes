@@ -26,7 +26,10 @@ function KComposeTabItem:Listen()
 end
 
 function KComposeTabItem:Button_0_Clicked()
-    KenlComposeManager:Reload(KenlComposeManager.DefineId, KenlComposeManager.EquipmentType[self.Index+1].Type);
+    local config = KenlComposeManager.EquipmentType[self.Index + 1];
+    if config ~= nil then
+        KenlComposeManager:Reload(KenlComposeManager.DefineId, config.Type);
+    end
 end
 
 function KComposeTabItem:SetDAT(Index, Text)
