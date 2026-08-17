@@ -7,10 +7,13 @@
 ---@field selected UCanvasPanel
 ---@field TextBlock UTextBlock
 --Edit Below--
-local FMTabItem = { bInitDoOnce = false, Index=nil}
+local FMTabItem = {
+    bInitDoOnce = false,
+    Index = nil,
+}
 
 function FMTabItem:Construct()
-	self:LuaInit();
+    self:LuaInit();
 end
 
 function FMTabItem:LuaInit()
@@ -18,32 +21,24 @@ function FMTabItem:LuaInit()
         return;
     end
     self.bInitDoOnce = true;
-    self:Listen();
-end
-
-function FMTabItem:Listen()
     self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
 end
 
 function FMTabItem:Button_0_Clicked()
-    FortifyManager:Reload(FortifyManager.DefineId, FortifyManager.EquipmentType[self.Index+1].Type);
+    local tab = self.Index ~= nil and FortifyManager.EquipmentType[self.Index + 1] or nil;
+    if tab ~= nil then
+        FortifyManager:Reload(FortifyManager.DefineId, tab.Type);
+    end
 end
 
 function FMTabItem:SetDAT(Index, Text)
     self.Index = Index;
-    self.TextBlock:SetText(Text);
+    self.TextBlock:SetText(Text or '');
 end
 
-function FMTabItem:SetSelected(Visible)
-    local s = ESlateVisibility.Collapsed;
-    local n = ESlateVisibility.Collapsed
-    if Visible then
-        s = ESlateVisibility.Visible;
-    else
-        n = ESlateVisibility.Visible;
-    end
-    self.selected:SetVisibility(s);
-    self.Normal:SetVisibility(n);
+function FMTabItem:SetSelected(Selected)
+    self.selected:SetVisibility(Selected and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
+    self.Normal:SetVisibility(Selected and ESlateVisibility.Collapsed or ESlateVisibility.Visible);
 end
 
 return FMTabItem

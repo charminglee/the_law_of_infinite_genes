@@ -12,10 +12,14 @@
 ---@field Size FVector2D
 ---@field DurabilityPercent float
 --Edit Below--
-local FortifyItem = { bInitDoOnce = false, DefineID=nil}
+local FortifyItem = {
+    bInitDoOnce = false,
+    DefineID = nil,
+    RenderVersion = 0,
+}
 
 function FortifyItem:Construct()
-	self:LuaInit()
+    self:LuaInit();
 end
 
 function FortifyItem:LuaInit()
@@ -23,47 +27,73 @@ function FortifyItem:LuaInit()
         return;
     end
     self.bInitDoOnce = true;
-    self:Listen();
-end
-
-function FortifyItem:Listen()
     self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
-
 end
 
 function FortifyItem:Button_0_Clicked()
-    ugcprint('clicked');
-    FortifyManager:Reload(self.DefineID, FortifyManager.FilterType);
-end
-
---- @param DefineID ItemDefineID
-function FortifyItem:SetSelected(DefineID)
-    if DefineID.InstanceID == self.DefineID.InstanceID then
-        self.Image_Select:SetVisibility(ESlateVisibility.Visible);
-    else
-        self.Image_Select:SetVisibility(ESlateVisibility.Collapsed);
+    if self.DefineID ~= nil then
+        FortifyManager:Reload(self.DefineID, FortifyManager.FilterType);
     end
 end
 
---- @param DefineID ItemDefineID
-function FortifyItem:SetDefineID(DefineID)
-    self.DefineID = DefineID;
-
-    local ItemId = self.DefineID.TypeSpecificID;
-    local quality = UGCItemSystemV2.GetItemQualityV2(ItemId);
-    local icon = UGCItemSystemV2.GetItemIconTextureV2(ItemId);
-    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].Bg, SubPathString=nil}, self.Image_QualityBarBg);
-    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].bar, SubPathString=nil}, self.Image_QualityBar);
-    self:AsyncSetTexture(icon, self.Image_Icon);
+function FortifyItem:SetEmpty()
+    self.DefineID = nil;
+    self.RenderVersion = self.RenderVersion + 1;
+    self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Collapsed);
+    self.Image_Select:SetVisibility(ESlateVisibility.Collapsed);
 end
 
-function FortifyItem:AsyncSetTexture(path, UI)
-    Common.LoadObjectWithSoftPathAsync(path,
-            function (PATH)
-                if self == nil or PATH == nil then
+---@param DefineID ItemDefineID
+function FortifyItem:SetSelected(DefineID)
+    local selected = DefineID ~= nil and self.DefineID ~= nil
+            and DefineID.InstanceID ~= nil and DefineID.InstanceID == self.DefineID.InstanceID;
+    self.Image_Select:SetVisibility(selected and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
+end
+
+---@param DefineID ItemDefineID
+function FortifyItem:SetDefineID(DefineID)
+    if DefineID == nil or DefineID.TypeSpecificID == nil then
+        self:SetEmpty();
+        return;
+    end
+
+    self.DefineID = DefineID;
+    self.RenderVersion = self.RenderVersion + 1;
+    local renderVersion = self.RenderVersion;
+    self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Visible);
+    self.Image_Null:SetVisibility(ESlateVisibility.Collapsed);
+    self.Image_Icon:SetVisibility(ESlateVisibility.Visible);
+    self.TextBlock_Num:SetVisibility(ESlateVisibility.Collapsed);
+
+    local itemId = DefineID.TypeSpecificID;
+    local quality = UGCItemSystemV2.GetItemQualityV2(itemId) or 0;
+    local qualityCfg = ItemCfg.ItemQuality[quality] or ItemCfg.ItemQuality[0];
+    if qualityCfg ~= nil then
+        self:AsyncSetTexture({AssetPathName = qualityCfg.Bg, SubPathString = nil}, self.Image_QualityBarBg, renderVersion);
+        self:AsyncSetTexture({AssetPathName = qualityCfg.bar, SubPathString = nil}, self.Image_QualityBar, renderVersion);
+    end
+    self:AsyncSetTexture(UGCItemSystemV2.GetItemIconTextureV2(itemId), self.Image_Icon, renderVersion);
+
+    local data = LocalPlayerState.ItemDataManager:GetCustomData(DefineID) or {};
+    local level = tonumber(data.strengthenLevel) or 0;
+    self.TextBlock_Fortify:SetText(string.format('+%s', tostring(level)));
+    local levelCfg = ItemCfg.colorTable[level] or ItemCfg.colorTable[0];
+    if levelCfg ~= nil then
+        self.TextBlock_Fortify:SetColorRGBStr(levelCfg.HexColor);
+    end
+end
+
+function FortifyItem:AsyncSetTexture(Path, UI, RenderVersion)
+    if Path == nil or UI == nil then
+        return;
+    end
+    Common.LoadObjectWithSoftPathAsync(Path,
+            function(Texture)
+                if self == nil or Texture == nil or UI == nil
+                        or self.RenderVersion ~= RenderVersion then
                     return;
                 end
-                UI:SetBrushFromTexture(PATH);
+                UI:SetBrushFromTexture(Texture);
             end
     );
 end

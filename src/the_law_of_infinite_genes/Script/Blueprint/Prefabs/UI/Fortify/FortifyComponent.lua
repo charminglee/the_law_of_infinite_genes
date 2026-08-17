@@ -2,16 +2,34 @@
 ---@field FortifyPath FSoftClassPath
 --Edit Below--
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Fortify.FortifyManager");
+
 local FortifyComponent = {}
+
+local function IsEquipment(DefineID)
+    if DefineID == nil or DefineID.TypeSpecificID == nil then
+        return false;
+    end
+    local itemType = UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID);
+    return ItemCfg.CustomizeType[itemType] == true;
+end
+
+local function IsSameDefineId(Left, Right)
+    return Left ~= nil and Right ~= nil
+            and Left.InstanceID ~= nil and Left.InstanceID == Right.InstanceID;
+end
+
 function FortifyComponent:ReceiveBeginPlay()
     FortifyComponent.SuperClass.ReceiveBeginPlay(self);
-    if Lib.IsServer() == false then
+    if not Lib.IsServer() then
+        FortifyManager:RegisterComponentClass(self);
         self:InitUI();
+        Lib.EventSystem.Listen(Event.OnItemCustomDataUpdateAfter, self.OnItemCustomDataUpdateAfter, self);
     end
 end
+
 function FortifyComponent:InitUI()
     Common.LoadObjectWithSoftPathAsync(self.FortifyPath,
-            function (MainUIClass)
+            function(MainUIClass)
                 if self == nil or MainUIClass == nil then
                     return;
                 end
@@ -20,5 +38,32 @@ function FortifyComponent:InitUI()
                 MainUI:SetVisibility(ESlateVisibility.Collapsed);
             end
     );
+end
+
+function FortifyComponent:GetAvailableServerRPCs()
+    return "FortifySubmit";
+end
+
+function FortifyComponent:OnItemCustomDataUpdateAfter(UID, ItemDefineId, OldData, NewData)
+    if not IsSameDefineId(ItemDefineId, FortifyManager.DefineId) then
+        return;
+    end
+    local oldLevel = OldData and OldData.strengthenLevel or 0;
+    local newLevel = NewData and NewData.strengthenLevel or 0;
+    if newLevel ~= oldLevel then
+        FortifyManager.RefreshUI = true;
+    end
+end
+
+---@param PlayerKey number
+---@param DefineID ItemDefineID
+function FortifyComponent:FortifySubmit(PlayerKey, DefineID)
+    ugcprint('接收消息')
+    local playerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
+    if playerState == nil or playerState.ItemDataManager == nil then
+        return;
+    end
+
+    playerState.ItemDataManager:Strengthen(DefineID, 1);
 end
 return FortifyComponent

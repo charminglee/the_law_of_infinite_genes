@@ -20,69 +20,37 @@
 --Edit Below--
 local FortifyMain = {
     bInitDoOnce = false,
-    Filter = nil,
-    FilterType = nil,
-    DefineID = nil,
-
+    Filter = {},
+    MaterialDefineID = nil,
 }
+
+local function IsSameDefineId(Left, Right)
+    if Left == nil or Right == nil then
+        return false;
+    end
+    if Left.InstanceID ~= nil and Right.InstanceID ~= nil then
+        return Left.InstanceID == Right.InstanceID;
+    end
+    return Left.TypeSpecificID ~= nil and Left.TypeSpecificID == Right.TypeSpecificID;
+end
+
+local function IsEquipment(DefineID)
+    if DefineID == nil or DefineID.TypeSpecificID == nil then
+        return false;
+    end
+    local itemType = UGCItemSystemV2.GetItemCustomizedTypeV2(DefineID.TypeSpecificID);
+    return ItemCfg.CustomizeType[itemType] == true;
+end
 
 function FortifyMain:Construct()
     self:LuaInit();
 end
 
-function FortifyMain:Open(DefineID)
-    self:SetVisibility(ESlateVisibility.Visible);
-    self:Reload(DefineID, FortifyManager.EquipmentType[1].Type);
-end
-
-function FortifyMain:Reload(DefineID, FilterType)
-    local AllItem = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
-    ugcprint('刷新数据')
-    ugcprint_concat(AllItem);
-    if FilterType == nil then
-        FilterType = EquipmentType[1].Type;
+function FortifyMain:Tick(MyGeometry, InDeltaTime)
+    if FortifyManager.RefreshUI then
+        FortifyManager.RefreshUI = false;
+        self:Reload(FortifyManager.DefineId, FortifyManager.FilterType);
     end
-    FortifyManager.DefineId = DefineID;
-    FortifyManager.FilterType = FilterType
-    self.Filter = self:FilterEquipment(AllItem, FilterType);
-    self.BackpackList:Reload(#self.Filter);
-    self.TabList:Reload(#FortifyManager.EquipmentType)
-    self:SetPreview(DefineID);
-    --local imageT = RichText.Link('点击这里', {size='24', color='FFAAAAFF', under_line='1'})
-    --ugcprint(imageT)
-    self.Front:SetText(
-        '请点击<a2 src="/Engine/EngineFonts/Roboto.Roboto" size="30" color="A9FF00FF" flag="1">这里</>'
-    )
-end
-
---- @param DefineID ItemDefineID
-function FortifyMain:SetPreview(DefineID)
-    --local ItemId = DefineID.TypeSpecificID;
-    self.FortifyPreviewItem:SetDefineID(DefineID);
-    self.FortifyPreviewItem_0:SetDefineID({TypeSpecificID=8310004})
-end
-
-function FortifyMain:FilterEquipment(ItemList, FilterType)
-    local result = {};
-    ugcprint(FilterType)
-    for key, item in ipairs(ItemList) do
-        local itemId = item.TypeSpecificID;
-        local itemType = UGCItemSystemV2.GetItemCustomizedTypeV2(itemId);
-        local has_all = false
-        if FilterType == FortifyManager.EquipmentType[1].Type then
-            has_all = true;
-            ugcprint('全部')
-        end
-        local has_equipment = ItemCfg.CustomizeType[itemType];
-        if has_all and has_equipment then
-            table.insert(result, item);
-        else
-            if itemType == FilterType then
-                table.insert(result, item)
-            end
-        end
-    end
-    return result;
 end
 
 function FortifyMain:LuaInit()
@@ -90,49 +58,187 @@ function FortifyMain:LuaInit()
         return;
     end
     self.bInitDoOnce = true;
-    self:Listen();
+    self.Button_0.OnClicked:Add(self.Exit, self);
+    self.Button_1.OnClicked:Add(self.Request, self);
+    self.PureBtn.OnClicked:Add(self.PureBtnClicked, self);
+    self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
+    self.TabList.OnUpdateItem:Add(self.TabListUpdate, self);
     FortifyManager:RegisterMainUI(self);
 end
 
-function FortifyMain:Listen()
-    self.Button_0.OnClicked:Add(self.Exit, self);
-    self.BackpackList.OnUpdateItem:Add(self.BackpackListUpdate, self);
-    self.TabList.OnUpdateItem:Add(self.TabListUpdate, self)
-    self.PureBtn.OnClicked:Add(self.PureBtnClicked, self);
-    self.Front.OnHyperlinkClicked:Add(self.OnHyperlinkClicked, self)
-
+function FortifyMain:Open(DefineID)
+    self:SetVisibility(ESlateVisibility.Visible);
+    self:Reload(DefineID, FortifyManager.EquipmentType[1].Type);
 end
 
 function FortifyMain:Exit()
     self:SetVisibility(ESlateVisibility.Collapsed);
 end
-function FortifyMain:OnHyperlinkClicked(meta)
-    self:TestC(meta)
+
+function FortifyMain:PureBtnClicked()
+    local defineID = FortifyManager.DefineId;
+    self:Exit();
+    if PureManager ~= nil then
+        PureManager:OpenMainUI(defineID);
+    end
 end
 
-function FortifyMain:TestC(meta)
-    ugcprint(tostring(meta.Metadata.flag));
-    ugcprint_concat(meta, '  ');
+---@param DefineID ItemDefineID
+---@param FilterType string
+function FortifyMain:Reload(DefineID, FilterType)
+    FilterType = FilterType or FortifyManager.EquipmentType[1].Type;
+    local allItems = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController) or {};
+    self.Filter = self:FilterEquipment(allItems, FilterType);
+
+    local selected = DefineID ~= nil and totable(DefineID) or nil;
+    if not self:ContainsDefineId(self.Filter, selected) then
+        selected = self.Filter[1];
+    end
+
+    FortifyManager.DefineId = totable(selected);
+    FortifyManager.FilterType = FilterType;
+    self.BackpackList:Reload(#self.Filter);
+    self.TabList:Reload(#FortifyManager.EquipmentType);
+    self:SetPreview(selected, allItems);
 end
-function FortifyMain:PureBtnClicked()
-    self:Exit()
-    PureManager:OpenMainUI(FortifyManager.DefineID);
+
+function FortifyMain:ContainsDefineId(ItemList, DefineID)
+    for _, item in ipairs(ItemList or {}) do
+        if IsSameDefineId(item, DefineID) then
+            return true;
+        end
+    end
+    return false;
+end
+
+function FortifyMain:FilterEquipment(ItemList, FilterType)
+    local result = {};
+    local showAll = FilterType == FortifyManager.EquipmentType[1].Type;
+    for _, item in ipairs(ItemList or {}) do
+        if IsEquipment(item) then
+            local itemType = UGCItemSystemV2.GetItemCustomizedTypeV2(item.TypeSpecificID);
+            if showAll or itemType == FilterType then
+                table.insert(result, item);
+            end
+        end
+    end
+    return result;
+end
+
+function FortifyMain:FindMaterial(ItemList, MaterialItemId)
+    for _, item in ipairs(ItemList or {}) do
+        if item.TypeSpecificID == MaterialItemId then
+            return item;
+        end
+    end
+    return nil;
+end
+
+---@param DefineID ItemDefineID
+function FortifyMain:SetPreview(DefineID, AllItems)
+    if not IsEquipment(DefineID) then
+        self.MaterialDefineID = nil;
+        FortifyManager.MaterialDefineId = nil;
+        self.FortifyPreviewItem:SetEmpty();
+        self.FortifyPreviewItem_0:SetEmpty();
+        self.CurrentLevel:SetText('');
+        self.AfterLevel:SetText('');
+        self.Front:SetText('请选择需要强化的装备');
+        self.After:SetText('');
+        self.SuccessRate:SetText('0%');
+        self.Button_1:SetIsEnabled(false);
+        return;
+    end
+
+    local data = LocalPlayerState.ItemDataManager:GetCustomData(DefineID) or {};
+    local currentLevel = tonumber(data.strengthenLevel) or 0;
+    local maxLevel = FortifyManager:GetMaxLevel();
+    local afterLevel = math.min(currentLevel + 1, maxLevel);
+    local materialItemId = FortifyManager:GetMaterialItemId(DefineID);
+    local materialDefineID = self:FindMaterial(AllItems, materialItemId);
+
+    self.MaterialDefineID = materialDefineID;
+    FortifyManager.MaterialDefineId = materialDefineID;
+    self.FortifyPreviewItem:SetDefineID(DefineID, currentLevel);
+    self.FortifyPreviewItem_0:SetDefineID(materialDefineID or {TypeSpecificID = materialItemId});
+    self.FortifyPreviewItem_0:SetCount(materialDefineID ~= nil and '1/1' or '0/1');
+
+    self.CurrentLevel:SetText(self:GetLevelText(currentLevel));
+    if currentLevel >= maxLevel then
+        self.AfterLevel:SetText(RichText.Font('已满级', {size = 18, color = 'FFFF00FF'}));
+    else
+        self.AfterLevel:SetText(self:GetLevelText(afterLevel));
+    end
+    self.Front:SetText(self:GetEquipmentAttributeText(DefineID, currentLevel));
+    self.After:SetText(self:GetEquipmentAttributeText(DefineID, afterLevel));
+    self.SuccessRate:SetText(currentLevel < maxLevel and '100%' or '0%');
+    self.Button_1:SetIsEnabled(currentLevel < maxLevel and materialDefineID ~= nil
+            and FortifyManager.ComponentClass ~= nil);
+end
+
+function FortifyMain:GetLevelText(Level)
+    local levelCfg = ItemCfg.colorTable[Level] or ItemCfg.colorTable[0];
+    local color = levelCfg and levelCfg.HexColor or 'FFFFFFFF';
+    local stage = levelCfg and levelCfg.Text or '';
+    return RichText.Font(string.format('+%s %s', tostring(Level), stage), {size = 18, color = color});
+end
+
+function FortifyMain:GetEquipmentAttributeText(DefineID, Level)
+    local itemName = UGCItemSystemV2.GetItemNameV2(DefineID.TypeSpecificID);
+    local attrCfg = ItemCfg.EquipmentAttribute[itemName];
+    local result = {self:GetLevelText(Level)};
+    if attrCfg == nil or attrCfg.Base == nil then
+        table.insert(result, RichText.Font('暂无属性配置', {size = 18, color = 'FFFFFFFF'}));
+        return table.concat(result, '\n');
+    end
+
+    local quality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineID)
+            or UGCItemSystemV2.GetItemQualityV2(DefineID.TypeSpecificID) or 0;
+    local factor = attrCfg.Factor and attrCfg.Factor[quality] or 1;
+    for _, attr in ipairs(attrCfg.Base) do
+        local meta = AttributeMate[attr.property];
+        local attrName = meta and meta.anno or tostring(attr.property);
+        local value = math.floor((tonumber(attr.value) or 0) * factor);
+        table.insert(result, RichText.Inline(
+                RichText.Font(string.format('-- %s\t\t', attrName), {size = 18, color = 'FFFFFFFF'}),
+                RichText.Font(tostring(value), {size = 18, color = 'B8FFA1FF'})
+        ));
+    end
+    return table.concat(result, '\n');
+end
+
+function FortifyMain:Request()
+    if FortifyManager.DefineId == nil or self.MaterialDefineID == nil
+            or FortifyManager.ComponentClass == nil then
+        return;
+    end
+    ugcprint('发送消息')
+    UnrealNetwork.CallUnrealRPC(
+            LocalPlayerController,
+            FortifyManager.ComponentClass,
+            'FortifySubmit',
+            LocalPlayerController.PlayerKey,
+            FortifyManager.DefineId
+    );
 end
 
 function FortifyMain:BackpackListUpdate(Item, Index)
-    local DefineID = self.Filter[Index+1];
-    Item:SetDefineID(DefineID);
+    local defineID = self.Filter[Index + 1];
+    if defineID == nil then
+        Item:SetEmpty();
+        return;
+    end
+    Item:SetDefineID(defineID);
     Item:SetSelected(FortifyManager.DefineId);
 end
 
 function FortifyMain:TabListUpdate(Item, Index)
-    Item.Index = Index;
-    Item:SetDAT(Index, FortifyManager.EquipmentType[Index+1].Text);
-    if FortifyManager.FilterType == FortifyManager.EquipmentType[Index+1].Type then
-        Item:SetSelected(true);
-    else
-        Item:SetSelected(false);
+    local tab = FortifyManager.EquipmentType[Index + 1];
+    if tab == nil then
+        return;
     end
+    Item:SetDAT(Index, tab.Text);
+    Item:SetSelected(FortifyManager.FilterType == tab.Type);
 end
 
 return FortifyMain
