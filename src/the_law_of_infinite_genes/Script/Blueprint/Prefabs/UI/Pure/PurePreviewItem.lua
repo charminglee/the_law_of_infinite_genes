@@ -6,13 +6,15 @@
 ---@field Image_Select UImage
 ---@field TextBlock_Fortify UTextBlock
 ---@field TextBlock_Num UTextBlock
----@field Size FVector2D
----@field DurabilityPercent float
 --Edit Below--
-local PurePreviewItem = { bInitDoOnce = false, DefineID=nil}
+local PurePreviewItem = {
+    bInitDoOnce = false,
+    DefineID = nil,
+    RenderVersion = 0,
+}
 
 function PurePreviewItem:Construct()
-	self:LuaInit()
+    self:LuaInit();
 end
 
 function PurePreviewItem:LuaInit()
@@ -20,47 +22,76 @@ function PurePreviewItem:LuaInit()
         return;
     end
     self.bInitDoOnce = true;
-    self:Listen();
+    self:SetEmpty();
 end
 
-function PurePreviewItem:Listen()
-    self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
-
+function PurePreviewItem:SetEmpty()
+    self.DefineID = nil;
+    self.RenderVersion = self.RenderVersion + 1;
+    self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Collapsed);
+    self.Image_Select:SetVisibility(ESlateVisibility.Collapsed);
+    self.TextBlock_Num:SetVisibility(ESlateVisibility.Collapsed);
 end
 
-function PurePreviewItem:Button_0_Clicked()
-    ugcprint('clicked');
-    PureManager:Reload(self.DefineID, PureManager.FilterType);
-end
-
---- @param DefineID ItemDefineID
-function PurePreviewItem:SetSelected(DefineID)
-    if DefineID.InstanceID == self.DefineID.InstanceID then
-        self.Image_Select:SetVisibility(ESlateVisibility.Visible);
-    else
-        self.Image_Select:SetVisibility(ESlateVisibility.Collapsed);
+---@param DefineID ItemDefineID
+---@param DisplayLevel number|nil
+---@param QualityOverride number|nil
+function PurePreviewItem:SetDefineID(DefineID, DisplayLevel, QualityOverride)
+    if DefineID == nil or DefineID.TypeSpecificID == nil then
+        self:SetEmpty();
+        return;
     end
-end
 
---- @param DefineID ItemDefineID
-function PurePreviewItem:SetDefineID(DefineID)
     self.DefineID = DefineID;
+    self.RenderVersion = self.RenderVersion + 1;
+    local renderVersion = self.RenderVersion;
+    self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Visible);
+    self.Image_Select:SetVisibility(ESlateVisibility.Collapsed);
 
-    local ItemId = self.DefineID.TypeSpecificID;
-    local quality = UGCItemSystemV2.GetItemQualityV2(ItemId);
-    local icon = UGCItemSystemV2.GetItemIconTextureV2(ItemId);
-    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].Bg, SubPathString=nil}, self.Image_QualityBarBg);
-    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].bar, SubPathString=nil}, self.Image_QualityBar);
-    self:AsyncSetTexture(icon, self.Image_Icon);
+    local itemId = DefineID.TypeSpecificID;
+    local quality = QualityOverride
+            or UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineID)
+            or UGCItemSystemV2.GetItemQualityV2(itemId) or 0;
+    local qualityCfg = ItemCfg.ItemQuality[quality] or ItemCfg.ItemQuality[0];
+    if qualityCfg ~= nil then
+        self:AsyncSetTexture({AssetPathName = qualityCfg.Bg, SubPathString = nil}, self.Image_QualityBarBg, renderVersion);
+        self:AsyncSetTexture({AssetPathName = qualityCfg.bar, SubPathString = nil}, self.Image_QualityBar, renderVersion);
+    end
+    self:AsyncSetTexture(UGCItemSystemV2.GetItemIconTextureV2(itemId), self.Image_Icon, renderVersion);
+
+    if DisplayLevel ~= nil then
+        self.TextBlock_Fortify:SetVisibility(ESlateVisibility.Visible);
+        self.TextBlock_Fortify:SetText(string.format('+%s', tostring(DisplayLevel)));
+        local levelCfg = ItemCfg.colorTable[DisplayLevel] or ItemCfg.colorTable[0];
+        if levelCfg ~= nil then
+            self.TextBlock_Fortify:SetColorRGBStr(levelCfg.HexColor);
+        end
+    else
+        self.TextBlock_Fortify:SetVisibility(ESlateVisibility.Collapsed);
+    end
+    self.TextBlock_Num:SetVisibility(ESlateVisibility.Collapsed);
 end
 
-function PurePreviewItem:AsyncSetTexture(path, UI)
-    Common.LoadObjectWithSoftPathAsync(path,
-            function (PATH)
-                if self == nil or PATH == nil then
+function PurePreviewItem:SetCount(Text)
+    if Text == nil or Text == '' then
+        self.TextBlock_Num:SetVisibility(ESlateVisibility.Collapsed);
+        return;
+    end
+    self.TextBlock_Num:SetText(tostring(Text));
+    self.TextBlock_Num:SetVisibility(ESlateVisibility.Visible);
+end
+
+function PurePreviewItem:AsyncSetTexture(Path, UI, RenderVersion)
+    if Path == nil or UI == nil then
+        return;
+    end
+    Common.LoadObjectWithSoftPathAsync(Path,
+            function(Texture)
+                if self == nil or Texture == nil or UI == nil
+                        or self.RenderVersion ~= RenderVersion then
                     return;
                 end
-                UI:SetBrushFromTexture(PATH);
+                UI:SetBrushFromTexture(Texture);
             end
     );
 end

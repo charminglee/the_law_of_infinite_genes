@@ -171,7 +171,8 @@ function FortifyMain:SetPreview(DefineID, AllItems)
     end
     self.Front:SetText(self:GetEquipmentAttributeText(DefineID, currentLevel));
     self.After:SetText(self:GetEquipmentAttributeText(DefineID, afterLevel));
-    self.SuccessRate:SetText(currentLevel < maxLevel and '100%' or '0%');
+    self.SuccessRate:SetText(currentLevel < maxLevel
+            and self:GetStrengthenSuccessRateText(DefineID, afterLevel) or '0%');
     self.Button_1:SetIsEnabled(currentLevel < maxLevel and materialDefineID ~= nil
             and FortifyManager.ComponentClass ~= nil);
 end
@@ -183,25 +184,31 @@ function FortifyMain:GetLevelText(Level)
     return RichText.Font(string.format('+%s %s', tostring(Level), stage), {size = 18, color = color});
 end
 
+--- @param DefineID FItemDefineID
 function FortifyMain:GetEquipmentAttributeText(DefineID, Level)
-    local itemName = UGCItemSystemV2.GetItemNameV2(DefineID.TypeSpecificID);
-    local attrCfg = ItemCfg.EquipmentAttribute[itemName];
-    local result = {self:GetLevelText(Level)};
-    if attrCfg == nil or attrCfg.Base == nil then
-        table.insert(result, RichText.Font('暂无属性配置', {size = 18, color = 'FFFFFFFF'}));
-        return table.concat(result, '\n');
+    local details =  LocalPlayerState.ItemDataManager:GetBaseAttrEntryDetail(DefineID, Level);
+    local tags = UGCItemSystemV2.GetItemTagsV2(DefineID.TypeSpecificID)
+
+    ugcprint('重置')
+    for k,v in ipairs(tags) do
+        ugcprint(string.format('key:%s, value:%s', k, v))
+    end
+    if details == nil or #details == 0 then
+        return RichText.Font('暂无属性配置', {size = 18, color = 'FFFFFFFF'});
     end
 
-    local quality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineID)
-            or UGCItemSystemV2.GetItemQualityV2(DefineID.TypeSpecificID) or 0;
-    local factor = attrCfg.Factor and attrCfg.Factor[quality] or 1;
-    for _, attr in ipairs(attrCfg.Base) do
-        local meta = AttributeMate[attr.property];
-        local attrName = meta and meta.anno or tostring(attr.property);
-        local value = math.floor((tonumber(attr.value) or 0) * factor);
+    local result = {};
+    for _, detail in ipairs(details) do
+        local meta = AttributeMate[detail.property];
+        local attrName = meta and meta.anno or tostring(detail.property);
         table.insert(result, RichText.Inline(
-                RichText.Font(string.format('-- %s\t\t', attrName), {size = 18, color = 'FFFFFFFF'}),
-                RichText.Font(tostring(value), {size = 18, color = 'B8FFA1FF'})
+                RichText.Font(string.format('-- %s  ', attrName), {size = 18, color = 'FFFFFFFF'}),
+                RichText.Font('' .. self:FormatAttributeValue(detail.finalValue),
+                        {size = 18, color = 'B8FFA1FF'}),
+                RichText.Font('（基础 ' .. self:FormatAttributeValue(detail.baseValue),
+                        {size = 16, color = 'FFFFFFFF'}),
+                RichText.Font(' + 强化 ' .. self:FormatAttributeValue(detail.strengthenValue) .. '）',
+                        {size = 16, color = 'FFD966FF'})
         ));
     end
     return table.concat(result, '\n');
@@ -212,7 +219,6 @@ function FortifyMain:Request()
             or FortifyManager.ComponentClass == nil then
         return;
     end
-    ugcprint('发送消息')
     UnrealNetwork.CallUnrealRPC(
             LocalPlayerController,
             FortifyManager.ComponentClass,
@@ -239,6 +245,47 @@ function FortifyMain:TabListUpdate(Item, Index)
     end
     Item:SetDAT(Index, tab.Text);
     Item:SetSelected(FortifyManager.FilterType == tab.Type);
+end
+
+function FortifyMain:GetStrengthenSuccessRateText(DefineID, TargetLevel)
+    if DefineID == nil or DefineID.TypeSpecificID == nil
+            or ItemCfg.Strengthen == nil or ItemCfg.Strengthen.ProbCurve == nil then
+        return '0%';
+    end
+    local quality = UGCItemSystemV2.GetItemQualityV2(DefineID.TypeSpecificID) or 0;
+    local probability = ItemCfg.Strengthen._ProbMap[TargetLevel];
+    probability = math.max(0, math.min(1, probability));
+    local percent = probability * 100;
+    if math.abs(percent - math.floor(percent + 0.5)) < 0.0001 then
+        return string.format('%d%%', math.floor(percent + 0.5));
+    end
+    return string.format('%.1f%%', percent);
+end
+
+function FortifyMain:GetStrengthenAttributeText(DefineID, Level)
+    local details =  LocalPlayerState.ItemDataManager:GetBaseAttrEntryDetail(DefineID, Level);
+    if details == nil or #details == 0 then
+        return RichText.Font('暂无强化属性', {size = 18, color = 'FFFFFFFF'});
+    end
+
+    local result = {};
+    for _, attr in ipairs(entries) do
+        local meta = AttributeMate[attr.property];
+        local attrName = meta and meta.anno or tostring(attr.property);
+        table.insert(result, RichText.Inline(
+                RichText.Font(string.format('-- %s\t\t', attrName), {size = 18, color = 'FFFFFFFF'}),
+                RichText.Font(string.format('+%s',tostring(attr.strengthenValue)), {size = 18, color = 'B8FFA1FF'})
+        ));
+    end
+    return table.concat(result, '\n');
+end
+
+function FortifyMain:FormatAttributeValue(Value)
+    local value = tonumber(Value) or 0;
+    if math.abs(value - math.floor(value + 0.5)) < 0.0001 then
+        return tostring(math.floor(value + 0.5));
+    end
+    return string.format('%.2f', value):gsub('0+$', ''):gsub('%.$', '');
 end
 
 return FortifyMain

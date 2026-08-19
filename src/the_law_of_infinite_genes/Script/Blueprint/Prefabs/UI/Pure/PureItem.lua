@@ -1,6 +1,5 @@
 ---@class PureItem_C:UUserWidget
 ---@field Button_0 UButton
----@field CanvasPanel_0 UCanvasPanel
 ---@field CanvasPanel_Icon UCanvasPanel
 ---@field Image_Icon UImage
 ---@field Image_Null UImage
@@ -9,13 +8,15 @@
 ---@field Image_Select UImage
 ---@field TextBlock_Fortify UTextBlock
 ---@field TextBlock_Num UTextBlock
----@field Size FVector2D
----@field DurabilityPercent float
 --Edit Below--
-local PureItem = { bInitDoOnce = false, DefineID=nil}
+local PureItem = {
+    bInitDoOnce = false,
+    DefineID = nil,
+    RenderVersion = 0,
+}
 
 function PureItem:Construct()
-	self:LuaInit()
+    self:LuaInit();
 end
 
 function PureItem:LuaInit()
@@ -23,47 +24,77 @@ function PureItem:LuaInit()
         return;
     end
     self.bInitDoOnce = true;
-    self:Listen();
-end
-
-function PureItem:Listen()
     self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
-
 end
 
 function PureItem:Button_0_Clicked()
-    ugcprint('clicked');
-    PureManager:Reload(self.DefineID, PureManager.FilterType);
-end
-
---- @param DefineID ItemDefineID
-function PureItem:SetSelected(DefineID)
-    if DefineID.InstanceID == self.DefineID.InstanceID then
-        self.Image_Select:SetVisibility(ESlateVisibility.Visible);
-    else
-        self.Image_Select:SetVisibility(ESlateVisibility.Collapsed);
+    if self.DefineID ~= nil then
+        PureManager:Reload(self.DefineID, PureManager.FilterType);
     end
 end
 
---- @param DefineID ItemDefineID
-function PureItem:SetDefineID(DefineID)
-    self.DefineID = DefineID;
-
-    local ItemId = self.DefineID.TypeSpecificID;
-    local quality = UGCItemSystemV2.GetItemQualityV2(ItemId);
-    local icon = UGCItemSystemV2.GetItemIconTextureV2(ItemId);
-    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].Bg, SubPathString=nil}, self.Image_QualityBarBg);
-    self:AsyncSetTexture({AssetPathName=ItemCfg.ItemQuality[quality].bar, SubPathString=nil}, self.Image_QualityBar);
-    self:AsyncSetTexture(icon, self.Image_Icon);
+function PureItem:SetEmpty()
+    self.DefineID = nil;
+    self.RenderVersion = self.RenderVersion + 1;
+    self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Collapsed);
+    self.Image_Select:SetVisibility(ESlateVisibility.Collapsed);
 end
 
-function PureItem:AsyncSetTexture(path, UI)
-    Common.LoadObjectWithSoftPathAsync(path,
-            function (PATH)
-                if self == nil or PATH == nil then
+---@param DefineID ItemDefineID
+function PureItem:SetSelected(DefineID)
+    local selected = DefineID ~= nil and self.DefineID ~= nil
+            and DefineID.InstanceID ~= nil and DefineID.InstanceID == self.DefineID.InstanceID;
+    self.Image_Select:SetVisibility(selected and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
+end
+
+---@param DefineID ItemDefineID
+function PureItem:SetDefineID(DefineID)
+    if DefineID == nil or DefineID.TypeSpecificID == nil then
+        self:SetEmpty();
+        return;
+    end
+
+    self.DefineID = DefineID;
+    self.RenderVersion = self.RenderVersion + 1;
+    local renderVersion = self.RenderVersion;
+    self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Visible);
+    self.Image_Null:SetVisibility(ESlateVisibility.Collapsed);
+    self.Image_Icon:SetVisibility(ESlateVisibility.Visible);
+    self.TextBlock_Num:SetVisibility(ESlateVisibility.Collapsed);
+
+    local itemId = DefineID.TypeSpecificID;
+    local quality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineID)
+            or UGCItemSystemV2.GetItemQualityV2(itemId) or 0;
+    local qualityCfg = ItemCfg.ItemQuality[quality] or ItemCfg.ItemQuality[0];
+    if qualityCfg ~= nil then
+        self:AsyncSetTexture({AssetPathName = qualityCfg.Bg, SubPathString = nil}, self.Image_QualityBarBg, renderVersion);
+        self:AsyncSetTexture({AssetPathName = qualityCfg.bar, SubPathString = nil}, self.Image_QualityBar, renderVersion);
+    end
+    self:AsyncSetTexture(UGCItemSystemV2.GetItemIconTextureV2(itemId), self.Image_Icon, renderVersion);
+
+    local data = {};
+    if LocalPlayerState ~= nil and LocalPlayerState.ItemDataManager ~= nil then
+        data = LocalPlayerState.ItemDataManager:GetCustomData(DefineID) or {};
+    end
+    local level = tonumber(data.strengthenLevel) or 0;
+    self.TextBlock_Fortify:SetText(string.format('+%s', tostring(level)));
+    local levelCfg = ItemCfg.colorTable[level] or ItemCfg.colorTable[0];
+    if levelCfg ~= nil then
+        self.TextBlock_Fortify:SetColorRGBStr(levelCfg.HexColor);
+    end
+end
+
+function PureItem:AsyncSetTexture(Path, UI, RenderVersion)
+    if Path == nil or UI == nil then
+        return;
+    end
+    Common.LoadObjectWithSoftPathAsync(Path,
+            function(Texture)
+                if self == nil or Texture == nil or UI == nil
+                        or self.RenderVersion ~= RenderVersion then
                     return;
                 end
-                UI:SetBrushFromTexture(PATH);
+                UI:SetBrushFromTexture(Texture);
             end
     );
 end

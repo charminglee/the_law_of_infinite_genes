@@ -63,7 +63,6 @@ function FortifyComponent:FortifySubmit(PlayerKey, DefineID)
     if playerState == nil or playerState.ItemDataManager == nil then
         return;
     end
-
     playerState.ItemDataManager:Strengthen(DefineID, 1);
 end
 return FortifyComponent

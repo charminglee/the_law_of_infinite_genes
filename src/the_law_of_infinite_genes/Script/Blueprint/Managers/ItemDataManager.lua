@@ -299,6 +299,7 @@ end
 ---@return BaseAttrEntryDetail[]? @词条明细，格式 { property: Attribute, finalValue: number, initialValue: number, strengthenValue: number } ；获取失败返回 nil
 function ItemDataManager:GetBaseAttrEntryDetail(defineId, level)
     if not _IsEquipment(defineId) then
+        ugcprint('返回nil')
         return nil
     end
 
