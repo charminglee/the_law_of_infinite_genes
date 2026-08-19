@@ -133,7 +133,7 @@ ItemCfg.Strengthen = {
     end,
     -- 强化提升百分比曲线
     StrengthenCurve = function (attr, level, quality)
-        return 0.01
+        return level * 0.01
     end,
 }
 for l = 42, 100 do

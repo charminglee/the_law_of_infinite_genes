@@ -13,6 +13,12 @@
 ---    isIdentified: boolean, 
 ---    refineNum: number,
 ---}
+---@alias BaseAttrEntryDetail {
+---    property: Attribute, 
+---    finalValue: number, 
+---    initialValue: number, 
+---    strengthenValue: number,
+---}
 
 
 ---@alias GeneNode {level: number, isUnlocked: boolean, nodeId: number}

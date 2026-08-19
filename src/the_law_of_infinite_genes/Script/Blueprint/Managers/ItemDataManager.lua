@@ -4,21 +4,29 @@
 local ItemDataManager = {}
 
 
-local function _GetQuality(itemId)
-    if type(itemId) == "number" then
-        return UGCItemSystemV2.GetItemQualityV2(itemId)
-    else
-        return UGCItemSystemV2.GetItemQualityV2(itemId.TypeSpecificID)
+local function _IsEquipment(itemId)
+    if type(itemId) ~= "number" then
+        itemId = itemId.TypeSpecificID
     end
+    local tags = UGCItemSystemV2.GetItemTagsV2(itemId)
+    return Lib.Table.Contain(tags, GameplayTag.Item.Equipment)
 end
 
 
-local function _GetItemType(itemId)
-    if type(itemId) == "number" then
-        return UGCItemSystemV2.GetItemCustomizedTypeV2(itemId)
-    else
-        return UGCItemSystemV2.GetItemCustomizedTypeV2(itemId.TypeSpecificID)
+local function _IsKenl(itemId)
+    if type(itemId) ~= "number" then
+        itemId = itemId.TypeSpecificID
     end
+    local tags = UGCItemSystemV2.GetItemTagsV2(itemId)
+    return Lib.Table.Contain(tags, GameplayTag.EquipmentSlot.Kenl)
+end
+
+
+local function _GetQuality(itemId)
+    if type(itemId) ~= "number" then
+        itemId = itemId.TypeSpecificID
+    end
+    return UGCItemSystemV2.GetItemQualityV2(itemId)
 end
 
 
@@ -60,7 +68,7 @@ end
 function ItemDataManager:GetCustomData(defineId)
     local data = UGCItemSystemV2.LoadItemCustomData(defineId) or {}
     local defaults
-    if _GetItemType(defineId) == ItemCfg.ItemType.Kenl then
+    if _IsKenl(defineId) then
         defaults = {
             entries = {},
             isIdentified = false,
@@ -108,7 +116,7 @@ function ItemDataManager:Identify(defineId)
         return nil
     end
     local itemId = defineId.TypeSpecificID
-    if _GetItemType(itemId) ~= ItemCfg.ItemType.Kenl then
+    if not _IsKenl(itemId) then
         return nil
     end
     local data = self:GetCustomData(defineId)
@@ -153,7 +161,7 @@ function ItemDataManager:Fusion(defineId1, defineId2)
     end
     local itemId1 = defineId1.TypeSpecificID
     local itemId2 = defineId2.TypeSpecificID
-    if _GetItemType(itemId1) ~= ItemCfg.ItemType.Kenl or _GetItemType(itemId2) ~= ItemCfg.ItemType.Kenl then
+    if not _IsKenl(itemId1) or not _IsKenl(itemId2) then
         return nil
     end
     local data1 = self:GetCustomData(defineId1)
@@ -187,7 +195,7 @@ function ItemDataManager:Refine(defineId, ...)
         return nil
     end
     local itemId = defineId.TypeSpecificID
-    if _GetItemType(itemId) ~= ItemCfg.ItemType.Kenl then
+    if not _IsKenl(itemId) then
         return nil
     end
     local data = self:GetCustomData(defineId)
@@ -285,23 +293,34 @@ function ItemDataManager:GetStrengthenLevel(defineId)
 end
 
 
----【双端】获取装备的基础词条列表。
+---【双端】获取装备基础词条明细，包含最终值、初始值和强化值。
 ---@param defineId ItemDefineID @装备的 ItemDefineID
----@return AttrEntry[]? @基础词条列表，若无数据则返回 nil
-function ItemDataManager:GetBaseAttrEntries(defineId)
-    local itemId = defineId.TypeSpecificID
-    if _GetItemType(itemId) ~= ItemCfg.ItemType.Equipment then
+---@param level number? @指定的强化等级；不传 level 时使用装备当前强化等级；传入 level 可用于 UI 预览指定等级
+---@return BaseAttrEntryDetail[]? @词条明细，格式 { property: Attribute, finalValue: number, initialValue: number, strengthenValue: number } ；获取失败返回 nil
+function ItemDataManager:GetBaseAttrEntryDetail(defineId, level)
+    if not _IsEquipment(defineId) then
         return nil
     end
+
+    local itemId = defineId.TypeSpecificID
     local quality = _GetQuality(itemId)
     local name = UGCItemSystemV2.GetItemNameV2(itemId)
     local factor = ItemCfg.EquipmentAttribute[name].Factor[quality]
-    local level = self:GetStrengthenLevel(defineId)
-    local base = ItemCfg.EquipmentAttribute[name].Base ---@type AttrEntry[]
-    local result = Lib.Table.DeepCopy(base)
-    for _, entry in pairs(result) do
-        local value = entry.value * factor
-        entry.value = value + value * ItemCfg.Strengthen.StrengthenCurve(entry.property, level, quality)
+    local base = ItemCfg.EquipmentAttribute[name].Base
+    if not level then
+        level = self:GetStrengthenLevel(defineId)
+    end
+
+    local result = {}
+    for _, entry in pairs(base) do
+        local initialValue = entry.value * factor
+        local strengthenValue = initialValue * ItemCfg.Strengthen.StrengthenCurve(entry.property, level, quality)
+        table.insert(result, {
+            property = entry.property,
+            initialValue = initialValue,
+            strengthenValue = strengthenValue,
+            finalValue = initialValue + strengthenValue,
+        })
     end
     return result
 end

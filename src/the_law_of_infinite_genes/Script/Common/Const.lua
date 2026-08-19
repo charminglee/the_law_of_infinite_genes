@@ -57,7 +57,21 @@ GameplayTag = {
             Seckill         = "Damage.Type.Seckill",
             Dodge           = "Damage.Type.Dodge",
         },
-    }
+    },
+    Item = {
+        Equipment = "Item.Equipment"
+    },
+    EquipmentSlot = {
+        Kenl = "EquipmentSlot.Kenl",
+        Suit = {
+            Body = "EquipmentSlot.Suit.Body",
+            Face = "EquipmentSlot.Suit.Face",
+            Feet = "EquipmentSlot.Suit.Feet",
+            Head = "EquipmentSlot.Suit.Head",
+            Kenl = "EquipmentSlot.Suit.Kenl",
+            Legs = "EquipmentSlot.Suit.Legs",
+        }
+    },
 }
 
 
