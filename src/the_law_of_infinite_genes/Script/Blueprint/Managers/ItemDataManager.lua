@@ -56,7 +56,7 @@ end
 
 ---【双端】获取物品自定义数据。
 ---@param defineId ItemDefineID @物品的 ItemDefineID
----@return (EquipmentData|KenlData|table) @自定义数据
+---@return (EquipmentData|KenlData|table)? @自定义数据
 function ItemDataManager:GetCustomData(defineId)
     local data = UGCItemSystemV2.LoadItemCustomData(defineId) or {}
     local defaults
@@ -102,7 +102,7 @@ end
 
 ---【服务端】鉴定核心。
 ---@param defineId ItemDefineID @核心的 ItemDefineID
----@return AttrEntry[] @鉴定结果词条列表，鉴定失败时返回 nil
+---@return AttrEntry[]? @鉴定结果词条列表，鉴定失败时返回 nil
 function ItemDataManager:Identify(defineId)
     if not Lib.IsServer() then
         return nil
@@ -146,7 +146,7 @@ end
 ---【服务端】融合两个核心。
 ---@param defineId1 ItemDefineID @主核心的 ItemDefineID
 ---@param defineId2 ItemDefineID @另一核心的 ItemDefineID
----@return AttrEntry[] @新词条列表，融合失败时返回 nil
+---@return AttrEntry[]? @新词条列表，融合失败时返回 nil
 function ItemDataManager:Fusion(defineId1, defineId2)
     if not Lib.IsServer() then
         return nil
@@ -181,7 +181,7 @@ end
 ---【服务端】洗炼核心。
 ---@param defineId ItemDefineID @核心的 ItemDefineID
 ---@param ... number @保留的词条索引
----@return AttrEntry[] @洗炼后的词条列表，洗炼失败时返回 nil
+---@return AttrEntry[]? @洗炼后的词条列表，洗炼失败时返回 nil
 function ItemDataManager:Refine(defineId, ...)
     if not Lib.IsServer() then
         return nil
@@ -209,24 +209,29 @@ function ItemDataManager:Refine(defineId, ...)
 
     return Lib.Table.DeepCopy(data.entries)
 end
- 
+
 
 ---【服务端】强化装备。
 ---@param defineId ItemDefineID @装备的 ItemDefineID
----@param level number @要强化的等级，默认为 1
 ---@return boolean @是否成功
-function ItemDataManager:Strengthen(defineId, level)
+function ItemDataManager:Strengthen(defineId)
     if not Lib.IsServer() then
         return false
     end
-    level = level or 1
     local data = self:GetCustomData(defineId)
     if not data then
         return false
     end
-    data.strengthenLevel = data.strengthenLevel + level
-    self:_SaveCustomData(defineId, data)
-    return true
+
+    local level = data.strengthenLevel + 1
+    local quality = _GetQuality(defineId)
+    local prob = ItemCfg.Strengthen.ProbCurve(level, quality)
+    if Lib.Math.Chance(prob) then
+        data.strengthenLevel = level
+        return self:_SaveCustomData(defineId, data)
+    else
+        return false
+    end
 end
 
 
@@ -237,6 +242,68 @@ function ItemDataManager:Reforge(defineId)
     if not Lib.IsServer() then
         return false
     end
+    return true
+end
+
+
+---【双端】获取核心的词条列表。
+---@param defineId ItemDefineID @核心的 ItemDefineID
+---@return AttrEntry[]? @词条列表，若无数据则返回 nil
+function ItemDataManager:GetKenlAttrEntries(defineId)
+    local data = self:GetCustomData(defineId)
+    if not data then
+        return nil
+    end
+    return data.entries
+end
+
+
+---【双端】获取剩余洗炼次数。
+---@param defineId ItemDefineID @核心的 ItemDefineID
+---@return number @剩余洗炼次数
+function ItemDataManager:GetRemainRefineNum(defineId)
+    local data = self:GetCustomData(defineId)
+    if not data then
+        return 0
+    end
+    if not data.refineNum then
+        return 0
+    end
+    return ItemCfg.Refine.Limit - data.refineNum
+end
+
+
+---【双端】获取强化等级。
+---@param defineId ItemDefineID @装备的 ItemDefineID
+---@return number @强化等级
+function ItemDataManager:GetStrengthenLevel(defineId)
+    local data = self:GetCustomData(defineId)
+    if not data then
+        return 0
+    end
+    return data.strengthenLevel or 0
+end
+
+
+---【双端】获取装备的基础词条列表。
+---@param defineId ItemDefineID @装备的 ItemDefineID
+---@return AttrEntry[]? @基础词条列表，若无数据则返回 nil
+function ItemDataManager:GetBaseAttrEntries(defineId)
+    local itemId = defineId.TypeSpecificID
+    if _GetItemType(itemId) ~= ItemCfg.ItemType.Equipment then
+        return nil
+    end
+    local quality = _GetQuality(itemId)
+    local name = UGCItemSystemV2.GetItemNameV2(itemId)
+    local factor = ItemCfg.EquipmentAttribute[name].Factor[quality]
+    local level = self:GetStrengthenLevel(defineId)
+    local base = ItemCfg.EquipmentAttribute[name].Base ---@type AttrEntry[]
+    local result = Lib.Table.DeepCopy(base)
+    for _, entry in pairs(result) do
+        local value = entry.value * factor
+        entry.value = value + value * ItemCfg.Strengthen.StrengthenCurve(entry.property, level, quality)
+    end
+    return result
 end
 
 
