@@ -35,7 +35,7 @@ function FortifyPreviewItem:SetEmpty()
 end
 
 ---@param DefineID ItemDefineID
----@param DisplayLevel number?
+---@param DisplayLevel number
 function FortifyPreviewItem:SetDefineID(DefineID, DisplayLevel)
     if DefineID == nil or DefineID.TypeSpecificID == nil then
         self:SetEmpty();

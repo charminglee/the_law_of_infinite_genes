@@ -56,7 +56,7 @@ end
 
 ---【双端】获取物品自定义数据。
 ---@param defineId ItemDefineID @物品的 ItemDefineID
----@return (EquipmentData|KenlData|table)? @自定义数据
+---@return (EquipmentData|KenlData|table) @自定义数据
 function ItemDataManager:GetCustomData(defineId)
     local data = UGCItemSystemV2.LoadItemCustomData(defineId) or {}
     local defaults
@@ -102,7 +102,7 @@ end
 
 ---【服务端】鉴定核心。
 ---@param defineId ItemDefineID @核心的 ItemDefineID
----@return AttrEntry[]? @鉴定结果词条列表，鉴定失败时返回 nil
+---@return AttrEntry[] @鉴定结果词条列表，鉴定失败时返回 nil
 function ItemDataManager:Identify(defineId)
     if not Lib.IsServer() then
         return nil
@@ -146,7 +146,7 @@ end
 ---【服务端】融合两个核心。
 ---@param defineId1 ItemDefineID @主核心的 ItemDefineID
 ---@param defineId2 ItemDefineID @另一核心的 ItemDefineID
----@return AttrEntry[]? @新词条列表，融合失败时返回 nil
+---@return AttrEntry[] @新词条列表，融合失败时返回 nil
 function ItemDataManager:Fusion(defineId1, defineId2)
     if not Lib.IsServer() then
         return nil
@@ -181,7 +181,7 @@ end
 ---【服务端】洗炼核心。
 ---@param defineId ItemDefineID @核心的 ItemDefineID
 ---@param ... number @保留的词条索引
----@return AttrEntry[]? @洗炼后的词条列表，洗炼失败时返回 nil
+---@return AttrEntry[] @洗炼后的词条列表，洗炼失败时返回 nil
 function ItemDataManager:Refine(defineId, ...)
     if not Lib.IsServer() then
         return nil

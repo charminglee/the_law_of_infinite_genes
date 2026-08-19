@@ -507,4 +507,75 @@ ItemCfg.EquipmentAttribute = {
 
 }
 
+ItemCfg.FirearmType = {
+    {Type = 'Ammo', Text = '子弹'},
+    {Type = 'Rifle', Text = '步枪'},
+    {Type = 'SMG', Text = '冲锋枪'},
+    {Type = 'LMG', Text = '轻机枪'},
+    {Type = 'Shotgun', Text = '霰弹枪'},
+    {Type = 'Snipe', Text = '狙击枪'},
+    {Type = 'Pistol', Text = '手枪'},
+}
+
+ItemCfg.FirearmPurchase = {
+    Ammo = {
+        {ItemId=831301001, cost=100},
+        {ItemId=831301002, cost=100},
+        {ItemId=831302001, cost=100},
+        {ItemId=831303001, cost=100},
+        {ItemId=831304001, cost=100},
+        {ItemId=831305001, cost=100},
+        {ItemId=831305002, cost=100},
+        {ItemId=831306001, cost=100},
+        {ItemId=831306002, cost=100},
+        {ItemId=831306003, cost=100},
+        {ItemId=831307001, cost=100},
+        {ItemId=831307002, cost=100},
+        {ItemId=831307003, cost=100},
+        {ItemId=831307004, cost=100},
+        {ItemId=831307099, cost=100},
+        {ItemId=831307100, cost=100},
+        {ItemId=831307101, cost=100},
+        {ItemId=831307102, cost=100},
+        {ItemId=831307103, cost=100},
+    },
+    Rifle = {
+        {ItemId=8310163, cost=100},
+        {ItemId=8310161, cost=100},
+        {ItemId=8310164, cost=100},
+        {ItemId=8310184, cost=100},
+
+    },
+    SMG = {
+        {ItemId=8310018, cost=100},
+        {ItemId=8310165, cost=100},
+        {ItemId=8310167, cost=100},
+        {ItemId=8310163, cost=100},
+        {ItemId=8310166, cost=100},
+    },
+    LMG = {
+        {ItemId=8310178, cost=100},
+        {ItemId=8310180, cost=100},
+        {ItemId=8310179, cost=100},
+    },
+    Shotgun = {
+        {ItemId=8310176, cost=100},
+        {ItemId=8310175, cost=100},
+        {ItemId=8310177, cost=100},
+    },
+    Snipe = {
+        {ItemId=8310168, cost=100},
+        {ItemId=8310169, cost=100},
+        {ItemId=8310174, cost=100},
+        {ItemId=8310172, cost=100},
+        {ItemId=8310170, cost=100},
+        {ItemId=8310171, cost=100},
+    },
+    Pistol = {
+        {ItemId=8310181, cost=100},
+        {ItemId=8310182, cost=100},
+        {ItemId=8310183, cost=100},
+    }
+}
+
 return ItemCfg

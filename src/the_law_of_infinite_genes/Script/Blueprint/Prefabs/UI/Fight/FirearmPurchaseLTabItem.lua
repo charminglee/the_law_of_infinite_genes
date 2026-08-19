@@ -3,39 +3,71 @@
 ---@field Item UImage
 ---@field selected UCanvasPanel
 --Edit Below--
-local FirearmPurchaseLTabItem = { 
+local FirearmPurchaseLTabItem = {
     bInitDoOnce = false,
-    Index=nil,
+    Index = nil,
+    RenderVersion = 0,
 }
 
 function FirearmPurchaseLTabItem:Construct()
-	self:LuaInit();
+    self:LuaInit();
 end
 
 function FirearmPurchaseLTabItem:LuaInit()
     if self.bInitDoOnce then
-		return;
-	end
-	self.bInitDoOnce = true;
-    self:Listen();
-end
-
-function FirearmPurchaseLTabItem:Listen()
+        return;
+    end
+    self.bInitDoOnce = true;
     self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
 end
 
 function FirearmPurchaseLTabItem:Button_0_Clicked()
-    FightManager.TabSelectIndex = self.Index;
+    if self.Index ~= nil then
+        FightManager:SelectTab(self.Index);
+    end
 end
 
-function FirearmPurchaseLTabItem:SetSelected(Visible)
-    self.selected:SetVisibility(Visible);
+function FirearmPurchaseLTabItem:SetEmpty()
+    self.Index = nil;
+    self.RenderVersion = self.RenderVersion + 1;
+    self:SetVisibility(ESlateVisibility.Collapsed);
 end
 
-function FirearmPurchaseLTabItem:SetIcon()
-    local path = FightManager.LTabIconList[self.Index+1].path;
-    local Texture = LoadObject(path);
-    self.Item:SetBrushFromTexture(Texture);
+function FirearmPurchaseLTabItem:SetSelected(IsSelected)
+    self.selected:SetVisibility(IsSelected and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
+end
+
+---@param Index number
+---@param TabData table
+function FirearmPurchaseLTabItem:SetData(Index, TabData)
+    if TabData == nil or TabData.path == nil then
+        self:SetEmpty();
+        return;
+    end
+    self.Index = Index;
+    self.RenderVersion = self.RenderVersion + 1;
+    local renderVersion = self.RenderVersion;
+    self:SetVisibility(ESlateVisibility.Visible);
+    self:AsyncSetTexture(
+            {AssetPathName = TabData.path, SubPathString = nil},
+            self.Item,
+            renderVersion
+    );
+end
+
+function FirearmPurchaseLTabItem:AsyncSetTexture(Path, UI, RenderVersion)
+    if Path == nil or UI == nil then
+        return;
+    end
+    Common.LoadObjectWithSoftPathAsync(Path,
+            function(Texture)
+                if self == nil or Texture == nil or UI == nil
+                        or self.RenderVersion ~= RenderVersion then
+                    return;
+                end
+                UI:SetBrushFromTexture(Texture);
+            end
+    );
 end
 
 return FirearmPurchaseLTabItem
