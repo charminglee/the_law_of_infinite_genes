@@ -81,7 +81,8 @@ end
 
 --- 点击强化界面按钮
 function BP_BackpackUIComponentV2_Custom:EquipmentFortify(DefineID, DataType)
-    FortifyManager:OpenMainUI(DefineID);
+    --FortifyManager:OpenMainUI(DefineID);
+    GunsManager:OpenMainUI();
 end
 
 function BP_BackpackUIComponentV2_Custom:EquipmentPure(DefineID, DataType)

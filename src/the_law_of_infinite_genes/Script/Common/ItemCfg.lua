@@ -610,7 +610,6 @@ ItemCfg.FirearmPurchase = {
         {ItemId=8310018, cost=100},
         {ItemId=8310165, cost=100},
         {ItemId=8310167, cost=100},
-        {ItemId=8310163, cost=100},
         {ItemId=8310166, cost=100},
     },
     LMG = {
@@ -637,7 +636,6 @@ ItemCfg.FirearmPurchase = {
         {ItemId=8310183, cost=100},
     }
 }
-
 
 ItemCfg.EnhanceSuccessRate = {
     [1] = 1.0,
