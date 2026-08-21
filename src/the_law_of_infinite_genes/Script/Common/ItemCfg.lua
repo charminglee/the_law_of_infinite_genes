@@ -715,4 +715,35 @@ ItemCfg.UnlockConditions = {
     [8310187] = {ItemId=8310003, value=6000}, --- DP-28
 }
 
+ItemCfg.EquipmentAdvanced = {
+    --- =========== 衣服 -- Body =========== ---
+    --- suit 0 新手套装
+    [8310020] = {ItemId = 8310053, Requirement={[1]={ItemId=8310015, value=1},[2]={ItemId=8310016, value=1}}, rate=0.95},
+    [8310053] = {ItemId = 8310056, Requirement={[1]={ItemId=8310015, value=1},[2]={ItemId=8310016, value=1}}, rate=0.80},
+    [8310056] = {ItemId = 8310058, Requirement={[1]={ItemId=8310016, value=1},[2]={ItemId=8310017, value=1}}, rate=0.60},
+    [8310058] = {ItemId = 8310057, Requirement={[1]={ItemId=8310017, value=1},[2]={ItemId=8310013, value=1}}, rate=0.40},
+    [8310057] = {ItemId = 8310028, Requirement={[1]={ItemId=8310013, value=1},[2]={ItemId=8310014, value=1}}, rate=0.20},
+    --- suit 1
+    [8310028] = {ItemId = 8310071},
+    [8310071] = {ItemId = 8310072},
+    [8310072] = {ItemId = 8310073},
+    [8310073] = {ItemId = 8310074},
+    [8310074] = {ItemId = 8310075},
+    [8310075] = {ItemId = 8310076},
+    [8310076] = {ItemId = 8310033},
+    --- suit 2
+    [8310033] = {ItemId = 8310101},
+    [8310101] = {ItemId = 8310102},
+    [8310102] = {ItemId = 8310103},
+    [8310103] = {ItemId = 8310104},
+    [8310105] = {ItemId = 8310106},
+    [8310106] = {ItemId = 8310007},
+    [8310007] = {ItemId = 8310131},
+    --- suit 3
+    [8310131] = {ItemId = 8310132},
+    [8310132] = {ItemId = 8310133},
+    [8310133] = {ItemId = 8310134},
+    [8310134] = {ItemId = 8310135},
+    [8310135] = {ItemId = 8310136}
+}
 return ItemCfg

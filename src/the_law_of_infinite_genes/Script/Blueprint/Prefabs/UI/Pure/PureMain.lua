@@ -4,11 +4,20 @@
 ---@field BackpackList UGC_ReuseList2_C
 ---@field Button_0 UButton
 ---@field Button_1 UButton
+---@field Button_277 UButton
 ---@field CurrentLevel UUTRichTextBlock
 ---@field FortifyBtn UButton
 ---@field Front UUTRichTextBlock
+---@field Image_9 UImage
+---@field Image_12 UImage
+---@field Image_13 UImage
+---@field Image_14 UImage
+---@field Image_17 UImage
+---@field Image_18 UImage
+---@field NewCheckBox_0 UNewCheckBox
 ---@field PreviewItem PurePreviewItem_C
 ---@field PreviewItem_0 PurePreviewItem_C
+---@field PurePreviewItem_C_0 PurePreviewItem_C
 ---@field SuccessRate UTextBlock
 ---@field TabList UGC_ReuseList2_C
 --Edit Below--
