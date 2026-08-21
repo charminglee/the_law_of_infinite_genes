@@ -600,6 +600,8 @@ ItemCfg.FirearmPurchase = {
         {ItemId=831307103, cost=100},
     },
     Rifle = {
+        {ItemId=8310185, cost=100},
+        {ItemId=8310186, cost=100},
         {ItemId=8310163, cost=100},
         {ItemId=8310161, cost=100},
         {ItemId=8310164, cost=100},
@@ -613,6 +615,7 @@ ItemCfg.FirearmPurchase = {
         {ItemId=8310166, cost=100},
     },
     LMG = {
+        {ItemId=8310187, cost=100},
         {ItemId=8310178, cost=100},
         {ItemId=8310180, cost=100},
         {ItemId=8310179, cost=100},
@@ -623,6 +626,7 @@ ItemCfg.FirearmPurchase = {
         {ItemId=8310177, cost=100},
     },
     Snipe = {
+        {ItemId=8310173, cost=100},
         {ItemId=8310168, cost=100},
         {ItemId=8310169, cost=100},
         {ItemId=8310174, cost=100},
@@ -679,6 +683,36 @@ ItemCfg.EnhanceSuccessRate = {
     [40] = 0.065,
     [41] = 0.060,
     [42] = 0.050
+}
+
+ItemCfg.UnlockConditions = {
+    [8310163] = {ItemId=8310162, value=3}, --- AUG
+    [8310161] = {ItemId=8310162, value=1}, --- M416
+    [8310164] = {ItemId=8310162, value=3}, --- Groza
+    [8310184] = {ItemId=0, value=0}, --- 激光枪
+    [8310018] = {ItemId=8310003, value=3000}, --- UZI
+    [8310165] = {ItemId=8310162, value=3}, --- UMP45
+    [8310167] = {ItemId=8310003, value=6000}, --- 野牛
+    [8310166] = {ItemId=8310162, value=3}, --- P90
+    [8310178] = {ItemId=8310162, value=3}, --- M249
+    [8310180] = {ItemId=8310162, value=3}, --- M134
+    [8310179] = {ItemId=8310162, value=3}, --- MG3
+    [8310176] = {ItemId=8310162, value=3}, --- DBS
+    [8310175] = {ItemId=8310003, value=3000}, --- S686
+    [8310177] = {ItemId=8310003, value=6000}, --- S12K
+    [8310168] = {ItemId=8310003, value=3000}, --- 98k
+    [8310169] = {ItemId=8310003, value=6000}, --- M24
+    [8310173] = {ItemId=8310003, value=3000}, --- VSS
+    [8310174] = {ItemId=8310003, value=6000}, --- Mini14
+    [8310172] = {ItemId=8310003, value=6000}, --- SKS
+    [8310170] = {ItemId=8310162, value=3}, --- AWM
+    [8310171] = {ItemId=8310162, value=3}, --- M200
+    [8310181] = {ItemId=8310162, value=3}, --- 双持左轮
+    [8310182] = {ItemId=8310003, value=3000}, --- 霰弹手枪
+    [8310183] = {ItemId=8310003, value=3000}, --- 冲锋手枪
+    [8310185] = {ItemId=8310003, value=6000}, --- AKM
+    [8310186] = {ItemId=8310003, value=6000}, --- SCAR-L
+    [8310187] = {ItemId=8310003, value=6000}, --- DP-28
 }
 
 return ItemCfg
