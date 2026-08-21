@@ -12,6 +12,7 @@ local PlayerDataManager = {
     ---    title: {equipped: Title?, unlocked: Title[]}, 
     ---    inv: table<number, ntable<InvItem>>,
     ---    geneTree: {skillPoint: number, nodes: table<number, GeneNode>},
+    ---    gun: {unlocked: table<number, boolean>},
     ---}
     _data = nil,
 
@@ -71,9 +72,6 @@ function PlayerDataManager:ReceiveEndPlay()
 end
 
 
--- region: 通用 ==================================================
-
-
 local function _BuildDefaultData()
     local data = {
         custom = {},
@@ -92,6 +90,9 @@ local function _BuildDefaultData()
         geneTree = {
             skillPoint = 0,
             nodes = {},
+        },
+        gun = {
+            unlocked = {},
         },
     }
     for _, v in pairs(Statistics) do
@@ -138,6 +139,9 @@ function PlayerDataManager:_LoadData()
     self._isLoaded = true
     self:SyncData()
 end
+
+
+-- region: 通用 ==================================================
 
 
 ---【双端】获取自定义数据。
@@ -195,6 +199,52 @@ end
 function PlayerDataManager:SyncAll()
     self:SyncData()
     self:SyncCardData()
+end
+
+
+-- endregion
+
+
+-- region: 枪械 ==================================================
+
+
+---【双端】判断指定枪械是否已解锁。
+---@param itemId number @枪械的物品ID
+---@return boolean @是否已解锁
+function PlayerDataManager:IsGunUnlock(itemId)
+    if not self._isLoaded then
+        return false
+    end
+    return self._data.gun.unlocked[itemId] == true
+end
+
+
+---【双端】获取已解锁的枪械列表。
+---@return number[]? @已解锁的枪械物品ID列表，获取失败或无已解锁枪械时返回 nil
+function PlayerDataManager:GetUnlockedGuns()
+    if not self._isLoaded then
+        return nil
+    end
+    if Lib.Table.IsEmpty(self._data.gun.unlocked) then
+        return nil
+    end
+    return Lib.Table.Keys(self._data.gun.unlocked)
+end
+
+
+---【服务端】解锁指定枪械。
+---@param itemId number @枪械的物品ID
+---@return boolean @是否成功
+function PlayerDataManager:UnlockGun(itemId)
+    if not Lib.IsServer() or not self._isLoaded then
+        return false
+    end
+    if self:IsGunUnlock(itemId) then
+        return false
+    end
+    self._data.gun.unlocked[itemId] = true
+    self:SyncData()
+    return true
 end
 
 
@@ -324,7 +374,11 @@ function PlayerDataManager:SetCoin(id, value, sync)
     if sync ~= false then
         self:SyncData()
     end
-    Lib.EventSystem.Broadcast(Event.OnCoinChangeAfter, self.owner.UID, id, old, value)
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner, 
+        Event.OnCoinChangeAfter, 
+        self.owner.UID, id, old, value
+    )
     return true
 end
 
@@ -349,7 +403,11 @@ function PlayerDataManager:AddCoin(id, delta, sync)
     if sync ~= false then
         self:SyncData()
     end
-    Lib.EventSystem.Broadcast(Event.OnCoinChangeAfter, self.owner.UID, id, old, new)
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner, 
+        Event.OnCoinChangeAfter, 
+        self.owner.UID, id, old, new
+    )
     return true
 end
 
@@ -394,7 +452,7 @@ function PlayerDataManager:ResetCardData()
         refreshCount = 0,
     }
     self:SyncCardData()
-    Lib.EventSystem.Broadcast(Event.OnResetCardData, self.owner.UID)
+    Lib.EventSystem.Broadcast_SinglePlayer(self.owner, Event.OnResetCardData, self.owner.UID)
 end
 
 
@@ -418,7 +476,11 @@ function PlayerDataManager:LevelUpCardSlot()
 
     self._card.shopLevel = level + 1
     self:SyncCardData()
-    Lib.EventSystem.Broadcast(Event.OnCardShopLevelUpAfter, self.owner.UID, level, self._card.shopLevel)
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner, 
+        Event.OnCardShopLevelUpAfter, 
+        self.owner.UID, level, self._card.shopLevel
+    )
 end
 
 
@@ -551,7 +613,11 @@ function PlayerDataManager:EquipCard(fromSlot, toSlot, sync)
     if sync ~= false then
         self:SyncCardData()
     end
-    Lib.EventSystem.Broadcast(Event.OnCardEquipAfter, self.owner.UID, fromSlot, toSlot, card)
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner, 
+        Event.OnCardEquipAfter, 
+        self.owner.UID, fromSlot, toSlot, card
+    )
 end
 
 
@@ -585,7 +651,11 @@ function PlayerDataManager:UnequipCard(fromSlot, toSlot, sync)
     if sync ~= false then
         self:SyncCardData()
     end
-    Lib.EventSystem.Broadcast(Event.OnCardUnequipAfter, self.owner.UID, fromSlot, toSlot, card)
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner, 
+        Event.OnCardUnequipAfter, 
+        self.owner.UID, fromSlot, toSlot, card
+    )
 end
 
 
@@ -627,7 +697,11 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
     if sync ~= false then
         self:SyncCardData()
     end
-    Lib.EventSystem.Broadcast(Event.OnCardPurchaseAfter, self.owner.UID, fromSlot, toSlot, card, cost)
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner, 
+        Event.OnCardPurchaseAfter, 
+        self.owner.UID, fromSlot, toSlot, card, cost
+    )
 end
 
 
@@ -647,7 +721,11 @@ function PlayerDataManager:_SellCard(from, slot, sync)
     if sync ~= false then
         self:SyncCardData()
     end
-    Lib.EventSystem.Broadcast(Event.OnCardSellAfter, self.owner.UID, from, slot, card, refund)
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner, 
+        Event.OnCardSellAfter, 
+        self.owner.UID, from, slot, card, refund
+    )
 end
 
 
@@ -708,7 +786,11 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
     self._card.refreshCount = self._card.refreshCount + 1
 
     self:SyncCardData()
-    Lib.EventSystem.Broadcast(Event.OnCardShopRefreshAfter, self.owner.UID, shop)
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner, 
+        Event.OnCardShopRefreshAfter, 
+        self.owner.UID, shop
+    )
 end
 
 
@@ -767,7 +849,7 @@ function PlayerDataManager:EquipTitle(title)
     end
     self._data.title.equipped = title
     self:SyncData()
-    Lib.EventSystem.Broadcast(Event.OnTitleEquipAfter, self.owner.UID, title)
+    Lib.EventSystem.Broadcast_SinglePlayer(self.owner, Event.OnTitleEquipAfter, self.owner.UID, title)
 end
 
 
@@ -795,7 +877,7 @@ function PlayerDataManager:UnlockTitle(title)
     end
     table.insert(unlocked, title)
     self:SyncData()
-    Lib.EventSystem.Broadcast(Event.OnTitleUnlockAfter, self.owner.UID, title)
+    Lib.EventSystem.Broadcast_SinglePlayer(self.owner, Event.OnTitleUnlockAfter, self.owner.UID, title)
 end
 
 
