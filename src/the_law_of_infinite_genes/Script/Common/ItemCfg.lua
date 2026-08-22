@@ -3,44 +3,44 @@ ItemCfg = ItemCfg or {}
 
 -- 装备词条数值范围
 ItemCfg.AttributeEntryRange = {
-    [Attribute.AttackPower]                 = { min=0, max=1 },
-    [Attribute.AttackPowerPct]              = { min=0, max=1 },
-    [Attribute.DamagePct]                   = { min=0, max=1 },
-    [Attribute.NormalMonsterDamagePct]      = { min=0, max=1 },
-    [Attribute.EliteMonsterDamagePct]       = { min=0, max=1 },
-    [Attribute.BossDamagePct]               = { min=0, max=1 },
-    [Attribute.CritChance]                  = { min=0, max=1 },
-    [Attribute.CritDamagePct]               = { min=0, max=1 },
-    [Attribute.Defence]                     = { min=0, max=1 },
-    [Attribute.DefensePct]                  = { min=0, max=1 },
-    [Attribute.HealthStealPct]              = { min=0, max=1 },
-    [Attribute.CounterAttackPct]            = { min=0, max=1 },
-    [Attribute.DamageDecreace]              = { min=0, max=1 },
-    [Attribute.DamageDecreacePct]           = { min=0, max=1 },
-    [Attribute.BreakDefencePct]             = { min=0, max=1 },
-    [Attribute.SeckillChance]               = { min=0, max=1 },
-    [Attribute.DodgeChance]                 = { min=0, max=1 },   
-    [Attribute.HealthMax]                   = { min=0, max=1 },
-    [Attribute.HealthMaxPct]                = { min=0, max=1 },
-    [Attribute.RecoilPct]                   = { min=0, max=1 },
-    [Attribute.ReloadTime]                  = { min=0, max=1 },
-    [Attribute.ReloadTimePct]               = { min=0, max=1 },
-    [Attribute.MoveSpeedScale]              = { min=0, max=2 },
-    [Attribute.ShootSpeedScale]             = { min=0, max=2 },
-    [Attribute.EpidemicToxinRatio]          = { min=0, max=1 },
-    [Attribute.EpidemicToxinLevel]          = { min=0, max=1 },
-    [Attribute.EpidemicToxinOverlyLimit]    = { min=0, max=1 },
-    [Attribute.EpidemicToxinSettleRatio]    = { min=0, max=1 },
+    [Attribute.AttackPower]                 = { Min=0, Max=1 },
+    [Attribute.AttackPowerPct]              = { Min=0, Max=1 },
+    [Attribute.DamagePct]                   = { Min=0, Max=1 },
+    [Attribute.NormalMonsterDamagePct]      = { Min=0, Max=1 },
+    [Attribute.EliteMonsterDamagePct]       = { Min=0, Max=1 },
+    [Attribute.BossDamagePct]               = { Min=0, Max=1 },
+    [Attribute.CritChance]                  = { Min=0, Max=1 },
+    [Attribute.CritDamagePct]               = { Min=0, Max=1 },
+    [Attribute.Defence]                     = { Min=0, Max=1 },
+    [Attribute.DefensePct]                  = { Min=0, Max=1 },
+    [Attribute.HealthStealPct]              = { Min=0, Max=1 },
+    [Attribute.CounterAttackPct]            = { Min=0, Max=1 },
+    [Attribute.DamageDecreace]              = { Min=0, Max=1 },
+    [Attribute.DamageDecreacePct]           = { Min=0, Max=1 },
+    [Attribute.BreakDefencePct]             = { Min=0, Max=1 },
+    [Attribute.SeckillChance]               = { Min=0, Max=1 },
+    [Attribute.DodgeChance]                 = { Min=0, Max=1 },   
+    [Attribute.HealthMax]                   = { Min=0, Max=1 },
+    [Attribute.HealthMaxPct]                = { Min=0, Max=1 },
+    [Attribute.RecoilPct]                   = { Min=0, Max=1 },
+    [Attribute.ReloadTime]                  = { Min=0, Max=1 },
+    [Attribute.ReloadTimePct]               = { Min=0, Max=1 },
+    [Attribute.MoveSpeedScale]              = { Min=0, Max=2 },
+    [Attribute.ShootSpeedScale]             = { Min=0, Max=2 },
+    [Attribute.EpidemicToxinRatio]          = { Min=0, Max=1 },
+    [Attribute.EpidemicToxinLevel]          = { Min=0, Max=1 },
+    [Attribute.EpidemicToxinOverlyLimit]    = { Min=0, Max=1 },
+    [Attribute.EpidemicToxinSettleRatio]    = { Min=0, Max=1 },
 }
 ItemCfg.AttributeEntryPool = Lib.Table.Keys(ItemCfg.AttributeEntryRange)
 
 
 ItemCfg.EntryItemId = {
-    [0] = 8310042,
-    [1] = 8310046,
-    [2] = 8310044,
-    [3] = 8310049,
-    [4] = 8310050,
+    [0] = ItemId.Kenl_0_0,
+    [1] = ItemId.Kenl_0_1,
+    [2] = ItemId.Kenl_0_2,
+    [3] = ItemId.Kenl_0_3,
+    [4] = ItemId.Kenl_0_4,
 }
 
 
@@ -54,14 +54,14 @@ end
 -- 鉴定配置
 ItemCfg.Identify = {
     -- 消耗的材料ItemId
-    Material = 8310000,
+    Material = ItemId.Coin_0,
     -- 消耗的材料数量
     Cost = {
-        [8310042] = 100,
-        [8310046] = 150,
-        [8310044] = 200,
-        [8310049] = 250,
-        [8310050] = 300,
+        [ItemId.Kenl_0_0] = 100,
+        [ItemId.Kenl_0_1] = 150,
+        [ItemId.Kenl_0_2] = 200,
+        [ItemId.Kenl_0_3] = 250,
+        [ItemId.Kenl_0_4] = 300,
     },
 }
 
@@ -81,7 +81,7 @@ ItemCfg.Refine = {
 -- 强化配置
 ItemCfg.Strengthen = {
     -- 消耗的材料ItemId
-    Material = 8310000,
+    Material = ItemId.Coin_0,
     -- 最大强化等级
     MaxLevel = 100,
     -- 强化概率曲线
@@ -137,14 +137,66 @@ ItemCfg.Strengthen = {
         return level * 0.01
     end,
 }
-for l = 42, 100 do
-    ItemCfg.Strengthen._ProbMap[l] = 0.050
+for i = 42, 100 do
+    ItemCfg.Strengthen._ProbMap[i] = 0.050
 end
 
 
 -- 精炼配置
 ItemCfg.Reforge = {
-
+    -- 宇宙晶石概率提升
+    AdvancedProbBoost = 0.2,
+    ReforgeMap = {
+        --- =========== 衣服 -- Body =========== ---
+        --- suit 0 新手套装
+        [8310020] = {
+            Result = 8310053, 
+            Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } }, 
+            Prob = 0.95
+        },
+        [8310053] = {
+            Result = 8310056, 
+            Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } }, 
+            Prob = 0.80
+        },
+        [8310056] = {
+            Result = 8310058, 
+            Requirement = { { ItemId=8310016, Value=1 }, { ItemId=8310017, Value=1 } }, 
+            Prob = 0.60
+        },
+        [8310058] = {
+            Result = 8310057, 
+            Requirement = { { ItemId=8310017, Value=1 }, { ItemId=8310013, Value=1 } }, 
+            Prob = 0.40
+        },
+        [8310057] = {
+            Result = 8310028, 
+            Requirement = { { ItemId=8310013, Value=1 }, { ItemId=8310014, Value=1 } }, 
+            Prob = 0.20
+        },
+        --- suit 1
+        [8310028] = {Result = 8310071},
+        [8310071] = {Result = 8310072},
+        [8310072] = {Result = 8310073},
+        [8310073] = {Result = 8310074},
+        [8310074] = {Result = 8310075},
+        [8310075] = {Result = 8310076},
+        [8310076] = {Result = 8310033},
+        --- suit 2
+        [8310033] = {Result = 8310101},
+        [8310101] = {Result = 8310102},
+        [8310102] = {Result = 8310103},
+        [8310103] = {Result = 8310104},
+        [8310105] = {Result = 8310106},
+        [8310106] = {Result = 8310007},
+        [8310007] = {Result = 8310131},
+        --- suit 3
+        [8310131] = {Result = 8310132},
+        [8310132] = {Result = 8310133},
+        [8310133] = {Result = 8310134},
+        [8310134] = {Result = 8310135},
+        [8310135] = {Result = 8310136}
+    }
 }
 
 
@@ -171,6 +223,7 @@ ItemCfg.ItemQuality = {
     [5] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_6.Image_BigQualityBg_6', name='史诗', color='#F1C40F', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_6.Image_QualityBar_6'},
     [6] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话', color='#E74C3C', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_7.Image_QualityBar_7'}
 }
+
 
 ItemCfg.colorTable = {
     -- ============ 凡尘（Lv.1 ~ Lv.9）============
@@ -493,6 +546,7 @@ ItemCfg.Formula = {
     },
 }
 
+
 ItemCfg.EquipmentAttribute = {
     ['基础帽子'] = {
         Base = {
@@ -567,6 +621,7 @@ ItemCfg.EquipmentAttribute = {
 
 }
 
+
 ItemCfg.FirearmType = {
     {Type = 'Ammo', Text = '子弹'},
     {Type = 'Rifle', Text = '步枪'},
@@ -576,6 +631,7 @@ ItemCfg.FirearmType = {
     {Type = 'Snipe', Text = '狙击枪'},
     {Type = 'Pistol', Text = '手枪'},
 }
+
 
 ItemCfg.FirearmPurchase = {
     Ammo = {
@@ -641,49 +697,6 @@ ItemCfg.FirearmPurchase = {
     }
 }
 
-ItemCfg.EnhanceSuccessRate = {
-    [1] = 1.0,
-    [2] = 0.95,
-    [3] = 0.9,
-    [4] = 0.85,
-    [5] = 0.80,
-    [6] = 0.75,
-    [7] = 0.70,
-    [8] = 0.65,
-    [9] = 0.60,
-    [10] = 0.55,
-    [11] = 0.50,
-    [12] = 0.45,
-    [13] = 0.40,
-    [14] = 0.35,
-    [15] = 0.30,
-    [16] = 0.25,
-    [18] = 0.20,
-    [19] = 0.15,
-    [20] = 0.10,
-    [21] = 0.05,
-    [22] = 0.05,
-    [23] = 0.05,
-    [24] = 0.05,
-    [25] = 0.05,
-    [26] = 0.05,
-    [27] = 0.05,
-    [28] = 0.05,
-    [29] = 0.05,
-    [30] = 0.04,
-    [31] = 0.03,
-    [32] = 0.02,
-    [33] = 0.01,
-    [34] = 0.095,
-    [35] = 0.090,
-    [36] = 0.085,
-    [37] = 0.080,
-    [38] = 0.075,
-    [39] = 0.07,
-    [40] = 0.065,
-    [41] = 0.060,
-    [42] = 0.050
-}
 
 ItemCfg.UnlockConditions = {
     [8310163] = {ItemId=8310162, value=3}, --- AUG
@@ -715,35 +728,5 @@ ItemCfg.UnlockConditions = {
     [8310187] = {ItemId=8310003, value=6000}, --- DP-28
 }
 
-ItemCfg.EquipmentAdvanced = {
-    --- =========== 衣服 -- Body =========== ---
-    --- suit 0 新手套装
-    [8310020] = {ItemId = 8310053, Requirement={[1]={ItemId=8310015, value=1},[2]={ItemId=8310016, value=1}}, rate=0.95},
-    [8310053] = {ItemId = 8310056, Requirement={[1]={ItemId=8310015, value=1},[2]={ItemId=8310016, value=1}}, rate=0.80},
-    [8310056] = {ItemId = 8310058, Requirement={[1]={ItemId=8310016, value=1},[2]={ItemId=8310017, value=1}}, rate=0.60},
-    [8310058] = {ItemId = 8310057, Requirement={[1]={ItemId=8310017, value=1},[2]={ItemId=8310013, value=1}}, rate=0.40},
-    [8310057] = {ItemId = 8310028, Requirement={[1]={ItemId=8310013, value=1},[2]={ItemId=8310014, value=1}}, rate=0.20},
-    --- suit 1
-    [8310028] = {ItemId = 8310071},
-    [8310071] = {ItemId = 8310072},
-    [8310072] = {ItemId = 8310073},
-    [8310073] = {ItemId = 8310074},
-    [8310074] = {ItemId = 8310075},
-    [8310075] = {ItemId = 8310076},
-    [8310076] = {ItemId = 8310033},
-    --- suit 2
-    [8310033] = {ItemId = 8310101},
-    [8310101] = {ItemId = 8310102},
-    [8310102] = {ItemId = 8310103},
-    [8310103] = {ItemId = 8310104},
-    [8310105] = {ItemId = 8310106},
-    [8310106] = {ItemId = 8310007},
-    [8310007] = {ItemId = 8310131},
-    --- suit 3
-    [8310131] = {ItemId = 8310132},
-    [8310132] = {ItemId = 8310133},
-    [8310133] = {ItemId = 8310134},
-    [8310134] = {ItemId = 8310135},
-    [8310135] = {ItemId = 8310136}
-}
+
 return ItemCfg

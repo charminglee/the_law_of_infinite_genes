@@ -84,6 +84,7 @@ ItemId = {
     Coin_2              = 8310002,
     Coin_3              = 8310003,
     Coin_4              = 8310012,
+    Coin_5              = 8310162,
     EquipmentMaterial_0 = 8310004,
     EquipmentMaterial_1 = 8310005,
     EquipmentMaterial_2 = 8310006,
@@ -101,6 +102,7 @@ ItemId = {
     Kenl_0_2            = 8310044,
     Kenl_0_3            = 8310049,
     Kenl_0_4            = 8310050,
+    Advanced_1          = 8310188,
 }
 
 

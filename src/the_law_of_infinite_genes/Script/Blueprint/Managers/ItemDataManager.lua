@@ -56,8 +56,8 @@ end
 
 local function _GenAttrValue(attr)
     local range = ItemCfg.AttributeEntryRange[attr]
-    local value = ItemCfg.AttrCurve(range.min, range.max)
-    value = _RoundAttrValue(value, range.min, range.max)
+    local value = ItemCfg.AttrCurve(range.Min, range.Max)
+    value = _RoundAttrValue(value, range.Min, range.Max)
     return value
 end
 
@@ -151,6 +151,44 @@ function ItemDataManager:Identify(defineId)
 end
 
 
+function ItemDataManager:_AddItem(itemId, count, customData)
+    if type(itemId) ~= "number" then
+        itemId = itemId.TypeSpecificID
+    end
+    count = count or 1
+    local pc = UGCGameSystem.GetPlayerControllerByPlayerState(self.owner)
+    if customData then
+        local defineId = UGCItemSystemV2.GetItemDefineID(itemId)
+        self:_SaveCustomData(defineId, customData)
+        return UGCBackpackSystemV2.AddItemByDefineIDV2(pc, defineId, count) > 0
+    else
+        local res = UGCBackpackSystemV2.AddItemV2(pc, itemId, count)
+        return res and res[0] > 0
+    end
+end
+
+
+function ItemDataManager:_RemoveItem(itemId, count)
+    count = count or 1
+    local pc = UGCGameSystem.GetPlayerControllerByPlayerState(self.owner)
+    if type(itemId) == "number" then
+        return UGCBackpackSystemV2.RemoveItemV2(pc, itemId, count) > 0  
+    else
+        return UGCBackpackSystemV2.RemoveItemByDefineIDV2(pc, itemId, count) > 0
+    end
+end
+
+
+function ItemDataManager:_GetItemCount(itemId)
+    local pc = UGCGameSystem.GetPlayerControllerByPlayerState(self.owner)
+    if type(itemId) == "number" then
+        return UGCBackpackSystemV2.GetItemCountV2(pc, itemId)
+    else
+        return UGCBackpackSystemV2.GetItemCountByDefineIDV2(pc, itemId)
+    end
+end
+
+
 ---【服务端】融合两个核心。
 ---@param defineId1 ItemDefineID @主核心的 ItemDefineID
 ---@param defineId2 ItemDefineID @另一核心的 ItemDefineID
@@ -179,8 +217,7 @@ function ItemDataManager:Fusion(defineId1, defineId2)
         return nil
     end
 
-    local pc = UGCGameSystem.GetPlayerControllerByPlayerState(self.owner)
-    UGCBackpackSystemV2.RemoveItemByDefineIDV2(pc, defineId2, 1)
+    self:_RemoveItem(defineId2)
 
     return Lib.Table.DeepCopy(result)
 end
@@ -245,12 +282,44 @@ end
 
 ---【服务端】精炼装备。
 ---@param defineId ItemDefineID @装备的 ItemDefineID
+---@param useAdvanced boolean? @是否使用宇宙晶石，默认为 false
 ---@return boolean @是否成功
-function ItemDataManager:Reforge(defineId)
+function ItemDataManager:Reforge(defineId, useAdvanced)
     if not Lib.IsServer() then
         return false
     end
-    return true
+    local reforgeData = ItemCfg.Reforge.ReforgeMap[defineId.TypeSpecificID]
+    if not reforgeData then
+        return false
+    end
+    local result      = reforgeData.Result
+    local requirement = reforgeData.Requirement
+    local prob        = reforgeData.Prob
+
+    for _, req in pairs(requirement) do
+        if self:_GetItemCount(req.ItemId) < req.Value then
+            return false
+        end
+    end
+
+    if useAdvanced then
+        if self:_GetItemCount(ItemId.Advanced_1) <= 0 then
+            return false
+        end
+        prob = prob + ItemCfg.Reforge.AdvancedProbBoost
+        self:_RemoveItem(ItemId.Advanced_1)
+    end
+    for _, req in pairs(requirement) do
+        self:_RemoveItem(req.ItemId, req.Value)
+    end
+
+    if Lib.Math.Chance(prob) then
+        self:_AddItem(result, 1, self:GetCustomData(defineId))
+        self:_RemoveItem(defineId)
+        return true
+    else
+        return false
+    end
 end
 
 

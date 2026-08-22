@@ -3,10 +3,9 @@
 ---@field SpecialEventManager SpecialEventManager_C
 ---@field MobSpawnerManager MobSpawnerManager_C
 --Edit Below--
-UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 local UGCGameState = {}
 
-UGCGameSystem.UGCRequire("Script.Common.ue_enum_custom")
+UGCGameSystem.UGCRequire('Script.Common.ue_enum_custom')
 UGCGameSystem.UGCRequire("Script.GameAttribute.game_attribute_type")
 UGCGameSystem.UGCRequire("Script.Lib.Lib")
 UGCGameSystem.UGCRequire("Script.Common.UGCLog")
