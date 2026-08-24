@@ -1,9 +1,11 @@
 PureManager = PureManager or {
     MainUI = nil,
+    ComponentClass = nil,
     DefineId = nil,
     MaterialDefineId = nil,
     FilterType = nil,
-    RequestHandler = nil,
+    RefreshUI = false,
+    PendingResultItemId = nil,
     EquipmentType = {
         [1] = {Type = 'ALL', Text = '所有装备'},
         [2] = {Type = 'Head', Text = '帽子'},
@@ -13,6 +15,12 @@ PureManager = PureManager or {
         [6] = {Type = 'Feet', Text = '鞋子'},
     }
 }
+
+function PureManager:RegisterComponentClass(CompClass)
+    if CompClass ~= nil then
+        self.ComponentClass = CompClass;
+    end
+end
 
 function PureManager:RegisterMainUI(MainUI)
     if MainUI ~= nil then
@@ -31,6 +39,8 @@ function PureManager:OpenMainUI(DefineID)
         return;
     end
     self.MaterialDefineId = nil;
+    self.RefreshUI = false;
+    self.PendingResultItemId = nil;
     self.MainUI:Open(DefineID);
 end
 
@@ -50,61 +60,63 @@ function PureManager:Reload(DefineID, FilterType)
     end
 end
 
----注册精炼请求回调。这里只保留 UI 接口，不直接调用 RPC 或数据层。
----@param Handler function|nil
-function PureManager:SetRequestHandler(Handler)
-    self.RequestHandler = Handler;
-end
-
 ---@param DefineID ItemDefineID
----@param MaterialDefineID ItemDefineID
+---@param UseAdvanced boolean
 ---@return boolean
-function PureManager:Request(DefineID, MaterialDefineID)
-    if type(self.RequestHandler) ~= 'function' then
+function PureManager:Request(DefineID, UseAdvanced)
+    if DefineID == nil or self.ComponentClass == nil then
         return false;
     end
-    self.RequestHandler(DefineID, MaterialDefineID);
+    local data = self:GetReforgeData(DefineID);
+    if data == nil then
+        return false;
+    end
+    self.PendingResultItemId = data.Result;
+    UnrealNetwork.CallUnrealRPC(
+            LocalPlayerController,
+            self.ComponentClass,
+            'ReforgeSubmit',
+            LocalPlayerController.PlayerKey,
+            DefineID,
+            UseAdvanced == true
+    );
     return true;
 end
 
-function PureManager:GetMaxQuality()
-    local maxQuality = 0;
-    for quality, _ in pairs(ItemCfg.ItemQuality or {}) do
-        if type(quality) == 'number' and quality > maxQuality then
-            maxQuality = quality;
-        end
-    end
-    return maxQuality;
-end
-
 ---@param DefineID ItemDefineID
----@return number|nil
-function PureManager:GetMaterialItemId(DefineID)
+---@return table|nil
+function PureManager:GetReforgeData(DefineID)
     if DefineID == nil or DefineID.TypeSpecificID == nil then
         return nil;
     end
-    local quality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineID)
-            or UGCItemSystemV2.GetItemQualityV2(DefineID.TypeSpecificID) or 0;
-    local materialKey = string.format('EquipmentMaterial_%s', tostring(quality));
-    if ItemId == nil then
-        return 8310004;
-    end
-    return ItemId[materialKey] or ItemId.EquipmentMaterial_0 or 8310004;
+    local cfg = ItemCfg.Reforge;
+    return cfg and cfg.ReforgeMap and cfg.ReforgeMap[DefineID.TypeSpecificID] or nil;
 end
 
----@param Quality number
+---@param DefineID ItemDefineID
+---@param UseAdvanced boolean
 ---@return number
-function PureManager:GetSuccessRate(Quality)
-    local cfg = ItemCfg.Reforge or {};
-    local rates = cfg.SuccessRate or cfg.Rate;
-    local rate = nil;
-    if type(rates) == 'table' then
-        rate = rates[Quality] or rates[Quality + 1];
-    elseif type(rates) == 'number' then
-        rate = rates;
+function PureManager:GetSuccessRate(DefineID, UseAdvanced)
+    local data = self:GetReforgeData(DefineID);
+    if data == nil then
+        return 0;
     end
-    rate = tonumber(rate) or 0.8;
+    local rate = tonumber(data.Prob) or 0;
+    if UseAdvanced then
+        rate = rate + (tonumber(ItemCfg.Reforge.AdvancedProbBoost) or 0);
+    end
     return math.max(0, math.min(rate, 1));
+end
+
+---@param ItemDefineId ItemDefineID
+function PureManager:OnItemCustomDataUpdateAfter(ItemDefineId)
+    if self.PendingResultItemId == nil or ItemDefineId == nil
+            or ItemDefineId.TypeSpecificID ~= self.PendingResultItemId then
+        return;
+    end
+    self.DefineId = totable(ItemDefineId);
+    self.PendingResultItemId = nil;
+    self.RefreshUI = true;
 end
 
 return PureManager
