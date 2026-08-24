@@ -124,10 +124,10 @@ function ItemDataManager:Identify(defineId)
         return nil
     end
 
-    -- 扣除鉴定材料
+    -- 扣除材料
     local pdm = self.owner.PlayerDataManager ---@type PlayerDataManager_C
     local cost = ItemCfg.Identify.Cost[itemId]
-    if not pdm:AddCoin(ItemCfg.Identify.Material, -cost) then
+    if not pdm:AddCoin(cost.ItemId, -cost.Count) then
         return nil
     end
     
@@ -268,6 +268,13 @@ function ItemDataManager:Strengthen(defineId)
         return false
     end
 
+    -- 扣除材料
+    local cost = ItemCfg.Strengthen.Cost
+    if self:_GetItemCount(cost.ItemId) < cost.Count then
+        return false
+    end
+    self:_RemoveItem(cost.ItemId, cost.Count)
+
     local level = data.strengthenLevel + 1
     local quality = _GetQuality(defineId)
     local prob = ItemCfg.Strengthen.ProbCurve(level, quality)
@@ -297,11 +304,12 @@ function ItemDataManager:Reforge(defineId, useAdvanced)
     local prob        = reforgeData.Prob
 
     for _, req in pairs(requirement) do
-        if self:_GetItemCount(req.ItemId) < req.Value then
+        if self:_GetItemCount(req.ItemId) < req.Count then
             return false
         end
     end
 
+    -- 使用宇宙晶石
     if useAdvanced then
         if self:_GetItemCount(ItemId.Advanced_1) <= 0 then
             return false
@@ -309,8 +317,9 @@ function ItemDataManager:Reforge(defineId, useAdvanced)
         prob = prob + ItemCfg.Reforge.AdvancedProbBoost
         self:_RemoveItem(ItemId.Advanced_1)
     end
+    -- 扣除材料
     for _, req in pairs(requirement) do
-        self:_RemoveItem(req.ItemId, req.Value)
+        self:_RemoveItem(req.ItemId, req.Count)
     end
 
     if Lib.Math.Chance(prob) then

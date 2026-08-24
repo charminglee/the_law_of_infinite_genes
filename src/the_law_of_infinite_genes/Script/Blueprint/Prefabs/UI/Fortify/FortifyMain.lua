@@ -248,13 +248,8 @@ function FortifyMain:TabListUpdate(Item, Index)
 end
 
 function FortifyMain:GetStrengthenSuccessRateText(DefineID, TargetLevel)
-    if DefineID == nil or DefineID.TypeSpecificID == nil
-            or ItemCfg.Strengthen == nil or ItemCfg.Strengthen.ProbCurve == nil then
-        return '0%';
-    end
     local quality = UGCItemSystemV2.GetItemQualityV2(DefineID.TypeSpecificID) or 0;
-    local probability = ItemCfg.Strengthen._ProbMap[TargetLevel];
-    probability = math.max(0, math.min(1, probability));
+    local probability = ItemCfg.Strengthen.ProbCurve(TargetLevel, quality);
     local percent = probability * 100;
     if math.abs(percent - math.floor(percent + 0.5)) < 0.0001 then
         return string.format('%d%%', math.floor(percent + 0.5));
@@ -269,7 +264,7 @@ function FortifyMain:GetStrengthenAttributeText(DefineID, Level)
     end
 
     local result = {};
-    for _, attr in ipairs(entries) do
+    for _, attr in ipairs(details) do
         local meta = AttributeMate[attr.property];
         local attrName = meta and meta.anno or tostring(attr.property);
         table.insert(result, RichText.Inline(

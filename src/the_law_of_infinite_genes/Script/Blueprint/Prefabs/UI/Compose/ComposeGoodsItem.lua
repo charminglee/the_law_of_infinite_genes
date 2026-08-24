@@ -63,7 +63,7 @@ function ComposeGoodsItem:SetSelected(Visible)
 end
 
 function ComposeGoodsItem:SetMaterial(dat)
-    self.ItemName:SetText(tostring(dat.number));
+    self.ItemName:SetText(tostring(dat.Count));
     local ItemId = dat.ItemId;
     local ItemPath = UGCItemSystemV2.GetItemIconTextureV2(ItemId);
     local Texture = LoadObject(ItemPath.AssetPathName);

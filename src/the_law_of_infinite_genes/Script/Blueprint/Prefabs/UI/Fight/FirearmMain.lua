@@ -79,7 +79,7 @@ function FirearmMain:RefreshDetail()
     self:SetPreviewTexture(UGCItemSystemV2.GetItemIconTextureV2(itemId));
     self.ItemName:SetText(UGCItemSystemV2.GetItemNameV2(itemId) or '');
     self.ItemDesc:SetText(UGCItemSystemV2.GetItemDetailV2(itemId) or '');
-    self.NeedCost:SetText(tostring(itemData.cost or 0));
+    self.NeedCost:SetText(tostring(itemData.Count or 0));
 end
 
 function FirearmMain:SetPreviewTexture(Path)
