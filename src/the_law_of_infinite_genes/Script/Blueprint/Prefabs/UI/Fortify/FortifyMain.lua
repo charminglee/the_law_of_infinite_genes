@@ -157,7 +157,7 @@ function FortifyMain:SetPreview(DefineID, AllItems)
     local currentLevel = tonumber(data.strengthenLevel) or 0;
     local maxLevel = FortifyManager:GetMaxLevel();
     local afterLevel = math.min(currentLevel + 1, maxLevel);
-    local materialItemId = FortifyManager:GetMaterialItemId(DefineID);
+    local materialItemId = ItemCfg.Strengthen.Cost.ItemId;
     local materialOwnedCount = self:GetItemCount(materialItemId);
     local materialRequiredCount = 1;
     local materialDefineID = materialItemId ~= nil

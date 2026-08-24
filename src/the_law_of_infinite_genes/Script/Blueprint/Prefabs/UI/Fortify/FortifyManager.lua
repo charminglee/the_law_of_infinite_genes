@@ -74,13 +74,4 @@ function FortifyManager:GetMaxLevel()
     return maxLevel;
 end
 
----@param DefineID ItemDefineID
----@return number
-function FortifyManager:GetMaterialItemId(DefineID)
-    if DefineID == nil or DefineID.TypeSpecificID == nil then
-        return nil;
-    end
-    return ItemCfg.Strengthen and ItemCfg.Strengthen.Material or nil;
-end
-
 return FortifyManager
