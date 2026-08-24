@@ -59,6 +59,12 @@ function FortifyManager:Reload(DefineID, FilterType)
 end
 
 function FortifyManager:GetMaxLevel()
+    local configuredMaxLevel = ItemCfg.Strengthen
+            and tonumber(ItemCfg.Strengthen.MaxLevel) or nil;
+    if configuredMaxLevel ~= nil and configuredMaxLevel > 0 then
+        return configuredMaxLevel;
+    end
+
     local maxLevel = 0;
     for level, _ in pairs(ItemCfg.colorTable or {}) do
         if type(level) == 'number' and level > maxLevel then
@@ -74,12 +80,7 @@ function FortifyManager:GetMaterialItemId(DefineID)
     if DefineID == nil or DefineID.TypeSpecificID == nil then
         return nil;
     end
-    local quality = UGCItemSystemV2.GetItemQualityV2(DefineID.TypeSpecificID) or 0;
-    local materialKey = string.format('EquipmentMaterial_%s', tostring(quality));
-    if ItemId == nil then
-        return 8310004;
-    end
-    return ItemId[materialKey] or ItemId.EquipmentMaterial_0 or 8310004;
+    return ItemCfg.Strengthen and ItemCfg.Strengthen.Material or nil;
 end
 
 return FortifyManager

@@ -22,6 +22,9 @@ local FortifyMain = {
     bInitDoOnce = false,
     Filter = {},
     MaterialDefineID = nil,
+    MaterialItemId = nil,
+    MaterialOwnedCount = 0,
+    MaterialRequiredCount = 1,
 }
 
 local function IsSameDefineId(Left, Right)
@@ -125,19 +128,19 @@ function FortifyMain:FilterEquipment(ItemList, FilterType)
     return result;
 end
 
-function FortifyMain:FindMaterial(ItemList, MaterialItemId)
-    for _, item in ipairs(ItemList or {}) do
-        if item.TypeSpecificID == MaterialItemId then
-            return item;
-        end
+function FortifyMain:GetItemCount(ItemId)
+    if ItemId == nil then
+        return 0;
     end
-    return nil;
+    return UGCBackpackSystemV2.GetItemCountV2(LocalPlayerController, ItemId);
 end
 
 ---@param DefineID ItemDefineID
 function FortifyMain:SetPreview(DefineID, AllItems)
     if not IsEquipment(DefineID) then
         self.MaterialDefineID = nil;
+        self.MaterialItemId = nil;
+        self.MaterialOwnedCount = 0;
         FortifyManager.MaterialDefineId = nil;
         self.FortifyPreviewItem:SetEmpty();
         self.FortifyPreviewItem_0:SetEmpty();
@@ -155,13 +158,21 @@ function FortifyMain:SetPreview(DefineID, AllItems)
     local maxLevel = FortifyManager:GetMaxLevel();
     local afterLevel = math.min(currentLevel + 1, maxLevel);
     local materialItemId = FortifyManager:GetMaterialItemId(DefineID);
-    local materialDefineID = self:FindMaterial(AllItems, materialItemId);
+    local materialOwnedCount = self:GetItemCount(materialItemId);
+    local materialRequiredCount = 1;
+    local materialDefineID = materialItemId ~= nil
+            and {TypeSpecificID = materialItemId} or nil;
 
     self.MaterialDefineID = materialDefineID;
+    self.MaterialItemId = materialItemId;
+    self.MaterialOwnedCount = materialOwnedCount;
+    self.MaterialRequiredCount = materialRequiredCount;
     FortifyManager.MaterialDefineId = materialDefineID;
     self.FortifyPreviewItem:SetDefineID(DefineID, currentLevel);
-    self.FortifyPreviewItem_0:SetDefineID(materialDefineID or {TypeSpecificID = materialItemId});
-    self.FortifyPreviewItem_0:SetCount(materialDefineID ~= nil and '1/1' or '0/1');
+    self.FortifyPreviewItem_0:SetDefineID(materialDefineID);
+    self.FortifyPreviewItem_0:SetCount(materialItemId ~= nil
+            and string.format('%s/%s', tostring(materialOwnedCount), tostring(materialRequiredCount))
+            or nil);
 
     self.CurrentLevel:SetText(self:GetLevelText(currentLevel));
     if currentLevel >= maxLevel then
@@ -173,7 +184,8 @@ function FortifyMain:SetPreview(DefineID, AllItems)
     self.After:SetText(self:GetEquipmentAttributeText(DefineID, afterLevel));
     self.SuccessRate:SetText(currentLevel < maxLevel
             and self:GetStrengthenSuccessRateText(DefineID, afterLevel) or '0%');
-    self.Button_1:SetIsEnabled(currentLevel < maxLevel and materialDefineID ~= nil
+    self.Button_1:SetIsEnabled(currentLevel < maxLevel
+            and materialOwnedCount >= materialRequiredCount
             and FortifyManager.ComponentClass ~= nil);
 end
 
@@ -215,8 +227,18 @@ function FortifyMain:GetEquipmentAttributeText(DefineID, Level)
 end
 
 function FortifyMain:Request()
-    if FortifyManager.DefineId == nil or self.MaterialDefineID == nil
-            or FortifyManager.ComponentClass == nil then
+    if FortifyManager.DefineId == nil then
+        UGCWidgetManagerSystem.ShowTipsUI('请选择需要强化的装备');
+        return;
+    end
+    local materialCount = self:GetItemCount(self.MaterialItemId);
+    if self.MaterialItemId == nil or materialCount < self.MaterialRequiredCount then
+        UGCWidgetManagerSystem.ShowTipsUI('强化材料不足');
+        self:SetPreview(FortifyManager.DefineId);
+        return;
+    end
+    if FortifyManager.ComponentClass == nil then
+        UGCWidgetManagerSystem.ShowTipsUI('强化组件尚未初始化');
         return;
     end
     UnrealNetwork.CallUnrealRPC(

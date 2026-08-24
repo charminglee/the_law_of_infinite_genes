@@ -71,13 +71,14 @@ function PureManager:Request(DefineID, UseAdvanced)
     if data == nil then
         return false;
     end
+    local defineIdData = Lib.ToTable(DefineID);
     self.PendingResultItemId = data.Result;
     UnrealNetwork.CallUnrealRPC(
             LocalPlayerController,
             self.ComponentClass,
             'ReforgeSubmit',
             LocalPlayerController.PlayerKey,
-            DefineID,
+            defineIdData,
             UseAdvanced == true
     );
     return true;
