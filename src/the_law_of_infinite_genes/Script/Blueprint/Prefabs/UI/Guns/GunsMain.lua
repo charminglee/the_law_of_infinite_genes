@@ -75,7 +75,7 @@ function GunsMain:Reload(DefineId, FilterType)
     if DefineId == nil or DefineId == 0 then
         DefineId = self.Filter[1];
     end
-    GunsManager.DefineId = totable(DefineId);
+    GunsManager.DefineId = DefineId;
     GunsManager.FilterType = FilterType;
     self.TabList:Reload(#GunsManager.GunsType);
     self.GunsList:Reload(#self.Filter);

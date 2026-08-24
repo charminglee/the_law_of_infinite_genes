@@ -113,7 +113,7 @@ function ReinfMain:Reload(DefineID, FilterType)
         FilterType = ReinfManager.KenlType[1].Type;
     end
     ReinfManager.FilterType = FilterType;
-    local NewDefineId = totable(DefineID);
+    local NewDefineId = DefineID;
     if not IsSameDefineId(self.ReinfDat.DefineId, NewDefineId) then
         self:ResetReinfDat();
         self.ReinfDat.DefineId = Lib.Table.DeepCopy(NewDefineId);

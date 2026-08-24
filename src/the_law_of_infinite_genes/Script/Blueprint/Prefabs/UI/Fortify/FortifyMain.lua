@@ -90,12 +90,12 @@ function FortifyMain:Reload(DefineID, FilterType)
     local allItems = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController) or {};
     self.Filter = self:FilterEquipment(allItems, FilterType);
 
-    local selected = DefineID ~= nil and totable(DefineID) or nil;
+    local selected = DefineID;
     if not self:ContainsDefineId(self.Filter, selected) then
         selected = self.Filter[1];
     end
 
-    FortifyManager.DefineId = totable(selected);
+    FortifyManager.DefineId = selected;
     FortifyManager.FilterType = FilterType;
     self.BackpackList:Reload(#self.Filter);
     self.TabList:Reload(#FortifyManager.EquipmentType);

@@ -47,7 +47,7 @@ Lib.EventSystem.Broadcast(eventName, ...)
 | 序号 | 参数 | 类型 | 说明 |
 | --- | --- | --- | --- |
 | 1 | uid | number | 玩家 UID |
-| 2 | itemDefineId | ItemDefineID | 物品的 ItemDefineId |
+| 2 | itemDefineId | table | 物品的 ItemDefineId |
 | 3 | oldData | table | 旧数据 |
 | 4 | newData | table | 新数据 |
 

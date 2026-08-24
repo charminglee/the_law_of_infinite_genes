@@ -144,7 +144,7 @@ function PureMain:Reload(DefineID, FilterType)
     self.Filter = self:FilterEquipment(allItems, FilterType);
 
     local selected = self:FindDefineId(self.Filter, DefineID) or self.Filter[1];
-    PureManager.DefineId = selected ~= nil and totable(selected) or nil;
+    PureManager.DefineId = selected;
     PureManager.FilterType = FilterType;
     self.BackpackList:Reload(#self.Filter);
     self.TabList:Reload(#PureManager.EquipmentType);
@@ -341,7 +341,7 @@ function PureMain:Request()
         return;
     end
 
-    self.PendingSourceDefineId = totable(defineId);
+    self.PendingSourceDefineId = defineId;
     self.RequestRefreshCountdown = 0.75;
     self.Button_1:SetIsEnabled(false);
     if not PureManager:Request(defineId, useAdvanced) then

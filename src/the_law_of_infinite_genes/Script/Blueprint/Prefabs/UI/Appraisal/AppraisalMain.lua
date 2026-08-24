@@ -100,7 +100,7 @@ function AppraisalMain:Reload(DefineID, FilterType)
         FilterType = AppraisalManager.KenlType[1].Type;
     end
     AppraisalManager.FilterType = FilterType;
-    AppraisalManager.DefineId = totable(DefineID);
+    AppraisalManager.DefineId = DefineID;
     local AllItem = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
     self.Filter = self:FilterKenl(AllItem, FilterType)
     self.BackpackList:Reload(#self.Filter);

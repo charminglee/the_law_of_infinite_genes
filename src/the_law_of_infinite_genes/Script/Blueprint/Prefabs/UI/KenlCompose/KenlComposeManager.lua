@@ -31,7 +31,7 @@ function KenlComposeManager:OpenMainUI(DefineID)
         return;
     end
 
-    self.DefineId = totable(DefineID);
+    self.DefineId = DefineID;
     self.MaterialDefineId = nil;
     self.PendingFusion = false;
     self.MainUI:Open(self.DefineId);

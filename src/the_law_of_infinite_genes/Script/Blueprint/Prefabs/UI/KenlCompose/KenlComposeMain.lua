@@ -102,7 +102,7 @@ function KenlComposeMain:Reload(DefineID, FilterType)
 
     FilterType = FilterType or KenlComposeManager.EquipmentType[1].Type;
     KenlComposeManager.FilterType = FilterType;
-    KenlComposeManager.DefineId = totable(DefineID);
+    KenlComposeManager.DefineId = DefineID;
 
     local allItems = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
     self.Filter = self:FilterKenl(allItems, FilterType);
@@ -163,7 +163,7 @@ function KenlComposeMain:SelectMaterial(DefineID)
         return;
     end
 
-    KenlComposeManager.MaterialDefineId = totable(DefineID);
+    KenlComposeManager.MaterialDefineId = DefineID;
     self.PreviousData = nil;
     self.WaitList:Reload(#self.MaterialFilter);
     self:SetPreview(KenlComposeManager.DefineId);

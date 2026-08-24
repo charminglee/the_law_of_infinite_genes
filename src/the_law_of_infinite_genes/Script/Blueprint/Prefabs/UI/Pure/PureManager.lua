@@ -114,7 +114,7 @@ function PureManager:OnItemCustomDataUpdateAfter(ItemDefineId)
             or ItemDefineId.TypeSpecificID ~= self.PendingResultItemId then
         return;
     end
-    self.DefineId = totable(ItemDefineId);
+    self.DefineId = ItemDefineId;
     self.PendingResultItemId = nil;
     self.RefreshUI = true;
 end

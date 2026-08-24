@@ -11,6 +11,24 @@ Lib = {
 }
 
 
+---@alias SupportToTable ItemDefineID
+
+
+---【双端】将 UE 对象转换为 Lua table 。
+---目前仅支持以下类型的 UE 对象： ItemDefineID
+---@param obj SupportToTable @对象
+---@return table @表
+function Lib.ToTable(obj)
+    local t = {}
+    t.Type           = obj.Type or nil
+    t.TypeSpecificID = obj.TypeSpecificID or nil
+    t.bValidItem     = obj.bValidItem or nil
+    t.bValidInstance = obj.bValidInstance or nil
+    t.InstanceID     = obj.InstanceID or nil
+    return t
+end
+
+
 local _UGCGameSystem = UGCGameSystem
 UGCGameSystem = setmetatable({}, {
     __index = _UGCGameSystem,

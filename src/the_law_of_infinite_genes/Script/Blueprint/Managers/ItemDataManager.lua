@@ -99,7 +99,7 @@ function ItemDataManager:_SaveCustomData(defineId, data)
             self.owner,
             Event.OnItemCustomDataUpdateAfter, 
             self.owner.UID, 
-            defineId, 
+            Lib.ToTable(defineId), 
             oldData,
             newData
         )
