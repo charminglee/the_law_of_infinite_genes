@@ -147,55 +147,84 @@ ItemCfg.Reforge = {
     -- 宇宙晶石概率提升
     AdvancedProbBoost = 0.2,
     ReforgeMap = {
+        ----- =========== 衣服 -- Body =========== ---
+        ----- suit 0 新手套装
+        --[8310020] = {
+        --    Result = 8310053,
+        --    Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } },
+        --    Prob = 0.95
+        --},
+        --[8310053] = {
+        --    Result = 8310056,
+        --    Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } },
+        --    Prob = 0.80
+        --},
+        --[8310056] = {
+        --    Result = 8310058,
+        --    Requirement = { { ItemId=8310016, Value=1 }, { ItemId=8310017, Value=1 } },
+        --    Prob = 0.60
+        --},
+        --[8310058] = {
+        --    Result = 8310057,
+        --    Requirement = { { ItemId=8310017, Value=1 }, { ItemId=8310013, Value=1 } },
+        --    Prob = 0.40
+        --},
+        --[8310057] = {
+        --    Result = 8310028,
+        --    Requirement = { { ItemId=8310013, Value=1 }, { ItemId=8310014, Value=1 } },
+        --    Prob = 0.20
+        --},
+        ----- suit 1
+        --[8310028] = {Result = 8310071},
+        --[8310071] = {Result = 8310072},
+        --[8310072] = {Result = 8310073},
+        --[8310073] = {Result = 8310074},
+        --[8310074] = {Result = 8310075},
+        --[8310075] = {Result = 8310076},
+        --[8310076] = {Result = 8310033},
+        ----- suit 2
+        --[8310033] = {Result = 8310101},
+        --[8310101] = {Result = 8310102},
+        --[8310102] = {Result = 8310103},
+        --[8310103] = {Result = 8310104},
+        --[8310105] = {Result = 8310106},
+        --[8310106] = {Result = 8310007},
+        --[8310007] = {Result = 8310131},
+        ----- suit 3
+        --[8310131] = {Result = 8310132},
+        --[8310132] = {Result = 8310133},
+        --[8310133] = {Result = 8310134},
+        --[8310134] = {Result = 8310135},
+        --[8310135] = {Result = 8310136}
         --- =========== 衣服 -- Body =========== ---
-        --- suit 0 新手套装
-        [8310020] = {
-            Result = 8310053,
-            Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } },
-            Prob = 0.95
-        },
-        [8310053] = {
-            Result = 8310056,
-            Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } },
-            Prob = 0.80
-        },
-        [8310056] = {
-            Result = 8310058,
-            Requirement = { { ItemId=8310016, Value=1 }, { ItemId=8310017, Value=1 } },
-            Prob = 0.60
-        },
-        [8310058] = {
-            Result = 8310057,
-            Requirement = { { ItemId=8310017, Value=1 }, { ItemId=8310013, Value=1 } },
-            Prob = 0.40
-        },
-        [8310057] = {
-            Result = 8310028,
-            Requirement = { { ItemId=8310013, Value=1 }, { ItemId=8310014, Value=1 } },
-            Prob = 0.20
-        },
-        --- suit 1
-        [8310028] = {Result = 8310071},
-        [8310071] = {Result = 8310072},
-        [8310072] = {Result = 8310073},
-        [8310073] = {Result = 8310074},
-        [8310074] = {Result = 8310075},
-        [8310075] = {Result = 8310076},
-        [8310076] = {Result = 8310033},
-        --- suit 2
-        [8310033] = {Result = 8310101},
-        [8310101] = {Result = 8310102},
-        [8310102] = {Result = 8310103},
-        [8310103] = {Result = 8310104},
-        [8310105] = {Result = 8310106},
-        [8310106] = {Result = 8310007},
-        [8310007] = {Result = 8310131},
-        --- suit 3
-        [8310131] = {Result = 8310132},
-        [8310132] = {Result = 8310133},
-        [8310133] = {Result = 8310134},
-        [8310134] = {Result = 8310135},
-        [8310135] = {Result = 8310136}
+        --- suit 0 新手套装 15 16 17 13 14
+        [8310020] = {Result = 8310053,Requirement={{ItemId=8310015, value=5 },{ItemId=8310016, value=5 }},Prob=0.95},
+        [8310053] = {Result = 8310056,Requirement={{ItemId=8310015, value=10},{ItemId=8310016, value=10}},Prob=0.80},
+        [8310056] = {Result = 8310058,Requirement={{ItemId=8310016, value=15},{ItemId=8310017, value=5 }},Prob=0.60},
+        [8310058] = {Result = 8310057,Requirement={{ItemId=8310017, value=10},{ItemId=8310013, value=5 }},Prob=0.40},
+        [8310057] = {Result = 8310028,Requirement={{ItemId=8310013, value=10},{ItemId=8310014, value=5 }},Prob=0.20},
+        --- suit 1  赤锋套装 189 194 201 206 207
+        [8310028] = {Result = 8310071,Requirement={{ItemId=8310189, value=5},{ItemId=8310194, value=5 }},Prob=0.95},
+        [8310071] = {Result = 8310072,Requirement={{ItemId=8310189, value=10},{ItemId=8310194, value=10 }},Prob=0.80},
+        [8310072] = {Result = 8310073,Requirement={{ItemId=8310194, value=15},{ItemId=8310201, value=15 }},Prob=0.65},
+        [8310073] = {Result = 8310074,Requirement={{ItemId=8310194, value=20},{ItemId=8310201, value=5 }},Prob=0.50},
+        [8310074] = {Result = 8310075,Requirement={{ItemId=8310194, value=30},{ItemId=8310201, value=10 }},Prob=0.35},
+        [8310075] = {Result = 8310076,Requirement={{ItemId=8310201, value=50},{ItemId=8310206, value=20 }},Prob=0.20},
+        [8310076] = {Result = 8310033,Requirement={{ItemId=8310206, value=30},{ItemId=8310207, value=10 }},Prob=0.05},
+        --- suit 2  荒土套装 190 197 204 208 209
+        [8310033] = {Result = 8310101,Requirement={{ItemId=8310190, value=5},{ItemId=8310197, value=5 }},Prob=0.95},
+        [8310101] = {Result = 8310102,Requirement={{ItemId=8310190, value=10},{ItemId=8310197, value=10 }},Prob=0.80},
+        [8310102] = {Result = 8310103,Requirement={{ItemId=8310197, value=15},{ItemId=8310204, value=15 }},Prob=0.65},
+        [8310103] = {Result = 8310104,Requirement={{ItemId=8310197, value=20},{ItemId=8310204, value=5 }},Prob=0.50},
+        [8310105] = {Result = 8310106,Requirement={{ItemId=8310197, value=30},{ItemId=8310204, value=10 }},Prob=0.35},
+        [8310106] = {Result = 8310007,Requirement={{ItemId=8310204, value=50},{ItemId=8310208, value=20}},Prob=0.20},
+        [8310007] = {Result = 8310131,Requirement={{ItemId=8310208, value=30},{ItemId=8310209, value=10}},Prob=0.05},
+        --- suit 3  荒漠套装 191 198 205 210 211
+        [8310131] = {Result = 8310132,Requirement={{ItemId=8310191, value=5},{ItemId=8310198, value=5 }},Prob=0.95},
+        [8310132] = {Result = 8310133,Requirement={{ItemId=8310191, value=10},{ItemId=8310198, value=10 }},Prob=0.75},
+        [8310133] = {Result = 8310134,Requirement={{ItemId=8310198, value=15},{ItemId=8310205, value=10 }},Prob=0.55},
+        [8310134] = {Result = 8310135,Requirement={{ItemId=8310205, value=25},{ItemId=8310210, value=10 }},Prob=0.35},
+        [8310135] = {Result = 8310136,Requirement={{ItemId=8310210, value=30},{ItemId=8310211, value=10 }},Prob=0.05}
     }
 }
 
