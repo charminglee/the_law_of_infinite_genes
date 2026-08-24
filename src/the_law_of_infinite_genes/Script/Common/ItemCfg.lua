@@ -19,7 +19,7 @@ ItemCfg.AttributeEntryRange = {
     [Attribute.DamageDecreacePct]           = { Min=0, Max=1 },
     [Attribute.BreakDefencePct]             = { Min=0, Max=1 },
     [Attribute.SeckillChance]               = { Min=0, Max=1 },
-    [Attribute.DodgeChance]                 = { Min=0, Max=1 },   
+    [Attribute.DodgeChance]                 = { Min=0, Max=1 },
     [Attribute.HealthMax]                   = { Min=0, Max=1 },
     [Attribute.HealthMaxPct]                = { Min=0, Max=1 },
     [Attribute.RecoilPct]                   = { Min=0, Max=1 },
@@ -150,28 +150,28 @@ ItemCfg.Reforge = {
         --- =========== 衣服 -- Body =========== ---
         --- suit 0 新手套装
         [8310020] = {
-            Result = 8310053, 
-            Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } }, 
+            Result = 8310053,
+            Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } },
             Prob = 0.95
         },
         [8310053] = {
-            Result = 8310056, 
-            Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } }, 
+            Result = 8310056,
+            Requirement = { { ItemId=8310015, Value=1 }, { ItemId=8310016, Value=1 } },
             Prob = 0.80
         },
         [8310056] = {
-            Result = 8310058, 
-            Requirement = { { ItemId=8310016, Value=1 }, { ItemId=8310017, Value=1 } }, 
+            Result = 8310058,
+            Requirement = { { ItemId=8310016, Value=1 }, { ItemId=8310017, Value=1 } },
             Prob = 0.60
         },
         [8310058] = {
-            Result = 8310057, 
-            Requirement = { { ItemId=8310017, Value=1 }, { ItemId=8310013, Value=1 } }, 
+            Result = 8310057,
+            Requirement = { { ItemId=8310017, Value=1 }, { ItemId=8310013, Value=1 } },
             Prob = 0.40
         },
         [8310057] = {
-            Result = 8310028, 
-            Requirement = { { ItemId=8310013, Value=1 }, { ItemId=8310014, Value=1 } }, 
+            Result = 8310028,
+            Requirement = { { ItemId=8310013, Value=1 }, { ItemId=8310014, Value=1 } },
             Prob = 0.20
         },
         --- suit 1
@@ -728,5 +728,35 @@ ItemCfg.UnlockConditions = {
     [8310187] = {ItemId=8310003, value=6000}, --- DP-28
 }
 
-
+ItemCfg.EquipmentAdvanced = {
+    --- =========== 衣服 -- Body =========== ---
+    --- suit 0 新手套装 15 16 17 13 14
+    [8310020] = {ItemId = 8310053,Requirement={[1]={ItemId=8310015, value=5 },[2]={ItemId=8310016, value=5 }},rate=0.95},
+    [8310053] = {ItemId = 8310056,Requirement={[1]={ItemId=8310015, value=10},[2]={ItemId=8310016, value=10}},rate=0.80},
+    [8310056] = {ItemId = 8310058,Requirement={[1]={ItemId=8310016, value=15},[2]={ItemId=8310017, value=5 }},rate=0.60},
+    [8310058] = {ItemId = 8310057,Requirement={[1]={ItemId=8310017, value=10},[2]={ItemId=8310013, value=5 }},rate=0.40},
+    [8310057] = {ItemId = 8310028,Requirement={[1]={ItemId=8310013, value=10},[2]={ItemId=8310014, value=5 }},rate=0.20},
+    --- suit 1  赤锋套装 189 194 201 206 207
+    [8310028] = {ItemId = 8310071,Requirement={[1]={ItemId=8310189, value=5},[2]={ItemId=8310194, value=5 }},rate=0.95},
+    [8310071] = {ItemId = 8310072,Requirement={[1]={ItemId=8310189, value=10},[2]={ItemId=8310194, value=10 }},rate=0.80},
+    [8310072] = {ItemId = 8310073,Requirement={[1]={ItemId=8310194, value=15},[2]={ItemId=8310201, value=15 }},rate=0.65},
+    [8310073] = {ItemId = 8310074,Requirement={[1]={ItemId=8310194, value=20},[2]={ItemId=8310201, value=5 }},rate=0.50},
+    [8310074] = {ItemId = 8310075,Requirement={[1]={ItemId=8310194, value=30},[2]={ItemId=8310201, value=10 }},rate=0.35},
+    [8310075] = {ItemId = 8310076,Requirement={[1]={ItemId=8310201, value=50},[2]={ItemId=8310206, value=20 }},rate=0.20},
+    [8310076] = {ItemId = 8310033,Requirement={[1]={ItemId=8310206, value=30},[2]={ItemId=8310207, value=10 }},rate=0.05},
+    --- suit 2  荒土套装 190 197 204 208 209
+    [8310033] = {ItemId = 8310101,Requirement={[1]={ItemId=8310190, value=5},[2]={ItemId=8310197, value=5 }},rate=0.95},
+    [8310101] = {ItemId = 8310102,Requirement={[1]={ItemId=8310190, value=10},[2]={ItemId=8310197, value=10 }},rate=0.80},
+    [8310102] = {ItemId = 8310103,Requirement={[1]={ItemId=8310197, value=15},[2]={ItemId=8310204, value=15 }},rate=0.65},
+    [8310103] = {ItemId = 8310104,Requirement={[1]={ItemId=8310197, value=20},[2]={ItemId=8310204, value=5 }},rate=0.50},
+    [8310105] = {ItemId = 8310106,Requirement={[1]={ItemId=8310197, value=30},[2]={ItemId=8310204, value=10 }},rate=0.35},
+    [8310106] = {ItemId = 8310007,Requirement={[1]={ItemId=8310204, value=50},[2]={ItemId=8310208, value=20}},rate=0.20},
+    [8310007] = {ItemId = 8310131,Requirement={[1]={ItemId=8310208, value=30},[2]={ItemId=8310209, value=10}},rate=0.05},
+    --- suit 3  荒漠套装 191 198 205 210 211
+    [8310131] = {ItemId = 8310132,Requirement={[1]={ItemId=8310191, value=5},[2]={ItemId=8310198, value=5 }},rate=0.95},
+    [8310132] = {ItemId = 8310133,Requirement={[1]={ItemId=8310191, value=10},[2]={ItemId=8310198, value=10 }},rate=0.75},
+    [8310133] = {ItemId = 8310134,Requirement={[1]={ItemId=8310198, value=15},[2]={ItemId=8310205, value=10 }},rate=0.55},
+    [8310134] = {ItemId = 8310135,Requirement={[1]={ItemId=8310205, value=25},[2]={ItemId=8310210, value=10 }},rate=0.35},
+    [8310135] = {ItemId = 8310136,Requirement={[1]={ItemId=8310210, value=30},[2]={ItemId=8310211, value=10 }},rate=0.05}
+}
 return ItemCfg
