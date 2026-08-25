@@ -383,16 +383,14 @@ function ItemDataManager:GetBaseAttrEntryDetail(defineId, level)
 
     local itemId = defineId.TypeSpecificID
     local quality = _GetQuality(itemId)
-    local name = UGCItemSystemV2.GetItemNameV2(itemId)
-    local factor = ItemCfg.EquipmentAttribute[name].Factor[quality]
-    local base = ItemCfg.EquipmentAttribute[name].Base
+    local attrs = ItemCfg.EquipmentAttribute[itemId]
     if not level then
         level = self:GetStrengthenLevel(defineId)
     end
 
     local result = {}
-    for _, entry in pairs(base) do
-        local initialValue = entry.value * factor
+    for _, entry in pairs(attrs) do
+        local initialValue = entry.value
         local strengthenValue = initialValue * ItemCfg.Strengthen.StrengthenCurve(entry.property, level, quality)
         table.insert(result, {
             property = entry.property,

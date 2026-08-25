@@ -530,99 +530,6 @@ ItemCfg.ItemTable = {
 }
 
 
-
-ItemCfg.EquipmentAttribute = {
-    ['基础帽子'] = {
-        Base = {
-            {property = Attribute.HealthMax, value = 20},
-            {property = Attribute.AttackPower, value = 20},
-            {property = Attribute.Defence, value = 10}
-        },
-        Factor = {
-            [0] = 1.00,
-            [1] = 1.20,
-            [2] = 1.60,
-            [3] = 1.80,
-            [4] = 2.00
-        }
-    },
-    ['基础脸饰'] = {
-        Base = {
-            {property = Attribute.HealthMax, value = 20},
-            {property = Attribute.AttackPower, value = 20},
-            {property = Attribute.Defence, value = 10}
-        },
-        Factor = {
-            [0] = 1.00,
-            [1] = 1.20,
-            [2] = 1.60,
-            [3] = 1.80,
-            [4] = 2.00
-        }
-    },
-    ['基础上衣'] = {
-        Base = {
-            {property = Attribute.HealthMax, value = 20},
-            {property = Attribute.AttackPower, value = 20},
-            {property = Attribute.Defence, value = 10}
-        },
-        Factor = {
-            [0] = 1.00,
-            [1] = 1.20,
-            [2] = 1.60,
-            [3] = 1.80,
-            [4] = 2.00
-        }
-    },
-    ['基础裤子'] = {
-        Base = {
-            {property = Attribute.HealthMax, value = 20},
-            {property = Attribute.AttackPower, value = 20},
-            {property = Attribute.Defence, value = 10}
-        },
-        Factor = {
-            [0] = 1.00,
-            [1] = 1.20,
-            [2] = 1.60,
-            [3] = 1.80,
-            [4] = 2.00
-        }
-    },
-    ['基础鞋子'] = {
-
-        Base = {
-            {property = Attribute.HealthMax, value = 20},
-            {property = Attribute.AttackPower, value = 20},
-            {property = Attribute.Defence, value = 10}
-        },
-        Factor = {
-            [0] = 1.00,
-            [1] = 1.20,
-            [2] = 1.60,
-            [3] = 1.80,
-            [4] = 2.00
-        }
-    },
-    ['赤峰帽子'] = {
-        Base = {
-            {property = Attribute.HealthMax, value = 45},
-            {property = Attribute.AttackPower, value = 45},
-            {property = Attribute.Defence, value = 25}
-        },
-        Factor = {
-            [0] = 1.00,
-            [1] = 1.20,
-            [2] = 1.60,
-            [3] = 1.80,
-            [4] = 2.00,
-            [5] = 2.20,
-            [6] = 2.50,
-        }
-    },
-
-}
-
-
 ItemCfg.FirearmType = {
     {Type = 'Ammo', Text = '子弹'},
     {Type = 'Rifle', Text = '步枪'},
@@ -729,14 +636,6 @@ ItemCfg.UnlockConditions = {
     [8310187] = {ItemId=8310003, Count=6000}, --- DP-28
 }
 
---按线性差值推算：
---
---- 基础：`20 / 20 / 10`
---- 赤潮：`45 / 45 / 25`
---- 荒土：`70 / 70 / 40`
---- 荒漠：`95 / 95 / 55`
---
---即每套增加 `25 / 25 / 15`。
 
 ItemCfg.EquipmentAttribute = {
     -- ==================== 基础套装 ====================
@@ -1437,5 +1336,6 @@ ItemCfg.EquipmentAttribute = {
         {property = Attribute.Defence, value = 55 * 2.5}
     }
 }
+
 
 return ItemCfg
