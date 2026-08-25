@@ -530,146 +530,6 @@ ItemCfg.ItemTable = {
 }
 
 
--- 合成表 材料ID {8310014 = 领主之眼, 8310015 = 腐化布料, 8310016 = 硬化骨片, 8310017 = 变异粘液}
-ItemCfg.Formula = {
-    -- 基础套装
-    -- 基础工装长裤
-    [8310019] = {
-        [1]={ItemId=8310017, Count=10},
-        [2]={ItemId=8310015, Count=5},
-        [3]={ItemId=8310014, Count=1},
-    },
-    -- 基础方形眼镜
-    [8310020] = {
-        [1]={ItemId=8310017, Count=10},
-        [2]={ItemId=8310015, Count=5},
-        [3]={ItemId=8310014, Count=1},
-    },
-    -- 基础遮阳棒球帽
-    [8310021] = {
-        [1]={ItemId=8310017, Count=10},
-        [2]={ItemId=8310015, Count=5},
-        [3]={ItemId=8310014, Count=1},
-    },
-    --- 基础防滑鞋
-    [8310022] = {
-        [1]={ItemId=8310017, Count=10},
-        [2]={ItemId=8310015, Count=5},
-        [3]={ItemId=8310014, Count=1},
-    },
-    --- 基础透气亨利衫
-    [8310023] = {
-        [1]={ItemId=8310017, Count=10},
-        [2]={ItemId=8310015, Count=5},
-        [3]={ItemId=8310014, Count=1},
-    },
-    --- 赤锋突击工装裤
-    [8310024] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310019, Count=1},
-    },
-    --- 赤锋突击面罩
-    [8310025] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 赤锋突击头盔
-    [8310026] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 赤锋突击战靴
-    [8310027] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 赤锋突击外套
-    [8310028] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒土耐磨工装裤
-    [8310029] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒土防毒面罩
-    [8310030] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒土战术帽
-    [8310031] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒土战术靴
-    [8310032] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒土迷彩外套
-    [8310033] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒原·残戍夹克
-    [8310007] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒原·工装长裤
-    [8310008] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒原·破雾面罩
-    [8310009] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒原·皮质手套
-    [8310010] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-    --- 荒原·踏尘战靴
-    [8310011] = {
-        [1]={ItemId=8310017, Count=30},
-        [2]={ItemId=8310015, Count=20},
-        [3]={ItemId=8310014, Count=2},
-        [4]={ItemId=8310020, Count=1},
-    },
-}
-
 
 ItemCfg.EquipmentAttribute = {
     ['基础帽子'] = {
@@ -729,6 +589,7 @@ ItemCfg.EquipmentAttribute = {
         }
     },
     ['基础鞋子'] = {
+
         Base = {
             {property = Attribute.HealthMax, value = 20},
             {property = Attribute.AttackPower, value = 20},
@@ -740,6 +601,22 @@ ItemCfg.EquipmentAttribute = {
             [2] = 1.60,
             [3] = 1.80,
             [4] = 2.00
+        }
+    },
+    ['赤峰帽子'] = {
+        Base = {
+            {property = Attribute.HealthMax, value = 45},
+            {property = Attribute.AttackPower, value = 45},
+            {property = Attribute.Defence, value = 25}
+        },
+        Factor = {
+            [0] = 1.00,
+            [1] = 1.20,
+            [2] = 1.60,
+            [3] = 1.80,
+            [4] = 2.00,
+            [5] = 2.20,
+            [6] = 2.50,
         }
     },
 
@@ -850,6 +727,715 @@ ItemCfg.UnlockConditions = {
     [8310185] = {ItemId=8310003, Count=6000}, --- AKM
     [8310186] = {ItemId=8310003, Count=6000}, --- SCAR-L
     [8310187] = {ItemId=8310003, Count=6000}, --- DP-28
+}
+
+--按线性差值推算：
+--
+--- 基础：`20 / 20 / 10`
+--- 赤潮：`45 / 45 / 25`
+--- 荒土：`70 / 70 / 40`
+--- 荒漠：`95 / 95 / 55`
+--
+--即每套增加 `25 / 25 / 15`。
+
+ItemCfg.EquipmentAttribute = {
+    -- ==================== 基础套装 ====================
+
+    -- Head
+    [8310019] = {
+        {property = Attribute.HealthMax, value = 20},
+        {property = Attribute.AttackPower, value = 20},
+        {property = Attribute.Defence, value = 10}
+    },
+    [8310067] = {
+        {property = Attribute.HealthMax, value = 20 * 1.2},
+        {property = Attribute.AttackPower, value = 20 * 1.2},
+        {property = Attribute.Defence, value = 10 * 1.2}
+    },
+    [8310068] = {
+        {property = Attribute.HealthMax, value = 20 * 1.6},
+        {property = Attribute.AttackPower, value = 20 * 1.6},
+        {property = Attribute.Defence, value = 10 * 1.6}
+    },
+    [8310069] = {
+        {property = Attribute.HealthMax, value = 20 * 1.8},
+        {property = Attribute.AttackPower, value = 20 * 1.8},
+        {property = Attribute.Defence, value = 10 * 1.8}
+    },
+    [8310070] = {
+        {property = Attribute.HealthMax, value = 20 * 2.0},
+        {property = Attribute.AttackPower, value = 20 * 2.0},
+        {property = Attribute.Defence, value = 10 * 2.0}
+    },
+
+    -- Face
+    [8310022] = {
+        {property = Attribute.HealthMax, value = 20},
+        {property = Attribute.AttackPower, value = 20},
+        {property = Attribute.Defence, value = 10}
+    },
+    [8310059] = {
+        {property = Attribute.HealthMax, value = 20 * 1.2},
+        {property = Attribute.AttackPower, value = 20 * 1.2},
+        {property = Attribute.Defence, value = 10 * 1.2}
+    },
+    [8310060] = {
+        {property = Attribute.HealthMax, value = 20 * 1.6},
+        {property = Attribute.AttackPower, value = 20 * 1.6},
+        {property = Attribute.Defence, value = 10 * 1.6}
+    },
+    [8310061] = {
+        {property = Attribute.HealthMax, value = 20 * 1.8},
+        {property = Attribute.AttackPower, value = 20 * 1.8},
+        {property = Attribute.Defence, value = 10 * 1.8}
+    },
+    [8310062] = {
+        {property = Attribute.HealthMax, value = 20 * 2.0},
+        {property = Attribute.AttackPower, value = 20 * 2.0},
+        {property = Attribute.Defence, value = 10 * 2.0}
+    },
+
+    -- Body
+    [8310020] = {
+        {property = Attribute.HealthMax, value = 20},
+        {property = Attribute.AttackPower, value = 20},
+        {property = Attribute.Defence, value = 10}
+    },
+    [8310051] = {
+        {property = Attribute.HealthMax, value = 20 * 1.2},
+        {property = Attribute.AttackPower, value = 20 * 1.2},
+        {property = Attribute.Defence, value = 10 * 1.2}
+    },
+    [8310054] = {
+        {property = Attribute.HealthMax, value = 20 * 1.6},
+        {property = Attribute.AttackPower, value = 20 * 1.6},
+        {property = Attribute.Defence, value = 10 * 1.6}
+    },
+    [8310058] = {
+        {property = Attribute.HealthMax, value = 20 * 1.8},
+        {property = Attribute.AttackPower, value = 20 * 1.8},
+        {property = Attribute.Defence, value = 10 * 1.8}
+    },
+    [8310057] = {
+        {property = Attribute.HealthMax, value = 20 * 2.0},
+        {property = Attribute.AttackPower, value = 20 * 2.0},
+        {property = Attribute.Defence, value = 10 * 2.0}
+    },
+
+    -- Legs
+    [8310021] = {
+        {property = Attribute.HealthMax, value = 20},
+        {property = Attribute.AttackPower, value = 20},
+        {property = Attribute.Defence, value = 10}
+    },
+    [8310034] = {
+        {property = Attribute.HealthMax, value = 20 * 1.2},
+        {property = Attribute.AttackPower, value = 20 * 1.2},
+        {property = Attribute.Defence, value = 10 * 1.2}
+    },
+    [8310035] = {
+        {property = Attribute.HealthMax, value = 20 * 1.6},
+        {property = Attribute.AttackPower, value = 20 * 1.6},
+        {property = Attribute.Defence, value = 10 * 1.6}
+    },
+    [8310038] = {
+        {property = Attribute.HealthMax, value = 20 * 1.8},
+        {property = Attribute.AttackPower, value = 20 * 1.8},
+        {property = Attribute.Defence, value = 10 * 1.8}
+    },
+    [8310041] = {
+        {property = Attribute.HealthMax, value = 20 * 2.0},
+        {property = Attribute.AttackPower, value = 20 * 2.0},
+        {property = Attribute.Defence, value = 10 * 2.0}
+    },
+
+    -- Feet
+    [8310023] = {
+        {property = Attribute.HealthMax, value = 20},
+        {property = Attribute.AttackPower, value = 20},
+        {property = Attribute.Defence, value = 10}
+    },
+    [8310063] = {
+        {property = Attribute.HealthMax, value = 20 * 1.2},
+        {property = Attribute.AttackPower, value = 20 * 1.2},
+        {property = Attribute.Defence, value = 10 * 1.2}
+    },
+    [8310064] = {
+        {property = Attribute.HealthMax, value = 20 * 1.6},
+        {property = Attribute.AttackPower, value = 20 * 1.6},
+        {property = Attribute.Defence, value = 10 * 1.6}
+    },
+    [8310065] = {
+        {property = Attribute.HealthMax, value = 20 * 1.8},
+        {property = Attribute.AttackPower, value = 20 * 1.8},
+        {property = Attribute.Defence, value = 10 * 1.8}
+    },
+    [8310066] = {
+        {property = Attribute.HealthMax, value = 20 * 2.0},
+        {property = Attribute.AttackPower, value = 20 * 2.0},
+        {property = Attribute.Defence, value = 10 * 2.0}
+    },
+
+    -- ==================== 赤潮套装 ====================
+
+    -- Head
+    [8310026] = {
+        {property = Attribute.HealthMax, value = 45},
+        {property = Attribute.AttackPower, value = 45},
+        {property = Attribute.Defence, value = 25}
+    },
+    [8310089] = {
+        {property = Attribute.HealthMax, value = 45 * 1.2},
+        {property = Attribute.AttackPower, value = 45 * 1.2},
+        {property = Attribute.Defence, value = 25 * 1.2}
+    },
+    [8310090] = {
+        {property = Attribute.HealthMax, value = 45 * 1.6},
+        {property = Attribute.AttackPower, value = 45 * 1.6},
+        {property = Attribute.Defence, value = 25 * 1.6}
+    },
+    [8310091] = {
+        {property = Attribute.HealthMax, value = 45 * 1.8},
+        {property = Attribute.AttackPower, value = 45 * 1.8},
+        {property = Attribute.Defence, value = 25 * 1.8}
+    },
+    [8310092] = {
+        {property = Attribute.HealthMax, value = 45 * 2.0},
+        {property = Attribute.AttackPower, value = 45 * 2.0},
+        {property = Attribute.Defence, value = 25 * 2.0}
+    },
+    [8310093] = {
+        {property = Attribute.HealthMax, value = 45 * 2.2},
+        {property = Attribute.AttackPower, value = 45 * 2.2},
+        {property = Attribute.Defence, value = 25 * 2.2}
+    },
+    [8310094] = {
+        {property = Attribute.HealthMax, value = 45 * 2.5},
+        {property = Attribute.AttackPower, value = 45 * 2.5},
+        {property = Attribute.Defence, value = 25 * 2.5}
+    },
+
+    -- Face
+    [8310025] = {
+        {property = Attribute.HealthMax, value = 45},
+        {property = Attribute.AttackPower, value = 45},
+        {property = Attribute.Defence, value = 25}
+    },
+    [8310077] = {
+        {property = Attribute.HealthMax, value = 45 * 1.2},
+        {property = Attribute.AttackPower, value = 45 * 1.2},
+        {property = Attribute.Defence, value = 25 * 1.2}
+    },
+    [8310078] = {
+        {property = Attribute.HealthMax, value = 45 * 1.6},
+        {property = Attribute.AttackPower, value = 45 * 1.6},
+        {property = Attribute.Defence, value = 25 * 1.6}
+    },
+    [8310079] = {
+        {property = Attribute.HealthMax, value = 45 * 1.8},
+        {property = Attribute.AttackPower, value = 45 * 1.8},
+        {property = Attribute.Defence, value = 25 * 1.8}
+    },
+    [8310080] = {
+        {property = Attribute.HealthMax, value = 45 * 2.0},
+        {property = Attribute.AttackPower, value = 45 * 2.0},
+        {property = Attribute.Defence, value = 25 * 2.0}
+    },
+    [8310081] = {
+        {property = Attribute.HealthMax, value = 45 * 2.2},
+        {property = Attribute.AttackPower, value = 45 * 2.2},
+        {property = Attribute.Defence, value = 25 * 2.2}
+    },
+    [8310082] = {
+        {property = Attribute.HealthMax, value = 45 * 2.5},
+        {property = Attribute.AttackPower, value = 45 * 2.5},
+        {property = Attribute.Defence, value = 25 * 2.5}
+    },
+
+    -- Body
+    [8310028] = {
+        {property = Attribute.HealthMax, value = 45},
+        {property = Attribute.AttackPower, value = 45},
+        {property = Attribute.Defence, value = 25}
+    },
+    [8310071] = {
+        {property = Attribute.HealthMax, value = 45 * 1.2},
+        {property = Attribute.AttackPower, value = 45 * 1.2},
+        {property = Attribute.Defence, value = 25 * 1.2}
+    },
+    [8310072] = {
+        {property = Attribute.HealthMax, value = 45 * 1.6},
+        {property = Attribute.AttackPower, value = 45 * 1.6},
+        {property = Attribute.Defence, value = 25 * 1.6}
+    },
+    [8310073] = {
+        {property = Attribute.HealthMax, value = 45 * 1.8},
+        {property = Attribute.AttackPower, value = 45 * 1.8},
+        {property = Attribute.Defence, value = 25 * 1.8}
+    },
+    [8310074] = {
+        {property = Attribute.HealthMax, value = 45 * 2.0},
+        {property = Attribute.AttackPower, value = 45 * 2.0},
+        {property = Attribute.Defence, value = 25 * 2.0}
+    },
+    [8310075] = {
+        {property = Attribute.HealthMax, value = 45 * 2.2},
+        {property = Attribute.AttackPower, value = 45 * 2.2},
+        {property = Attribute.Defence, value = 25 * 2.2}
+    },
+    [8310076] = {
+        {property = Attribute.HealthMax, value = 45 * 2.5},
+        {property = Attribute.AttackPower, value = 45 * 2.5},
+        {property = Attribute.Defence, value = 25 * 2.5}
+    },
+
+    -- Legs
+    [8310024] = {
+        {property = Attribute.HealthMax, value = 45},
+        {property = Attribute.AttackPower, value = 45},
+        {property = Attribute.Defence, value = 25}
+    },
+    [8310095] = {
+        {property = Attribute.HealthMax, value = 45 * 1.2},
+        {property = Attribute.AttackPower, value = 45 * 1.2},
+        {property = Attribute.Defence, value = 25 * 1.2}
+    },
+    [8310096] = {
+        {property = Attribute.HealthMax, value = 45 * 1.6},
+        {property = Attribute.AttackPower, value = 45 * 1.6},
+        {property = Attribute.Defence, value = 25 * 1.6}
+    },
+    [8310097] = {
+        {property = Attribute.HealthMax, value = 45 * 1.8},
+        {property = Attribute.AttackPower, value = 45 * 1.8},
+        {property = Attribute.Defence, value = 25 * 1.8}
+    },
+    [8310098] = {
+        {property = Attribute.HealthMax, value = 45 * 2.0},
+        {property = Attribute.AttackPower, value = 45 * 2.0},
+        {property = Attribute.Defence, value = 25 * 2.0}
+    },
+    [8310099] = {
+        {property = Attribute.HealthMax, value = 45 * 2.2},
+        {property = Attribute.AttackPower, value = 45 * 2.2},
+        {property = Attribute.Defence, value = 25 * 2.2}
+    },
+    [8310100] = {
+        {property = Attribute.HealthMax, value = 45 * 2.5},
+        {property = Attribute.AttackPower, value = 45 * 2.5},
+        {property = Attribute.Defence, value = 25 * 2.5}
+    },
+
+    -- Feet
+    [8310027] = {
+        {property = Attribute.HealthMax, value = 45},
+        {property = Attribute.AttackPower, value = 45},
+        {property = Attribute.Defence, value = 25}
+    },
+    [8310083] = {
+        {property = Attribute.HealthMax, value = 45 * 1.2},
+        {property = Attribute.AttackPower, value = 45 * 1.2},
+        {property = Attribute.Defence, value = 25 * 1.2}
+    },
+    [8310084] = {
+        {property = Attribute.HealthMax, value = 45 * 1.6},
+        {property = Attribute.AttackPower, value = 45 * 1.6},
+        {property = Attribute.Defence, value = 25 * 1.6}
+    },
+    [8310085] = {
+        {property = Attribute.HealthMax, value = 45 * 1.8},
+        {property = Attribute.AttackPower, value = 45 * 1.8},
+        {property = Attribute.Defence, value = 25 * 1.8}
+    },
+    [8310086] = {
+        {property = Attribute.HealthMax, value = 45 * 2.0},
+        {property = Attribute.AttackPower, value = 45 * 2.0},
+        {property = Attribute.Defence, value = 25 * 2.0}
+    },
+    [8310087] = {
+        {property = Attribute.HealthMax, value = 45 * 2.2},
+        {property = Attribute.AttackPower, value = 45 * 2.2},
+        {property = Attribute.Defence, value = 25 * 2.2}
+    },
+    [8310088] = {
+        {property = Attribute.HealthMax, value = 45 * 2.5},
+        {property = Attribute.AttackPower, value = 45 * 2.5},
+        {property = Attribute.Defence, value = 25 * 2.5}
+    },
+
+    -- ==================== 荒土套装 ====================
+
+    -- Head
+    [8310031] = {
+        {property = Attribute.HealthMax, value = 70},
+        {property = Attribute.AttackPower, value = 70},
+        {property = Attribute.Defence, value = 40}
+    },
+    [8310119] = {
+        {property = Attribute.HealthMax, value = 70 * 1.2},
+        {property = Attribute.AttackPower, value = 70 * 1.2},
+        {property = Attribute.Defence, value = 40 * 1.2}
+    },
+    [8310120] = {
+        {property = Attribute.HealthMax, value = 70 * 1.6},
+        {property = Attribute.AttackPower, value = 70 * 1.6},
+        {property = Attribute.Defence, value = 40 * 1.6}
+    },
+    [8310121] = {
+        {property = Attribute.HealthMax, value = 70 * 1.8},
+        {property = Attribute.AttackPower, value = 70 * 1.8},
+        {property = Attribute.Defence, value = 40 * 1.8}
+    },
+    [8310122] = {
+        {property = Attribute.HealthMax, value = 70 * 2.0},
+        {property = Attribute.AttackPower, value = 70 * 2.0},
+        {property = Attribute.Defence, value = 40 * 2.0}
+    },
+    [8310123] = {
+        {property = Attribute.HealthMax, value = 70 * 2.2},
+        {property = Attribute.AttackPower, value = 70 * 2.2},
+        {property = Attribute.Defence, value = 40 * 2.2}
+    },
+    [8310124] = {
+        {property = Attribute.HealthMax, value = 70 * 2.5},
+        {property = Attribute.AttackPower, value = 70 * 2.5},
+        {property = Attribute.Defence, value = 40 * 2.5}
+    },
+
+    -- Face
+    [8310030] = {
+        {property = Attribute.HealthMax, value = 70},
+        {property = Attribute.AttackPower, value = 70},
+        {property = Attribute.Defence, value = 40}
+    },
+    [8310107] = {
+        {property = Attribute.HealthMax, value = 70 * 1.2},
+        {property = Attribute.AttackPower, value = 70 * 1.2},
+        {property = Attribute.Defence, value = 40 * 1.2}
+    },
+    [8310108] = {
+        {property = Attribute.HealthMax, value = 70 * 1.6},
+        {property = Attribute.AttackPower, value = 70 * 1.6},
+        {property = Attribute.Defence, value = 40 * 1.6}
+    },
+    [8310109] = {
+        {property = Attribute.HealthMax, value = 70 * 1.8},
+        {property = Attribute.AttackPower, value = 70 * 1.8},
+        {property = Attribute.Defence, value = 40 * 1.8}
+    },
+    [8310110] = {
+        {property = Attribute.HealthMax, value = 70 * 2.0},
+        {property = Attribute.AttackPower, value = 70 * 2.0},
+        {property = Attribute.Defence, value = 40 * 2.0}
+    },
+    [8310111] = {
+        {property = Attribute.HealthMax, value = 70 * 2.2},
+        {property = Attribute.AttackPower, value = 70 * 2.2},
+        {property = Attribute.Defence, value = 40 * 2.2}
+    },
+    [8310112] = {
+        {property = Attribute.HealthMax, value = 70 * 2.5},
+        {property = Attribute.AttackPower, value = 70 * 2.5},
+        {property = Attribute.Defence, value = 40 * 2.5}
+    },
+
+    -- Body
+    [8310033] = {
+        {property = Attribute.HealthMax, value = 70},
+        {property = Attribute.AttackPower, value = 70},
+        {property = Attribute.Defence, value = 40}
+    },
+    [8310101] = {
+        {property = Attribute.HealthMax, value = 70 * 1.2},
+        {property = Attribute.AttackPower, value = 70 * 1.2},
+        {property = Attribute.Defence, value = 40 * 1.2}
+    },
+    [8310102] = {
+        {property = Attribute.HealthMax, value = 70 * 1.6},
+        {property = Attribute.AttackPower, value = 70 * 1.6},
+        {property = Attribute.Defence, value = 40 * 1.6}
+    },
+    [8310103] = {
+        {property = Attribute.HealthMax, value = 70 * 1.8},
+        {property = Attribute.AttackPower, value = 70 * 1.8},
+        {property = Attribute.Defence, value = 40 * 1.8}
+    },
+    [8310104] = {
+        {property = Attribute.HealthMax, value = 70 * 2.0},
+        {property = Attribute.AttackPower, value = 70 * 2.0},
+        {property = Attribute.Defence, value = 40 * 2.0}
+    },
+    [8310105] = {
+        {property = Attribute.HealthMax, value = 70 * 2.2},
+        {property = Attribute.AttackPower, value = 70 * 2.2},
+        {property = Attribute.Defence, value = 40 * 2.2}
+    },
+    [8310106] = {
+        {property = Attribute.HealthMax, value = 70 * 2.5},
+        {property = Attribute.AttackPower, value = 70 * 2.5},
+        {property = Attribute.Defence, value = 40 * 2.5}
+    },
+
+    -- Legs
+    [8310029] = {
+        {property = Attribute.HealthMax, value = 70},
+        {property = Attribute.AttackPower, value = 70},
+        {property = Attribute.Defence, value = 40}
+    },
+    [8310125] = {
+        {property = Attribute.HealthMax, value = 70 * 1.2},
+        {property = Attribute.AttackPower, value = 70 * 1.2},
+        {property = Attribute.Defence, value = 40 * 1.2}
+    },
+    [8310126] = {
+        {property = Attribute.HealthMax, value = 70 * 1.6},
+        {property = Attribute.AttackPower, value = 70 * 1.6},
+        {property = Attribute.Defence, value = 40 * 1.6}
+    },
+    [8310127] = {
+        {property = Attribute.HealthMax, value = 70 * 1.8},
+        {property = Attribute.AttackPower, value = 70 * 1.8},
+        {property = Attribute.Defence, value = 40 * 1.8}
+    },
+    [8310128] = {
+        {property = Attribute.HealthMax, value = 70 * 2.0},
+        {property = Attribute.AttackPower, value = 70 * 2.0},
+        {property = Attribute.Defence, value = 40 * 2.0}
+    },
+    [8310129] = {
+        {property = Attribute.HealthMax, value = 70 * 2.2},
+        {property = Attribute.AttackPower, value = 70 * 2.2},
+        {property = Attribute.Defence, value = 40 * 2.2}
+    },
+    [8310130] = {
+        {property = Attribute.HealthMax, value = 70 * 2.5},
+        {property = Attribute.AttackPower, value = 70 * 2.5},
+        {property = Attribute.Defence, value = 40 * 2.5}
+    },
+
+    -- Feet
+    [8310032] = {
+        {property = Attribute.HealthMax, value = 70},
+        {property = Attribute.AttackPower, value = 70},
+        {property = Attribute.Defence, value = 40}
+    },
+    [8310113] = {
+        {property = Attribute.HealthMax, value = 70 * 1.2},
+        {property = Attribute.AttackPower, value = 70 * 1.2},
+        {property = Attribute.Defence, value = 40 * 1.2}
+    },
+    [8310114] = {
+        {property = Attribute.HealthMax, value = 70 * 1.6},
+        {property = Attribute.AttackPower, value = 70 * 1.6},
+        {property = Attribute.Defence, value = 40 * 1.6}
+    },
+    [8310115] = {
+        {property = Attribute.HealthMax, value = 70 * 1.8},
+        {property = Attribute.AttackPower, value = 70 * 1.8},
+        {property = Attribute.Defence, value = 40 * 1.8}
+    },
+    [8310116] = {
+        {property = Attribute.HealthMax, value = 70 * 2.0},
+        {property = Attribute.AttackPower, value = 70 * 2.0},
+        {property = Attribute.Defence, value = 40 * 2.0}
+    },
+    [8310117] = {
+        {property = Attribute.HealthMax, value = 70 * 2.2},
+        {property = Attribute.AttackPower, value = 70 * 2.2},
+        {property = Attribute.Defence, value = 40 * 2.2}
+    },
+    [8310118] = {
+        {property = Attribute.HealthMax, value = 70 * 2.5},
+        {property = Attribute.AttackPower, value = 70 * 2.5},
+        {property = Attribute.Defence, value = 40 * 2.5}
+    },
+
+    -- ==================== 荒漠套装 ====================
+
+    -- Head
+    [8310010] = {
+        {property = Attribute.HealthMax, value = 95},
+        {property = Attribute.AttackPower, value = 95},
+        {property = Attribute.Defence, value = 55}
+    },
+    [8310149] = {
+        {property = Attribute.HealthMax, value = 95 * 1.2},
+        {property = Attribute.AttackPower, value = 95 * 1.2},
+        {property = Attribute.Defence, value = 55 * 1.2}
+    },
+    [8310150] = {
+        {property = Attribute.HealthMax, value = 95 * 1.6},
+        {property = Attribute.AttackPower, value = 95 * 1.6},
+        {property = Attribute.Defence, value = 55 * 1.6}
+    },
+    [8310151] = {
+        {property = Attribute.HealthMax, value = 95 * 1.8},
+        {property = Attribute.AttackPower, value = 95 * 1.8},
+        {property = Attribute.Defence, value = 55 * 1.8}
+    },
+    [8310152] = {
+        {property = Attribute.HealthMax, value = 95 * 2.0},
+        {property = Attribute.AttackPower, value = 95 * 2.0},
+        {property = Attribute.Defence, value = 55 * 2.0}
+    },
+    [8310153] = {
+        {property = Attribute.HealthMax, value = 95 * 2.2},
+        {property = Attribute.AttackPower, value = 95 * 2.2},
+        {property = Attribute.Defence, value = 55 * 2.2}
+    },
+    [8310154] = {
+        {property = Attribute.HealthMax, value = 95 * 2.5},
+        {property = Attribute.AttackPower, value = 95 * 2.5},
+        {property = Attribute.Defence, value = 55 * 2.5}
+    },
+
+    -- Face
+    [8310009] = {
+        {property = Attribute.HealthMax, value = 95},
+        {property = Attribute.AttackPower, value = 95},
+        {property = Attribute.Defence, value = 55}
+    },
+    [8310137] = {
+        {property = Attribute.HealthMax, value = 95 * 1.2},
+        {property = Attribute.AttackPower, value = 95 * 1.2},
+        {property = Attribute.Defence, value = 55 * 1.2}
+    },
+    [8310138] = {
+        {property = Attribute.HealthMax, value = 95 * 1.6},
+        {property = Attribute.AttackPower, value = 95 * 1.6},
+        {property = Attribute.Defence, value = 55 * 1.6}
+    },
+    [8310139] = {
+        {property = Attribute.HealthMax, value = 95 * 1.8},
+        {property = Attribute.AttackPower, value = 95 * 1.8},
+        {property = Attribute.Defence, value = 55 * 1.8}
+    },
+    [8310140] = {
+        {property = Attribute.HealthMax, value = 95 * 2.0},
+        {property = Attribute.AttackPower, value = 95 * 2.0},
+        {property = Attribute.Defence, value = 55 * 2.0}
+    },
+    [8310141] = {
+        {property = Attribute.HealthMax, value = 95 * 2.2},
+        {property = Attribute.AttackPower, value = 95 * 2.2},
+        {property = Attribute.Defence, value = 55 * 2.2}
+    },
+    [8310142] = {
+        {property = Attribute.HealthMax, value = 95 * 2.5},
+        {property = Attribute.AttackPower, value = 95 * 2.5},
+        {property = Attribute.Defence, value = 55 * 2.5}
+    },
+
+    -- Body
+    [8310007] = {
+        {property = Attribute.HealthMax, value = 95},
+        {property = Attribute.AttackPower, value = 95},
+        {property = Attribute.Defence, value = 55}
+    },
+    [8310131] = {
+        {property = Attribute.HealthMax, value = 95 * 1.2},
+        {property = Attribute.AttackPower, value = 95 * 1.2},
+        {property = Attribute.Defence, value = 55 * 1.2}
+    },
+    [8310132] = {
+        {property = Attribute.HealthMax, value = 95 * 1.6},
+        {property = Attribute.AttackPower, value = 95 * 1.6},
+        {property = Attribute.Defence, value = 55 * 1.6}
+    },
+    [8310133] = {
+        {property = Attribute.HealthMax, value = 95 * 1.8},
+        {property = Attribute.AttackPower, value = 95 * 1.8},
+        {property = Attribute.Defence, value = 55 * 1.8}
+    },
+    [8310134] = {
+        {property = Attribute.HealthMax, value = 95 * 2.0},
+        {property = Attribute.AttackPower, value = 95 * 2.0},
+        {property = Attribute.Defence, value = 55 * 2.0}
+    },
+    [8310135] = {
+        {property = Attribute.HealthMax, value = 95 * 2.2},
+        {property = Attribute.AttackPower, value = 95 * 2.2},
+        {property = Attribute.Defence, value = 55 * 2.2}
+    },
+    [8310136] = {
+        {property = Attribute.HealthMax, value = 95 * 2.5},
+        {property = Attribute.AttackPower, value = 95 * 2.5},
+        {property = Attribute.Defence, value = 55 * 2.5}
+    },
+
+    -- Legs
+    [8310008] = {
+        {property = Attribute.HealthMax, value = 95},
+        {property = Attribute.AttackPower, value = 95},
+        {property = Attribute.Defence, value = 55}
+    },
+    [8310155] = {
+        {property = Attribute.HealthMax, value = 95 * 1.2},
+        {property = Attribute.AttackPower, value = 95 * 1.2},
+        {property = Attribute.Defence, value = 55 * 1.2}
+    },
+    [8310156] = {
+        {property = Attribute.HealthMax, value = 95 * 1.6},
+        {property = Attribute.AttackPower, value = 95 * 1.6},
+        {property = Attribute.Defence, value = 55 * 1.6}
+    },
+    [8310157] = {
+        {property = Attribute.HealthMax, value = 95 * 1.8},
+        {property = Attribute.AttackPower, value = 95 * 1.8},
+        {property = Attribute.Defence, value = 55 * 1.8}
+    },
+    [8310158] = {
+        {property = Attribute.HealthMax, value = 95 * 2.0},
+        {property = Attribute.AttackPower, value = 95 * 2.0},
+        {property = Attribute.Defence, value = 55 * 2.0}
+    },
+    [8310159] = {
+        {property = Attribute.HealthMax, value = 95 * 2.2},
+        {property = Attribute.AttackPower, value = 95 * 2.2},
+        {property = Attribute.Defence, value = 55 * 2.2}
+    },
+    [8310160] = {
+        {property = Attribute.HealthMax, value = 95 * 2.5},
+        {property = Attribute.AttackPower, value = 95 * 2.5},
+        {property = Attribute.Defence, value = 55 * 2.5}
+    },
+
+    -- Feet
+    [8310011] = {
+        {property = Attribute.HealthMax, value = 95},
+        {property = Attribute.AttackPower, value = 95},
+        {property = Attribute.Defence, value = 55}
+    },
+    [8310143] = {
+        {property = Attribute.HealthMax, value = 95 * 1.2},
+        {property = Attribute.AttackPower, value = 95 * 1.2},
+        {property = Attribute.Defence, value = 55 * 1.2}
+    },
+    [8310144] = {
+        {property = Attribute.HealthMax, value = 95 * 1.6},
+        {property = Attribute.AttackPower, value = 95 * 1.6},
+        {property = Attribute.Defence, value = 55 * 1.6}
+    },
+    [8310145] = {
+        {property = Attribute.HealthMax, value = 95 * 1.8},
+        {property = Attribute.AttackPower, value = 95 * 1.8},
+        {property = Attribute.Defence, value = 55 * 1.8}
+    },
+    [8310146] = {
+        {property = Attribute.HealthMax, value = 95 * 2.0},
+        {property = Attribute.AttackPower, value = 95 * 2.0},
+        {property = Attribute.Defence, value = 55 * 2.0}
+    },
+    [8310147] = {
+        {property = Attribute.HealthMax, value = 95 * 2.2},
+        {property = Attribute.AttackPower, value = 95 * 2.2},
+        {property = Attribute.Defence, value = 55 * 2.2}
+    },
+    [8310148] = {
+        {property = Attribute.HealthMax, value = 95 * 2.5},
+        {property = Attribute.AttackPower, value = 95 * 2.5},
+        {property = Attribute.Defence, value = 55 * 2.5}
+    }
 }
 
 return ItemCfg
