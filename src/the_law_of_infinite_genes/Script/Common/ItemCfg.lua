@@ -540,6 +540,11 @@ ItemCfg.FirearmType = {
     {Type = 'Pistol', Text = '手枪'},
 }
 
+ItemCfg.AttributeTextColor = {
+    [Attribute.HealthMax] = '41ff4cFF',
+    [Attribute.AttackPower] = 'ff8b49FF',
+    [Attribute.Defence] = '00fffcFF'
+}
 
 ItemCfg.FirearmPurchase = {
     Ammo = {

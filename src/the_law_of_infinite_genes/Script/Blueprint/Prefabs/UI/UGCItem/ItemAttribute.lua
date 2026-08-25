@@ -50,10 +50,7 @@ function ItemAttribute:GetEquipmentDAT(DefineID)
     local FQuality = UGCItemSystemV2.GetItemQualityV2ByDefineID(DefineID)
     local customDat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID)
     local strengthenLevel = customDat.strengthenLevel
-    local ItemName = UGCItemSystemV2.GetItemNameV2(DefineID.TypeSpecificID);
-    local Attr = ItemCfg.EquipmentAttribute[ItemName]
-    local Base = Attr.Base
-    local Factor = Attr.Factor[FQuality]
+    local Attr = ItemCfg.EquipmentAttribute[DefineID.TypeSpecificID]
     local EquipmentText = RichText.Line(
             RichText.Inline(
                     RichText.Font(string.format('品质\t\t\t%s',ItemCfg.ItemQuality[FQuality].name), {size=20, color=ItemCfg.ItemQuality[FQuality].color})
@@ -61,20 +58,8 @@ function ItemAttribute:GetEquipmentDAT(DefineID)
             RichText.Inline(
                     RichText.Font("装备强化\t\t", { size = 18, color = 'FFFFFFFF'}),
                     RichText.Font(string.format('+%s',strengthenLevel, ItemCfg.colorTable[strengthenLevel].Text),{size=20, color=ItemCfg.colorTable[strengthenLevel].HexColor})
-            ),
-            RichText.Inline(
-                    RichText.Font(string.format("--%s\t\t\t", AttributeMate[Base[1].property].anno), {size=16, color = 'FFFFFFFF'}),
-                    RichText.Font(tostring(math.floor(Base[1].value * Factor)), {size=16, color='41ff4cFF'})
-            ),
-            RichText.Inline(
-                    RichText.Font(string.format("--%s\t\t\t", AttributeMate[Base[2].property].anno), {size=16, color = 'FFFFFFFF'}),
-                    RichText.Font(tostring(math.floor(Base[2].value * Factor)), {size=16, color='ff8b49FF'})
-            ),
-            RichText.Inline(
-                    RichText.Font(string.format("--%s\t\t\t", AttributeMate[Base[3].property].anno), {size=16, color = 'FFFFFFFF'}),
-                    RichText.Font(tostring(math.floor(Base[3].value * Factor)), {size=16,  color='00fffcFF'})
             )
-    )
+    )..string.format('\n%s',self:GetAttributeText(Attr));
     return EquipmentText;
 end
 
@@ -102,6 +87,20 @@ function ItemAttribute:GetKenlDAT(DefineID)
     end
     local KenlText =table.concat(KenlTable, "\n");
     return KenlText;
+end
+
+function ItemAttribute:GetAttributeText(attr)
+    local result = {}
+    for _, item in ipairs(attr) do
+        table.insert(
+            result,
+            RichText.Inline(
+                    RichText.Font(string.format("--%s\t\t\t", AttributeMate[item.property].anno), {size=16, color = 'FFFFFFFF'}),
+                    RichText.Font(tostring(math.floor(item.value)), {size=16, color=ItemCfg.AttributeTextColor[item.property]})
+                )
+            )
+    end
+    return table.concat(result, '\n');
 end
 
 return ItemAttribute
