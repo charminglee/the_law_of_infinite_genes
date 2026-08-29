@@ -112,6 +112,7 @@ end
 
 function PureMain:Open(DefineID)
     self:SetVisibility(ESlateVisibility.Visible);
+    self.NewCheckBox_0:SetIsChecked(false);
     self:Reload(DefineID, PureManager.EquipmentType[1].Type);
 end
 
@@ -203,7 +204,7 @@ function PureMain:SetMaterialPreview(Widget, Requirement)
         return;
     end
     local owned = self:GetItemCount(Requirement.ItemId);
-    local required = tonumber(Requirement.Value) or 0;
+    local required = tonumber(Requirement.Count) or 0;
     Widget:SetDefineID({TypeSpecificID = Requirement.ItemId});
     Widget:SetCount(string.format('%s/%s', tostring(owned), tostring(required)));
 end
@@ -264,7 +265,7 @@ function PureMain:SetPreview(DefineID)
 
     local canSubmit = PureManager.ComponentClass ~= nil;
     for _, requirement in ipairs(self.MaterialRequirements) do
-        if self:GetItemCount(requirement.ItemId) < (tonumber(requirement.Value) or 0) then
+        if self:GetItemCount(requirement.ItemId) < (tonumber(requirement.Count) or 0) then
             canSubmit = false;
             break;
         end
@@ -326,7 +327,7 @@ function PureMain:Request()
         return;
     end
     for _, requirement in ipairs(reforgeData.Requirement or {}) do
-        if self:GetItemCount(requirement.ItemId) < (tonumber(requirement.Value) or 0) then
+        if self:GetItemCount(requirement.ItemId) < (tonumber(requirement.Count) or 0) then
             UGCWidgetManagerSystem.ShowTipsUI('精炼材料不足');
             return;
         end

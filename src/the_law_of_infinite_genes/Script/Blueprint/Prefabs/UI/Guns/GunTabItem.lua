@@ -1,16 +1,16 @@
 ---@class GunTabItem_C:UAEUserWidget
 ---@field Button_0 UButton
----@field CanvasPanel_Icon UCanvasPanel
----@field Image_Null UImage
----@field Image_QualityBar UImage
 ---@field Normal UCanvasPanel
 ---@field selected UCanvasPanel
 ---@field TextBlock UTextBlock
 --Edit Below--
-local GunTabItem = { bInitDoOnce = false, Index=nil}
+local GunTabItem = {
+    bInitDoOnce = false,
+    Index = nil,
+}
 
 function GunTabItem:Construct()
-	self:LuaInit();
+    self:LuaInit();
 end
 
 function GunTabItem:LuaInit()
@@ -18,26 +18,29 @@ function GunTabItem:LuaInit()
         return;
     end
     self.bInitDoOnce = true;
-    self:Listen();
-end
-
-function GunTabItem:Listen()
     self.Button_0.OnClicked:Add(self.Button_0_Clicked, self);
 end
 
 function GunTabItem:Button_0_Clicked()
-    GunsManager:Reload(GunsManager.DefineId, GunsManager.GunsType[self.Index+1].Type);
+    local tab = GunsManager.GunsType[self.Index + 1];
+    GunsManager:Reload(nil, tab.Type);
+end
+
+function GunTabItem:SetEmpty()
+    self.Index = nil;
+    self:SetVisibility(ESlateVisibility.Collapsed);
 end
 
 function GunTabItem:SetDAT(Index, Text)
     self.Index = Index;
+    self:SetVisibility(ESlateVisibility.Visible);
     self.TextBlock:SetText(Text);
 end
 
-function GunTabItem:SetSelected(Visible)
+function GunTabItem:SetSelected(IsSelected)
     local s = ESlateVisibility.Collapsed;
     local n = ESlateVisibility.Collapsed
-    if Visible then
+    if IsSelected then
         s = ESlateVisibility.Visible;
     else
         n = ESlateVisibility.Visible;
