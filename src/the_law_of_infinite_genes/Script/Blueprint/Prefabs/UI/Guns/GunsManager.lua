@@ -55,9 +55,9 @@ function GunsManager:RequestUnlock(ItemId)
     );
 end
 
-function GunsManager:OnItemCustomDataUpdateAfter()
+function GunsManager:OnGunUnlockAfter(ItemId)
     if self.MainUI ~= nil then
-        self.MainUI:OnItemCustomDataUpdateAfter();
+        self.MainUI:OnGunUnlockAfter(ItemId);
     end
 end
 

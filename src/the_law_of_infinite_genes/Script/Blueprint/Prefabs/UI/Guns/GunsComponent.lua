@@ -10,7 +10,7 @@ function GunsComponent:ReceiveBeginPlay()
     if not Lib.IsServer() then
         GunsManager:RegisterComponentClass(self);
         self:InitUI();
-        Lib.EventSystem.Listen(Event.OnItemCustomDataUpdateAfter, self.OnItemCustomDataUpdateAfter, self);
+        Lib.EventSystem.Listen(Event.OnGunUnlockAfter, self.OnGunUnlockAfter, self);
     end
 end
 
@@ -36,10 +36,8 @@ function GunsComponent:GetAvailableServerRPCs()
     return 'GunsActivateSubmit';
 end
 
-function GunsComponent:OnItemCustomDataUpdateAfter(UID, ItemDefineId, OldData, NewData)
-    ugcprint_concat(oldData);
-    ugcprint_concat(NewData);
-    GunsManager:OnItemCustomDataUpdateAfter();
+function GunsComponent:OnGunUnlockAfter(UID, ItemId)
+    GunsManager:OnGunUnlockAfter(ItemId);
 end
 
 ---@param PlayerKey integer

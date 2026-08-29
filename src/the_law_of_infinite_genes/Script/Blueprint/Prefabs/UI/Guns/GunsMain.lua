@@ -160,7 +160,8 @@ function GunsMain:FilterGuns(FilterType)
 end
 
 ---@param ItemData table|nil
-function GunsMain:SetPreview(ItemData)
+---@param UnlockedItemId integer|nil
+function GunsMain:SetPreview(ItemData, UnlockedItemId)
     if ItemData == nil then
         self.Preview:SetVisibility(ESlateVisibility.Collapsed);
         return;
@@ -168,7 +169,8 @@ function GunsMain:SetPreview(ItemData)
 
     self.Preview:SetVisibility(ESlateVisibility.Visible);
     local itemId = ItemData.ItemId;
-    local isUnlocked = LocalPlayerState.PlayerDataManager:IsGunUnlock(itemId);
+    local isUnlocked = itemId == UnlockedItemId
+            or LocalPlayerState.PlayerDataManager:IsGunUnlock(itemId);
     local condition = ItemCfg.UnlockConditions[itemId];
     local ownedCount = condition.ItemId == 0
             and condition.Count
@@ -223,9 +225,9 @@ function GunsMain:SetPreviewTexture(Path)
     );
 end
 
-function GunsMain:OnItemCustomDataUpdateAfter()
+function GunsMain:OnGunUnlockAfter(ItemId)
     self.PendingUnlockItemId = nil;
-    self:SetPreview(GunsManager.DefineId);
+    self:SetPreview(GunsManager.DefineId, ItemId);
 end
 
 return GunsMain

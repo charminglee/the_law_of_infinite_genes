@@ -244,11 +244,13 @@ function PlayerDataManager:UnlockGun(itemId)
     end
 
     local cond = ItemCfg.UnlockConditions[itemId]
-    if self:GetCoin(cond.ItemId) < cond.Count then
-        return false
-    end
-    if not self:AddCoin(itemId, -cond.Count, false) then
-        return false
+    if cond.ItemId ~= 0 then
+        if self:GetCoin(cond.ItemId) < cond.Count then
+            return false
+        end
+        if not self:AddCoin(cond.ItemId, -cond.Count, false) then
+            return false
+        end
     end
 
     self._data.gun.unlocked[itemId] = true
