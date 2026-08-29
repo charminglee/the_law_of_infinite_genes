@@ -244,15 +244,18 @@ function PlayerDataManager:UnlockGun(itemId)
     end
 
     local cond = ItemCfg.UnlockConditions[itemId]
-    if cond == nil then
+    if self:GetCoin(cond.ItemId) < cond.Count then
         return false
     end
-    if self:GetCoin(cond.ItemId) < cond.Count then
+    if not self:AddCoin(itemId, -cond.Count, false) then
         return false
     end
 
     self._data.gun.unlocked[itemId] = true
     self:SyncData()
+
+    Lib.EventSystem.Broadcast_SinglePlayer(self.owner, Event.OnGunUnlockAfter, self.owner.UID, itemId)
+
     return true
 end
 

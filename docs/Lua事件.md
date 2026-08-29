@@ -40,6 +40,15 @@ Lib.EventSystem.Broadcast(eventName, ...)
 
 ## 事件列表
 
+### OnGunUnlockAfter
+
+【双端】枪械解锁时触发。
+
+| 序号 | 参数 | 类型   | 说明          |
+| --- | --- |--------|---------------|
+| 1 | uid | number | 玩家 UID      |
+| 2 | itemId | number | 枪械的 ItemId |
+
 ### OnItemCustomDataUpdateAfter
 
 【双端】背包物品自定义数据更新时触发。

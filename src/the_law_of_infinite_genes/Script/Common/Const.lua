@@ -3,6 +3,7 @@ local ROOT = UGCMapInfoLib.GetRootLongPackagePath().."Asset/Blueprint/"
 
 ---@enum Event
 Event = {
+    OnGunUnlockAfter            = "OnGunUnlockAfter",
     OnItemCustomDataUpdateAfter = "OnItemCustomDataUpdateAfter",
     OnWaveStart                 = "OnWaveStart",
     OnWaveEnd                   = "OnWaveEnd",
