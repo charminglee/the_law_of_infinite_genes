@@ -69,7 +69,7 @@ function MobSpawnerManager:NextWave()
     end
     self.isInSpawnInterval = true
     UGCTimerUtility.CreateUETimer(
-        function ()
+        function()
             self:_StartWave()
         end, 
         Config.Common.SpawnerDelay, 

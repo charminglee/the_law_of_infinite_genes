@@ -83,7 +83,7 @@ ItemCfg.Strengthen = {
     -- 最大强化等级
     MaxLevel = 100,
     -- 强化概率曲线
-    _ProbMap = (function () 
+    _ProbMap = (function()
         local m = {
             [1] = 1.0,
             [2] = 0.95,
@@ -133,11 +133,11 @@ ItemCfg.Strengthen = {
         end
         return m
     end)(),
-    ProbCurve = function (level, quality)
+    ProbCurve = function(level, quality)
         return ItemCfg.Strengthen._ProbMap[level]
     end,
     -- 强化提升百分比曲线
-    StrengthenCurve = function (attr, level, quality)
+    StrengthenCurve = function(attr, level, quality)
         return level * 0.01
     end,
 }
@@ -323,293 +323,58 @@ ItemCfg.Reforge = {
 }
 
 
--- 物品类型配置
-ItemCfg.ItemTypeName = {
-    [1] = '装备',
-    [2] = '消耗品',
-    [3] = '材料',
-    [4] = '其他'
-}
-ItemCfg.ItemType = {
-    Kenl = "Kenl",
-    Material = "Material",
-}
-
-
--- 物品品质配置
-ItemCfg.ItemQuality = {
-    [0] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_1.Image_BigQualityBg_1', name='普通', color='#FFFFFF', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_1.Image_QualityBar_1'},
-    [1] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_2.Image_BigQualityBg_2', name='平凡', color='#2ECC71', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_2.Image_QualityBar_2'},
-    [2] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_3.Image_BigQualityBg_3', name='精良', color='#3498DB', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_3.Image_QualityBar_3'},
-    [3] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_4.Image_BigQualityBg_4', name='稀有', color='#9B59B6', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_4.Image_QualityBar_4'},
-    [4] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_5.Image_BigQualityBg_5', name='传说', color='#E67E22', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_5.Image_QualityBar_5'},
-    [5] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_6.Image_BigQualityBg_6', name='史诗', color='#F1C40F', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_6.Image_QualityBar_6'},
-    [6] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话', color='#E74C3C', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_7.Image_QualityBar_7'}
-}
-
-
-ItemCfg.colorTable = {
-    -- ============ 凡尘（Lv.1 ~ Lv.9）============
-    [0] = { HexColor = '#3D3D3D', Text = '凡尘' },  -- Lv.1
-    [1] = { HexColor = '#3E4040', Text = '凡尘' },  -- Lv.2
-    [2] = { HexColor = '#3F4343', Text = '凡尘' },  -- Lv.3
-    [3] = { HexColor = '#404646', Text = '凡尘' },  -- Lv.4
-    [4] = { HexColor = '#414949', Text = '凡尘' },  -- Lv.5
-    [5] = { HexColor = '#424C4C', Text = '凡尘' },  -- Lv.6
-    [6] = { HexColor = '#434F4F', Text = '凡尘' },  -- Lv.7
-    [7] = { HexColor = '#445252', Text = '凡尘' },  -- Lv.8
-    [8] = { HexColor = '#455555', Text = '凡尘' },  -- Lv.9
-
-    -- ============ 百炼（Lv.10 ~ Lv.24）============
-    [9] = { HexColor = '#4A5A5A', Text = '百炼' },  -- Lv.10
-    [10] = { HexColor = '#475E5A', Text = '百炼' }, -- Lv.11
-    [11] = { HexColor = '#44625A', Text = '百炼' }, -- Lv.12
-    [12] = { HexColor = '#41665A', Text = '百炼' }, -- Lv.13
-    [13] = { HexColor = '#3E6A5A', Text = '百炼' }, -- Lv.14
-    [14] = { HexColor = '#3B6E5A', Text = '百炼' }, -- Lv.15
-    [15] = { HexColor = '#38725A', Text = '百炼' }, -- Lv.16
-    [16] = { HexColor = '#35765A', Text = '百炼' }, -- Lv.17
-    [17] = { HexColor = '#327A5A', Text = '百炼' }, -- Lv.18
-    [18] = { HexColor = '#2F7E5A', Text = '百炼' }, -- Lv.19
-    [19] = { HexColor = '#2C825A', Text = '百炼' }, -- Lv.20
-    [20] = { HexColor = '#29865A', Text = '百炼' }, -- Lv.21
-    [21] = { HexColor = '#268A5A', Text = '百炼' }, -- Lv.22
-    [22] = { HexColor = '#238E5A', Text = '百炼' }, -- Lv.23
-    [23] = { HexColor = '#20925A', Text = '百炼' }, -- Lv.24
-
-    -- ============ 凝气（Lv.25 ~ Lv.39）============
-    [24] = { HexColor = '#1D5C3A', Text = '凝气' }, -- Lv.25
-    [25] = { HexColor = '#1C623C', Text = '凝气' }, -- Lv.26
-    [26] = { HexColor = '#1B683E', Text = '凝气' }, -- Lv.27
-    [27] = { HexColor = '#1A6E40', Text = '凝气' }, -- Lv.28
-    [28] = { HexColor = '#197442', Text = '凝气' }, -- Lv.29
-    [29] = { HexColor = '#187A44', Text = '凝气' }, -- Lv.30
-    [30] = { HexColor = '#178046', Text = '凝气' }, -- Lv.31
-    [31] = { HexColor = '#168648', Text = '凝气' }, -- Lv.32
-    [32] = { HexColor = '#158C4A', Text = '凝气' }, -- Lv.33
-    [33] = { HexColor = '#14924C', Text = '凝气' }, -- Lv.34
-    [34] = { HexColor = '#13984E', Text = '凝气' }, -- Lv.35
-    [35] = { HexColor = '#129E50', Text = '凝气' }, -- Lv.36
-    [36] = { HexColor = '#11A452', Text = '凝气' }, -- Lv.37
-    [37] = { HexColor = '#10AA54', Text = '凝气' }, -- Lv.38
-    [38] = { HexColor = '#0FB056', Text = '凝气' }, -- Lv.39
-
-    -- ============ 化灵（Lv.40 ~ Lv.54）============
-    [39] = { HexColor = '#1050A0', Text = '化灵' }, -- Lv.40
-    [40] = { HexColor = '#125599', Text = '化灵' }, -- Lv.41
-    [41] = { HexColor = '#145A92', Text = '化灵' }, -- Lv.42
-    [42] = { HexColor = '#165F8B', Text = '化灵' }, -- Lv.43
-    [43] = { HexColor = '#186484', Text = '化灵' }, -- Lv.44
-    [44] = { HexColor = '#1A697D', Text = '化灵' }, -- Lv.45
-    [45] = { HexColor = '#1C6E76', Text = '化灵' }, -- Lv.46
-    [46] = { HexColor = '#1E736F', Text = '化灵' }, -- Lv.47
-    [47] = { HexColor = '#207868', Text = '化灵' }, -- Lv.48
-    [48] = { HexColor = '#227D61', Text = '化灵' }, -- Lv.49
-    [49] = { HexColor = '#24825A', Text = '化灵' }, -- Lv.50
-    [50] = { HexColor = '#268753', Text = '化灵' }, -- Lv.51
-    [51] = { HexColor = '#288C4C', Text = '化灵' }, -- Lv.52
-    [52] = { HexColor = '#2A9145', Text = '化灵' }, -- Lv.53
-    [53] = { HexColor = '#2C963E', Text = '化灵' }, -- Lv.54
-
-    -- ============ 道蕴（Lv.55 ~ Lv.69）============
-    [54] = { HexColor = '#5500AA', Text = '道蕴' }, -- Lv.55
-    [55] = { HexColor = '#5300A6', Text = '道蕴' }, -- Lv.56
-    [56] = { HexColor = '#5100A2', Text = '道蕴' }, -- Lv.57
-    [57] = { HexColor = '#4F009E', Text = '道蕴' }, -- Lv.58
-    [58] = { HexColor = '#4D009A', Text = '道蕴' }, -- Lv.59
-    [59] = { HexColor = '#4B0096', Text = '道蕴' }, -- Lv.60
-    [60] = { HexColor = '#490092', Text = '道蕴' }, -- Lv.61
-    [61] = { HexColor = '#47008E', Text = '道蕴' }, -- Lv.62
-    [62] = { HexColor = '#45008A', Text = '道蕴' }, -- Lv.63
-    [63] = { HexColor = '#430086', Text = '道蕴' }, -- Lv.64
-    [64] = { HexColor = '#410082', Text = '道蕴' }, -- Lv.65
-    [65] = { HexColor = '#3F007E', Text = '道蕴' }, -- Lv.66
-    [66] = { HexColor = '#3D007A', Text = '道蕴' }, -- Lv.67
-    [67] = { HexColor = '#3B0076', Text = '道蕴' }, -- Lv.68
-    [68] = { HexColor = '#390072', Text = '道蕴' }, -- Lv.69
-
-    -- ============ 涅槃（Lv.70 ~ Lv.84）============
-    [69] = { HexColor = '#B02800', Text = '涅槃' }, -- Lv.70
-    [70] = { HexColor = '#B43008', Text = '涅槃' }, -- Lv.71
-    [71] = { HexColor = '#B83810', Text = '涅槃' }, -- Lv.72
-    [72] = { HexColor = '#BC4018', Text = '涅槃' }, -- Lv.73
-    [73] = { HexColor = '#C04820', Text = '涅槃' }, -- Lv.74
-    [74] = { HexColor = '#C45028', Text = '涅槃' }, -- Lv.75
-    [75] = { HexColor = '#C85830', Text = '涅槃' }, -- Lv.76
-    [76] = { HexColor = '#CC6038', Text = '涅槃' }, -- Lv.77
-    [77] = { HexColor = '#D06840', Text = '涅槃' }, -- Lv.78
-    [78] = { HexColor = '#D47048', Text = '涅槃' }, -- Lv.79
-    [79] = { HexColor = '#D87850', Text = '涅槃' }, -- Lv.80
-    [80] = { HexColor = '#DC8058', Text = '涅槃' }, -- Lv.81
-    [81] = { HexColor = '#E08860', Text = '涅槃' }, -- Lv.82
-    [82] = { HexColor = '#E49068', Text = '涅槃' }, -- Lv.83
-    [83] = { HexColor = '#E89870', Text = '涅槃' }, -- Lv.84
-
-    -- ============ 造化（Lv.85 ~ Lv.100）============
-    [84] = { HexColor = '#CC8800', Text = '造化' }, -- Lv.85
-    [85] = { HexColor = '#D18E08', Text = '造化' }, -- Lv.86
-    [86] = { HexColor = '#D69410', Text = '造化' }, -- Lv.87
-    [87] = { HexColor = '#DB9A18', Text = '造化' }, -- Lv.88
-    [88] = { HexColor = '#E0A020', Text = '造化' }, -- Lv.89
-    [89] = { HexColor = '#E5A628', Text = '造化' }, -- Lv.90
-    [90] = { HexColor = '#EAAC30', Text = '造化' }, -- Lv.91
-    [91] = { HexColor = '#EFB238', Text = '造化' }, -- Lv.92
-    [92] = { HexColor = '#F4B840', Text = '造化' }, -- Lv.93
-    [93] = { HexColor = '#F9BE48', Text = '造化' }, -- Lv.94
-    [94] = { HexColor = '#FEC450', Text = '造化' }, -- Lv.95
-    [95] = { HexColor = '#FFCA58', Text = '造化' }, -- Lv.96
-    [96] = { HexColor = '#FFD060', Text = '造化' }, -- Lv.97
-    [97] = { HexColor = '#FFD668', Text = '造化' }, -- Lv.98
-    [98] = { HexColor = '#FFDC70', Text = '造化' }, -- Lv.99
-    [99] = { HexColor = '#FFD800', Text = '造化' }, -- Lv.100
+-- 枪械购买价格
+ItemCfg.GunPrice = {
+    [831301001] = 100,
+    [831301002] = 100,
+    [831302001] = 100,
+    [831303001] = 100,
+    [831304001] = 100,
+    [831305001] = 100,
+    [831305002] = 100,
+    [831306001] = 100,
+    [831306002] = 100,
+    [831306003] = 100,
+    [831307001] = 100,
+    [831307002] = 100,
+    [831307003] = 100,
+    [831307004] = 100,
+    [831307099] = 100,
+    [831307100] = 100,
+    [831307101] = 100,
+    [831307102] = 100,
+    [831307103] = 100,
+    [8310185] = 100,
+    [8310186] = 100,
+    [8310163] = 100,
+    [8310161] = 100,
+    [8310164] = 100,
+    [8310184] = 100,
+    [8310018] = 100,
+    [8310165] = 100,
+    [8310167] = 100,
+    [8310166] = 100,
+    [8310187] = 100,
+    [8310178] = 100,
+    [8310180] = 100,
+    [8310179] = 100,
+    [8310176] = 100,
+    [8310175] = 100,
+    [8310177] = 100,
+    [8310173] = 100,
+    [8310168] = 100,
+    [8310169] = 100,
+    [8310174] = 100,
+    [8310172] = 100,
+    [8310170] = 100,
+    [8310171] = 100,
+    [8310181] = 100,
+    [8310182] = 100,
+    [8310183] = 100,
 }
 
 
-ItemCfg.CustomizeType = {
-    Body = true,
-    Feet = true,
-    Face = true,
-    Head = true,
-    Legs = true,
-}
-
-
-ItemCfg.ItemDef = {
-    [1] = '帽子',
-    [2] = '脸饰',
-    [3] = '衣服',
-    [4] = '裤子',
-    [5] = '鞋子',
-    [6] = '消耗品',
-    [7] = '材料',
-    [8] = '其他',
-}
-
-
-ItemCfg.ItemTable = {
-    Head = {
-        8310021,
-        8310026,
-        8310031
-    },
-    Face = {
-        8310020,
-        8310025,
-        8310030,
-        8310009,
-    },
-    Body = {
-        8310023,
-        8310028,
-        8310033,
-        8310007,
-    },
-    Legs = {
-        8310019,
-        8310024,
-        8310029,
-        8310008
-    },
-    Feet = {
-        8310022,
-        8310027,
-        8310032,
-        8310011,
-    },
-    [6] = {
-
-    },
-    Material = {
-        8310014,
-        8310015,
-        8310016,
-        8310017
-    },
-    [8] = {}
-}
-
-
-ItemCfg.FirearmType = {
-    {Type = 'Ammo', Text = '子弹'},
-    {Type = 'Rifle', Text = '步枪'},
-    {Type = 'SMG', Text = '冲锋枪'},
-    {Type = 'LMG', Text = '轻机枪'},
-    {Type = 'Shotgun', Text = '霰弹枪'},
-    {Type = 'Snipe', Text = '狙击枪'},
-    {Type = 'Pistol', Text = '手枪'},
-}
-
-ItemCfg.AttributeTextColor = {
-    [Attribute.HealthMax] = '41ff4cFF',
-    [Attribute.AttackPower] = 'ff8b49FF',
-    [Attribute.Defence] = '00fffcFF'
-}
-
-ItemCfg.FirearmPurchase = {
-    Ammo = {
-        {ItemId=831301001, Count=100},
-        {ItemId=831301002, Count=100},
-        {ItemId=831302001, Count=100},
-        {ItemId=831303001, Count=100},
-        {ItemId=831304001, Count=100},
-        {ItemId=831305001, Count=100},
-        {ItemId=831305002, Count=100},
-        {ItemId=831306001, Count=100},
-        {ItemId=831306002, Count=100},
-        {ItemId=831306003, Count=100},
-        {ItemId=831307001, Count=100},
-        {ItemId=831307002, Count=100},
-        {ItemId=831307003, Count=100},
-        {ItemId=831307004, Count=100},
-        {ItemId=831307099, Count=100},
-        {ItemId=831307100, Count=100},
-        {ItemId=831307101, Count=100},
-        {ItemId=831307102, Count=100},
-        {ItemId=831307103, Count=100},
-    },
-    Rifle = {
-        {ItemId=8310185, Count=100},
-        {ItemId=8310186, Count=100},
-        {ItemId=8310163, Count=100},
-        {ItemId=8310161, Count=100},
-        {ItemId=8310164, Count=100},
-        {ItemId=8310184, Count=100},
-
-    },
-    SMG = {
-        {ItemId=8310018, Count=100},
-        {ItemId=8310165, Count=100},
-        {ItemId=8310167, Count=100},
-        {ItemId=8310166, Count=100},
-    },
-    LMG = {
-        {ItemId=8310187, Count=100},
-        {ItemId=8310178, Count=100},
-        {ItemId=8310180, Count=100},
-        {ItemId=8310179, Count=100},
-    },
-    Shotgun = {
-        {ItemId=8310176, Count=100},
-        {ItemId=8310175, Count=100},
-        {ItemId=8310177, Count=100},
-    },
-    Snipe = {
-        {ItemId=8310173, Count=100},
-        {ItemId=8310168, Count=100},
-        {ItemId=8310169, Count=100},
-        {ItemId=8310174, Count=100},
-        {ItemId=8310172, Count=100},
-        {ItemId=8310170, Count=100},
-        {ItemId=8310171, Count=100},
-    },
-    Pistol = {
-        {ItemId=8310181, Count=100},
-        {ItemId=8310182, Count=100},
-        {ItemId=8310183, Count=100},
-    }
-}
-
-
+-- 枪械解锁花费
 ItemCfg.UnlockConditions = {
     [8310163] = {ItemId=ItemId.Coin_5, Count=3}, --- AUG
     [8310161] = {ItemId=ItemId.Coin_5, Count=1}, --- M416
@@ -641,6 +406,7 @@ ItemCfg.UnlockConditions = {
 }
 
 
+-- 装备基础属性
 ItemCfg.EquipmentAttribute = {
     -- ==================== 基础套装 ====================
 
@@ -1338,6 +1104,294 @@ ItemCfg.EquipmentAttribute = {
         {property = Attribute.HealthMax, value = 95 * 2.5},
         {property = Attribute.AttackPower, value = 95 * 2.5},
         {property = Attribute.Defence, value = 55 * 2.5}
+    }
+}
+
+
+-- 物品类型配置
+ItemCfg.ItemTypeName = {
+    [1] = '装备',
+    [2] = '消耗品',
+    [3] = '材料',
+    [4] = '其他'
+}
+ItemCfg.ItemType = {
+    Kenl = "Kenl",
+    Material = "Material",
+}
+
+
+-- 物品品质配置
+ItemCfg.ItemQuality = {
+    [0] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_1.Image_BigQualityBg_1', name='普通', color='#FFFFFF', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_1.Image_QualityBar_1'},
+    [1] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_2.Image_BigQualityBg_2', name='平凡', color='#2ECC71', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_2.Image_QualityBar_2'},
+    [2] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_3.Image_BigQualityBg_3', name='精良', color='#3498DB', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_3.Image_QualityBar_3'},
+    [3] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_4.Image_BigQualityBg_4', name='稀有', color='#9B59B6', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_4.Image_QualityBar_4'},
+    [4] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_5.Image_BigQualityBg_5', name='传说', color='#E67E22', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_5.Image_QualityBar_5'},
+    [5] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_6.Image_BigQualityBg_6', name='史诗', color='#F1C40F', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_6.Image_QualityBar_6'},
+    [6] = {Bg='/the_law_of_infinite_genes/Asset/Texture/UI/Image_BigQualityBg_7.Image_BigQualityBg_7', name='神话', color='#E74C3C', bar='/the_law_of_infinite_genes/Asset/Texture/UI/Image_QualityBar_7.Image_QualityBar_7'}
+}
+
+
+ItemCfg.colorTable = {
+    -- ============ 凡尘（Lv.1 ~ Lv.9）============
+    [0] = { HexColor = '#3D3D3D', Text = '凡尘' },  -- Lv.1
+    [1] = { HexColor = '#3E4040', Text = '凡尘' },  -- Lv.2
+    [2] = { HexColor = '#3F4343', Text = '凡尘' },  -- Lv.3
+    [3] = { HexColor = '#404646', Text = '凡尘' },  -- Lv.4
+    [4] = { HexColor = '#414949', Text = '凡尘' },  -- Lv.5
+    [5] = { HexColor = '#424C4C', Text = '凡尘' },  -- Lv.6
+    [6] = { HexColor = '#434F4F', Text = '凡尘' },  -- Lv.7
+    [7] = { HexColor = '#445252', Text = '凡尘' },  -- Lv.8
+    [8] = { HexColor = '#455555', Text = '凡尘' },  -- Lv.9
+
+    -- ============ 百炼（Lv.10 ~ Lv.24）============
+    [9] = { HexColor = '#4A5A5A', Text = '百炼' },  -- Lv.10
+    [10] = { HexColor = '#475E5A', Text = '百炼' }, -- Lv.11
+    [11] = { HexColor = '#44625A', Text = '百炼' }, -- Lv.12
+    [12] = { HexColor = '#41665A', Text = '百炼' }, -- Lv.13
+    [13] = { HexColor = '#3E6A5A', Text = '百炼' }, -- Lv.14
+    [14] = { HexColor = '#3B6E5A', Text = '百炼' }, -- Lv.15
+    [15] = { HexColor = '#38725A', Text = '百炼' }, -- Lv.16
+    [16] = { HexColor = '#35765A', Text = '百炼' }, -- Lv.17
+    [17] = { HexColor = '#327A5A', Text = '百炼' }, -- Lv.18
+    [18] = { HexColor = '#2F7E5A', Text = '百炼' }, -- Lv.19
+    [19] = { HexColor = '#2C825A', Text = '百炼' }, -- Lv.20
+    [20] = { HexColor = '#29865A', Text = '百炼' }, -- Lv.21
+    [21] = { HexColor = '#268A5A', Text = '百炼' }, -- Lv.22
+    [22] = { HexColor = '#238E5A', Text = '百炼' }, -- Lv.23
+    [23] = { HexColor = '#20925A', Text = '百炼' }, -- Lv.24
+
+    -- ============ 凝气（Lv.25 ~ Lv.39）============
+    [24] = { HexColor = '#1D5C3A', Text = '凝气' }, -- Lv.25
+    [25] = { HexColor = '#1C623C', Text = '凝气' }, -- Lv.26
+    [26] = { HexColor = '#1B683E', Text = '凝气' }, -- Lv.27
+    [27] = { HexColor = '#1A6E40', Text = '凝气' }, -- Lv.28
+    [28] = { HexColor = '#197442', Text = '凝气' }, -- Lv.29
+    [29] = { HexColor = '#187A44', Text = '凝气' }, -- Lv.30
+    [30] = { HexColor = '#178046', Text = '凝气' }, -- Lv.31
+    [31] = { HexColor = '#168648', Text = '凝气' }, -- Lv.32
+    [32] = { HexColor = '#158C4A', Text = '凝气' }, -- Lv.33
+    [33] = { HexColor = '#14924C', Text = '凝气' }, -- Lv.34
+    [34] = { HexColor = '#13984E', Text = '凝气' }, -- Lv.35
+    [35] = { HexColor = '#129E50', Text = '凝气' }, -- Lv.36
+    [36] = { HexColor = '#11A452', Text = '凝气' }, -- Lv.37
+    [37] = { HexColor = '#10AA54', Text = '凝气' }, -- Lv.38
+    [38] = { HexColor = '#0FB056', Text = '凝气' }, -- Lv.39
+
+    -- ============ 化灵（Lv.40 ~ Lv.54）============
+    [39] = { HexColor = '#1050A0', Text = '化灵' }, -- Lv.40
+    [40] = { HexColor = '#125599', Text = '化灵' }, -- Lv.41
+    [41] = { HexColor = '#145A92', Text = '化灵' }, -- Lv.42
+    [42] = { HexColor = '#165F8B', Text = '化灵' }, -- Lv.43
+    [43] = { HexColor = '#186484', Text = '化灵' }, -- Lv.44
+    [44] = { HexColor = '#1A697D', Text = '化灵' }, -- Lv.45
+    [45] = { HexColor = '#1C6E76', Text = '化灵' }, -- Lv.46
+    [46] = { HexColor = '#1E736F', Text = '化灵' }, -- Lv.47
+    [47] = { HexColor = '#207868', Text = '化灵' }, -- Lv.48
+    [48] = { HexColor = '#227D61', Text = '化灵' }, -- Lv.49
+    [49] = { HexColor = '#24825A', Text = '化灵' }, -- Lv.50
+    [50] = { HexColor = '#268753', Text = '化灵' }, -- Lv.51
+    [51] = { HexColor = '#288C4C', Text = '化灵' }, -- Lv.52
+    [52] = { HexColor = '#2A9145', Text = '化灵' }, -- Lv.53
+    [53] = { HexColor = '#2C963E', Text = '化灵' }, -- Lv.54
+
+    -- ============ 道蕴（Lv.55 ~ Lv.69）============
+    [54] = { HexColor = '#5500AA', Text = '道蕴' }, -- Lv.55
+    [55] = { HexColor = '#5300A6', Text = '道蕴' }, -- Lv.56
+    [56] = { HexColor = '#5100A2', Text = '道蕴' }, -- Lv.57
+    [57] = { HexColor = '#4F009E', Text = '道蕴' }, -- Lv.58
+    [58] = { HexColor = '#4D009A', Text = '道蕴' }, -- Lv.59
+    [59] = { HexColor = '#4B0096', Text = '道蕴' }, -- Lv.60
+    [60] = { HexColor = '#490092', Text = '道蕴' }, -- Lv.61
+    [61] = { HexColor = '#47008E', Text = '道蕴' }, -- Lv.62
+    [62] = { HexColor = '#45008A', Text = '道蕴' }, -- Lv.63
+    [63] = { HexColor = '#430086', Text = '道蕴' }, -- Lv.64
+    [64] = { HexColor = '#410082', Text = '道蕴' }, -- Lv.65
+    [65] = { HexColor = '#3F007E', Text = '道蕴' }, -- Lv.66
+    [66] = { HexColor = '#3D007A', Text = '道蕴' }, -- Lv.67
+    [67] = { HexColor = '#3B0076', Text = '道蕴' }, -- Lv.68
+    [68] = { HexColor = '#390072', Text = '道蕴' }, -- Lv.69
+
+    -- ============ 涅槃（Lv.70 ~ Lv.84）============
+    [69] = { HexColor = '#B02800', Text = '涅槃' }, -- Lv.70
+    [70] = { HexColor = '#B43008', Text = '涅槃' }, -- Lv.71
+    [71] = { HexColor = '#B83810', Text = '涅槃' }, -- Lv.72
+    [72] = { HexColor = '#BC4018', Text = '涅槃' }, -- Lv.73
+    [73] = { HexColor = '#C04820', Text = '涅槃' }, -- Lv.74
+    [74] = { HexColor = '#C45028', Text = '涅槃' }, -- Lv.75
+    [75] = { HexColor = '#C85830', Text = '涅槃' }, -- Lv.76
+    [76] = { HexColor = '#CC6038', Text = '涅槃' }, -- Lv.77
+    [77] = { HexColor = '#D06840', Text = '涅槃' }, -- Lv.78
+    [78] = { HexColor = '#D47048', Text = '涅槃' }, -- Lv.79
+    [79] = { HexColor = '#D87850', Text = '涅槃' }, -- Lv.80
+    [80] = { HexColor = '#DC8058', Text = '涅槃' }, -- Lv.81
+    [81] = { HexColor = '#E08860', Text = '涅槃' }, -- Lv.82
+    [82] = { HexColor = '#E49068', Text = '涅槃' }, -- Lv.83
+    [83] = { HexColor = '#E89870', Text = '涅槃' }, -- Lv.84
+
+    -- ============ 造化（Lv.85 ~ Lv.100）============
+    [84] = { HexColor = '#CC8800', Text = '造化' }, -- Lv.85
+    [85] = { HexColor = '#D18E08', Text = '造化' }, -- Lv.86
+    [86] = { HexColor = '#D69410', Text = '造化' }, -- Lv.87
+    [87] = { HexColor = '#DB9A18', Text = '造化' }, -- Lv.88
+    [88] = { HexColor = '#E0A020', Text = '造化' }, -- Lv.89
+    [89] = { HexColor = '#E5A628', Text = '造化' }, -- Lv.90
+    [90] = { HexColor = '#EAAC30', Text = '造化' }, -- Lv.91
+    [91] = { HexColor = '#EFB238', Text = '造化' }, -- Lv.92
+    [92] = { HexColor = '#F4B840', Text = '造化' }, -- Lv.93
+    [93] = { HexColor = '#F9BE48', Text = '造化' }, -- Lv.94
+    [94] = { HexColor = '#FEC450', Text = '造化' }, -- Lv.95
+    [95] = { HexColor = '#FFCA58', Text = '造化' }, -- Lv.96
+    [96] = { HexColor = '#FFD060', Text = '造化' }, -- Lv.97
+    [97] = { HexColor = '#FFD668', Text = '造化' }, -- Lv.98
+    [98] = { HexColor = '#FFDC70', Text = '造化' }, -- Lv.99
+    [99] = { HexColor = '#FFD800', Text = '造化' }, -- Lv.100
+}
+
+
+ItemCfg.CustomizeType = {
+    Body = true,
+    Feet = true,
+    Face = true,
+    Head = true,
+    Legs = true,
+}
+
+
+ItemCfg.ItemDef = {
+    [1] = '帽子',
+    [2] = '脸饰',
+    [3] = '衣服',
+    [4] = '裤子',
+    [5] = '鞋子',
+    [6] = '消耗品',
+    [7] = '材料',
+    [8] = '其他',
+}
+
+
+ItemCfg.ItemTable = {
+    Head = {
+        8310021,
+        8310026,
+        8310031
+    },
+    Face = {
+        8310020,
+        8310025,
+        8310030,
+        8310009,
+    },
+    Body = {
+        8310023,
+        8310028,
+        8310033,
+        8310007,
+    },
+    Legs = {
+        8310019,
+        8310024,
+        8310029,
+        8310008
+    },
+    Feet = {
+        8310022,
+        8310027,
+        8310032,
+        8310011,
+    },
+    [6] = {
+
+    },
+    Material = {
+        8310014,
+        8310015,
+        8310016,
+        8310017
+    },
+    [8] = {}
+}
+
+
+ItemCfg.FirearmType = {
+    {Type = 'Ammo', Text = '子弹'},
+    {Type = 'Rifle', Text = '步枪'},
+    {Type = 'SMG', Text = '冲锋枪'},
+    {Type = 'LMG', Text = '轻机枪'},
+    {Type = 'Shotgun', Text = '霰弹枪'},
+    {Type = 'Snipe', Text = '狙击枪'},
+    {Type = 'Pistol', Text = '手枪'},
+}
+
+ItemCfg.AttributeTextColor = {
+    [Attribute.HealthMax] = '41ff4cFF',
+    [Attribute.AttackPower] = 'ff8b49FF',
+    [Attribute.Defence] = '00fffcFF'
+}
+
+
+ItemCfg.TabItemsMap = {
+    Ammo = {
+        831301001,
+        831301002,
+        831302001,
+        831303001,
+        831304001,
+        831305001,
+        831305002,
+        831306001,
+        831306002,
+        831306003,
+        831307001,
+        831307002,
+        831307003,
+        831307004,
+        831307099,
+        831307100,
+        831307101,
+        831307102,
+        831307103,
+    },
+    Rifle = {
+        8310185,
+        8310186,
+        8310163,
+        8310161,
+        8310164,
+        8310184,
+
+    },
+    SMG = {
+        8310018,
+        8310165,
+        8310167,
+        8310166,
+    },
+    LMG = {
+        8310187,
+        8310178,
+        8310180,
+        8310179,
+    },
+    Shotgun = {
+        8310176,
+        8310175,
+        8310177,
+    },
+    Snipe = {
+        8310173,
+        8310168,
+        8310169,
+        8310174,
+        8310172,
+        8310170,
+        8310171,
+    },
+    Pistol = {
+        8310181,
+        8310182,
+        8310183,
     }
 }
 

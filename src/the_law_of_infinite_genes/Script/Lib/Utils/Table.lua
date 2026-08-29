@@ -6,6 +6,22 @@ local Table = {}
 -- region: 表（通用） ==================================================
 
 
+---【双端】将表映射为新表。
+---@generic K
+---@generic V
+---@generic U
+---@param t table<K, V> @表
+---@param mapper fun(k: K, v: V): U @映射函数，该函数接受两个参数：键和值，返回映射后的值
+---@return table<K, U> @映射后的表
+function Table.Map(t, mapper)
+    local res = {}
+    for k, v in pairs(t) do
+        res[k] = mapper(k, v)
+    end
+    return res
+end
+
+
 ---【双端】合并两个表，第二个表的键值会覆盖第一个表。
 ---@generic T1
 ---@generic T2
@@ -184,16 +200,14 @@ end
 -- region: 列表 ==================================================
 
 
----【双端】将列表映射为新的列表。
+---【双端】根据传入的列表创建一个新表，列表的所有元素将被转换为新表的键，值均为 0 。
 ---@generic T
----@generic U
----@param t T[] @列表
----@param mapper fun(i: number, v: T): U @映射函数，该函数接受两个参数：索引和值，返回映射后的值
----@return (U|T)[] @映射后的列表
-function Table.Map(t, mapper)
+---@param list T[] @列表
+---@return table<T, number> @以 list 的元素作为键的表
+function Table.FromList(list)
     local res = {}
-    for i, v in ipairs(t) do
-        res[i] = mapper(i, v)
+    for _, v in pairs(list) do
+        res[v] = 0
     end
     return res
 end

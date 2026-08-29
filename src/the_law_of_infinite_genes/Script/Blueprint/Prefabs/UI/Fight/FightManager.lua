@@ -38,29 +38,22 @@ end
 
 function FightManager:GetPurchaseList(Index)
     local tab = self:GetTabData(Index == nil and self.TabSelectIndex or Index);
-    if tab == nil or ItemCfg.FirearmPurchase == nil then
+    if tab == nil then
         return {};
     end
+
+    local result;
     if tab.Key == 'Ammo' then
-        return ItemCfg.FirearmPurchase[tab.Key];
-    end
-    local unlockedGuns = LocalPlayerState.PlayerDataManager:GetUnlockedGuns();
-    if unlockedGuns == nil then
-        return {};
-    end
-
-    local unlockedGunMap = {};
-    for _, itemId in ipairs(unlockedGuns) do
-        unlockedGunMap[itemId] = true;
+        result = ItemCfg.TabItemsMap[tab.Key];
+    else
+        result = Lib.Table.Filter(ItemCfg.TabItemsMap[tab.Key], function(k, v)
+            return LocalPlayerState.PlayerDataManager:IsGunUnlock(v)
+        end)
     end
 
-    local result = {};
-    for _, itemData in ipairs(ItemCfg.FirearmPurchase[tab.Key]) do
-        if unlockedGunMap[itemData.ItemId] then
-            result[#result + 1] = itemData;
-        end
-    end
-    return result;
+    return Lib.Table.Map(result, function(k, v)
+        return { ItemId=v, Count=ItemCfg.GunPrice[v] }
+    end);
 end
 
 function FightManager:GetSelectedPurchaseData()

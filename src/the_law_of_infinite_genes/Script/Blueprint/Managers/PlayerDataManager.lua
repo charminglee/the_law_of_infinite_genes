@@ -208,6 +208,33 @@ end
 -- region: 枪械 ==================================================
 
 
+---【服务端】购买枪械。
+---@param itemId number @枪械的物品ID
+---@param count number @购买数量，默认为 1
+---@return boolean @是否成功
+function PlayerDataManager:BuyGun(itemId, count)
+    if not Lib.IsServer() then
+        return false
+    end
+    if not self:IsGunUnlock(itemId) then
+        return false
+    end
+
+    count = count or 1
+    local price = ItemCfg.GunPrice[itemId] * count
+    if self:GetCoin(ItemId.Coin_3) < price then
+        return false
+    end
+    if not self:AddCoin(ItemId.Coin_3, -price) then
+        return false
+    end
+
+    local pc = UGCGameSystem.GetPlayerControllerByPlayerState(self.owner)
+    local res = UGCBackpackSystemV2.AddItemV2(pc, itemId, count)
+    return res and res[0] > 0
+end
+
+
 ---【双端】判断指定枪械是否已解锁。
 ---@param itemId number @枪械的物品ID
 ---@return boolean @是否已解锁
@@ -244,11 +271,13 @@ function PlayerDataManager:UnlockGun(itemId)
     end
 
     local cond = ItemCfg.UnlockConditions[itemId]
-    if cond.ItemId ~= 0 then
-        if self:GetCoin(cond.ItemId) < cond.Count then
+    local needItemId = cond.ItemId
+    local needCount = cond.Count
+    if needItemId ~= 0 then
+        if self:GetCoin(needItemId) < needCount then
             return false
         end
-        if not self:AddCoin(cond.ItemId, -cond.Count, false) then
+        if not self:AddCoin(needItemId, -needCount, false) then
             return false
         end
     end

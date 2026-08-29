@@ -38,7 +38,7 @@ end
 
 ---服务端一次性发放初始物品；存档标记归 PlayerDataManager 管理。
 function UGCPlayerPawn:InitializeStarterItems()
-    Lib.CreateTimer(4, false, function ()
+    Lib.CreateTimer(4, false, function()
         -- 初始武器
         local weaponId = Config.InitialWeapon.WeaponId
         local bulletId = Config.InitialWeapon.BulletId
