@@ -242,6 +242,15 @@ function PlayerDataManager:UnlockGun(itemId)
     if self:IsGunUnlock(itemId) then
         return false
     end
+
+    local cond = ItemCfg.UnlockConditions[itemId]
+    if cond == nil then
+        return false
+    end
+    if self:GetCoin(cond.ItemId) < cond.Count then
+        return false
+    end
+
     self._data.gun.unlocked[itemId] = true
     self:SyncData()
     return true

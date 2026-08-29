@@ -319,7 +319,6 @@ ItemCfg.Reforge = {
         [8310157] = {Result = 8310158,Requirement={{ItemId=8310198, Count=20},{ItemId=8310205, Count=5 }},Prob=0.50},
         [8310158] = {Result = 8310159,Requirement={{ItemId=8310198, Count=30},{ItemId=8310205, Count=10}},Prob=0.35},
         [8310159] = {Result = 8310160,Requirement={{ItemId=8310205, Count=50},{ItemId=8310210, Count=20}},Prob=0.20},
-
     }
 }
 
@@ -612,33 +611,33 @@ ItemCfg.FirearmPurchase = {
 
 
 ItemCfg.UnlockConditions = {
-    [8310163] = {ItemId=8310162, Count=3}, --- AUG
-    [8310161] = {ItemId=8310162, Count=1}, --- M416
-    [8310164] = {ItemId=8310162, Count=3}, --- Groza
+    [8310163] = {ItemId=ItemId.Coin_5, Count=3}, --- AUG
+    [8310161] = {ItemId=ItemId.Coin_5, Count=1}, --- M416
+    [8310164] = {ItemId=ItemId.Coin_5, Count=3}, --- Groza
     [8310184] = {ItemId=0, Count=0}, --- 激光枪
-    [8310018] = {ItemId=8310003, Count=3000}, --- UZI
-    [8310165] = {ItemId=8310162, Count=3}, --- UMP45
-    [8310167] = {ItemId=8310003, Count=6000}, --- 野牛
-    [8310166] = {ItemId=8310162, Count=3}, --- P90
-    [8310178] = {ItemId=8310162, Count=3}, --- M249
-    [8310180] = {ItemId=8310162, Count=3}, --- M134
-    [8310179] = {ItemId=8310162, Count=3}, --- MG3
-    [8310176] = {ItemId=8310162, Count=3}, --- DBS
-    [8310175] = {ItemId=8310003, Count=3000}, --- S686
-    [8310177] = {ItemId=8310003, Count=6000}, --- S12K
-    [8310168] = {ItemId=8310003, Count=3000}, --- 98k
-    [8310169] = {ItemId=8310003, Count=6000}, --- M24
-    [8310173] = {ItemId=8310003, Count=3000}, --- VSS
-    [8310174] = {ItemId=8310003, Count=6000}, --- Mini14
-    [8310172] = {ItemId=8310003, Count=6000}, --- SKS
-    [8310170] = {ItemId=8310162, Count=3}, --- AWM
-    [8310171] = {ItemId=8310162, Count=3}, --- M200
-    [8310181] = {ItemId=8310162, Count=3}, --- 双持左轮
-    [8310182] = {ItemId=8310003, Count=3000}, --- 霰弹手枪
-    [8310183] = {ItemId=8310003, Count=3000}, --- 冲锋手枪
-    [8310185] = {ItemId=8310003, Count=6000}, --- AKM
-    [8310186] = {ItemId=8310003, Count=6000}, --- SCAR-L
-    [8310187] = {ItemId=8310003, Count=6000}, --- DP-28
+    [8310018] = {ItemId=ItemId.Coin_3, Count=3000}, --- UZI
+    [8310165] = {ItemId=ItemId.Coin_5, Count=3}, --- UMP45
+    [8310167] = {ItemId=ItemId.Coin_3, Count=6000}, --- 野牛
+    [8310166] = {ItemId=ItemId.Coin_5, Count=3}, --- P90
+    [8310178] = {ItemId=ItemId.Coin_5, Count=3}, --- M249
+    [8310180] = {ItemId=ItemId.Coin_5, Count=3}, --- M134
+    [8310179] = {ItemId=ItemId.Coin_5, Count=3}, --- MG3
+    [8310176] = {ItemId=ItemId.Coin_5, Count=3}, --- DBS
+    [8310175] = {ItemId=ItemId.Coin_3, Count=3000}, --- S686
+    [8310177] = {ItemId=ItemId.Coin_3, Count=6000}, --- S12K
+    [8310168] = {ItemId=ItemId.Coin_3, Count=3000}, --- 98k
+    [8310169] = {ItemId=ItemId.Coin_3, Count=6000}, --- M24
+    [8310173] = {ItemId=ItemId.Coin_3, Count=3000}, --- VSS
+    [8310174] = {ItemId=ItemId.Coin_3, Count=6000}, --- Mini14
+    [8310172] = {ItemId=ItemId.Coin_3, Count=6000}, --- SKS
+    [8310170] = {ItemId=ItemId.Coin_5, Count=3}, --- AWM
+    [8310171] = {ItemId=ItemId.Coin_5, Count=3}, --- M200
+    [8310181] = {ItemId=ItemId.Coin_5, Count=3}, --- 双持左轮
+    [8310182] = {ItemId=ItemId.Coin_3, Count=3000}, --- 霰弹手枪
+    [8310183] = {ItemId=ItemId.Coin_3, Count=3000}, --- 冲锋手枪
+    [8310185] = {ItemId=ItemId.Coin_3, Count=6000}, --- AKM
+    [8310186] = {ItemId=ItemId.Coin_3, Count=6000}, --- SCAR-L
+    [8310187] = {ItemId=ItemId.Coin_3, Count=6000}, --- DP-28
 }
 
 

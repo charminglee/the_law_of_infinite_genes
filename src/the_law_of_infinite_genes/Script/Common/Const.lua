@@ -77,14 +77,15 @@ GameplayTag = {
 
 ---@enum ItemId
 ItemId = {
-    BossMaterial_0      = 8310013,
-    BossMaterial_1      = 8310014,
     Coin_0              = 8310000,
     Coin_1              = 8310001,
     Coin_2              = 8310002,
     Coin_3              = 8310003,
     Coin_4              = 8310012,
     Coin_5              = 8310162,
+
+    BossMaterial_0      = 8310013,
+    BossMaterial_1      = 8310014,
     EquipmentMaterial_0 = 8310004,
     EquipmentMaterial_1 = 8310005,
     EquipmentMaterial_2 = 8310006,
@@ -96,13 +97,14 @@ ItemId = {
     HySuitHelmet        = 8310009,
     HySuitShoes         = 8310011,
     HySuitTop           = 8310007,
-    UZI                 = 8310018,
     Kenl_0_0            = 8310042,
     Kenl_0_1            = 8310046,
     Kenl_0_2            = 8310044,
     Kenl_0_3            = 8310049,
     Kenl_0_4            = 8310050,
     Advanced_1          = 8310188,
+
+    UZI                 = 8310018,
 }
 
 
