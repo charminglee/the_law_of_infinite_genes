@@ -44,6 +44,8 @@ UGCNativeGameAttributeType = {
 
 ---------------------------------------------------------
 
+	--Weapon [连发数量-BurstShootBulletsNum],
+	Weapon_BurstShootBulletsNum = 'ShootWeaponEntityComp|BurstShootBulletsNum',
 	--Weapon [射击前处理（拉栓）时长-PreFireTime],
 	Weapon_PreFireTime = 'ShootWeaponEntityComp|PreFireTime',
 	--Weapon [射击后处理时长-PostFireTime],
@@ -198,6 +200,7 @@ UGCNativeGameAttributeTypeCommentMap = {
 
 ---------------------------------------------------------
 
+	['ShootWeaponEntityComp|BurstShootBulletsNum'] = 'Weapon [连发数量-BurstShootBulletsNum]', 
 	['ShootWeaponEntityComp|PreFireTime'] = 'Weapon [射击前处理（拉栓）时长-PreFireTime]', 
 	['ShootWeaponEntityComp|PostFireTime'] = 'Weapon [射击后处理时长-PostFireTime]', 
 	['ShootWeaponEntityComp|ReloadDurationStart'] = 'Weapon [单发换弹开始动作加第一发子弹时长-ReloadDurationStart]', 
