@@ -1,6 +1,8 @@
 ---@class RaidInstanceMain_C:UAEUserWidget
 ---@field CardButton UButton
+---@field RaidInstanceCardGrid RaidInstanceCardGrid_C
 ---@field RaidInstanceTop RaidInstanceTop_C
+---@field REINST_RaidInstanceCardGrid_C_0 RaidInstanceCardGrid_C
 ---@field ShopButton UButton
 --Edit Below--
 local RaidInstanceMain = { bInitDoOnce = false } 

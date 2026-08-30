@@ -26,4 +26,15 @@ function FightComponent:InitUI()
     );
 end
 
+function FightComponent:GetAvailableServerRPCs()
+    return 'BuyGunSubmit';
+end
+
+---@param PlayerKey integer
+---@param ItemId integer
+function FightComponent:BuyGunSubmit(PlayerKey, ItemId)
+    local playerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
+    playerState.PlayerDataManager:BuyGun(ItemId);
+end
+
 return FightComponent
