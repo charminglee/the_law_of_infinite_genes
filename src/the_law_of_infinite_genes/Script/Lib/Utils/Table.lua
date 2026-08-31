@@ -71,10 +71,9 @@ end
 
 
 ---【双端】浅拷贝一个表。
----@generic K
----@generic V
----@param t table<K, V> @表
----@return table<K, V> @浅拷贝后的表
+---@generic T
+---@param t T @表
+---@return T @浅拷贝后的表
 function Table.Copy(t)
     if type(t) ~= "table" then
         return t
@@ -95,11 +94,10 @@ end
 
 
 ---【双端】深拷贝一个表。
----@generic K
----@generic V
----@param t table<K, V> @表
+---@generic T
+---@param t T @表
 ---@param lookup table? @查找表，仅内部使用，一般无需传入
----@return table<K, V> @深拷贝后的表
+---@return T @深拷贝后的表
 function Table.DeepCopy(t, lookup)
     if type(t) ~= "table" then
         return t
@@ -274,12 +272,12 @@ function Table.Concat(list1, list2)
     local res = {}
     local n = 0
     for i = 1, (list1.n or #list1) do
-        table.insert(res, list1[i])
         n = n + 1
+        res[n] = list1[i]
     end
     for i = 1, (list2.n or #list2) do
-        table.insert(res, list2[i])
         n = n + 1
+        res[n] = list2[i]
     end
     res.n = n
     return res

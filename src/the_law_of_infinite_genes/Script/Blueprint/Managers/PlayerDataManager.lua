@@ -482,20 +482,23 @@ function PlayerDataManager:_CardAutoUpgrade()
         local group = {}
         for i = 1, cardList.n do
             local card = cardList[i]
+            local id = card and card[1]
+            local star = card and card[2]
             if card and card[2] < maxStar then
-                local indices = Lib.Table.SetDefault(group, card, {})
-                table.insert(indices, i)
+                local byId = Lib.Table.SetDefault(group, id, {})
+                local byStar = Lib.Table.SetDefault(byId, star, {})
+                table.insert(byStar, i)
                 -- 发现三张同名同星级卡牌
-                if #indices >= upgradeCount then
+                if #byStar >= upgradeCount then
                     -- 第一张执行升星
-                    local firstIndex = indices[1]
+                    local firstIndex = byStar[1]
                     local firstCard = cardList[firstIndex]
                     cardList[firstIndex] = { firstCard[1], firstCard[2] + 1 }
                     -- 丢弃后两张
-                    for ii = 2, #indices do
-                        cardList[indices[ii]] = nil
+                    for ii = 2, #byStar do
+                        cardList[byStar[ii]] = nil
                     end
-                    group[card] = {}
+                    byId[star] = {}
                     finish = false
                     changed = true
                 end
