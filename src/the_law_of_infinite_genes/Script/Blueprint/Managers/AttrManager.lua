@@ -74,6 +74,7 @@ function AttrManager:ReceiveBeginPlay()
                 Lib.EventSystem.Listen(Event.OnCardEquipAfter, self.OnCardEquipAfter, self)
                 Lib.EventSystem.Listen(Event.OnCardUnequipAfter, self.OnCardUnequipAfter, self)
                 Lib.EventSystem.Listen(Event.OnCardSellAfter, self.OnCardSellAfter, self)
+                Lib.EventSystem.Listen(Event.OnCardAutoUpgradeAfter, self.OnCardAutoUpgradeAfter, self)
             end
 
             self:_RebuildAllAttr()
@@ -137,6 +138,14 @@ end
 
 function AttrManager:OnCardSellAfter(uid, from, slot, card, refund)
     if uid ~= self.owner.UID or from ~= "equipped" then
+        return
+    end
+    self:_RebuildAllAttr()
+end
+
+
+function AttrManager:OnCardAutoUpgradeAfter(uid, upgradeCount)
+    if uid ~= self.owner.UID then
         return
     end
     self:_RebuildAllAttr()

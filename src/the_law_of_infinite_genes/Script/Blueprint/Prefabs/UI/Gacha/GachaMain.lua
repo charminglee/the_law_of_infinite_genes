@@ -143,9 +143,9 @@ function GachaMain:Listen()
 end
 
 function GachaMain:ReloadList()
-    self.ShopList:Reload(6);
-    self.StoreList:Reload(20);
-    self.SlotList:Reload(12);
+    self.ShopList:Reload(CardCfg.Common.ShopSlotCount);
+    self.StoreList:Reload(CardCfg.Common.StoreSlotCount);
+    self.SlotList:Reload(CardCfg.Common.EquippedSlotCount);
     self:RefreshInfo();
     self:RefreshAttributeCountList();
 end
@@ -179,7 +179,8 @@ function GachaMain:RefreshInfo()
     end
     if self.StoreCount ~= nil then
         local storeSlotCount = CardCfg.Common.StoreSlotCount
-        self.StoreCount:SetText(tostring(self:_CountUsed(card.store)) .. "/" .. tostring(storeSlotCount));
+        local store = LocalPlayerState.PlayerDataManager:GetAllStoreCards()
+        self.StoreCount:SetText(tostring(self:_CountUsed(store)) .. "/" .. tostring(storeSlotCount));
     end
     SetButtonVisible(self.LevelUpButton, level < maxSlotLv);
 end
@@ -345,7 +346,7 @@ function GachaMain:BuildAttributeCountTextList()
             local suitId = Fcard.suit;
             if suitId ~= nil then
                 suitCounts[suitId] = (suitCounts[suitId] or 0) + 1;
-                if star >= 3 then
+                if star >= CardCfg.Common.MaxCardStar then
                     suitFullStarCounts[suitId] = (suitFullStarCounts[suitId] or 0) + 1;
                 end
             end

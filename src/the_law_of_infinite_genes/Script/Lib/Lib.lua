@@ -15,7 +15,7 @@ Lib = {
 
 
 ---【双端】将 UE 对象转换为 Lua table 。
----目前仅支持以下类型的 UE 对象： ItemDefineID
+---目前仅支持以下类型的 UE 对象： `ItemDefineID`
 ---@param obj SupportToTable @对象
 ---@return table @表
 function Lib.ToTable(obj)
@@ -47,7 +47,7 @@ UGCGameSystem = setmetatable({}, {
 ---@param time number @定时时间，单位秒
 ---@param isLoop boolean @是否循环
 ---@param callback function @定时器回调函数
----@param obj any @回调函数所在对象，静态函数传 nil 即可
+---@param obj any @回调函数所在对象，静态函数传 `nil` 即可
 ---@param ... any @回调函数参数
 ---@return FTimerHandle @定时器句柄
 function Lib.CreateTimer(time, isLoop, callback, obj, ...)
@@ -106,7 +106,7 @@ local _clsCache = {}
 
 
 ---【双端】获取一个类。
----@param clsPath string @类路径（由 "Asset/" 开始）
+---@param clsPath string @类路径（由 `Asset/` 开始）
 ---@return UClass|nil @类
 function Lib.GetClass(clsPath)
     if not _clsCache[clsPath] then
@@ -116,22 +116,22 @@ function Lib.GetClass(clsPath)
 end
 
 
----【双端】获取 PlayerController 类。
----@return UClass|nil @PlayerController 类
+---【双端】获取 `PlayerController` 类。
+---@return UClass|nil @`PlayerController` 类
 function Lib.GetPlayerControllerClass()
     return Lib.GetClass(_PC_CLS_PATH)
 end
 
 
----【双端】获取 PlayerState 类。
----@return UClass|nil @PlayerState 类
+---【双端】获取 `PlayerState` 类。
+---@return UClass|nil @`PlayerState` 类
 function Lib.GetPlayerStateClass()
     return Lib.GetClass(_PS_CLS_PATH)
 end
 
 
----【双端】获取 PlayerPawn 类。
----@return UClass|nil @PlayerPawn 类
+---【双端】获取 `PlayerPawn` 类。
+---@return UClass|nil @`PlayerPawn` 类
 function Lib.GetPlayerPawnClass()
     return Lib.GetClass(_PP_CLS_PATH)
 end
@@ -144,7 +144,7 @@ local function _IsPlayer(actor)
 end
 
 
----【双端】判断一个 actor 是否属于玩家。
+---【双端】判断一个 Actor 是否属于玩家。
 ---@param actor AActor @Actor
 ---@return boolean @是否是玩家
 function Lib.IsPlayer(actor)
