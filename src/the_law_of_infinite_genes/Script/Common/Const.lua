@@ -14,6 +14,7 @@ Event = {
     OnCardUnequipAfter          = "OnCardUnequipAfter",
     OnCardPurchaseAfter         = "OnCardPurchaseAfter",
     OnCardSellAfter             = "OnCardSellAfter",
+    OnCardAutoUpgradeAfter      = "OnCardAutoUpgradeAfter",
     OnCoinChangeAfter           = "OnCoinChangeAfter",
     OnTitleEquipAfter           = "OnTitleEquipAfter",
     OnTitleUnlockAfter          = "OnTitleUnlockAfter",

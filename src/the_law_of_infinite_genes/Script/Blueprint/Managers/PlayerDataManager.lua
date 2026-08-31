@@ -465,6 +465,62 @@ end
 -- region: 卡牌 ==================================================
 
 
+function PlayerDataManager:_CardAutoUpgrade()
+    if not Lib.IsServer() or not self._isLoaded then
+        return
+    end
+
+    local upgradeCount = CardCfg.Common.CardUpgradeCount
+    local maxStar = CardCfg.Common.MaxCardStar
+    local cardList = Lib.Table.Concat(self._card.equipped, self._card.store)
+
+    -- 连续合并可升星卡牌
+    local changed = false
+    local finish = false
+    while not finish do
+        finish = true
+        local group = {}
+        for i = 1, cardList.n do
+            local card = cardList[i]
+            if card and card[2] < maxStar then
+                local indices = Lib.Table.SetDefault(group, card, {})
+                table.insert(indices, i)
+                -- 发现三张同名同星级卡牌
+                if #indices >= upgradeCount then
+                    -- 第一张执行升星
+                    local firstIndex = indices[1]
+                    local firstCard = cardList[firstIndex]
+                    cardList[firstIndex] = { firstCard[1], firstCard[2] + 1 }
+                    -- 丢弃后两张
+                    for ii = 2, #indices do
+                        cardList[indices[ii]] = nil
+                    end
+                    group[card] = {}
+                    finish = false
+                    changed = true
+                end
+            end
+        end
+    end
+
+    -- 应用变更
+    if changed then
+        local equippedSlotCount = CardCfg.Common.EquippedSlotCount
+        for i = 1, cardList.n do
+            local card = cardList[i]
+            if i <= equippedSlotCount then
+                self._card.equipped[i] = card
+            else
+                self._card.store[i - equippedSlotCount] = card
+            end
+        end
+
+        self:SyncCardData()
+        Lib.EventSystem.Broadcast_SinglePlayer(self.owner, Event.OnCardAutoUpgradeAfter, self.owner.UID)
+    end
+end
+
+
 local _cardsByGrade = nil
 
 
@@ -740,6 +796,8 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
 
     store[toSlot] = card
     shop[fromSlot] = nil
+
+    self:_CardAutoUpgrade()
 
     if sync ~= false then
         self:SyncCardData()

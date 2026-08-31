@@ -191,6 +191,7 @@ function GachaMain:RefreshInfo()
     if self.StoreCount ~= nil then
         local store = manager:GetAllStoreCards()
         local storeSlotCount = CardCfg.Common.StoreSlotCount
+        local store = LocalPlayerState.PlayerDataManager:GetAllStoreCards()
         self.StoreCount:SetText(tostring(self:_CountUsed(store)) .. "/" .. tostring(storeSlotCount));
     end
     self:SetResourceCoin(manager:GetCoin(ItemId.Coin_3));
@@ -361,7 +362,7 @@ function GachaMain:BuildAttributeCountTextList()
             local suitId = Fcard.suit;
             if suitId ~= nil then
                 suitCounts[suitId] = (suitCounts[suitId] or 0) + 1;
-                if star >= 3 then
+                if star >= CardCfg.Common.MaxCardStar then
                     suitFullStarCounts[suitId] = (suitFullStarCounts[suitId] or 0) + 1;
                 end
             end

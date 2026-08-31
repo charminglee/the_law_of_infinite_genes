@@ -145,6 +145,14 @@ Lib.EventSystem.Broadcast(eventName, ...)
 | 4 | card | table | 出售的卡牌 `{cardId, star}` |
 | 5 | refund | number | 返还的资源点数量 |
 
+### OnCardAutoUpgradeAfter
+
+【双端】卡牌自动升星后触发。
+
+| 序号 | 参数          | 类型    | 说明                          |
+|------|---------------|---------|-------------------------------|
+| 1    | uid           | number  | 玩家 UID                      |
+
 ### OnCoinChangeAfter
 
 【双端】货币数量变化后触发。

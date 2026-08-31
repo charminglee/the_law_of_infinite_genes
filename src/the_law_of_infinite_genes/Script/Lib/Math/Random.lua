@@ -11,7 +11,7 @@ local _CHARS_LEN = #_CHARS
 
 
 ---【双端】生成一个指定长度的随机字符串。
----@param length number @字符串长度，默认为 16
+---@param length number @字符串长度，默认为 `16`
 ---@return string @随机字符串
 function Random.GenString(length)
     length = length or 16
@@ -35,10 +35,10 @@ function Random.Shuffle(list)
 end
 
 
----【双端】从列表中随机抽取 n 个元素。
+---【双端】从列表中随机抽取 `n` 个元素。
 ---@generic T
 ---@param list T[] @列表
----@param n number? @要抽取的元素个数，默认为 1
+---@param n number? @要抽取的元素个数，默认为 `1`
 ---@return T[] @抽取结果列表
 function Random.Pick(list, n)
     list = Lib.Table.Copy(list)
