@@ -1,6 +1,5 @@
 ---@class GachaMain_C:UUserWidget
----@field AttributeCountList ReuseList2_C
----@field DescributeList ReuseList2_C
+---@field CountPreviewText UUTRichTextBlock
 ---@field EquipCardButton UButton
 ---@field ExitButton UButton
 ---@field LevelUpButton UButton
@@ -9,6 +8,7 @@
 ---@field PreviewItem UImage
 ---@field PreviewItemName UTextBlock
 ---@field PreviewStar UTextBlock
+---@field PreviewText UUTRichTextBlock
 ---@field PreviewTop UImage
 ---@field PurchaseButton UButton
 ---@field RefreshButton UButton
@@ -27,26 +27,19 @@ local GachaMain = {
     bInitDoOnce = false,
     SelectTag = nil,
     SelectIndex = nil,
-    DescribeTextList = {},
-    AttributeCountTextList = {},
+    PreviewRenderVersion = 0,
 } 
 local SelectTag = {
     Shop = 1,
     Equipped = 2,
     Store = 3,
 }
-local DEFAULT_ATTRIBUTE_TEXT_COLOR = 'FFFFFF'
+local DEFAULT_ATTRIBUTE_TEXT_COLOR = 'FFFFFFFF'
 local function SetButtonVisible(button, visible)
     if button == nil then
         return
     end
     button:SetVisibility(visible and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
-end
-local function ReloadReuseList(list, count)
-    if list == nil then
-        return
-    end
-    list:Reload(count);
 end
 local function AddAttributeText(list, text, HexColor)
     if text == nil then
@@ -108,11 +101,12 @@ function GachaMain:LuaInit()
     if self.bInitDoOnce then
 		return;
 	end
-	self.bInitDoOnce = true;
+    self.bInitDoOnce = true;
     GachaManager:RegisterMainUI(self);
     self:Listen();
-    self:ReloadList();
+    self:RefreshCountPreviewEmptyState();
     self:SetPreview(false);
+    self:ReloadList();
 end
 
 function GachaMain:Listen()
@@ -137,17 +131,31 @@ function GachaMain:Listen()
     self.ShopList.OnUpdateItem:Add(self.ShopListUpdate, self);
     self.SlotList.OnUpdateItem:Add(self.SlotListUpdate, self);
     self.StoreList.OnUpdateItem:Add(self.StoreListUpdate, self);
-    self.AttributeCountList.OnUpdateItem:Add(self.AttributeCountListUpdate, self);
-    self.DescributeList.OnUpdateItem:Add(self.DescributeListUpdate, self);
-    
 end
 
 function GachaMain:ReloadList()
-    self.ShopList:Reload(6);
-    self.StoreList:Reload(20);
-    self.SlotList:Reload(12);
+    self.ShopList:Reload(CardCfg.Common.ShopSlotCount);
+    self.StoreList:Reload(CardCfg.Common.StoreSlotCount);
+    self.SlotList:Reload(CardCfg.Common.EquippedSlotCount);
     self:RefreshInfo();
-    self:RefreshAttributeCountList();
+    self:RefreshCountPreviewText();
+end
+local function GetRichTextColor(HexColor)
+    local color = HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR;
+    if #color == 6 then
+        return color .. "FF";
+    end
+    return color;
+end
+local function BuildRichText(textList)
+    local result = {};
+    for _, data in ipairs(textList) do
+        table.insert(result, RichText.Font(data.Text, {
+            size = 18,
+            color = GetRichTextColor(data.HexColor),
+        }));
+    end
+    return table.concat(result, "\n");
 end
 function GachaMain:_SelectedSlot()
     if GachaManager.SelectIndex == nil then
@@ -169,19 +177,27 @@ function GachaMain:_CountUsed(list)
     return count
 end
 function GachaMain:RefreshInfo()
+    local manager = LocalPlayerState.PlayerDataManager
     local maxSlotLv = CardCfg.Common.MaxCardSlotLevel
-    local level = self:_UnlockedSlotCount()
+    local shopLevel = manager:GetCardShopLevel()
+    local unlockedSlotCount = manager:GetUnlockedCardSlotCount()
+    local equippedSlotCount = self:_CountUsed(manager:GetAllEquippedCards())
     if self.ShopLevel ~= nil then
-        self.ShopLevel:SetText(tostring(level));
+        self.ShopLevel:SetText("Lv." .. tostring(shopLevel));
     end
     if self.SlotCount ~= nil then
-        self.SlotCount:SetText(tostring(level) .. "/" .. tostring(maxSlotLv));
+        self.SlotCount:SetText(tostring(equippedSlotCount) .. "/" .. tostring(unlockedSlotCount));
     end
     if self.StoreCount ~= nil then
+        local store = manager:GetAllStoreCards()
         local storeSlotCount = CardCfg.Common.StoreSlotCount
-        self.StoreCount:SetText(tostring(self:_CountUsed(card.store)) .. "/" .. tostring(storeSlotCount));
+        self.StoreCount:SetText(tostring(self:_CountUsed(store)) .. "/" .. tostring(storeSlotCount));
     end
-    SetButtonVisible(self.LevelUpButton, level < maxSlotLv);
+    self:SetResourceCoin(manager:GetCoin(ItemId.Coin_3));
+    SetButtonVisible(self.LevelUpButton, unlockedSlotCount < maxSlotLv);
+end
+function GachaMain:SetResourceCoin(Value)
+    self.ResourceCoin:SetText(tostring(Value));
 end
 function GachaMain:_RefreshActionButtons(hasPreview)
     local tag = GachaManager.SelectTag;
@@ -225,17 +241,20 @@ function GachaMain:BuildAttributeTextList(data)
     if Fcard == nil then
         return list;
     end
+    local grade = CardCfg.Grade[Fcard.grade];
     local suit = CardCfg.Suit and CardCfg.Suit[Fcard.suit];
     local group = suit and CardCfg.Group and CardCfg.Group[suit.Group];
-    if group ~= nil then
-        AddAttributeText(list, group.name, group.HexColor);
-    end
+    AddAttributeText(list, Fcard.name, grade.HexColor);
+    AddAttributeText(list, "卡牌价格：" .. tostring(grade.cost), DEFAULT_ATTRIBUTE_TEXT_COLOR);
     local star = data[2] or 1;
     local bonusList = Fcard.bonus and (Fcard.bonus[star] or Fcard.bonus[1]);
     if bonusList ~= nil then
         for _, entry in ipairs(bonusList) do
             AddAttributeText(list, self:_AttributeLine(entry), DEFAULT_ATTRIBUTE_TEXT_COLOR);
         end
+    end
+    if group ~= nil then
+        AddAttributeText(list, group.name, group.HexColor);
     end
     local comboList = suit and suit.Combo;
     if comboList ~= nil then
@@ -329,13 +348,10 @@ function GachaMain:BuildAttributeCountTextList()
     local suitCounts = {};
     local suitFullStarCounts = {};
     local activeSuitList = {};
-    local equipped = LocalPlayerState.PlayerDataManager:GetAllEquippedCards();
-    if equipped == nil then
-        return list;
-    end
+    local manager = LocalPlayerState.PlayerDataManager;
     local count = CardCfg.Common.EquippedSlotCount;
     for i = 1, count do
-        local data = equipped[i];
+        local data = manager:GetEquippedCard(i);
         local cardIndex = data and data[1];
         local Fcard = cardIndex and CardCfg.Cards[cardIndex];
         if Fcard ~= nil then
@@ -385,37 +401,29 @@ function GachaMain:BuildAttributeCountTextList()
     end
     return list;
 end
-function GachaMain:RefreshAttributeCountList()
-    self.AttributeCountTextList = self:BuildAttributeCountTextList();
-    ReloadReuseList(self.AttributeCountList, #self.AttributeCountTextList);
-end
-function GachaMain:_RefreshDescribeTextList(data)
-    self.DescribeTextList = self:BuildAttributeTextList(data);
-    ReloadReuseList(self.DescributeList, #self.DescribeTextList);
-end
-function GachaMain:_UpdateAttributeTextItem(Item, Index, textList)
-    Item.Index = Index;
-    local data = textList and textList[Index + 1];
-    if data == nil then
-        if Item.SetText ~= nil then
-            Item:SetText("", DEFAULT_ATTRIBUTE_TEXT_COLOR);
-        end
+function GachaMain:RefreshCountPreviewText()
+    local textList = self:BuildAttributeCountTextList();
+    if #textList == 0 then
+        self:RefreshCountPreviewEmptyState();
         return;
     end
-    if Item.SetText ~= nil then
-        Item:SetText(data.Text, data.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR);
-    elseif Item.Text ~= nil then
-        Item.Text:SetText(data.Text);
-        Item.Text:SetColorRGBStr(data.HexColor or DEFAULT_ATTRIBUTE_TEXT_COLOR);
-    end
+    self.CountPreviewText:SetText(BuildRichText(textList));
+end
+function GachaMain:RefreshCountPreviewEmptyState()
+    self.CountPreviewText:SetVisibility(ESlateVisibility.Visible);
+    self.CountPreviewText:SetText(RichText.Font("暂无属性加成", {
+        size = 18,
+        color = "88FFFFFF",
+    }));
+end
+function GachaMain:RefreshPreviewText(data)
+    self.PreviewText:SetText(BuildRichText(self:BuildAttributeTextList(data)));
 end
 function GachaMain:Exit()
     GachaManager:CloseMainUI()
 end
 
 function GachaMain:Refresh()
-    ugcprint('客户端点击商店刷新')
-    ugcprint('compclass is:'..tostring(GachaManager.ComponentClass));
     UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "RefreshCardShop", LocalPlayerController.PlayerKey);
 end 
 
@@ -455,55 +463,61 @@ function GachaMain:Sell()
     end
 end
 function GachaMain:ShopListUpdate(Item, Index)
-    Item.Index = Index;
-    Item.Tag = SelectTag.Shop;
-    Item:ShopUpdate();
+    local data = LocalPlayerState.PlayerDataManager:GetShopCard(Index + 1);
+    Item:SetData(Index, SelectTag.Shop, data, false, false);
 end
 function GachaMain:SlotListUpdate(Item, Index)
-    Item.Index = Index;
-    Item.Tag = SelectTag.Equipped;
-    Item:SlotUpdate();
+    local manager = LocalPlayerState.PlayerDataManager;
+    local slot = Index + 1;
+    local data = manager:GetEquippedCard(slot);
+    local isUnlocked = slot <= manager:GetUnlockedCardSlotCount();
+    Item:SetData(Index, SelectTag.Equipped, data, isUnlocked, not isUnlocked);
 end
 function GachaMain:StoreListUpdate(Item, Index)
-    Item.Index = Index;
-    Item.Tag = SelectTag.Store;
-    Item:StoreUpdate();
+    local data = LocalPlayerState.PlayerDataManager:GetStoreCard(Index + 1);
+    Item:SetData(Index, SelectTag.Store, data, true, false);
 end
 
-function GachaMain:AttributeCountListUpdate(Item, Index)
-    self:_UpdateAttributeTextItem(Item, Index, self.AttributeCountTextList);
-end
-
-function GachaMain:DescributeListUpdate(Item, Index)
-    self:_UpdateAttributeTextItem(Item, Index, self.DescribeTextList);
-end
 function GachaMain:SetPreview(isShow)
     local data = GachaManager.PreviewDAT;
     local cardIndex = data and data[1];
     local Fcard = cardIndex and CardCfg.Cards[cardIndex];
     if not isShow or data == nil or Fcard == nil then
+        self.PreviewRenderVersion = self.PreviewRenderVersion + 1;
         self.SelectedPreview:SetVisibility(ESlateVisibility.Collapsed);
         self.NilPreview:SetVisibility(ESlateVisibility.Visible);
         self:_RefreshActionButtons(false);
-        self:_RefreshDescribeTextList(nil);
+        self:RefreshPreviewText(nil);
         return;
     end
     self.SelectedPreview:SetVisibility(ESlateVisibility.Visible);
     self.NilPreview:SetVisibility(ESlateVisibility.Collapsed);
-    local Texture = LoadObject(Fcard.texture);
     local ItemName = Fcard.name;
     local StarText = GachaManager:GetStarText(data[2]);
     local suit = CardCfg.Suit[Fcard.suit];
     local ItemColor = CardCfg.Group[suit.Group].HexColor;
     local grade = Fcard.grade;
     local QualityColor = CardCfg.Grade[grade].HexColor;
-    self.PreviewItem:SetBrushFromTexture(Texture);
+    self:AsyncSetPreviewTexture({AssetPathName = Fcard.texture, SubPathString = nil});
     self.PreviewItem:SetColorRGBStr(ItemColor);
     self.PreviewTop:SetColorRGBStr(QualityColor);
     self.PreviewStar:SetText(StarText);
     self.PreviewItemName:SetText(ItemName);
-    self:_RefreshDescribeTextList(data);
+    self:RefreshPreviewText(data);
     self:_RefreshActionButtons(true);
+end
+
+function GachaMain:AsyncSetPreviewTexture(Path)
+    self.PreviewRenderVersion = self.PreviewRenderVersion + 1;
+    local renderVersion = self.PreviewRenderVersion;
+    Common.LoadObjectWithSoftPathAsync(Path,
+            function(Texture)
+                if self ~= nil and Texture ~= nil
+                        and self.PreviewRenderVersion == renderVersion then
+                    self.PreviewItem:SetBrushFromTexture(Texture);
+                end
+            end
+    );
 end
 
 

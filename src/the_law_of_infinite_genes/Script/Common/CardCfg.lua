@@ -29,11 +29,11 @@ CardCfg.StoreWeight = {
 
 
 CardCfg.Grade = {
-    [1] = {cost=50, HexColor='FFFFFF', anno='一费卡'},
-    [2] = {cost=100, HexColor='00FF00', anno='二费卡'},
-    [3] = {cost=200, HexColor='0000FF', anno='三费卡'},
-    [4] = {cost=350, HexColor='FF00FF', anno='四费卡'},
-    [5] = {cost=700, HexColor='FFA500', anno='五费卡'},
+    [1] = {cost=50, HexColor='FFFFFF', anno='一费卡', rgba={R=1,G=1,B=1,A=0.3}},
+    [2] = {cost=100, HexColor='00FF00', anno='二费卡', rgba={R=0,G=1,B=0,A=0.3}},
+    [3] = {cost=200, HexColor='0000FF', anno='三费卡', rgba={R=0,G=0,B=1,A=0.3}},
+    [4] = {cost=350, HexColor='FF00FF', anno='四费卡', rgba={R=1,G=0,B=1,A=0.3}},
+    [5] = {cost=700, HexColor='FFA500', anno='五费卡', rgba={R=1,G=165/255,B=0,A=0.3}},
 }
 
 

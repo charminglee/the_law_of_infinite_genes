@@ -1,4 +1,3 @@
-
 GunsManager = GunsManager or {
     MainUI = nil,
     ComponentClass = nil,
@@ -32,10 +31,6 @@ end
 
 function GunsManager:OpenMainUI()
     self.MainUI:Open();
-end
-
-function GunsManager:CloseMainUI()
-    self.MainUI:Exit();
 end
 
 function GunsManager:GetMainUI()

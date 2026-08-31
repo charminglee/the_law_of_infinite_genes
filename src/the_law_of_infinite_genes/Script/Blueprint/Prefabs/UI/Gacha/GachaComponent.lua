@@ -26,6 +26,7 @@ function GachaComponent:ReceiveBeginPlay()
         self:InitUI();
         GachaManager:RegisterComponentClass(self);
         Lib.EventSystem.Listen(Event.OnRepCardData, self.OnRepCardData, self);
+        Lib.EventSystem.Listen(Event.OnCoinChangeAfter, self.OnCoinChangeAfter, self);
     end
 end
 
@@ -38,6 +39,15 @@ end
 function GachaComponent:OnRepCardData()
     GachaManager.RefreshUI = true;
     GachaManager.PreviewDAT = nil;
+    if GachaManager.MainUI ~= nil then
+        GachaManager.MainUI:RefreshCountPreviewText();
+    end
+end
+
+function GachaComponent:OnCoinChangeAfter(UID, CoinId, OldValue, NewValue)
+    if CoinId == ItemId.Coin_3 and GachaManager.MainUI ~= nil then
+        GachaManager.MainUI:SetResourceCoin(NewValue);
+    end
 end
 
 

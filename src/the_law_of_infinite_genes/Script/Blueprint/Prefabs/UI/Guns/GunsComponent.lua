@@ -43,7 +43,6 @@ end
 ---@param PlayerKey integer
 ---@param ItemId integer
 function GunsComponent:GunsActivateSubmit(PlayerKey, ItemId)
-    ugcprint('接收请求')
     local playerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     playerState.PlayerDataManager:UnlockGun(ItemId);
 end

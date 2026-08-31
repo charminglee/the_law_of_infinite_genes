@@ -1,14 +1,10 @@
 ---@class GunsItem_C:UUserWidget
 ---@field Button_0 UButton
----@field CanvasPanel_0 UCanvasPanel
 ---@field CanvasPanel_Icon UCanvasPanel
 ---@field Image_Icon UImage
----@field Image_Null UImage
 ---@field Image_QualityBarBg UImage
 ---@field Image_Select UImage
 ---@field ItemName UTextBlock
----@field Size FVector2D
----@field DurabilityPercent float
 --Edit Below--
 local GunsItem = {
     bInitDoOnce = false,

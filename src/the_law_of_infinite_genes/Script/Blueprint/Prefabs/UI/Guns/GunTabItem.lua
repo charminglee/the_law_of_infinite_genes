@@ -26,11 +26,6 @@ function GunTabItem:Button_0_Clicked()
     GunsManager:Reload(nil, tab.Type);
 end
 
-function GunTabItem:SetEmpty()
-    self.Index = nil;
-    self:SetVisibility(ESlateVisibility.Collapsed);
-end
-
 function GunTabItem:SetDAT(Index, Text)
     self.Index = Index;
     self:SetVisibility(ESlateVisibility.Visible);
@@ -38,15 +33,8 @@ function GunTabItem:SetDAT(Index, Text)
 end
 
 function GunTabItem:SetSelected(IsSelected)
-    local s = ESlateVisibility.Collapsed;
-    local n = ESlateVisibility.Collapsed
-    if IsSelected then
-        s = ESlateVisibility.Visible;
-    else
-        n = ESlateVisibility.Visible;
-    end
-    self.selected:SetVisibility(s);
-    self.Normal:SetVisibility(n);
+    self.selected:SetVisibility(IsSelected and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
+    self.Normal:SetVisibility(IsSelected and ESlateVisibility.Collapsed or ESlateVisibility.Visible);
 end
 
 return GunTabItem
