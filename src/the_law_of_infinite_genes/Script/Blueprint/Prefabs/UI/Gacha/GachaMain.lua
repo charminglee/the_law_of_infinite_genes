@@ -12,6 +12,7 @@
 ---@field PreviewTop UImage
 ---@field PurchaseButton UButton
 ---@field RefreshButton UButton
+---@field ResourceCoin UTextBlock
 ---@field ResourceCoinIcon UImage
 ---@field SelectedPreview UCanvasPanel
 ---@field SellButton UButton
@@ -191,7 +192,6 @@ function GachaMain:RefreshInfo()
     if self.StoreCount ~= nil then
         local store = manager:GetAllStoreCards()
         local storeSlotCount = CardCfg.Common.StoreSlotCount
-        local store = LocalPlayerState.PlayerDataManager:GetAllStoreCards()
         self.StoreCount:SetText(tostring(self:_CountUsed(store)) .. "/" .. tostring(storeSlotCount));
     end
     self:SetResourceCoin(manager:GetCoin(ItemId.Coin_3));
@@ -444,6 +444,39 @@ function GachaMain:UnequipCard()
         return
     end
     UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "UnequipCard", LocalPlayerController.PlayerKey, slot);
+end
+function GachaMain:HandleItemDrop(sourceItem, targetItem)
+    if sourceItem.Data == nil or targetItem.Data ~= nil then
+        return false;
+    end
+    local fromSlot = sourceItem.Index + 1;
+    local toSlot = targetItem.Index + 1;
+    local manager = LocalPlayerState.PlayerDataManager;
+    if sourceItem.Tag == SelectTag.Store and targetItem.Tag == SelectTag.Equipped then
+        if toSlot > manager:GetUnlockedCardSlotCount() or manager:GetEquippedCard(toSlot) ~= nil then
+            return false;
+        end
+        UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "EquipCard",
+                LocalPlayerController.PlayerKey, fromSlot, toSlot);
+        return true;
+    end
+    if sourceItem.Tag == SelectTag.Equipped and targetItem.Tag == SelectTag.Store then
+        if manager:GetStoreCard(toSlot) ~= nil then
+            return false;
+        end
+        UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "UnequipCard",
+                LocalPlayerController.PlayerKey, fromSlot, toSlot);
+        return true;
+    end
+    if sourceItem.Tag == SelectTag.Shop and targetItem.Tag == SelectTag.Store then
+        if manager:GetStoreCard(toSlot) ~= nil then
+            return false;
+        end
+        UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "APurchaseCard",
+                LocalPlayerController.PlayerKey, fromSlot, toSlot);
+        return true;
+    end
+    return false;
 end
 function GachaMain:Purchase()
     local slot = self:_SelectedSlot();

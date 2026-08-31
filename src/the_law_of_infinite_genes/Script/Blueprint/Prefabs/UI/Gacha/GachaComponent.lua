@@ -26,6 +26,7 @@ function GachaComponent:ReceiveBeginPlay()
         self:InitUI();
         GachaManager:RegisterComponentClass(self);
         Lib.EventSystem.Listen(Event.OnRepCardData, self.OnRepCardData, self);
+        Lib.EventSystem.Listen(Event.OnCardAutoUpgradeAfter, self.OnCardAutoUpgradeAfter, self);
         Lib.EventSystem.Listen(Event.OnCoinChangeAfter, self.OnCoinChangeAfter, self);
     end
 end
@@ -42,6 +43,10 @@ function GachaComponent:OnRepCardData()
     if GachaManager.MainUI ~= nil then
         GachaManager.MainUI:RefreshCountPreviewText();
     end
+end
+
+function GachaComponent:OnCardAutoUpgradeAfter(UID)
+    self:OnRepCardData();
 end
 
 function GachaComponent:OnCoinChangeAfter(UID, CoinId, OldValue, NewValue)
@@ -78,22 +83,22 @@ function GachaComponent:RefreshCardShop(PlayerKey)
     manager:RefreshCardShop();
 end
 
-function GachaComponent:APurchaseCard(PlayerKey, fromSlot)
+function GachaComponent:APurchaseCard(PlayerKey, fromSlot, toSlot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    manager:PurchaseCard(fromSlot);
+    manager:PurchaseCard(fromSlot, toSlot);
 end
 
-function GachaComponent:EquipCard(PlayerKey, fromSlot)
+function GachaComponent:EquipCard(PlayerKey, fromSlot, toSlot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    manager:EquipCard(fromSlot);
+    manager:EquipCard(fromSlot, toSlot);
 end
 
-function GachaComponent:UnequipCard(PlayerKey, fromSlot)
+function GachaComponent:UnequipCard(PlayerKey, fromSlot, toSlot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
-    manager:UnequipCard(fromSlot);
+    manager:UnequipCard(fromSlot, toSlot);
 end
 
 function GachaComponent:SellCardFromStore(PlayerKey, slot)

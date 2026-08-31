@@ -33,6 +33,7 @@ function RaidInstanceCardGrid:LuaInit()
     self.CardList3.OnUpdateItem:Add(self.CardList3Update, self);
     self.CardList4.OnUpdateItem:Add(self.CardList4Update, self);
     Lib.EventSystem.Listen(Event.OnRepCardData, self.RefreshCardLists, self);
+    Lib.EventSystem.Listen(Event.OnCardAutoUpgradeAfter, self.OnCardAutoUpgradeAfter, self);
     self:BuildGroupCardLists();
     self:RefreshEmptyState();
     self:RefreshCardLists();
@@ -107,6 +108,9 @@ function RaidInstanceCardGrid:RefreshCardLists()
     self.CardList2:Reload(#self.GroupCardLists[2]);
     self.CardList3:Reload(#self.GroupCardLists[3]);
     self.CardList4:Reload(#self.GroupCardLists[4]);
+end
+function RaidInstanceCardGrid:OnCardAutoUpgradeAfter(UID)
+    self:RefreshCardLists();
 end
 
 function RaidInstanceCardGrid:UpdateGroupItem(Item, GroupIndex, Index)

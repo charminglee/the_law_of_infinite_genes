@@ -19,11 +19,20 @@ local GachaItem = {
     Tag = nil,
     Data = nil,
     RenderVersion = 0,
+    DragVisualClass = nil,
+    DragOperationClass = nil,
+    DragOperation = nil,
+    bDragDetected = false,
 }
 local STAR_ACTIVE_COLOR = "FFA700";
 local STAR_INACTIVE_COLOR = "3C3C3C";
+local DRAG_VISUAL_CLASS_PATH = "Asset/Blueprint/Prefabs/UI/Gacha/GachaDragItem.GachaDragItem_C";
+local DRAG_OPERATION_CLASS_PATH = "/Script/UMG.DragDropOperation";
 function GachaItem:Construct()
     self:LuaInit();
+end
+function GachaItem:Destruct()
+    self.DragOperation = nil;
 end
 function GachaItem:LuaInit()
     if self.bInitDoOnce then
@@ -31,6 +40,16 @@ function GachaItem:LuaInit()
     end
     self.bInitDoOnce = true;
     self.Button_0.OnClicked:Add(self.ItemClicked, self);
+    self.DragOperationClass = UE.LoadClass(DRAG_OPERATION_CLASS_PATH);
+    local weakSelf = WeakObjectPtr(self);
+    local classPath = UGCMapInfoLib.GetRootLongPackagePath() .. DRAG_VISUAL_CLASS_PATH;
+    Common.LoadObjectAsync(classPath, function(UIClass)
+        if not weakSelf:IsValid() then
+            return;
+        end
+        weakSelf:Get().DragVisualClass = UIClass;
+        ugcprint("[GachaDrag] Drag visual class loaded");
+    end);
 end
 function GachaItem:ItemClicked()
     if self.Data == nil then
@@ -39,6 +58,65 @@ function GachaItem:ItemClicked()
     GachaManager.SelectIndex = self.Index;
     GachaManager.SelectTag = self.Tag;
     GachaManager.RefreshUI = true;
+end
+function GachaItem:OnPreviewMouseButtonDown(MyGeometry, MouseEvent)
+    if self.Data == nil then
+        return WidgetBlueprintLibrary.Unhandled();
+    end
+    self.bDragDetected = false;
+    local dragKey = KismetInputLibrary.PointerEvent_GetEffectingButton(MouseEvent);
+    ugcprint("[GachaDrag] Button_0 detect drag Index=" .. tostring(self.Index) .. " Tag=" .. tostring(self.Tag));
+    return WidgetBlueprintLibrary.DetectDragIfPressed(MouseEvent, self, dragKey);
+end
+function GachaItem:OnMouseButtonUp(MyGeometry, MouseEvent)
+    if not self.bDragDetected then
+        self:ItemClicked();
+    end
+    return WidgetBlueprintLibrary.Handled();
+end
+function GachaItem:OnDragDetected(MyGeometry, PointerEvent, Operation)
+    if self.Data == nil or self.DragVisualClass == nil or self.DragOperationClass == nil then
+        return nil;
+    end
+    local dragSize = SlateBlueprintLibrary.GetLocalSize(MyGeometry);
+    local dragVisual = UserWidget.NewWidgetObjectBP(self, self.DragVisualClass);
+    dragVisual:SetDesiredSizeInViewport(dragSize);
+    dragVisual:InitData({
+        Index = self.Index,
+        Tag = self.Tag,
+        Data = self.Data,
+        Size = dragSize,
+    });
+    dragVisual:SetVisibility(ESlateVisibility.HitTestInvisible);
+    local dragOperation = WidgetBlueprintLibrary.CreateDragDropOperation(self.DragOperationClass);
+    dragOperation.DefaultDragVisual = dragVisual;
+    dragOperation.Payload = self;
+    dragOperation.Pivot = EDragPivot.CenterCenter;
+    dragOperation.Tag = tostring(self.Tag) .. ":" .. tostring(self.Index);
+    self.DragOperation = dragOperation;
+    self.bDragDetected = true;
+    ugcprint("[GachaDrag] OnDragDetected operation created Index=" .. tostring(self.Index) .. " Tag=" .. tostring(self.Tag));
+    return dragOperation;
+end
+function GachaItem:OnDragCancelled(PointerEvent, Operation)
+    self.DragOperation = nil;
+    self.bDragDetected = false;
+    ugcprint("[GachaDrag] OnDragCancelled");
+end
+function GachaItem:OnDrop(MyGeometry, PointerEvent, Operation)
+    local sourceItem = Operation and Operation.Payload;
+    if self.Data ~= nil or sourceItem == nil or sourceItem == self then
+        return false;
+    end
+    local mainUI = GachaManager.MainUI;
+    if mainUI == nil or not mainUI:HandleItemDrop(sourceItem, self) then
+        return false;
+    end
+    sourceItem.DragOperation = nil;
+    sourceItem.bDragDetected = false;
+    ugcprint("[GachaDrag] OnDrop from=" .. tostring(sourceItem.Tag) .. ":" .. tostring(sourceItem.Index)
+            .. " to=" .. tostring(self.Tag) .. ":" .. tostring(self.Index));
+    return true;
 end
 function GachaItem:_IsSelected()
     return self.Data ~= nil
