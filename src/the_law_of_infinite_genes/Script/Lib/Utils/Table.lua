@@ -113,9 +113,9 @@ function Table.DeepCopy(t, lookup)
     local copy = {}
     lookup[t] = copy
     for k, v in pairs(t) do
-        k = Table.DeepCopy(k, lookup)
-        v = Table.DeepCopy(v, lookup)
-        copy[k] = v
+        local kk = Table.DeepCopy(k, lookup)
+        local vv = Table.DeepCopy(v, lookup)
+        copy[kk] = vv
     end
 
     local meta = getmetatable(t)
