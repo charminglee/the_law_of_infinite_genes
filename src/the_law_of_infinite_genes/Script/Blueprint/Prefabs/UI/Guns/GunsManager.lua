@@ -1,16 +1,18 @@
+
 GunsManager = GunsManager or {
     MainUI = nil,
     ComponentClass = nil,
     DefineId = nil,
     FilterType = nil,
     GunsType = {
-        [1] = {Type = 'ALL', Text = '所有装备'},
-        [2] = {Type = 'Rifle', Text = '步枪'},
-        [3] = {Type = 'SMG', Text = '冲锋枪'},
-        [4] = {Type = 'LMG', Text = '轻机枪'},
-        [5] = {Type = 'Shotgun', Text = '霰弹枪'},
-        [6] = {Type = 'Snipe', Text = '狙击枪'},
-        [7] = {Type = 'Pistol', Text = '手枪'},
+            {Type = 'ALL', Text = '所有装备'},
+            {Type = 'Ammo', Text = '子弹'},
+            {Type = 'Rifle', Text = '步枪'},
+            {Type = 'SMG', Text = '冲锋枪'},
+            {Type = 'LMG', Text = '轻机枪'},
+            {Type = 'Shotgun', Text = '霰弹枪'},
+            {Type = 'Snipe', Text = '狙击枪'},
+            {Type = 'Pistol', Text = '手枪'},
     },
 }
 

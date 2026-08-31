@@ -216,12 +216,16 @@ function PlayerDataManager:BuyGun(itemId, count)
     if not Lib.IsServer() then
         return false
     end
-    if not self:IsGunUnlock(itemId) then
+    if ItemCfg.UnlockConditions[itemId] ~= nil and not self:IsGunUnlock(itemId) then
         return false
     end
 
     count = count or 1
-    local price = ItemCfg.GunPrice[itemId] * count
+    local unitPrice = ItemCfg.GunPrice[itemId]
+    if unitPrice == nil then
+        return false
+    end
+    local price = unitPrice * count
     if self:GetCoin(ItemId.Coin_3) < price then
         return false
     end

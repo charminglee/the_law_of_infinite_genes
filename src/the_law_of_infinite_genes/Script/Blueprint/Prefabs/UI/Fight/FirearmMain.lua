@@ -49,7 +49,7 @@ end
 
 function FirearmMain:RefreshAll()
     local purchaseList = FightManager:GetPurchaseList();
-    self.TabList:Reload(#FightManager.LTabIconList);
+    self.TabList:Reload(#ItemCfg.FirearmType);
     self.FirearmList:Reload(#purchaseList);
     self:RefreshDetail();
 end
@@ -79,7 +79,7 @@ function FirearmMain:RefreshDetail()
     self:SetPreviewTexture(UGCItemSystemV2.GetItemIconTextureV2(itemId));
     self.ItemName:SetText(UGCItemSystemV2.GetItemNameV2(itemId) or '');
     self.ItemDesc:SetText(UGCItemSystemV2.GetItemDetailV2(itemId) or '');
-    self.NeedCost:SetText(tostring(itemData.Count or 0));
+    self.NeedCost:SetText(tostring(itemData.Price));
 end
 
 function FirearmMain:SetPreviewTexture(Path)
@@ -101,15 +101,10 @@ end
 
 function FirearmMain:PurchaseButtonClick()
     local itemData = FightManager:GetSelectedPurchaseData();
-    local tabData = FightManager:GetTabData(FightManager.TabSelectIndex);
-    if itemData == nil or tabData == nil then
+    if itemData == nil then
         return;
     end
-    FightManager:OnPurchaseRequested(
-            itemData,
-            tabData.Key,
-            FightManager.PurchaseSelectIndex
-    );
+    FightManager:OnPurchaseRequested(itemData);
 end
 
 function FirearmMain:TabListUpdate(Item, Index)

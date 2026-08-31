@@ -145,20 +145,20 @@ end
 ---@param FilterType string
 ---@return table[]
 function GunsMain:FilterGuns(FilterType)
+    local result = {};
     if FilterType ~= 'ALL' then
-        return Lib.Table.Map(ItemCfg.TabItemsMap[FilterType], function(k, v)
-            return { ItemId=v, Count=ItemCfg.GunPrice[v] }
-        end);
+        for _, itemId in ipairs(ItemCfg.TabItemsMap[FilterType]) do
+            result[#result + 1] = {ItemId = itemId};
+        end
     else
-        local result = {};
         for index = 2, #GunsManager.GunsType do
             local category = ItemCfg.TabItemsMap[GunsManager.GunsType[index].Type];
             for _, itemId in ipairs(category) do
-                table.insert(result, { ItemId=itemId, Count=ItemCfg.GunPrice[itemId] })
+                result[#result + 1] = {ItemId = itemId};
             end
         end
-        return result;
     end
+    return result;
 end
 
 ---@param ItemData table|nil
