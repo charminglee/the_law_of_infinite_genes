@@ -23,6 +23,7 @@ Event = {
 }
 
 
+---@enum ClassPath
 ClassPath = {
     [Buff.CorpseHuntingSurge]               = ROOT.."Prefabs/Buffs/CorpseHuntingSurge.CorpseHuntingSurge_C",
     [Buff.CorpseSurgeGoldRush]              = ROOT.."Prefabs/Buffs/CorpseSurgeGoldRush.CorpseSurgeGoldRush_C",
@@ -34,6 +35,7 @@ ClassPath = {
 }
 
 
+---@enum InstancePath
 InstancePath = {
     LevelStart          = "Helipad.LevelStart_8",
     MobSpawnerManager   = "Helipad.MobSpawnerManager",
@@ -44,14 +46,17 @@ InstancePath = {
 
 ---@enum Tag
 Tag = {
-    Monster = "Monster",
+    Normal  = "Normal",
     Elite   = "Elite",
     Boss    = "Boss",
 }
 
 
+---@enum GameplayTag
 GameplayTag = {
+    ---@enum GameplayTag.Damage
     Damage = {
+        ---@enum GameplayTag.Damage.Type
         Type = {
             Critical        = "Damage.Type.Critical",
             Direct          = "Damage.Type.Direct",
@@ -60,9 +65,11 @@ GameplayTag = {
             Dodge           = "Damage.Type.Dodge",
         },
     },
+    ---@enum GameplayTag.Item
     Item = {
         Equipment = "Item.Equipment"
     },
+    ---@enum GameplayTag.EquipmentSlot
     EquipmentSlot = {
         Kenl = "EquipmentSlot.Kenl",
         Suit = {

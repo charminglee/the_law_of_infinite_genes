@@ -5,7 +5,7 @@ local Boss_RottenArmor = {}
 
 function Boss_RottenArmor:ReceiveBeginPlay()
     Boss_RottenArmor.SuperClass.ReceiveBeginPlay(self)
-	self:AddDynamicTag(Tag.Boss)
+	self.tag = Tag.Boss
 end
 
 

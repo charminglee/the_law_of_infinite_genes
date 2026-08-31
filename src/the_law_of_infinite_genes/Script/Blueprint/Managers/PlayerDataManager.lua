@@ -59,7 +59,7 @@ end
 function PlayerDataManager:ReceiveTick(deltaTime)
     PlayerDataManager.SuperClass.ReceiveTick(self, deltaTime)
     self._tick = self._tick + deltaTime
-    if self._tick >= Config.Common.AutoSaveInterval then
+    if self._tick >= GameFlowCfg.AutoSaveInterval then
         self._tick = 0
         self:Save()
     end
@@ -800,8 +800,6 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
     store[toSlot] = card
     shop[fromSlot] = nil
 
-    self:_CardAutoUpgrade()
-
     if sync ~= false then
         self:SyncCardData()
     end
@@ -810,6 +808,8 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
         Event.OnCardPurchaseAfter, 
         self.owner.UID, fromSlot, toSlot, card, cost
     )
+
+    self:_CardAutoUpgrade()
 end
 
 

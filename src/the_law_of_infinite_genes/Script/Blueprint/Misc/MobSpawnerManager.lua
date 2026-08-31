@@ -72,7 +72,7 @@ function MobSpawnerManager:NextWave()
         function()
             self:_StartWave()
         end, 
-        Config.Common.SpawnerDelay, 
+        GameFlowCfg.SpawnerDelay,
         false
     )
 end

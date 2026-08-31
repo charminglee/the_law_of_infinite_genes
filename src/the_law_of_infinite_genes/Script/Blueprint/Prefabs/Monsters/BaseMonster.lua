@@ -2,12 +2,13 @@
 ---@field AttrManager AttrManager_C
 ---@field HitBox UCapsuleComponent
 --Edit Below--
-local BaseMonster = {}
+local BaseMonster = {
+    tag = nil,
+}
 
 
 function BaseMonster:ReceiveBeginPlay()
     BaseMonster.SuperClass.ReceiveBeginPlay(self)
-	self:AddDynamicTag(Tag.Monster)
 end
 
 
@@ -19,37 +20,37 @@ end
 ---@param DamageEvent DamageEvent 伤害事件
 ---@param DamageTypeID int32 伤害类型
 function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
-    if not Lib.IsServer() or not EventInstigator:IsPlayerController() then
-		return
-	end
-
-	self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
-	
-	-- 资源点掉落/称号条件相关逻辑
-	local isBoss = self:ActorHasTag(Tag.Boss)
-	local isElite = self:ActorHasTag(Tag.Elite)
-	local pdm = UGCGameSystem.GetPlayerStateByPlayerController(EventInstigator).PlayerDataManager ---@type PlayerDataManager_C
-	local config = Config.Resource.Coin_0.MonsterLoot
-	local playerHealth = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_Health)
-	local playerHealthMax = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_HealthMax)
-	local playerHealthPct = playerHealth / playerHealthMax
-	if isBoss then 
-		pdm:AddCoin(ItemId.Coin_0, config[3], false)
-		pdm:AddStat(Statistics.BossKillCount, 1, false)
-	elseif isElite then
-		pdm:AddCoin(ItemId.Coin_0, config[2], false)
-		pdm:AddStat(Statistics.EliteMonsterKillCount, 1, false)
-		if playerHealthPct > 0.5 then
-			pdm:AddStat(Statistics.EliteMonsterKillCountHealthAboveHalf, 1, false)
-		end
-	else
-		pdm:AddCoin(ItemId.Coin_0, config[1], false)
-		pdm:AddStat(Statistics.NormalMonsterKillCount, 1, false)
-		if playerHealthPct > 0.5 then
-			pdm:AddStat(Statistics.NormalMonsterKillCountHealthAboveHalf, 1, false)
-		end
+    if not Lib.IsServer() or not Lib.IsPlayer(EventInstigator) then
+        return
     end
-	pdm:SyncData()
+
+    self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
+
+    -- 资源点掉落/称号条件相关逻辑
+    local pdm = UGCGameSystem.GetPlayerStateByPlayerController(EventInstigator).PlayerDataManager
+    local pam = UGCGameSystem.GetPlayerPawnByPlayerController(EventInstigator).AttrManager
+    local playerHealth = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_Health)
+    local playerHealthMax = pam:GetAttr(Attribute.HealthMax)
+    local playerHealthPct = playerHealth / playerHealthMax
+
+    local loot = GameFlowCfg.Resource.OnKill.Loot[self.tag]
+    pdm:AddCoin(loot.ItemId, loot.Count, false)
+
+    if self.tag == Tag.Boss then
+        pdm:AddStat(Statistics.BossKillCount, 1, false)
+    elseif self.tag == Tag.Elite then
+        pdm:AddStat(Statistics.EliteMonsterKillCount, 1, false)
+        if playerHealthPct > 0.5 then
+            pdm:AddStat(Statistics.EliteMonsterKillCountHealthAboveHalf, 1, false)
+        end
+    else
+        pdm:AddStat(Statistics.NormalMonsterKillCount, 1, false)
+        if playerHealthPct > 0.5 then
+            pdm:AddStat(Statistics.NormalMonsterKillCountHealthAboveHalf, 1, false)
+        end
+    end
+
+    pdm:SyncData()
 end
 
 
@@ -75,7 +76,7 @@ end
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- function BaseMonster:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
-     
+
 -- end
 
 
@@ -86,7 +87,7 @@ end
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- function BaseMonster:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
-    
+
 -- end
 
 
@@ -154,22 +155,22 @@ end
 -- ---@param NewTarget AActor 新目标
 -- ---@param OldTarget AActor 旧目标
 -- function BaseMonster:OnTargetChange_BP(NewTarget, OldTarget)
-    
+
 -- end
 
 
 -- [Editor Generated Lua] function define Begin:
 function BaseMonster:LuaInit()
-	if self.bInitDoOnce then
-		return;
-	end
-	self.bInitDoOnce = true;
-	-- [Editor Generated Lua] BindingProperty Begin:
-	-- [Editor Generated Lua] BindingProperty End;
-	
-	-- [Editor Generated Lua] BindingEvent Begin:
-	-- self.UGCPresetCommonDropItemComponent.OnDropItem:Add(self.UGCPresetCommonDropItemComponent_OnDropItem, self);
-	-- [Editor Generated Lua] BindingEvent End;
+    if self.bInitDoOnce then
+        return;
+    end
+    self.bInitDoOnce = true;
+    -- [Editor Generated Lua] BindingProperty Begin:
+    -- [Editor Generated Lua] BindingProperty End;
+
+    -- [Editor Generated Lua] BindingEvent Begin:
+    -- self.UGCPresetCommonDropItemComponent.OnDropItem:Add(self.UGCPresetCommonDropItemComponent_OnDropItem, self);
+    -- [Editor Generated Lua] BindingEvent End;
 end
 
 

@@ -5,7 +5,7 @@ local Elite_Speed = {}
 
 function Elite_Speed:ReceiveBeginPlay()
     Elite_Speed.SuperClass.ReceiveBeginPlay(self)
-	self:AddDynamicTag(Tag.Elite)
+	self.tag = Tag.Elite
 end
 
 
