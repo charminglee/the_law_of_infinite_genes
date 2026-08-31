@@ -1,6 +1,3 @@
-local ROOT = UGCMapInfoLib.GetRootLongPackagePath().."Asset/Blueprint/"
-
-
 ---@enum Event
 Event = {
     OnGunUnlockAfter            = "OnGunUnlockAfter",
@@ -20,18 +17,22 @@ Event = {
     OnTitleUnlockAfter          = "OnTitleUnlockAfter",
     OnCardShopLevelUpAfter      = "OnCardShopLevelUpAfter",
     OnRepAppraisalData          = "OnRepAppraisalData",
+    OnGameScoreChanged          = "OnGameScoreChanged",
 }
+
+
+local _ROOT = Lib.LONG_ROOT_PKG_PATH.."Asset/Blueprint/"
 
 
 ---@enum ClassPath
 ClassPath = {
-    [Buff.CorpseHuntingSurge]               = ROOT.."Prefabs/Buffs/CorpseHuntingSurge.CorpseHuntingSurge_C",
-    [Buff.CorpseSurgeGoldRush]              = ROOT.."Prefabs/Buffs/CorpseSurgeGoldRush.CorpseSurgeGoldRush_C",
-    [Buff.HeavenPunishmentThunderStrike]    = ROOT.."Prefabs/Buffs/HeavenPunishmentThunderStrike.HeavenPunishmentThunderStrike_C",
-    [Buff.PutridMiasma]                     = ROOT.."Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
-    [Buff.PutridMiasma_Monster]             = ROOT.."Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
+    [Buff.CorpseHuntingSurge]               = _ROOT.."Prefabs/Buffs/CorpseHuntingSurge.CorpseHuntingSurge_C",
+    [Buff.CorpseSurgeGoldRush]              = _ROOT.."Prefabs/Buffs/CorpseSurgeGoldRush.CorpseSurgeGoldRush_C",
+    [Buff.HeavenPunishmentThunderStrike]    = _ROOT.."Prefabs/Buffs/HeavenPunishmentThunderStrike.HeavenPunishmentThunderStrike_C",
+    [Buff.PutridMiasma]                     = _ROOT.."Prefabs/Buffs/PutridMiasma.PutridMiasma_C",
+    [Buff.PutridMiasma_Monster]             = _ROOT.."Prefabs/Buffs/PutridMiasma_Monster.PutridMiasma_Monster_C",
 
-    BaseMonster = ROOT.."Prefabs/Monsters/BaseMonster.BaseMonster_C",
+    BaseMonster = _ROOT.."Prefabs/Monsters/BaseMonster.BaseMonster_C",
 }
 
 

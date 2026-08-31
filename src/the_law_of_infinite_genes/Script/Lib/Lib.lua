@@ -11,6 +11,20 @@ Lib = {
 }
 
 
+local _UGCGameSystem = UGCGameSystem
+UGCGameSystem = setmetatable({}, {
+    __index = _UGCGameSystem,
+    __newindex = function(t, k, v)
+        if k == "GameMode" then
+            GameMode = v ---@type UGCGameMode_C
+        elseif k == "GameState" then
+            GameState = v ---@type UGCGameState_C
+        end
+        _UGCGameSystem[k] = v
+    end
+})
+
+
 ---@alias SupportToTable ItemDefineID
 
 
@@ -27,20 +41,6 @@ function Lib.ToTable(obj)
     t.InstanceID     = obj.InstanceID or nil
     return t
 end
-
-
-local _UGCGameSystem = UGCGameSystem
-UGCGameSystem = setmetatable({}, {
-    __index = _UGCGameSystem,
-    __newindex = function(t, k, v)
-        if k == "GameMode" then
-            GameMode = v ---@type UGCGameMode_C
-        elseif k == "GameState" then
-            GameState = v ---@type UGCGameState_C
-        end
-        _UGCGameSystem[k] = v
-    end
-})
 
 
 ---【双端】创建一个定时器。
@@ -157,6 +157,11 @@ function Lib.IsPlayer(actor)
     local owner = actor:GetOwner()
     return owner and _IsPlayer(owner)
 end
+
+
+---根目录长路径（以 `/` 结尾）
+---@type string
+Lib.LONG_ROOT_PKG_PATH = _ROOT
 
 
 return Lib

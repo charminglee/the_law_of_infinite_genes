@@ -36,6 +36,9 @@ function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageE
     local loot = GameFlowCfg.Resource.OnKill.Loot[self.tag]
     pdm:AddCoin(loot.ItemId, loot.Count, false)
 
+    local score = GameFlowCfg.Resource.OnKill.Score[self.tag]
+    GameState:AddScore(score)
+
     if self.tag == Tag.Boss then
         pdm:AddStat(Statistics.BossKillCount, 1, false)
     elseif self.tag == Tag.Elite then
