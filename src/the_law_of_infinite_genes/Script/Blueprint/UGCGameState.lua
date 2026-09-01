@@ -185,6 +185,11 @@ function UGCGameState:_ResetScore()
     Lib.EventSystem.Broadcast(Event.OnGameScoreChanged, oldScore, self.score)
 end
 
+---【双端】获取当前回合数。
+function UGCGameState:GetWaveIndex()
+    return self.MobSpawnerManager.waveIndex
+end
+
 ---多播同步玩家当前装备的称号缓存。
 ---@param UID number|string
 ---@param ID number
@@ -193,3 +198,15 @@ function UGCGameState:MulticastRPC_EquippedTitle(UID, ID)
 end
 
 return UGCGameState
+
+
+
+
+
+
+
+
+
+
+
+

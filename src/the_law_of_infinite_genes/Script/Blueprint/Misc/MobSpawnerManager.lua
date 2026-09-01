@@ -68,13 +68,7 @@ function MobSpawnerManager:NextWave()
         self:JumpToWave(0)
     end
     self.isInSpawnInterval = true
-    UGCTimerUtility.CreateUETimer(
-        function()
-            self:_StartWave()
-        end, 
-        GameFlowCfg.SpawnerDelay,
-        false
-    )
+    Lib.CreateTimer(GameFlowCfg.SpawnerDelay, false, self._StartWave, self)
 end
 
 

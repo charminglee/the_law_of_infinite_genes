@@ -41,13 +41,7 @@ function SpecialEventManager:TriggerSpecialEvent(specialEvent)
 
     -- 持续时间结束后自动触发事件结束
     local dur = GameFlowCfg.SpecialEvent[specialEvent].Duration
-    UGCTimerUtility.CreateUETimer(
-        function()
-            self:StopSpecialEvent() 
-        end, 
-        dur, 
-        false
-    )
+    Lib.CreateTimer(dur, false, self.StopSpecialEvent, self)
 
     -- 给玩家添加对应buff
     local buffCls = ClassPath[specialEvent] ---@type string

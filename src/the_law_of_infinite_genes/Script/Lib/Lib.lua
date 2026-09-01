@@ -53,15 +53,17 @@ end
 function Lib.CreateTimer(time, isLoop, callback, obj, ...)
     local args = {...}
     local argCount = select("#", ...)
-    local f = function()
-        if obj then
+    local f
+    if obj ~= nil then
+        f = function()
             callback(obj, table.unpack(args, 1, argCount))
-        else
+        end
+    else
+        f = function()
             callback(table.unpack(args, 1, argCount))
         end
     end
-    local handle, _ = UGCTimerUtility.CreateUETimer(f, time, isLoop)
-    return handle
+    return UGCTimerUtility.CreateUETimer(f, time, isLoop)[0]
 end
 
 
