@@ -20,6 +20,18 @@ GameFlowCfg.Resource = {
             [Tag.Elite]  = 100,
             [Tag.Boss]   = 500,
         },
+        -- 赛季经验
+        SeasonExp = {
+            [Tag.Normal] = 2,
+            [Tag.Elite]  = 10,
+            [Tag.Boss]   = 50,
+        },
+        -- 永久经验（角色经验）
+        CharacterExp = {
+            [Tag.Normal] = 2,
+            [Tag.Elite]  = 10,
+            [Tag.Boss]   = 50,
+        },
     },
 }
 

@@ -18,6 +18,8 @@ Event = {
     OnCardShopLevelUpAfter      = "OnCardShopLevelUpAfter",
     OnRepAppraisalData          = "OnRepAppraisalData",
     OnGameScoreChanged          = "OnGameScoreChanged",
+    OnCharacterExpChangeAfter   = "OnCharacterExpChangeAfter",
+    OnSeasonExpChangeAfter      = "OnSeasonExpChangeAfter",
 }
 
 

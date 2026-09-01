@@ -39,6 +39,11 @@ function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageE
     local score = GameFlowCfg.Resource.OnKill.Score[self.tag]
     GameState:AddScore(score)
 
+    local seasonExp = GameFlowCfg.Resource.OnKill.SeasonExp[self.tag]
+    pdm:AddSeasonExp(seasonExp, false)
+    local characterExp = GameFlowCfg.Resource.OnKill.CharacterExp[self.tag]
+    pdm:AddCharacterExp(characterExp, false)
+
     if self.tag == Tag.Boss then
         pdm:AddStat(Statistics.BossKillCount, 1, false)
     elseif self.tag == Tag.Elite then

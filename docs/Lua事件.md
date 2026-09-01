@@ -40,6 +40,26 @@ Lib.EventSystem.Broadcast(eventName, ...)
 
 ## 事件列表
 
+### OnSeasonExpChangeAfter
+
+
+【双端】玩家赛季经验发生变化时触发。
+
+| 序号 | 参数 | 类型   | 说明         |
+| --- | --- |--------|--------------|
+| 1 | oldExp | number | 变化前的经验 |
+| 2 | newExp | number | 变化后的经验 |
+
+### OnCharacterExpChangeAfter
+
+
+【双端】玩家永久经验发生变化时触发。
+
+| 序号 | 参数 | 类型   | 说明         |
+| --- | --- |--------|--------------|
+| 1 | oldExp | number | 变化前的经验 |
+| 2 | newExp | number | 变化后的经验 |
+
 ### OnGameScoreChanged
 
 【双端】游戏分数发生变化时触发。
