@@ -21,10 +21,8 @@ function RaidInstanceMain:LuaInit()
     self.bInitDoOnce = true;
     RaidInstanceManager:RegisterMainUI(self);
     self:ShowCardGrid(true);
-    self.RaidInstanceCardGrid:RefreshCardLists();
 end
 function RaidInstanceMain:OnOpen(...)
-    self.RaidInstanceCardGrid:RefreshCardLists();
     UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "ResetCardData", LocalPlayerController.PlayerKey);
 end
 function RaidInstanceMain:Exit()

@@ -500,7 +500,7 @@ function PlayerDataManager:GetCoin(id)
     if not self._isLoaded then
         return 0
     end
-    return self._data.coin
+    return self._data.coin[id]
 end
 
 
@@ -897,6 +897,7 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
     local cost = CardCfg.Grade[info.grade].cost
     if self:GetCoin(ItemId.Coin_0) < cost then
         -- 资源点不足
+        ugcprint('资源点不足')
         return  
     end
     self:AddCoin(ItemId.Coin_0, -cost)

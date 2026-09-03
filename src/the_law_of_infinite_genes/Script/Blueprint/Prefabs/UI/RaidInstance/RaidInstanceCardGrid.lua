@@ -36,7 +36,6 @@ function RaidInstanceCardGrid:LuaInit()
     Lib.EventSystem.Listen(Event.OnCardAutoUpgradeAfter, self.OnCardAutoUpgradeAfter, self);
     self:BuildGroupCardLists();
     self:RefreshEmptyState();
-    self:RefreshCardLists();
 end
 function RaidInstanceCardGrid:Destruct()
     Lib.EventSystem.UnlistenByOwner(self);
@@ -87,7 +86,8 @@ end
 function RaidInstanceCardGrid:RefreshCardLists()
     self.EquippedCardMap = {};
     local equippedGroupCounts = {0, 0, 0, 0};
-    local manager = LocalPlayerState.PlayerDataManager;
+    local playerState = UGCGameSystem.GetLocalPlayerState();
+    local manager = playerState.PlayerDataManager;
     for slot = 1, CardCfg.Common.EquippedSlotCount do
         local data = manager:GetEquippedCard(slot);
         if data ~= nil then

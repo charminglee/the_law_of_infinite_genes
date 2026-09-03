@@ -472,7 +472,7 @@ function GachaMain:HandleItemDrop(sourceItem, targetItem)
         if manager:GetStoreCard(toSlot) ~= nil then
             return false;
         end
-        UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "APurchaseCard",
+        UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "PurchaseCard",
                 LocalPlayerController.PlayerKey, fromSlot, toSlot);
         return true;
     end

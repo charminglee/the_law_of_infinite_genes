@@ -215,6 +215,9 @@ function GameClientPresenter.OnGamePartReady(Controller)
     if not PlayerState then
         return
     end
+    if not UGCGameData.IsLobbyMode(UGCMultiMode.GetModeID()) then
+        RaidInstanceManager.MainUI.RaidInstanceCardGrid:RefreshCardLists()
+    end
     if not PlayerState.SettleParams or not PlayerState.SettleParams.bIsSettled then
         PlayerState:OnRep_AliveState()
     end
