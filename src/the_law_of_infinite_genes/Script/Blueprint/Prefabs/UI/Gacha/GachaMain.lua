@@ -12,7 +12,6 @@
 ---@field PreviewTop UImage
 ---@field PurchaseButton UButton
 ---@field RefreshButton UButton
----@field ResourceCoin UTextBlock
 ---@field ResourceCoinIcon UImage
 ---@field SelectedPreview UCanvasPanel
 ---@field SellButton UButton
@@ -194,11 +193,11 @@ function GachaMain:RefreshInfo()
         local storeSlotCount = CardCfg.Common.StoreSlotCount
         self.StoreCount:SetText(tostring(self:_CountUsed(store)) .. "/" .. tostring(storeSlotCount));
     end
-    self:SetResourceCoin(manager:GetCoin(ItemId.Coin_3));
+    self:SetResourceCoin(manager:GetCoin(ItemId.Coin_6));
     SetButtonVisible(self.LevelUpButton, unlockedSlotCount < maxSlotLv);
 end
 function GachaMain:SetResourceCoin(Value)
-    --self.ResourceCoin:SetText(tostring(Value));
+    self:GetWidgetFromName("ResourceCoin"):SetText(tostring(Value));
 end
 function GachaMain:_RefreshActionButtons(hasPreview)
     local tag = GachaManager.SelectTag;

@@ -4,6 +4,7 @@
 local GachaComponent = {}
 
 
+local Lib = UGCGameSystem.UGCRequire("Script.Lib.Lib");
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Gacha.GachaManager");
 
 
@@ -50,7 +51,7 @@ function GachaComponent:OnCardAutoUpgradeAfter(UID)
 end
 
 function GachaComponent:OnCoinChangeAfter(UID, CoinId, OldValue, NewValue)
-    if CoinId == ItemId.Coin_3 and GachaManager.MainUI ~= nil then
+    if CoinId == ItemId.Coin_6 and GachaManager.MainUI ~= nil then
         GachaManager.MainUI:SetResourceCoin(NewValue);
     end
 end

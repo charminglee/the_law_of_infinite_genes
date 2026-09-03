@@ -75,6 +75,9 @@ function RaidInstanceCardGrid:SetSuitCounts(counts)
         RaidInstanceManager.MainUI:SyncSuitCounts(counts, self.GroupCardLists);
     end
 end
+function RaidInstanceCardGrid:SetResourceCoin(value)
+    self.TextBlock_Coin:SetText(tostring(value));
+end
 function RaidInstanceCardGrid:RefreshEmptyState()
     self.EquippedCardMap = {};
     self:SetSuitCounts({0, 0, 0, 0});

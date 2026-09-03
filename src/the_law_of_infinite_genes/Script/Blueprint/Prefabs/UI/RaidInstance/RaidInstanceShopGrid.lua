@@ -35,6 +35,10 @@ function RaidInstanceShopGrid:SetSuitCounts(counts, groupCardLists)
     self.TextBlock_Suit4:SetText(tostring(counts[4]) .. "/" .. tostring(#groupCardLists[4]));
 end
 
+function RaidInstanceShopGrid:SetResourceCoin(value)
+    self.TextBlock_Coin:SetText(tostring(value));
+end
+
 function RaidInstanceShopGrid:OpenCardUI()
     GachaManager:OpenMainUI();
 end
