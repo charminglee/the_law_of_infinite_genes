@@ -11,3 +11,4 @@
 ---@alias UGCPlayerState UGCPlayerState_C
 ---@alias ActorComponent UActorComponent
 ---@alias PersistEffectBuff UPersistEffectBuff
+---@alias BP_UGCMobSpawnerManager_C AUGCMobSpawnerManager
