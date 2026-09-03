@@ -69,6 +69,15 @@ Lib.EventSystem.Broadcast(eventName, ...)
 | 1 | oldScore | number | 变化前的分数 |
 | 2 | newScore | number | 变化后的分数 |
 
+### OnRemainingMobCountChanged
+
+【双端】剩余怪物数发生变化时触发。
+
+| 序号 | 参数 | 类型   | 说明               |
+| --- | --- |--------|--------------------|
+| 1 | oldCount | number | 变化前的剩余怪物数 |
+| 2 | newCount | number | 变化后的剩余怪物数 |
+
 ### OnGunUnlockAfter
 
 【双端】枪械解锁时触发。

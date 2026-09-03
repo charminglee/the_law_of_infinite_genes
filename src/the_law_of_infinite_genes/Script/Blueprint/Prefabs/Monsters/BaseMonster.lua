@@ -9,6 +9,13 @@ local BaseMonster = {
 
 function BaseMonster:ReceiveBeginPlay()
     BaseMonster.SuperClass.ReceiveBeginPlay(self)
+    GameState:_AddRemainMobCount()
+end
+
+
+function BaseMonster:ReceiveEndPlay()
+    BaseMonster.SuperClass.ReceiveEndPlay(self)
+    GameState:_AddRemainMobCount(-1)
 end
 
 

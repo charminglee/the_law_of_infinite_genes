@@ -1,3 +1,5 @@
+---@class MobSpawnerManager_C:BP_UGCMobSpawnerManager_C
+--Edit Below--
 ---@class MobSpawnerManager_C: AUGCMobSpawnerManager
 local MobSpawnerManager = {
     waveIndex = 0,              -- 当前波数
@@ -21,14 +23,21 @@ local function _SpawnCountFormula(n)
 end
 
 
+function MobSpawnerManager:GetReplicatedProperties()
+    return { "waveIndex", "Lazy" }
+end
+
+
 function MobSpawnerManager:ReceiveBeginPlay()
     MobSpawnerManager.SuperClass.ReceiveBeginPlay(self)
     GameState.MobSpawnerManager = self
 
-    self.spawnerCount = self:GetWaveSpawnerNum(0)
-    for i = 0, self.spawnerCount - 1 do
-        local spawner = self:GetSpawner(0, i)
-        table.insert(self.spawners, spawner)
+    if Lib.IsServer() then
+        self.spawnerCount = self:GetWaveSpawnerNum(0)
+        for i = 0, self.spawnerCount - 1 do
+            local spawner = self:GetSpawner(0, i)
+            table.insert(self.spawners, spawner)
+        end
     end
 end
 
@@ -36,6 +45,11 @@ end
 function MobSpawnerManager:ReceiveEndPlay()
     MobSpawnerManager.SuperClass.ReceiveEndPlay(self)
     GameState.MobSpawnerManager = nil
+end
+
+
+function MobSpawnerManager:OnAllMobDie()
+    self:NextWave()
 end
 
 
@@ -55,14 +69,18 @@ function MobSpawnerManager:_StartWave()
         MobGroupID = self.waveIndex - 1,
     }
     self:SetMobConfigOverride(mobConfig)
-
     self:StartSpawnerManager()
+    
+    UnrealNetwork.RepLazyProperty(self, "waveIndex")
     Lib.EventSystem.Broadcast(Event.OnWaveStart, self.waveIndex)
 end
 
 
 ---【服务端】启动下一波刷怪。
 function MobSpawnerManager:NextWave()
+    if not Lib.IsServer() then
+        return
+    end
     if self.waveIndex > 0 then
         self:StopSpawnerManager()
         self:JumpToWave(0)
@@ -96,15 +114,6 @@ function MobSpawnerManager:OnAllWaveEnd()
     
 end
 --]]
-
-
-function MobSpawnerManager:OnAllMobDie()
-    local PlayerControllers = UGCGameSystem.GetAllPlayerController(true)
-    for k, v in pairs(PlayerControllers) do
-        UGCLevelFlowSystem.LevelAddScore(v.TeamID, 100)
-    end
-    self:NextWave()
-end
 
 
 return MobSpawnerManager

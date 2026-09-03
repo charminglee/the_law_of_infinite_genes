@@ -36,9 +36,12 @@ UGCGameState.LevelStateEnum = {
 UGCGameState.LevelState = UGCGameState.LevelStateEnum.Waiting
 
 UGCGameState.score = 0
+UGCGameState.remainingMobCount = 0
 
 function UGCGameState:GetReplicatedProperties()
-    return { "score", "Lazy" }
+    return
+    { "CurrentRespawnChanceCountDown", "Lazy" },
+    "score"
 end
 
 ---GameState 生命周期入口：初始化全局运行状态并绑定关卡事件。
@@ -124,11 +127,6 @@ function UGCGameState:GetAvailableServerRPCs()
     return
 end
 
----声明需要复制的全局复活倒计时字段。
-function UGCGameState:GetReplicatedProperties()
-    return { "CurrentRespawnChanceCountDown", "Lazy" }
-end
-
 ---客户端收到倒计时复制后刷新复活界面。
 function UGCGameState:OnRep_CurrentRespawnChanceCountDown()
     GameFlow.ClientPresenter.OnRespawnCountdownReplicated(self)
@@ -165,7 +163,6 @@ function UGCGameState:AddScore(score)
     end
     local oldScore = self.score
     self.score = self.score + score
-    UnrealNetwork.RepLazyProperty(self, "score")
     Lib.EventSystem.Broadcast(Event.OnGameScoreChanged, oldScore, self.score)
 end
 
@@ -181,13 +178,29 @@ function UGCGameState:_ResetScore()
     end
     local oldScore = self.score
     self.score = 0
-    UnrealNetwork.RepLazyProperty(self, "score")
     Lib.EventSystem.Broadcast(Event.OnGameScoreChanged, oldScore, self.score)
 end
 
 ---【双端】获取当前回合数。
 function UGCGameState:GetWaveIndex()
     return self.MobSpawnerManager.waveIndex
+end
+
+function UGCGameState:_AddRemainMobCount(delta)
+    delta = delta or 1
+    local oldCount = self.remainingMobCount
+    local newCount = math.max(0, oldCount + delta)
+    if newCount == oldCount then
+        return
+    end
+    self.remainingMobCount = newCount
+    Lib.EventSystem.Dispatch(Event.OnRemainingMobCountChanged, oldCount, newCount)
+end
+
+---【双端】获取剩余怪物数。
+---@return number @剩余怪物数
+function UGCGameState:GetRemainingMobCount()
+    return self.remainingMobCount
 end
 
 ---多播同步玩家当前装备的称号缓存。
