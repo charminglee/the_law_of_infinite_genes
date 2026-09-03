@@ -198,7 +198,7 @@ function GachaMain:RefreshInfo()
     SetButtonVisible(self.LevelUpButton, unlockedSlotCount < maxSlotLv);
 end
 function GachaMain:SetResourceCoin(Value)
-    self.ResourceCoin:SetText(tostring(Value));
+    --self.ResourceCoin:SetText(tostring(Value));
 end
 function GachaMain:_RefreshActionButtons(hasPreview)
     local tag = GachaManager.SelectTag;
