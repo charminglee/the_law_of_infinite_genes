@@ -10,9 +10,9 @@ GameFlowCfg.Resource = {
     OnKill = {
         -- 每类怪物掉落的资源点
         Loot = {
-            [Tag.Normal] = { ItemId=ItemId.Coin_0, Count=2 },
-            [Tag.Elite]  = { ItemId=ItemId.Coin_0, Count=10 },
-            [Tag.Boss]   = { ItemId=ItemId.Coin_0, Count=50 },
+            [Tag.Normal] = { ItemId=ItemId.Coin_6, Count=2 },
+            [Tag.Elite]  = { ItemId=ItemId.Coin_6, Count=10 },
+            [Tag.Boss]   = { ItemId=ItemId.Coin_6, Count=50 },
         },
         -- 加分
         Score = {

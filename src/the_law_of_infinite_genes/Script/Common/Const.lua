@@ -95,6 +95,7 @@ ItemId = {
     Coin_3              = 8310003,
     Coin_4              = 8310012,
     Coin_5              = 8310162,
+    Coin_6              = 8310036,
 
     BossMaterial_0      = 8310013,
     BossMaterial_1      = 8310014,

@@ -87,6 +87,7 @@ local function _BuildDefaultData()
             [ItemId.Coin_3] = 0,
             [ItemId.Coin_4] = 0,
             [ItemId.Coin_5] = 0,
+            [ItemId.Coin_6] = 0,
         },
         stat = {},
         title = {
@@ -895,12 +896,11 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
 
     local info = CardCfg.Cards[card[1]]
     local cost = CardCfg.Grade[info.grade].cost
-    if self:GetCoin(ItemId.Coin_0) < cost then
+    if self:GetCoin(ItemId.Coin_6) < cost then
         -- 资源点不足
-        ugcprint('资源点不足')
         return  
     end
-    self:AddCoin(ItemId.Coin_0, -cost)
+    self:AddCoin(ItemId.Coin_6, -cost)
 
     store[toSlot] = card
     shop[fromSlot] = nil
@@ -929,7 +929,7 @@ function PlayerDataManager:_SellCard(from, slot, sync)
     end
     local info = CardCfg.Cards[card[1]]
     local refund = math.floor(CardCfg.Grade[info.grade].cost * CardCfg.Common.SellRefundRatio)
-    self:AddCoin(ItemId.Coin_0, refund)
+    self:AddCoin(ItemId.Coin_6, refund)
     list[slot] = nil
     if sync ~= false then
         self:SyncCardData()
@@ -969,11 +969,11 @@ function PlayerDataManager:RefreshCardShop(useCoin, isFirstRefresh)
         self._card.refreshCount = 0
     end
     local cost = CardCfg.Common.RefreshBaseCost + CardCfg.Common.RefreshStepCost * self._card.refreshCount
-    if useCoin ~= false and self:GetCoin(ItemId.Coin_0) < cost then
+    if useCoin ~= false and self:GetCoin(ItemId.Coin_6) < cost then
         -- 资源点不足
         return  
     end
-    self:AddCoin(ItemId.Coin_0, -cost)
+    self:AddCoin(ItemId.Coin_6, -cost)
 
     local weights = CardCfg.StoreWeight[self._card.shopLevel]
     local byGrade = _BuildCardsByGrade()
