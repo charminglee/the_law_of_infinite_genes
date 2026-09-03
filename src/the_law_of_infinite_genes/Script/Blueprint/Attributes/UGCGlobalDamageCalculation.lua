@@ -92,17 +92,17 @@ function UGCGlobalDamageCalculation:GetCalculationResult(context, extraResult)
 
     -- 增伤区
     local damagePctArea = 1 + damagePct
-    if victim:ActorHasTag(Tag.Boss) then
+    if victim.tag == Tag.Boss then
         damagePctArea = damagePctArea + bossDamagePct
-    elseif victim:ActorHasTag(Tag.Elite) then
+    elseif victim.tag == Tag.Elite then
         damagePctArea = damagePctArea + eliteDamagePct
-    elseif victim:ActorHasTag(Tag.Monster) then
+    elseif victim.tag == Tag.Normal then
         damagePctArea = damagePctArea + normalMonsterDamagePct
     end
 
     -- 防御区
     local totalDefence = defence * (1 + defencePct)
-    local defenceArea = 1 - totalDefence * (1 - breakDefencePct) / (totalDefence + Config.Damage.DefenceK)
+    local defenceArea = 1 - totalDefence * (1 - breakDefencePct) / (totalDefence + GameFlowCfg.Damage.DefenceK)
 
     -- 减伤区
     local damageDecreaceArea = 1 - damageDecreacePct

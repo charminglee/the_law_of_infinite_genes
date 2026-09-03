@@ -10,7 +10,7 @@ UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Gacha.GachaManager");
 function GachaComponent:GetAvailableServerRPCs()
     return
     "RefreshCardShop",
-    "APurchaseCard",
+    "PurchaseCard",
     "EquipCard",
     "UnequipCard",
     "SellCardFromStore",
@@ -83,7 +83,7 @@ function GachaComponent:RefreshCardShop(PlayerKey)
     manager:RefreshCardShop();
 end
 
-function GachaComponent:APurchaseCard(PlayerKey, fromSlot, toSlot)
+function GachaComponent:PurchaseCard(PlayerKey, fromSlot, toSlot)
     local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey);
     local manager = PlayerState.PlayerDataManager;
     manager:PurchaseCard(fromSlot, toSlot);

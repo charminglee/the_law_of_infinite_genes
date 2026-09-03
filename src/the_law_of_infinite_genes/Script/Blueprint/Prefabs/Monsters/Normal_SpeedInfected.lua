@@ -1,20 +1,21 @@
----@class Monster_HeavyInfected_C:BaseMonster_C
+---@class Normal_SpeedInfected_C:BaseMonster_C
 --Edit Below--
-local Monster_HeavyInfected = {}
+local Normal_SpeedInfected = {}
 
--- function Monster_HeavyInfected:ReceiveBeginPlay()
---     Monster_HeavyInfected.SuperClass.ReceiveBeginPlay(self)
+function Normal_SpeedInfected:ReceiveBeginPlay()
+    Normal_SpeedInfected.SuperClass.ReceiveBeginPlay(self)
+	self.tag = Tag.Normal
+end
+
+-- function Normal_SpeedInfected:ReceiveTick(DeltaTime)
+--     Normal_SpeedInfected.SuperClass.ReceiveTick(self, DeltaTime)
 -- end
 
--- function Monster_HeavyInfected:ReceiveTick(DeltaTime)
---     Monster_HeavyInfected.SuperClass.ReceiveTick(self, DeltaTime)
+-- function Normal_SpeedInfected:ReceiveEndPlay()
+--     Normal_SpeedInfected.SuperClass.ReceiveEndPlay(self) 
 -- end
 
--- function Monster_HeavyInfected:ReceiveEndPlay()
---     Monster_HeavyInfected.SuperClass.ReceiveEndPlay(self) 
--- end
-
--- function Monster_HeavyInfected:GetReplicatedProperties()
+-- function Normal_SpeedInfected:GetReplicatedProperties()
 --     return
 -- end
 
@@ -24,7 +25,7 @@ local Monster_HeavyInfected = {}
 -- ---@param EventInstigator AController 伤害来源的Controller
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
--- function Monster_HeavyInfected:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function Normal_SpeedInfected:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
      
 -- end
 
@@ -34,7 +35,7 @@ local Monster_HeavyInfected = {}
 -- ---@param EventInstigator AController 伤害来源的Controller
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
--- function Monster_HeavyInfected:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function Normal_SpeedInfected:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
     
 -- end
 
@@ -45,7 +46,7 @@ local Monster_HeavyInfected = {}
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- ---@return float 修改后的伤害值
--- function Monster_HeavyInfected:PreOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function Normal_SpeedInfected:PreOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
 --     return Damage
 -- end
 
@@ -56,7 +57,7 @@ local Monster_HeavyInfected = {}
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- ---@return float 修改后的伤害值
--- function Monster_HeavyInfected:PostOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
+-- function Normal_SpeedInfected:PostOverrideDamage(Damage, EventInstigator, DamageCauser, DamageContext)
 --     return Damage
 -- end
 
@@ -67,14 +68,14 @@ local Monster_HeavyInfected = {}
 ---@param DamageCauser AActor 伤害来源
 ---@param DamageEvent DamageEvent 伤害事件
 ---@param DamageTypeID int32 伤害类型
-function Monster_HeavyInfected:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
-    Monster_HeavyInfected.SuperClass.BPDie(self, KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
+function Normal_SpeedInfected:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
+    Normal_SpeedInfected.SuperClass.BPDie(self, KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
 end
 
 -- ---状态进入事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 进入的状态
--- function Monster_HeavyInfected:OnEnterTagState_BP(DynamicState)
+-- function Normal_SpeedInfected:OnEnterTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnEnterTagState_BP: ' .. Tag)
 -- end
@@ -82,7 +83,7 @@ end
 -- ---状态退出事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 退出的状态
--- function Monster_HeavyInfected:OnLeaveTagState_BP(DynamicState)
+-- function Normal_SpeedInfected:OnLeaveTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnLeaveTagState_BP: ' .. Tag)
 -- end
@@ -90,7 +91,7 @@ end
 -- ---状态打断事件
 -- ---生效范围：服务器&客户端
 -- ---@param DynamicState FGameplayTag 打断的状态
--- function Monster_HeavyInfected:OnInterruptTagState_BP(DynamicState)
+-- function Normal_SpeedInfected:OnInterruptTagState_BP(DynamicState)
 --     local Tag = BlueprintGameplayTagLibrary.GetTagName(DynamicState)
 --     ugcprint('OnInterruptTagState_BP' .. Tag)
 -- end
@@ -98,7 +99,7 @@ end
 -- ---行为树消息
 -- ---生效范围：服务器
 -- ---@param NotifyMsg string 消息
--- function Monster_HeavyInfected:OnBehaviorNotify_BP(NotifyMsg)
+-- function Normal_SpeedInfected:OnBehaviorNotify_BP(NotifyMsg)
 --     ugcprint('OnBehaviorNotify_BP: ' .. NotifyMsg)
 -- end
 
@@ -106,8 +107,8 @@ end
 -- ---生效范围：服务器&客户端
 -- ---@param NewTarget AActor 新目标
 -- ---@param OldTarget AActor 旧目标
--- function Monster_HeavyInfected:OnTargetChange_BP(NewTarget, OldTarget)
+-- function Normal_SpeedInfected:OnTargetChange_BP(NewTarget, OldTarget)
     
 -- end
 
-return Monster_HeavyInfected
+return Normal_SpeedInfected

@@ -40,8 +40,8 @@ end
 function UGCPlayerPawn:InitializeStarterItems()
     Lib.CreateTimer(4, false, function()
         -- 初始武器
-        local weaponId = Config.InitialWeapon.WeaponId
-        local bulletId = Config.InitialWeapon.BulletId
+        local weaponId = GameFlowCfg.InitialWeapon.WeaponId
+        local bulletId = GameFlowCfg.InitialWeapon.BulletId
         local pdm = UGCGameSystem.GetPlayerStateByPlayerPawn(self).PlayerDataManager
         local isNotFirstJoin = pdm:GetCustomData("isNotFirstJoin")
         if isNotFirstJoin ~= 1 then

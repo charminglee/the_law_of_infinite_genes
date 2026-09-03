@@ -3,7 +3,7 @@
 --Edit Below--
 local PlayerDataManager = {
     _isLoaded = false,
-    _tick = 0,
+    _t = 0,
 
     ---@type {
     ---    custom: table<string, any>,
@@ -13,6 +13,8 @@ local PlayerDataManager = {
     ---    inv: table<number, ntable<InvItem>>,
     ---    geneTree: {skillPoint: number, nodes: table<number, GeneNode>},
     ---    gun: {unlocked: table<number, boolean>},
+    ---    seasonExp: number,
+    ---    characterExp: number,
     ---}
     _data = nil,
 
@@ -28,7 +30,7 @@ local PlayerDataManager = {
 
 
 function PlayerDataManager:GetReplicatedProperties()
-    return {"_data", "Lazy"}, {"_card", "Lazy"}
+    return { "_data", "Lazy" }, { "_card", "Lazy" }
 end
 
 
@@ -47,7 +49,7 @@ function PlayerDataManager:ReceiveBeginPlay()
     self:_LoadData()
     self:ResetCardData()
     
-    if Lib.IsPIE() then
+    if Lib.IsPIE() and Lib.IsServer() then
         for k, v in pairs(Config.Debug.Coin) do
             self:SetCoin(k, v, false)
         end
@@ -58,9 +60,10 @@ end
 
 function PlayerDataManager:ReceiveTick(deltaTime)
     PlayerDataManager.SuperClass.ReceiveTick(self, deltaTime)
-    self._tick = self._tick + deltaTime
-    if self._tick >= Config.Common.AutoSaveInterval then
-        self._tick = 0
+
+    self._t = self._t + deltaTime
+    if self._t >= GameFlowCfg.AutoSaveInterval and Lib.IsServer() then
+        self._t = 0
         self:Save()
     end
 end
@@ -68,7 +71,9 @@ end
 
 function PlayerDataManager:ReceiveEndPlay()
     PlayerDataManager.SuperClass.ReceiveEndPlay(self)
-    self:Save()
+    if Lib.IsServer() then
+        self:Save()
+    end
 end
 
 
@@ -81,6 +86,7 @@ local function _BuildDefaultData()
             [ItemId.Coin_2] = 0,
             [ItemId.Coin_3] = 0,
             [ItemId.Coin_4] = 0,
+            [ItemId.Coin_5] = 0,
         },
         stat = {},
         title = {
@@ -94,13 +100,19 @@ local function _BuildDefaultData()
         gun = {
             unlocked = {},
         },
+        seasonExp = 0,
+        characterExp = 0,
     }
     for _, v in pairs(Statistics) do
         data.stat[v] = 0
     end
     for _, branch in pairs(GeneTreeCfg.SkillData) do
         for __, node in pairs(branch) do
-            data.geneTree.nodes[node.Id] = {level = 0, isUnlocked = false, nodeId = node.Id}
+            data.geneTree.nodes[node.Id] = {
+                level = 0,
+                isUnlocked = false,
+                nodeId = node.Id,
+            }
         end
     end
     return data
@@ -129,16 +141,96 @@ function PlayerDataManager:_LoadData()
     end
 
     local data = UGCPlayerStateSystem.GetPlayerArchiveData(self.owner.UID)
-    if data == nil then
-        data = _BuildDefaultData()
-    else
+    if data then
         _MergeDefaults(data)
+    else
+        data = _BuildDefaultData()
     end
 
     self._data = data
     self._isLoaded = true
     self:SyncData()
 end
+
+
+-- region: 经验 ==================================================
+
+
+---【双端】获取永久经验。
+---@return number @永久经验
+function PlayerDataManager:GetCharacterExp()
+    if not self._isLoaded then
+        return 0
+    end
+    return self._data.characterExp
+end
+
+
+---【服务端】增加永久经验。
+---@param delta? number @增加的经验值，默认为 1
+---@param sync? boolean @是否立即同步数据，默认为 true
+---@return boolean @是否成功
+function PlayerDataManager:AddCharacterExp(delta, sync)
+    if not Lib.IsServer() or not self._isLoaded then
+        return false
+    end
+    delta = delta or 1
+    local old = self._data.characterExp
+    local new = old + delta
+    if new < 0 then
+        return false
+    end
+    self._data.characterExp = new
+    if sync ~= false then
+        self:SyncData()
+    end
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner,
+        Event.OnCharacterExpChangeAfter,
+        self.owner.UID, old, new
+    )
+    return true
+end
+
+
+---【双端】获取赛季经验。
+---@return number @赛季经验
+function PlayerDataManager:GetSeasonExp()
+    if not self._isLoaded then
+        return 0
+    end
+    return self._data.seasonExp
+end
+
+
+---【服务端】增加赛季经验。
+---@param delta? number @增加的经验值，默认为 1
+---@param sync? boolean @是否立即同步数据，默认为 true
+---@return boolean @是否成功
+function PlayerDataManager:AddSeasonExp(delta, sync)
+    if not Lib.IsServer() or not self._isLoaded then
+        return false
+    end
+    delta = delta or 1
+    local old = self._data.seasonExp
+    local new = old + delta
+    if new < 0 then
+        return false
+    end
+    self._data.seasonExp = new
+    if sync ~= false then
+        self:SyncData()
+    end
+    Lib.EventSystem.Broadcast_SinglePlayer(
+        self.owner,
+        Event.OnSeasonExpChangeAfter,
+        self.owner.UID, old, new
+    )
+    return true
+end
+
+
+-- endregion
 
 
 -- region: 通用 ==================================================
@@ -148,6 +240,9 @@ end
 ---@param key string @数据名
 ---@return any @数据值
 function PlayerDataManager:GetCustomData(key)
+    if not self._isLoaded then
+        return nil
+    end
     return self._data.custom[key]
 end
 
@@ -212,7 +307,7 @@ end
 ---@param itemId number @枪械的物品ID
 ---@param count number @购买数量，默认为 1
 ---@return boolean @是否成功
-function PlayerDataManager:BuyGun(itemId, count)
+function PlayerDataManager:PurchaseGun(itemId, count)
     if not Lib.IsServer() then
         return false
     end
@@ -356,7 +451,10 @@ end
 ---【双端】获取当前剩余的基因树技能点。
 ---@return number @技能点
 function PlayerDataManager:GetGeneTreeSkillPoint()
-    return (self._data.geneTree or {}).skillPoint or 0
+    if not self._isLoaded then
+        return 0
+    end
+    return self._data.geneTree.skillPoint
 end
 
 
@@ -399,7 +497,10 @@ end
 ---@param id number @货币ID
 ---@return number @货币数量
 function PlayerDataManager:GetCoin(id)
-    return (self._data.coin or {})[id] or -1
+    if not self._isLoaded then
+        return 0
+    end
+    return self._data.coin
 end
 
 
@@ -409,8 +510,11 @@ end
 ---@param sync? boolean @是否立即同步数据，默认为 true
 ---@return boolean @是否成功
 function PlayerDataManager:SetCoin(id, value, sync)
+    if not Lib.IsServer() or not self._isLoaded then
+        return false
+    end
     local coin = self._data.coin
-    if not Lib.IsServer() or not self._isLoaded or coin[id] == nil or coin[id] == value then
+    if coin[id] == nil or coin[id] == value then
         return false
     end
     if value < 0 then
@@ -436,11 +540,11 @@ end
 ---@param sync? boolean @是否立即同步数据，默认为 true
 ---@return boolean @是否成功
 function PlayerDataManager:AddCoin(id, delta, sync)
-    delta = delta or 1
-    local coin = self._data.coin
-    if not Lib.IsServer() or not self._isLoaded or coin[id] == nil then
+    if not Lib.IsServer() or not self._isLoaded then
         return false
     end
+    delta = delta or 1
+    local coin = self._data.coin
     local old = coin[id]
     local new = old + delta
     if new < 0 then
@@ -800,8 +904,6 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
     store[toSlot] = card
     shop[fromSlot] = nil
 
-    self:_CardAutoUpgrade()
-
     if sync ~= false then
         self:SyncCardData()
     end
@@ -810,6 +912,8 @@ function PlayerDataManager:PurchaseCard(fromSlot, toSlot, sync)
         Event.OnCardPurchaseAfter, 
         self.owner.UID, fromSlot, toSlot, card, cost
     )
+
+    self:_CardAutoUpgrade()
 end
 
 
@@ -912,7 +1016,10 @@ end
 ---@param name Statistics @统计数据名称，请使用 Statistics 枚举值
 ---@return number @数据值
 function PlayerDataManager:GetStat(name)
-    return (self._data.stat or {})[name] or 0
+    if not self._isLoaded then
+        return 0
+    end
+    return self._data.stat[name]
 end
 
 
@@ -921,11 +1028,11 @@ end
 ---@param delta? number @增量，默认为 1
 ---@param sync? boolean @是否立即同步数据，默认为 true
 function PlayerDataManager:AddStat(name, delta, sync)
-    delta = delta or 1
-    local stat = self._data.stat
-    if not Lib.IsServer() or not self._isLoaded or stat[name] == nil then
+    if not Lib.IsServer() or not self._isLoaded then
         return
     end
+    delta = delta or 1
+    local stat = self._data.stat
     stat[name] = stat[name] + delta
     if sync ~= false then
         self:SyncData()

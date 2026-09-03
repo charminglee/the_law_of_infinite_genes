@@ -4,13 +4,13 @@ local PutridMiasma_Monster = {}
  
 
 function PutridMiasma_Monster:AllAttrBuffFormula_Speed()
-	local mul = Config.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
+	local mul = GameFlowCfg.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
 	return mul
 end
 
 
 function PutridMiasma_Monster:AllAttrBuffFormula_MaxHealth()
-	local mul = Config.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
+	local mul = GameFlowCfg.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
 	return 1 + mul
 end
 
@@ -19,19 +19,19 @@ function PutridMiasma_Monster:AllAttrBuffFormula_Health()
 	local owner = self:GetOwnerActor()
 	local health = UGCAttributeSystem.GetGameAttributeValue(owner, UGCNativeGameAttributeType.Character_Health)
 	local maxHealth = UGCAttributeSystem.GetGameAttributeValueMax(owner, UGCNativeGameAttributeType.Character_Health)
-	local mul = Config.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
+	local mul = GameFlowCfg.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
 	return math.floor(health + maxHealth * mul)
 end
 
 
 function PutridMiasma_Monster:AllAttrBuffFormula_DefencePct()
-	local mul = Config.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
+	local mul = GameFlowCfg.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
 	return mul
 end
 
 
 function PutridMiasma_Monster:AllAttrBuffFormula_DamagePct()
-	local mul = Config.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
+	local mul = GameFlowCfg.SpecialEvent[SpecialEvent.PutridMiasma].InfectedAllAttrBuff
 	return mul
 end
 

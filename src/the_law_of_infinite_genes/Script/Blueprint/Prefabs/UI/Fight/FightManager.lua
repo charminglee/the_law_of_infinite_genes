@@ -120,7 +120,7 @@ function FightManager:OnPurchaseRequested(ItemData)
     UnrealNetwork.CallUnrealRPC(
             LocalPlayerController,
             self.ComponentClass,
-            'BuyGunSubmit',
+            'PurchaseGunSubmit',
             LocalPlayerController.PlayerKey,
             ItemData.ItemId
     );

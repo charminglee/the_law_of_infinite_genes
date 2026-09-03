@@ -15,6 +15,7 @@ UGCGameSystem.UGCRequire("Script.Common.Config")
 UGCGameSystem.UGCRequire("Script.Common.CardCfg")
 UGCGameSystem.UGCRequire("Script.Common.ItemCfg")
 UGCGameSystem.UGCRequire("Script.Common.GeneTreeCfg")
+UGCGameSystem.UGCRequire("Script.Common.GameFlowCfg")
 UGCGameSystem.UGCRequire("Script.Common.TweenManager")
 UGCGameSystem.UGCRequire("Script.Common.TimingListUtils")
 UGCGameSystem.UGCRequire("Script.Common.RichText")
@@ -34,6 +35,12 @@ UGCGameState.LevelStateEnum = {
 }
 UGCGameState.LevelState = UGCGameState.LevelStateEnum.Waiting
 
+UGCGameState.score = 0
+
+function UGCGameState:GetReplicatedProperties()
+    return { "score", "Lazy" }
+end
+
 ---GameState 生命周期入口：初始化全局运行状态并绑定关卡事件。
 function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
@@ -48,8 +55,8 @@ end
 
 ---GameState 销毁时清理全灭倒计时。
 function UGCGameState:ReceiveEndPlay()
-    GameFlow.TeamWipe.Shutdown(self)
     UGCGameState.SuperClass.ReceiveEndPlay(self)
+    GameFlow.TeamWipe.Shutdown(self)
 end
 
 ---初始化每局独立的服务端权威状态；客户端不覆盖复制属性。
@@ -140,6 +147,7 @@ end
 ---服务端从等待状态进入战斗，并启动第一波刷怪。
 ---@return boolean
 function UGCGameState:StartGame()
+    self:_ResetScore()
     return GameFlow.Session.Start(self)
 end
 
@@ -147,6 +155,39 @@ end
 ---@return boolean
 function UGCGameState:EndGame()
     return GameFlow.Session.Finish(self)
+end
+
+---【服务端】增加分数。
+---@param score number 分数
+function UGCGameState:AddScore(score)
+    if not Lib.IsServer() then
+        return
+    end
+    local oldScore = self.score
+    self.score = self.score + score
+    UnrealNetwork.RepLazyProperty(self, "score")
+    Lib.EventSystem.Broadcast(Event.OnGameScoreChanged, oldScore, self.score)
+end
+
+---【双端】获取当前分数。
+---@return number @分数
+function UGCGameState:GetScore()
+    return self.score
+end
+
+function UGCGameState:_ResetScore()
+    if not Lib.IsServer() then
+        return
+    end
+    local oldScore = self.score
+    self.score = 0
+    UnrealNetwork.RepLazyProperty(self, "score")
+    Lib.EventSystem.Broadcast(Event.OnGameScoreChanged, oldScore, self.score)
+end
+
+---【双端】获取当前回合数。
+function UGCGameState:GetWaveIndex()
+    return self.MobSpawnerManager.waveIndex
 end
 
 ---多播同步玩家当前装备的称号缓存。
@@ -157,3 +198,15 @@ function UGCGameState:MulticastRPC_EquippedTitle(UID, ID)
 end
 
 return UGCGameState
+
+
+
+
+
+
+
+
+
+
+
+

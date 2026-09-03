@@ -12,7 +12,7 @@
 - 类：大驼峰（ `ClassName` ）
 - 文件/目录：大驼峰（ `FileName` ）
 
-此外，对于不同的分类，还可以在名称前加上分类前缀，以下划线分隔，如 `Monster_SpeedInfected` 、 `Boss_RottenArmor` 。
+此外，对于不同的分类，还可以在名称前加上分类前缀，以下划线分隔，如 `Normal_SpeedInfected` 、 `Boss_RottenArmor` 。
 
 ## 编码规范
 

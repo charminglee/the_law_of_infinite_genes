@@ -2,7 +2,7 @@ local PutridMiasma = {}
 
 
 function PutridMiasma:MiasmaDamageFormula()
-	return Config.SpecialEvent[SpecialEvent.PutridMiasma].MiasmaDamage
+	return GameFlowCfg.SpecialEvent[SpecialEvent.PutridMiasma].MiasmaDamage
 end
 
  
