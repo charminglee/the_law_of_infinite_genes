@@ -205,6 +205,57 @@ function UGCGameState:GetRemainingMobCount()
     return self.remainingMobCount
 end
 
+---按波次在关键点曲线上线性插值取倍率；曲线两端之外按最近的关键点取值。
+---@param curve {Wave:number, Multiplier:number}[] @按 Wave 严格递增排列的关键点
+---@param waveIndex number @波次编号，从 1 开始
+---@return number @倍率
+local function _EvaluateMobMultiplier(curve, waveIndex)
+    if type(curve) ~= "table" or #curve == 0 then
+        return 1
+    end
+    if waveIndex <= curve[1].Wave then
+        return curve[1].Multiplier
+    end
+    for i = 2, #curve do
+        local prevPoint = curve[i - 1]
+        local currPoint = curve[i]
+        if waveIndex <= currPoint.Wave then
+            local waveSpan = currPoint.Wave - prevPoint.Wave
+            if waveSpan <= 0 then
+                return currPoint.Multiplier
+            end
+            local alpha = (waveIndex - prevPoint.Wave) / waveSpan
+            return prevPoint.Multiplier + (currPoint.Multiplier - prevPoint.Multiplier) * alpha
+        end
+    end
+    return curve[#curve].Multiplier
+end
+
+
+---【双端】获取指定波次的怪物攻击力倍率。
+---@param waveIndex number? @波次编号，默认为当前波次
+---@return number @攻击力倍率
+function UGCGameState:GetMonsterAttackMultiplier(waveIndex)
+    waveIndex = waveIndex or self:GetWaveIndex()
+    return _EvaluateMobMultiplier(GameFlowCfg.MobMultiplier.Attack, waveIndex)
+end
+
+---【双端】获取指定波次的怪物防御力倍率。
+---@param waveIndex number? @波次编号，默认为当前波次
+---@return number @防御力倍率
+function UGCGameState:GetMonsterDefenseMultiplier(waveIndex)
+    waveIndex = waveIndex or self:GetWaveIndex()
+    return _EvaluateMobMultiplier(GameFlowCfg.MobMultiplier.Defense, waveIndex)
+end
+
+---【双端】获取指定波次的怪物血量倍率。
+---@param waveIndex number? @波次编号，默认为当前波次
+---@return number @血量倍率
+function UGCGameState:GetMonsterHealthMultiplier(waveIndex)
+    waveIndex = waveIndex or self:GetWaveIndex()
+    return _EvaluateMobMultiplier(GameFlowCfg.MobMultiplier.Health, waveIndex)
+end
+
 ---多播同步玩家当前装备的称号缓存。
 ---@param UID number|string
 ---@param ID number

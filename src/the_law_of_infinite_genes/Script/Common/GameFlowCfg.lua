@@ -5,6 +5,35 @@ GameFlowCfg.AutoSaveInterval = 30  -- 玩家数据自动保存间隔，单位秒
 GameFlowCfg.SpawnerDelay = 10      -- 准备阶段时长
 
 
+-- 怪物属性倍率曲线
+GameFlowCfg.MobMultiplier = {
+    -- 怪物攻击力倍率
+    Attack = {
+        { Wave = 1,  Multiplier = 1.00 },
+        { Wave = 5,  Multiplier = 1.30 },
+        { Wave = 10, Multiplier = 1.80 },
+        { Wave = 15, Multiplier = 2.40 },
+        { Wave = 20, Multiplier = 3.00 },
+    },
+    -- 怪物防御力倍率
+    Defense = {
+        { Wave = 1,  Multiplier = 1.00 },
+        { Wave = 5,  Multiplier = 1.15 },
+        { Wave = 10, Multiplier = 1.40 },
+        { Wave = 15, Multiplier = 1.70 },
+        { Wave = 20, Multiplier = 2.00 },
+    },
+    -- 怪物血量倍率
+    Health = {
+        { Wave = 1,  Multiplier = 1.00 },
+        { Wave = 5,  Multiplier = 1.60 },
+        { Wave = 10, Multiplier = 2.50 },
+        { Wave = 15, Multiplier = 3.70 },
+        { Wave = 20, Multiplier = 5.20 },
+    },
+}
+
+
 -- 资源配置
 GameFlowCfg.Resource = {
     OnKill = {
