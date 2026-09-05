@@ -482,7 +482,7 @@ function GachaMain:Purchase()
     if slot == nil or GachaManager.SelectTag ~= SelectTag.Shop then
         return
     end
-    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "APurchaseCard", LocalPlayerController.PlayerKey, slot);
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "PurchaseCard", LocalPlayerController.PlayerKey, slot);
 end
 function GachaMain:Sell()
     local slot = self:_SelectedSlot();
