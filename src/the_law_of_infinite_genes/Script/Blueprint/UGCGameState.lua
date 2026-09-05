@@ -37,6 +37,7 @@ UGCGameState.LevelState = UGCGameState.LevelStateEnum.Waiting
 
 UGCGameState.score = 0
 UGCGameState.remainingMobCount = 0
+UGCGameState.difficulty = nil
 
 function UGCGameState:GetReplicatedProperties()
     return
@@ -48,6 +49,7 @@ end
 function UGCGameState:ReceiveBeginPlay()
     UGCGameState.SuperClass.ReceiveBeginPlay(self)
     self.bIsOpenShovelingAbility = true
+    self.difficulty = UGCGameData.GetGameModeConfig(UGCMultiMode.GetModeID()).Difficulty
     self:InitializeRuntimeState()
     self:Listen()
 
@@ -181,7 +183,7 @@ function UGCGameState:_ResetScore()
     Lib.EventSystem.Broadcast(Event.OnGameScoreChanged, oldScore, self.score)
 end
 
----【双端】获取当前回合数。
+---【双端】获取当前回合数（关卡数）。
 function UGCGameState:GetWaveIndex()
     return self.MobSpawnerManager.waveIndex
 end

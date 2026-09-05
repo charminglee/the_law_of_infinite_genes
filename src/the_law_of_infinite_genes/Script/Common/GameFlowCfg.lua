@@ -33,6 +33,42 @@ GameFlowCfg.Resource = {
             [Tag.Boss]   = 50,
         },
     },
+    BossLoot = {
+        -- 难度倍率
+        DifficultyMultiplier = {
+            Min = 0.8,
+            Max = 2.0,
+            [Difficulty.Simple]    = 0.8,
+            [Difficulty.Normal]    = 1.0,
+            [Difficulty.Hard]      = 1.3,
+            [Difficulty.Nightmare] = 2.0,
+        },
+        -- 关卡倍率
+        WaveMultiplier = {
+            Min = 1.0,
+            Max = 2.0,
+            [5]  = 1.0,
+            [10] = 1.2,
+            [15] = 1.2,
+            [20] = 1.5,
+            [25] = 2.0,
+            [30] = 2.0,
+        },
+        -- 奖励物品池
+        RewardPool = {
+            { ItemId=ItemId.EquipmentMaterial_3_1, Min=8, Max=12, MinDifficulty=Difficulty.Simple },
+            { ItemId=ItemId.EquipmentMaterial_4_1, Min=6, Max=10, MinDifficulty=Difficulty.Simple },
+            { ItemId=ItemId.EquipmentMaterial_5_1, Min=4, Max=8,  MinDifficulty=Difficulty.Normal },
+            { ItemId=ItemId.BossMaterial_1,        Min=1, Max=3,  MinDifficulty=Difficulty.Hard },
+            { ItemId=ItemId.BossMaterial_0,        Min=1, Max=2,  MinDifficulty=Difficulty.Nightmare },
+            { ItemId=ItemId.BossMaterial_4,        Min=1, Max=3,  MinDifficulty=Difficulty.Hard },
+            { ItemId=ItemId.BossMaterial_5,        Min=1, Max=2,  MinDifficulty=Difficulty.Nightmare },
+            { ItemId=ItemId.BossMaterial_6,        Min=1, Max=3,  MinDifficulty=Difficulty.Hard },
+            { ItemId=ItemId.BossMaterial_7,        Min=1, Max=2,  MinDifficulty=Difficulty.Nightmare },
+            { ItemId=ItemId.BossMaterial_2,        Min=1, Max=3,  MinDifficulty=Difficulty.Hard },
+            { ItemId=ItemId.BossMaterial_3,        Min=1, Max=2,  MinDifficulty=Difficulty.Nightmare },
+        },
+    },
 }
 
 

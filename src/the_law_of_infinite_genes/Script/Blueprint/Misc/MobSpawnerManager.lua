@@ -1,12 +1,13 @@
 ---@class MobSpawnerManager_C:BP_UGCMobSpawnerManager_C
 --Edit Below--
----@class MobSpawnerManager_C: AUGCMobSpawnerManager
 local MobSpawnerManager = {
     waveIndex = 0,              -- 当前波数
     ---@type MobSpawner_C[]
     spawners = {},              -- 刷怪点列表
     spawnerCount = 0,           -- 刷怪点数量
     isInSpawnInterval = false,  -- 是否处于两个波次之间的间隔时间
+    ---@type table<string, table<number, {ItemId: number, Count: number}[]>>
+    rewardsRecord = {},
 }
 
 
@@ -49,7 +50,35 @@ end
 
 
 function MobSpawnerManager:OnAllMobDie()
+    if GameFlowCfg.Resource.BossLoot.WaveMultiplier[self.waveIndex] then
+        self:_DropBossReward()
+    end
     self:NextWave()
+end
+
+
+function MobSpawnerManager:_DropBossReward()
+    local bossLoot = GameFlowCfg.Resource.BossLoot
+    local difficulty = GameState.difficulty
+    local difficultyMultiplier = bossLoot.DifficultyMultiplier[difficulty]
+    local waveMultiplier = bossLoot.WaveMultiplier[self.waveIndex]
+    local mul = difficultyMultiplier * waveMultiplier
+    local allPlayers = UGCGameSystem.GetAllPlayerController(false)
+
+    for _, material in pairs(bossLoot.RewardPool) do
+        if difficultyMultiplier >= material.MinDifficulty then
+            local baseCount = math.random(material.Min, material.Max)
+            local count = math.ceil(baseCount * mul)
+
+            for _, player in pairs(allPlayers) do
+                UGCBackpackSystemV2.AddItemV2(player, material.ItemId, count)
+
+                local record = Lib.Table.SetDefault(self.rewardsRecord, player.PlayerUID, {})
+                local byWave = Lib.Table.SetDefault(record, self.waveIndex, {})
+                table.insert(byWave, { ItemId = material.ItemId, Count = count })
+            end
+        end
+    end
 end
 
 

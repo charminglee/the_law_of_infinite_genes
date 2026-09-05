@@ -90,35 +90,51 @@ GameplayTag = {
 
 ---@enum ItemId
 ItemId = {
-    Coin_0              = 8310000,
-    Coin_1              = 8310001,
-    Coin_2              = 8310002,
-    Coin_3              = 8310003,
-    Coin_4              = 8310012,
-    Coin_5              = 8310162,
-    Coin_6              = 8310036,
+    Coin_0                = 8310000,
+    Coin_1                = 8310001,
+    Coin_2                = 8310002,
+    Coin_3                = 8310003,
+    Coin_4                = 8310012,
+    Coin_5                = 8310162,
+    Coin_6                = 8310036,
 
-    BossMaterial_0      = 8310013,
-    BossMaterial_1      = 8310014,
-    EquipmentMaterial_0 = 8310004,
-    EquipmentMaterial_1 = 8310005,
-    EquipmentMaterial_2 = 8310006,
-    EquipmentMaterial_3 = 8310015,
-    EquipmentMaterial_4 = 8310016,
-    EquipmentMaterial_5 = 8310017,
-    HySuitBottom        = 8310008,
-    HySuitGloves        = 8310010,
-    HySuitHelmet        = 8310009,
-    HySuitShoes         = 8310011,
-    HySuitTop           = 8310007,
-    Kenl_0_0            = 8310042,
-    Kenl_0_1            = 8310046,
-    Kenl_0_2            = 8310044,
-    Kenl_0_3            = 8310049,
-    Kenl_0_4            = 8310050,
-    Advanced_1          = 8310188,
+    BossMaterial_0        = 8310013, -- 领主之心
+    BossMaterial_1        = 8310014, -- 领主之眼
+    BossMaterial_2        = 8310206, -- 赤峰玄铁
+    BossMaterial_3        = 8310207, -- 赤晶棱镜
+    BossMaterial_4        = 8310208, -- 荒土玄岩
+    BossMaterial_5        = 8310209, -- 流沙晶核
+    BossMaterial_6        = 8310210, -- 沙噬韧革
+    BossMaterial_7        = 8310211, -- 沙暴之眼
+    EquipmentMaterial_0   = 8310004, -- 暴怒血核
+    EquipmentMaterial_1   = 8310005, -- 幽能棱镜
+    EquipmentMaterial_2   = 8310006, -- 突变源质
+    EquipmentMaterial_3_1 = 8310015, -- 低级腐化布料
+    EquipmentMaterial_3_2 = 8310189, -- 中级腐化布料
+    EquipmentMaterial_3_3 = 8310190, -- 高级腐化布料
+    EquipmentMaterial_3_4 = 8310191, -- 特级腐化布料
+    EquipmentMaterial_4_1 = 8310016, -- 低级硬化骨片
+    EquipmentMaterial_4_2 = 8310194, -- 中级硬化骨片
+    EquipmentMaterial_4_3 = 8310197, -- 高级硬化骨片
+    EquipmentMaterial_4_4 = 8310198, -- 特级硬化骨片
+    EquipmentMaterial_5_1 = 8310017, -- 低级变异粘液
+    EquipmentMaterial_5_2 = 8310201, -- 中级变异粘液
+    EquipmentMaterial_5_3 = 8310204, -- 高级变异粘液
+    EquipmentMaterial_5_4 = 8310205, -- 特级变异粘液
 
-    UZI                 = 8310018,
+    HySuitBottom          = 8310008,
+    HySuitGloves          = 8310010,
+    HySuitHelmet          = 8310009,
+    HySuitShoes           = 8310011,
+    HySuitTop             = 8310007,
+    Kenl_0_0              = 8310042,
+    Kenl_0_1              = 8310046,
+    Kenl_0_2              = 8310044,
+    Kenl_0_3              = 8310049,
+    Kenl_0_4              = 8310050,
+    Advanced_1            = 8310188,
+
+    UZI                   = 8310018,
 }
 
 
@@ -156,7 +172,7 @@ Attribute = {
     EpidemicToxinSettleRatio    = UGCCustomGameAttributeType.UGCAttributeGroup_Character_EpidemicToxinSettleRatio,  -- 疫毒结算概率
     InfiniteAmmo                = UGCCustomGameAttributeType.UGCAttributeGroup_Character_InfiniteAmmo,              -- 无限子弹
 
-    _HealthMax = UGCCustomGameAttributeType.UGCAttributeGroup_Character__HealthMax,
+    _HealthMax                  = UGCCustomGameAttributeType.UGCAttributeGroup_Character__HealthMax,
 }
 
 
@@ -190,4 +206,13 @@ AttributeMate = {
     [Attribute.InfiniteAmmo]                = {index=27, anno="无限子弹"},
     [Attribute.HealthMaxPct]                = {index=29, anno="最大血量百分比"},
     [Attribute.ReloadTime]                  = {index=34, anno="换弹时间"},
+}
+
+
+---@enum Difficulty
+Difficulty = {
+    Simple    = "简单",
+    Normal    = "普通",
+    Hard      = "困难",
+    Nightmare = "噩梦",
 }
