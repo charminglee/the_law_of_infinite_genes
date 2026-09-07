@@ -7,6 +7,7 @@
 ---@field NeedCost UTextBlock
 ---@field Nils UCanvasPanel
 ---@field PurchaseButton UButton
+---@field ResourceCoin UTextBlock
 ---@field ResourceCoinIcon UImage
 ---@field Selected UCanvasPanel
 ---@field TabList ReuseList2_C
@@ -34,8 +35,14 @@ function FirearmMain:LuaInit()
     self.PurchaseButton.OnClicked:Add(self.PurchaseButtonClick, self);
     self.TabList.OnUpdateItem:Add(self.TabListUpdate, self);
     self.FirearmList.OnUpdateItem:Add(self.FirearmListUpdate, self);
+    Lib.EventSystem.Listen(Event.OnCoinChangeAfter, self.OnCoinChangeAfter, self);
     FightManager:RegisterMainUI(self);
     self:RefreshAll();
+end
+
+function FirearmMain:Destruct()
+    Lib.EventSystem.UnlistenByOwner(self);
+    FightManager:UnregisterMainUI(self);
 end
 
 function FirearmMain:Open()
@@ -51,7 +58,18 @@ function FirearmMain:RefreshAll()
     local purchaseList = FightManager:GetPurchaseList();
     self.TabList:Reload(#ItemCfg.FirearmType);
     self.FirearmList:Reload(#purchaseList);
+    self:RefreshResourceCoin();
     self:RefreshDetail();
+end
+
+function FirearmMain:RefreshResourceCoin()
+    self.ResourceCoin:SetText(tostring(LocalPlayerState.PlayerDataManager:GetCoin(ItemId.Coin_3)));
+end
+
+function FirearmMain:OnCoinChangeAfter(UID, CoinId, OldValue, NewValue)
+    if CoinId == ItemId.Coin_3 then
+        self.ResourceCoin:SetText(tostring(NewValue));
+    end
 end
 
 function FirearmMain:RefreshPurchaseSelection()

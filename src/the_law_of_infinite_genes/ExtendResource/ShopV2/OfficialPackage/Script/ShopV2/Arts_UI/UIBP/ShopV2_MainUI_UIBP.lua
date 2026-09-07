@@ -2,7 +2,6 @@
 ---@field CloseButton UButton
 ---@field CurrencyBar UHorizontalBox
 ---@field HelpButton UButton
----@field Image_5 UImage
 ---@field ShopCurrency_1 ShopV2_Currency_UIBP_C
 ---@field ShopGoods ShopV2_Goods_UIBP_C
 ---@field ShopTabMenu UGC_ReuseList2_C
