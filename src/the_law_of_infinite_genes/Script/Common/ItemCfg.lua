@@ -1118,6 +1118,7 @@ ItemCfg.ItemTypeName = {
 ItemCfg.ItemType = {
     Kenl = "Kenl",
     Material = "Material",
+    Gift = "Gift",
 }
 
 

@@ -347,6 +347,7 @@ function GachaMain:BuildAttributeCountTextList()
     local totals = {};
     local suitCounts = {};
     local suitFullStarCounts = {};
+    local equippedSuitCards = {};
     local activeSuitList = {};
     local manager = LocalPlayerState.PlayerDataManager;
     local count = CardCfg.Common.EquippedSlotCount;
@@ -360,10 +361,24 @@ function GachaMain:BuildAttributeCountTextList()
             self:_AddAttributeEntryListTotal(totals, bonusList);
             local suitId = Fcard.suit;
             if suitId ~= nil then
-                suitCounts[suitId] = (suitCounts[suitId] or 0) + 1;
-                if star >= CardCfg.Common.MaxCardStar then
-                    suitFullStarCounts[suitId] = (suitFullStarCounts[suitId] or 0) + 1;
+                local suitCards = equippedSuitCards[suitId];
+                if suitCards == nil then
+                    suitCards = {};
+                    equippedSuitCards[suitId] = suitCards;
                 end
+                if suitCards[cardIndex] == nil or star > suitCards[cardIndex] then
+                    suitCards[cardIndex] = star;
+                end
+            end
+        end
+    end
+    for suitId, suitCards in pairs(equippedSuitCards) do
+        suitCounts[suitId] = 0;
+        suitFullStarCounts[suitId] = 0;
+        for _, star in pairs(suitCards) do
+            suitCounts[suitId] = suitCounts[suitId] + 1;
+            if star >= CardCfg.Common.MaxCardStar then
+                suitFullStarCounts[suitId] = suitFullStarCounts[suitId] + 1;
             end
         end
     end
@@ -495,20 +510,33 @@ function GachaMain:Sell()
         UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "SellCardFromEquipped", LocalPlayerController.PlayerKey, slot);
     end
 end
+function GachaMain:_HasEquippedSuit(cardIndex)
+    local card = CardCfg.Cards[cardIndex];
+    local manager = LocalPlayerState.PlayerDataManager;
+    for slot = 1, CardCfg.Common.EquippedSlotCount do
+        local equippedData = manager:GetEquippedCard(slot);
+        local equippedCard = equippedData and CardCfg.Cards[equippedData[1]];
+        if equippedCard ~= nil and equippedCard.suit == card.suit then
+            return true;
+        end
+    end
+    return false;
+end
 function GachaMain:ShopListUpdate(Item, Index)
     local data = LocalPlayerState.PlayerDataManager:GetShopCard(Index + 1);
-    Item:SetData(Index, SelectTag.Shop, data, false, false);
+    local showTips = data ~= nil and self:_HasEquippedSuit(data[1]);
+    Item:SetData(Index, SelectTag.Shop, data, false, false, showTips);
 end
 function GachaMain:SlotListUpdate(Item, Index)
     local manager = LocalPlayerState.PlayerDataManager;
     local slot = Index + 1;
     local data = manager:GetEquippedCard(slot);
     local isUnlocked = slot <= manager:GetUnlockedCardSlotCount();
-    Item:SetData(Index, SelectTag.Equipped, data, isUnlocked, not isUnlocked);
+    Item:SetData(Index, SelectTag.Equipped, data, isUnlocked, not isUnlocked, false);
 end
 function GachaMain:StoreListUpdate(Item, Index)
     local data = LocalPlayerState.PlayerDataManager:GetStoreCard(Index + 1);
-    Item:SetData(Index, SelectTag.Store, data, true, false);
+    Item:SetData(Index, SelectTag.Store, data, true, false, false);
 end
 
 function GachaMain:SetPreview(isShow)

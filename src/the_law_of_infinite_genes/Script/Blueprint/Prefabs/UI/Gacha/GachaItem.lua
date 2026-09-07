@@ -7,6 +7,7 @@
 ---@field Image_QualityBarBg UImage
 ---@field Image_Select UImage
 ---@field Image_SuitBar UImage
+---@field Image_Tips UImage
 ---@field Level_1 UImage
 ---@field Level_2 UImage
 ---@field Level_3 UImage
@@ -139,6 +140,7 @@ function GachaItem:_SetEmpty(showAdd, showLock)
     self.Image_QualityBar:SetVisibility(ESlateVisibility.Collapsed);
     self.Image_QualityBarBg:SetColorRGBStr("00000099");
     self.Image_SuitBar:SetVisibility(ESlateVisibility.Collapsed);
+    self.Image_Tips:SetVisibility(ESlateVisibility.Collapsed);
     self.TextBlock_Name:SetVisibility(ESlateVisibility.Collapsed);
     self.Level_1:SetVisibility(ESlateVisibility.Collapsed);
     self.Level_2:SetVisibility(ESlateVisibility.Collapsed);
@@ -148,7 +150,8 @@ function GachaItem:_SetEmpty(showAdd, showLock)
     end
 end
 ---@param data table
-function GachaItem:_SetCard(data)
+---@param showTips boolean
+function GachaItem:_SetCard(data, showTips)
     local card = CardCfg.Cards[data[1]];
     if card == nil then
         self:_SetEmpty();
@@ -166,6 +169,7 @@ function GachaItem:_SetCard(data)
     self.Lock:SetVisibility(ESlateVisibility.Collapsed);
     self.Image_QualityBar:SetVisibility(ESlateVisibility.Visible);
     self.Image_SuitBar:SetVisibility(ESlateVisibility.Visible);
+    self.Image_Tips:SetVisibility(showTips and ESlateVisibility.Visible or ESlateVisibility.Collapsed);
     self.TextBlock_Name:SetVisibility(ESlateVisibility.Visible);
     self.Level_1:SetVisibility(ESlateVisibility.Visible);
     self.Level_2:SetVisibility(ESlateVisibility.Visible);
@@ -188,14 +192,15 @@ end
 ---@param data table|nil
 ---@param showAdd boolean
 ---@param showLock boolean
-function GachaItem:SetData(index, tag, data, showAdd, showLock)
+---@param showTips boolean
+function GachaItem:SetData(index, tag, data, showAdd, showLock, showTips)
     self.Index = index;
     self.Tag = tag;
     if data == nil then
         self:_SetEmpty(showAdd, showLock);
         return;
     end
-    self:_SetCard(data);
+    self:_SetCard(data, showTips);
 end
 function GachaItem:AsyncSetTexture(Path, UI, RenderVersion)
     Common.LoadObjectWithSoftPathAsync(Path,

@@ -212,7 +212,6 @@ function ShopV2Manager:CloseMainUI()
 end
 
 function ShopV2Manager:OpenPurchaseUI(ProductID)
-    
     self.MainUI:ShowPurchasePanel(ProductID);
 end
 
@@ -411,12 +410,18 @@ function ShopV2Manager:GroupProductIDByTabID()
 end
 
 function ShopV2Manager:OnAddVirtualItem(Result)
-
+    log_tree('shopv2 result is ', Result);
     if Result.bSucceeded == false then
+        return;
+    end
+    if Result.RequestMark == "GiftPack" then
         return;
     end
 
     for ItemID, Num in pairs(Result.ItemList) do
+        if GiftPackManager:GetGiftPackageType(ItemID) == GiftPackageType.Normal then
+            return;
+        end
         self:ShowItemGetPopup(ItemID, Num);
         return;
     end

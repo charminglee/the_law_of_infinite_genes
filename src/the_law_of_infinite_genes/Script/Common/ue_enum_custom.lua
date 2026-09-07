@@ -73,6 +73,20 @@ EModeDifficulty = {
 }; 
 
 
+---@enum EGiftPackOpenType
+EGiftPackOpenType = { 
+    ManuallyOpen = 0,
+    AutoOpen = 1,
+}; 
+
+
+---@enum EGiftPackType
+EGiftPackType = { 
+    Normal = 0,
+    Optional = 1,
+}; 
+
+
 ---@enum ELotteryResetType
 ELotteryResetType = { 
     NotReset = 0,
