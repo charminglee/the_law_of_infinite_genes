@@ -30,6 +30,10 @@ function KenlComposeManager:OpenMainUI(DefineID)
     if self.MainUI == nil then
         return;
     end
+    DefineID = Lib.ToItemDefineId(DefineID, ItemCfg.ItemType.Kenl);
+    if DefineID == nil then
+        return;
+    end
 
     self.DefineId = DefineID;
     self.MaterialDefineId = nil;

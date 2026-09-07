@@ -5,6 +5,7 @@ ReinfManager = ReinfManager or
     ComponentClass = nil;
     DefineId = nil;
     FilterType = nil;
+    RefreshUI = false;
     KenlType = {
         [1] = {Type='ALL', Text='所有核心'}
     }
@@ -31,6 +32,10 @@ end
 
 function ReinfManager:OpenMainUI(DefineID)
     if self.MainUI == nil then
+        return;
+    end
+    DefineID = Lib.ToItemDefineId(DefineID, ItemCfg.ItemType.Kenl);
+    if DefineID == nil then
         return;
     end
     self.GoodSelectedIndex = nil;

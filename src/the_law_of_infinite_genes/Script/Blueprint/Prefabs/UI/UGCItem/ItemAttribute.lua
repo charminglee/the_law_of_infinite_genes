@@ -17,7 +17,6 @@ function ItemAttribute:InitData(Data)
         return
     end
     local DefineId = Data[1].ItemDefineID
-    ugcprint_concat(UGCItemSystemV2.GetItemNameV2(DefineId.TypeSpecificID));
     local Slots = UGCItemSystemV2.GetAttachChildrenItem(DefineId) or {}
     local KenlText = ""
     if ItemCfg.CustomizeType[UGCItemSystemV2.GetItemCustomizedTypeV2(DefineId.TypeSpecificID)] then
@@ -29,9 +28,10 @@ function ItemAttribute:InitData(Data)
         return;
     end
     for _, Slot in pairs(Slots) do
-        local SlotItemId = Slot and Slot.TypeSpecificID or 0
-        if SlotItemId and SlotItemId ~= 0 then
-            KenlText = self:GetKenlDAT(DefineId);
+        local SlotDefineId = Lib.ToTable(Slot);
+        if SlotDefineId.bValidItem
+                and UGCItemSystemV2.GetItemCustomizedTypeV2(SlotDefineId.TypeSpecificID) == ItemCfg.ItemType.Kenl then
+            KenlText = self:GetKenlDAT(SlotDefineId);
             break
         end
     end

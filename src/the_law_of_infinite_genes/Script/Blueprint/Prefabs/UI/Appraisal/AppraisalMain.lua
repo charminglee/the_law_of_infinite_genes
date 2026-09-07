@@ -100,7 +100,7 @@ function AppraisalMain:Reload(DefineID, FilterType)
         FilterType = AppraisalManager.KenlType[1].Type;
     end
     AppraisalManager.FilterType = FilterType;
-    AppraisalManager.DefineId = DefineID;
+    AppraisalManager.DefineId = Lib.ToTable(DefineID);
     local AllItem = UGCBackpackSystemV2.GetAllItemDefineIDsV2(LocalPlayerController);
     self.Filter = self:FilterKenl(AllItem, FilterType)
     self.BackpackList:Reload(#self.Filter);
@@ -132,6 +132,7 @@ end
 --- @param DefineID ItemDefineID
 function AppraisalMain:SetPreview(DefineID)
     local Dat = LocalPlayerState.ItemDataManager:GetCustomData(DefineID);
+    ugcprint_concat(DefineID)
     self.AppraisalPreviewItem:SetDefineID(DefineID);
     if Dat.isIdentified then
         self.UTRichTextBlock_0:SetText('已鉴定的核心');

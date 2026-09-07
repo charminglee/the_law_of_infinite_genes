@@ -2,6 +2,10 @@
 --Edit Below--
 local BP_BackpackUIComponentV2_Custom = {} 
 
+local function GetKenlDefineId(DefineID)
+    return Lib.ToItemDefineId(DefineID, ItemCfg.ItemType.Kenl);
+end
+
 ---开始运行时执行
 function BP_BackpackUIComponentV2_Custom:ReceiveBeginPlay()
     BP_BackpackUIComponentV2_Custom.SuperClass.ReceiveBeginPlay(self)
@@ -81,8 +85,8 @@ end
 
 --- 点击强化界面按钮
 function BP_BackpackUIComponentV2_Custom:EquipmentFortify(DefineID, DataType)
-    --FortifyManager:OpenMainUI(DefineID);
-    GunsManager:OpenMainUI();
+    FortifyManager:OpenMainUI(DefineID);
+    --GunsManager:OpenMainUI();
 end
 
 function BP_BackpackUIComponentV2_Custom:EquipmentPure(DefineID, DataType)
@@ -91,16 +95,24 @@ end
 
 --- 点击洗练界面按钮
 function BP_BackpackUIComponentV2_Custom:KenlReinf(DefineID, DataType)
-    ReinfManager:OpenMainUI(DefineID);
+    local kenlDefineId = GetKenlDefineId(DefineID);
+    if kenlDefineId ~= nil then
+        ReinfManager:OpenMainUI(kenlDefineId);
+    end
 end
 
 function BP_BackpackUIComponentV2_Custom:KenlAppraisal(DefineID, DataType)
-    ugcprint_concat(DefineID)
-    AppraisalManager:OpenMainUI(DefineID);
+    local kenlDefineId = GetKenlDefineId(DefineID);
+    if kenlDefineId ~= nil then
+        AppraisalManager:OpenMainUI(kenlDefineId);
+    end
 end
 
 function BP_BackpackUIComponentV2_Custom:KenlFusion(DefineID, DataType)
-    ReinfManager:OpenMainUI(DefineID);
+    local kenlDefineId = GetKenlDefineId(DefineID);
+    if kenlDefineId ~= nil then
+        KenlComposeManager:OpenMainUI(kenlDefineId);
+    end
 end
 
 --- 材料合成

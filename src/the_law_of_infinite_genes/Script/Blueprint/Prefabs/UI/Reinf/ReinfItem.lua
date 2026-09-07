@@ -47,7 +47,7 @@ end
 
 --- @param DefineID ItemDefineID
 function ReinfItem:SetDefineID(DefineID)
-    self.DefineID = DefineID;
+    self.DefineID = Lib.ToItemDefineId(DefineID, ItemCfg.ItemType.Kenl);
 
     local ItemId = self.DefineID.TypeSpecificID;
     local quality = UGCItemSystemV2.GetItemQualityV2(ItemId);

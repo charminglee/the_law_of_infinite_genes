@@ -42,6 +42,24 @@ function Lib.ToTable(obj)
     return t
 end
 
+---将单个 ItemDefineID 或 ItemDefineID 数组转换为指定类型的 ItemDefineID table。
+---@param obj ItemDefineID|ItemDefineID[]
+---@param customizedType number
+---@return table|nil
+function Lib.ToItemDefineId(obj, customizedType)
+    if obj.TypeSpecificID ~= nil then
+        return Lib.ToTable(obj)
+    end
+
+    for _, item in pairs(obj) do
+        local defineId = Lib.ToTable(item)
+        if defineId.bValidItem
+                and UGCItemSystemV2.GetItemCustomizedTypeV2(defineId.TypeSpecificID) == customizedType then
+            return defineId
+        end
+    end
+end
+
 
 ---【双端】创建一个定时器。
 ---@param time number @定时时间，单位秒

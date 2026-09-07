@@ -55,12 +55,14 @@ end
 
 ---@param DefineID ItemDefineID
 function KComposeItem:SetDefineID(DefineID)
-    self.DefineID = DefineID;
     if DefineID == nil then
+        self.DefineID = nil;
         self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Collapsed);
         return;
     end
 
+    DefineID = Lib.ToItemDefineId(DefineID, ItemCfg.ItemType.Kenl);
+    self.DefineID = DefineID;
     self.CanvasPanel_Icon:SetVisibility(ESlateVisibility.Visible);
     local itemId = DefineID.TypeSpecificID;
     local quality = UGCItemSystemV2.GetItemQualityV2(itemId);

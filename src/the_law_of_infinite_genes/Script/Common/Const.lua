@@ -75,7 +75,7 @@ GameplayTag = {
     },
     ---@enum GameplayTag.EquipmentSlot
     EquipmentSlot = {
-        Kenl = "EquipmentSlot.Kenl",
+        Kenl = "EquipmentSlot.Suit.Kenl",
         Suit = {
             Body = "EquipmentSlot.Suit.Body",
             Face = "EquipmentSlot.Suit.Face",

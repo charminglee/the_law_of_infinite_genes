@@ -176,7 +176,7 @@ function ReinfMain:SetPreview(DefineID)
     self.ReinfPreviewItem:SetDefineID(DefineID);
     self.attrBuff = self:GetReinfText(self.ReinfDat.current);
     self.UTRichTextBlock_0:SetText(table.concat(self.attrBuff, '\n'));
-    ugcprint(self:GetUseCount(Dat));
+    
     self.UseCount:SetText(self:GetUseCount(Dat));
     if #self.ReinfDat.previous.entries == 0 then
         self.Front:SetText(self:GetFrontText(self.ReinfDat.current));

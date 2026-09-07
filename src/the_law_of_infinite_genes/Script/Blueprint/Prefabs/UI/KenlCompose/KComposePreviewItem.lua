@@ -95,6 +95,7 @@ function KComposePreviewItem:SetDefineID(DefineID)
         return;
     end
 
+    DefineID = Lib.ToItemDefineId(DefineID, ItemCfg.ItemType.Kenl);
     self.DefineID = DefineID;
     self.RenderVersion = self.RenderVersion + 1;
     local renderVersion = self.RenderVersion;

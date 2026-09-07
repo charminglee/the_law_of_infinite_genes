@@ -233,14 +233,16 @@ function KenlComposeMain:Request()
         return;
     end
 
+    local defineIdData = Lib.ToTable(KenlComposeManager.DefineId);
+    local materialDefineIdData = Lib.ToTable(KenlComposeManager.MaterialDefineId);
     KenlComposeManager.PendingFusion = true;
     UnrealNetwork.CallUnrealRPC(
             LocalPlayerController,
             KenlComposeManager.ComponentClass,
             'FusionSubmit',
             LocalPlayerController.PlayerKey,
-            KenlComposeManager.DefineId,
-            KenlComposeManager.MaterialDefineId
+            defineIdData,
+            materialDefineIdData
     );
 end
 
