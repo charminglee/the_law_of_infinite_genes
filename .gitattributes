@@ -1,0 +1,16 @@
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyStairsD.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyStairsD.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyPillarRM.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyRailingN.uasset  filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyLintelRM.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyRailingD.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyWindowSillD.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyWindowSillRM.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyLintelD.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyWindowSillN.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyLintelN.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyStairsN.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyPillarN.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyPillarD.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyRailingRM.uasset filter=lfs diff=lfs merge=lfs -text
+src/the_law_of_infinite_genes/Asset/Texture/Mesh/LobbyStairsRM.uasset  filter=lfs diff=lfs merge=lfs -text
