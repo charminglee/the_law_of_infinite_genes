@@ -4,26 +4,31 @@ LobbyWidgetType = LobbyWidgetType or {
         Name = "MainLobby",
         Path = "Asset/Blueprint/Prefabs/UI/Lobby/Home/HomeMain.HomeMain_C",
         Instance = nil,
+        ZOrder = nil,
     },
     LWT_ModeSelect = {
         Name = "ModeSelect",
         Path = "Asset/Blueprint/Prefabs/UI/Lobby/Mode/UGC_ModeSelection_UIBP.UGC_ModeSelection_UIBP_C",
         Instance = nil,
+        ZOrder = 10000,
     },
     LWT_ClosePopupsTips = {
         Name = "ClosePopupsTips",
         Path = "Asset/Blueprint/Prefabs/UI/Lobby/UGC_ClosePopupsTips_UIBP.UGC_ClosePopupsTips_UIBP_C",
         Instance = nil,
+        ZOrder = nil,
     },
     LWT_ModeDifficultyTip = {
         Name = "ModeDifficultyTip",
         Path = "Asset/Blueprint/Prefabs/UI/Lobby/Mode/UGC_DifficultyTips_UIBP.UGC_DifficultyTips_UIBP_C",
         Instance = nil,
+        ZOrder = nil,
     },
     LWT_RaidInstance = {
         Name = "RaidInstance",
         Path = "Asset/Blueprint/Prefabs/UI/RaidInstance/RaidInstanceMain.RaidInstanceMain_C",
         Instance = nil,
+        ZOrder = nil,
     },
 }
 
@@ -80,7 +85,7 @@ function LobbyUtils.GetWidget(WidgetType)
     if not Widget then
         return nil
     end
-    Widget:AddToViewport()
+    Widget:AddToViewport(WidgetType.ZOrder)
     Widget:SetVisibility(ESlateVisibility.Collapsed)
     Widget.bIsOpened = false
     WidgetType.Instance = Widget
