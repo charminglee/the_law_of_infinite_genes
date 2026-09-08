@@ -26,6 +26,7 @@ function UGCGameMode:InitializeGameFlow(ModeID)
         ugcprint("[UGCGameMode] missing GameModeActorMgr for ModeID=" .. tostring(ModeID))
         return false
     end
+    UGCGameSystem.LoadStreamLevel("LobbySkyBox", true, false)
     UGCLevelFlowSystem.EnableLevelFlow(UGCGameSystem.GetUGCResourcesFullPath(ActorManagerPath))
     return true
 end
