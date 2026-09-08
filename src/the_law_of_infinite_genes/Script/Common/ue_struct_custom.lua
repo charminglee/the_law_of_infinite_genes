@@ -2,15 +2,92 @@
 
 -- sorted by struct name asc 
 
----@class LobbyTabs
----@field TabID int32
----@field TabName FString
----@field TabDesc FString
+---@class F_PassConfig
+---@field PassID int32
+---@field TaskLineName FString
+---@field AdvancedPassProductID int32
+---@field UltraPassProductID int32
+---@field LevelPurchaseItemID int32
+---@field LevelPurchaseItemNum int32
+---@field SkipTaskProductID int32
+---@field ThemeName FString
+---@field ThemeIcon FSoftObjectPath
+---@field BasePassName FString
+---@field BasePassIcon FSoftObjectPath
+---@field AdvancedPassName FString
+---@field AdvancedPassIcon FSoftObjectPath
+---@field Awards UDataTable
+---@field Tasks UDataTable
 
----@class RechargeTabs
----@field TabID int32
----@field TabName FString
----@field TabDesc FString
+---@class FModeConfig
+---@field ModeID int32
+---@field ModeName FText
+---@field Difficulty FText
+---@field LevelCount int32
+---@field UnlockDesc FText
+---@field UnlockMode int32[]
+---@field EnemyRefresh int32
+---@field ItemRefresh int32
+---@field ShopAfterLevel int32[]
+---@field TrapRefresh int32
+---@field SettlementExpCount int32
+---@field SettlementTalentCount int32
+---@field GameModeActorMgr FString
+---@field FreeReviveCount int32
+---@field PaidReviveCount  int32
+---@field Price int32[]
+---@field SkyBox FString
+
+---@class F_PassAwardConfig
+---@field Point int32
+---@field NormalItemID int32
+---@field NormalNum int32
+---@field AdvancedItemID int32
+---@field AdvancedNum int32
+
+---@class F_PassTaskConfig
+---@field TaskIndex int32
+---@field Week int32
+---@field SkipItemNum int32
+
+---@class FModeDetail
+---@field ID int32
+---@field ModeName FText
+---@field ModeDesc FText
+---@field ModeBanner UTexture2D
+---@field ModePost UTexture2D
+---@field ModeIDs int32[]
+---@field Hide bool
+
+---@class GiftPackData
+---@field ID int32
+---@field ItemID int32
+---@field GiftPackType EGiftPackType
+---@field OpenWay EGiftPackOpenType
+---@field DropID int32
+---@field DropGroupID int32
+
+---@class UGCTemplateRowStruct_itemTable
+---@field name FString
+---@field quality int32
+---@field ItemType int32
+---@field Desc FString
+---@field path FString
+
+---@class UGCTemplateRowStruct_lobbyBtnName
+---@field label FString
+
+---@class UGCTemplateRowStruct_FightTabIcon
+---@field ItemName FString
+---@field path FSoftObjectPath
+
+---@class UGCTemplateRowStruct_skill
+---@field branch FString
+---@field skill FString
+---@field level int32
+---@field property FString
+---@field value float
+---@field cost int32
 
 ---@class LotteryDrawInfo
 ---@field LotteryID int32
@@ -80,6 +157,31 @@
 ---@field Progress int32
 ---@field ItemList ProgressItem[]
 ---@field Desc FString
+
+---@class F_AwardConfig
+---@field ItemID int32
+---@field Num int32
+
+---@class F_GetAdvancedPassInfo
+---@field Title FString
+---@field Icon FSoftObjectPath
+
+---@class F_PassBonusArrayConfig
+---@field AdvancedBonus F_PassBonusConfig[]
+---@field UltraBonus F_PassBonusConfig[]
+
+---@class F_PassBonusConfig
+---@field Icon FSoftObjectPath
+---@field Description FString
+
+---@class F_PassPrizeArrayConfig
+---@field NormalPrizeItemIDs F_PassPrizeConfig[]
+---@field AdvancedPrizeItemIDs F_PassPrizeConfig[]
+---@field UltraPrizeItemIDs F_PassPrizeConfig[]
+
+---@class F_PassPrizeConfig
+---@field ItemID int32
+---@field Num int32
 
 ---@class ShopV2_ItemQuality
 ---@field ItemID int32

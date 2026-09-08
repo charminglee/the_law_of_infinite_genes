@@ -62,6 +62,11 @@ function UGCGameData.GetSettlementTalentCount(ModeID)
     return GameFlow.Config.GetSettlementTalentCount(ModeID)
 end
 
+---获取指定模式加载的天空盒。
+function UGCGameData.GetSkyBox(ModeID)
+    return GameFlow.Config.GetSkyBox(ModeID)
+end
+
 ---判断给定 ModeID 是否为大厅模式。
 function UGCGameData.IsLobbyMode(ModeID)
     return tonumber(ModeID) == GameFlow.Types.ModeID.Lobby

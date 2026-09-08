@@ -112,4 +112,10 @@ function GameConfigRepository.GetSettlementTalentCount(ModeID)
     return Config and Config.SettlementTalentCount or nil
 end
 
+---获取指定模式加载的天空盒。
+function GameConfigRepository.GetSkyBox(ModeID)
+    local Config = FindGameModeConfig(ModeID)
+    return Config and Config.SkyBox or nil
+end
+
 return GameConfigRepository
