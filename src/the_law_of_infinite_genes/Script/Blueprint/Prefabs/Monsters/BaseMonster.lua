@@ -21,22 +21,22 @@ end
 
 ---角色死亡事件
 ---生效范围：服务器&客户端
----@param KillingDamage float 伤害值
----@param EventInstigator AController 伤害来源的Controller
----@param DamageCauser AActor 伤害来源
----@param DamageEvent DamageEvent 伤害事件
----@param DamageTypeID int32 伤害类型
-function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageEvent, DamageTypeID)
-    if not Lib.IsServer() or not Lib.IsPlayer(EventInstigator) then
+---@param killingDamage float 伤害值
+---@param eventInstigator AController 伤害来源的Controller
+---@param damageCauser AActor 伤害来源
+---@param damageEvent DamageEvent 伤害事件
+---@param damageTypeId int32 伤害类型
+function BaseMonster:BPDie(killingDamage, eventInstigator, damageCauser, damageEvent, damageTypeId)
+    if not Lib.IsServer() or not Lib.IsPlayer(eventInstigator) then
         return
     end
 
-    self.UGCPresetCommonDropItemComponent:StartDrop(self, EventInstigator, {})
+    self.UGCPresetCommonDropItemComponent:StartDrop(self, eventInstigator, {})
 
     -- 资源点掉落/称号条件相关逻辑
-    local pdm = UGCGameSystem.GetPlayerStateByPlayerController(EventInstigator).PlayerDataManager
-    local pam = UGCGameSystem.GetPlayerPawnByPlayerController(EventInstigator).AttrManager
-    local playerHealth = UGCAttributeSystem.GetGameAttributeValue(EventInstigator, UGCNativeGameAttributeType.Character_Health)
+    local pdm = UGCGameSystem.GetPlayerStateByPlayerController(eventInstigator).PlayerDataManager
+    local pam = UGCGameSystem.GetPlayerPawnByPlayerController(eventInstigator).AttrManager
+    local playerHealth = UGCAttributeSystem.GetGameAttributeValue(eventInstigator, UGCNativeGameAttributeType.Character_Health)
     local playerHealthMax = pam:GetAttr(Attribute.HealthMax)
     local playerHealthPct = playerHealth / playerHealthMax
 
@@ -69,6 +69,23 @@ function BaseMonster:BPDie(KillingDamage, EventInstigator, DamageCauser, DamageE
 end
 
 
+---受击后置事件
+---生效范围：服务器
+---@param damage float 伤害值
+---@param eventInstigator AController 伤害来源的Controller
+---@param damageCauser AActor 伤害来源
+---@param damageContext FGameMagnitudeContext  伤害上下文
+function BaseMonster:PostTakeDamageEvent(damage, eventInstigator, damageCauser, damageContext)
+    if not Lib.IsServer() or not Lib.IsPlayer(eventInstigator) then
+        return
+    end
+
+    local pdm = UGCGameSystem.GetPlayerStateByPlayerController(eventInstigator).PlayerDataManager
+    local delta = math.ceil(damage * GameFlowCfg.Resource.OnDamage.ScoreMultiplier)
+    pdm:AddScore(delta)
+end
+
+
 -- function BaseMonster:ReceiveTick(DeltaTime)
 --     BaseMonster.SuperClass.ReceiveTick(self, DeltaTime)
 -- end
@@ -91,17 +108,6 @@ end
 -- ---@param DamageCauser AActor 伤害来源
 -- ---@param DamageContext FGameMagnitudeContext  伤害上下文
 -- function BaseMonster:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
-
--- end
-
-
--- ---受击后置事件
--- ---生效范围：服务器
--- ---@param Damage float 伤害值
--- ---@param EventInstigator AController 伤害来源的Controller
--- ---@param DamageCauser AActor 伤害来源
--- ---@param DamageContext FGameMagnitudeContext  伤害上下文
--- function BaseMonster:PostTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
 
 -- end
 

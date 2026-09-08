@@ -17,7 +17,6 @@ local PlayerDataManager = {
     ---    characterExp: number,
     ---}
     _data = nil,
-
     ---@type {
     ---    shopLevel: number, 
     ---    store: ntable<Card>, 
@@ -26,11 +25,12 @@ local PlayerDataManager = {
     ---    refreshCount: number,
     ---}
     _card = nil,
+    _score = 0,
 }
 
 
 function PlayerDataManager:GetReplicatedProperties()
-    return { "_data", "Lazy" }, { "_card", "Lazy" }
+    return { "_data", "Lazy" }, { "_card", "Lazy" }, { "_score", "Lazy" }
 end
 
 
@@ -48,6 +48,7 @@ function PlayerDataManager:ReceiveBeginPlay()
     PlayerDataManager.SuperClass.ReceiveBeginPlay(self)
     self:_LoadData()
     self:ResetCardData()
+    self:ResetScore()
     
     if Lib.IsPIE() and Lib.IsServer() then
         for k, v in pairs(Config.Debug.Coin) do
@@ -154,6 +155,110 @@ function PlayerDataManager:_LoadData()
 end
 
 
+-- region: 通用 ==================================================
+
+
+---【双端】获取自定义数据。
+---@param key string @数据名
+---@return any @数据值
+function PlayerDataManager:GetCustomData(key)
+    if not self._isLoaded then
+        return nil
+    end
+    return self._data.custom[key]
+end
+
+
+---【服务端】保存自定义数据。
+---@param key string @数据名
+---@param value any @数据值
+---@param sync? boolean @是否立即同步数据，默认为 true
+function PlayerDataManager:SaveCustomData(key, value, sync)
+    if not Lib.IsServer() or not self._isLoaded then
+        return
+    end
+    self._data.custom[key] = value
+    if sync ~= false then
+        self:SyncData()
+    end
+end
+
+
+---【服务端】立即保存所有存档数据。
+---@return boolean @是否成功
+function PlayerDataManager:Save()
+    if not Lib.IsServer() or not self._isLoaded then
+        return false
+    end
+    return UGCPlayerStateSystem.SavePlayerArchiveData(self.owner.UID, self._data)
+end
+
+
+---【服务端】将存档数据同步到客户端。
+function PlayerDataManager:SyncData()
+    if not Lib.IsServer() or not self._isLoaded then
+        return
+    end
+    UnrealNetwork.RepLazyProperty(self, "_data")
+end
+
+
+---【服务端】将卡牌数据同步到客户端。
+function PlayerDataManager:SyncCardData()
+    if not Lib.IsServer() then
+        return
+    end
+    UnrealNetwork.RepLazyProperty(self, "_card")
+end
+
+
+---【服务端】将所有数据同步到客户端。
+function PlayerDataManager:SyncAll()
+    self:SyncData()
+    self:SyncCardData()
+end
+
+
+-- endregion
+
+
+-- region: 得分 ==================================================
+
+
+---【服务端】增加得分。
+---@param delta number 增加的得分
+function PlayerDataManager:AddScore(delta)
+    if not Lib.IsServer() then
+        return
+    end
+    local oldScore = self.score
+    self.score = self.score + delta
+    UnrealNetwork.RepLazyProperty(self, "_score")
+    Lib.EventSystem.Broadcast_SinglePlayer(self, Event.OnGameScoreChanged, oldScore, self.score)
+end
+
+
+---【双端】获取当前得分。
+---@return number @得分
+function PlayerDataManager:GetScore()
+    return self.score
+end
+
+
+function PlayerDataManager:ResetScore()
+    if not Lib.IsServer() then
+        return
+    end
+    local oldScore = self.score
+    self.score = 0
+    UnrealNetwork.RepLazyProperty(self, "_score")
+    Lib.EventSystem.Broadcast_SinglePlayer(self, Event.OnGameScoreChanged, oldScore, self.score)
+end
+
+
+-- endregion
+
+
 -- region: 经验 ==================================================
 
 
@@ -228,73 +333,6 @@ function PlayerDataManager:AddSeasonExp(delta, sync)
         self.owner.UID, old, new
     )
     return true
-end
-
-
--- endregion
-
-
--- region: 通用 ==================================================
-
-
----【双端】获取自定义数据。
----@param key string @数据名
----@return any @数据值
-function PlayerDataManager:GetCustomData(key)
-    if not self._isLoaded then
-        return nil
-    end
-    return self._data.custom[key]
-end
-
-
----【服务端】保存自定义数据。
----@param key string @数据名
----@param value any @数据值
----@param sync? boolean @是否立即同步数据，默认为 true
-function PlayerDataManager:SaveCustomData(key, value, sync)
-    if not Lib.IsServer() or not self._isLoaded then
-        return
-    end
-    self._data.custom[key] = value
-    if sync ~= false then
-        self:SyncData()
-    end
-end
-
-
----【服务端】立即保存所有存档数据。
----@return boolean @是否成功
-function PlayerDataManager:Save()
-    if not Lib.IsServer() or not self._isLoaded then
-        return false
-    end
-    return UGCPlayerStateSystem.SavePlayerArchiveData(self.owner.UID, self._data)
-end
-
-
----【服务端】将存档数据同步到客户端。
-function PlayerDataManager:SyncData()
-    if not Lib.IsServer() or not self._isLoaded then
-        return
-    end
-    UnrealNetwork.RepLazyProperty(self, "_data")
-end
-
-
----【服务端】将卡牌数据同步到客户端。
-function PlayerDataManager:SyncCardData()
-    if not Lib.IsServer() then
-        return
-    end
-    UnrealNetwork.RepLazyProperty(self, "_card")
-end
-
-
----【服务端】将所有数据同步到客户端。
-function PlayerDataManager:SyncAll()
-    self:SyncData()
-    self:SyncCardData()
 end
 
 

@@ -36,6 +36,10 @@ GameFlowCfg.MobMultiplier = {
 
 -- 资源配置
 GameFlowCfg.Resource = {
+    OnDamage = {
+        -- 得分倍率
+        ScoreMultiplier = 1.0,
+    },
     OnKill = {
         -- 每类怪物掉落的资源点
         Loot = {

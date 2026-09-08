@@ -18,7 +18,7 @@ local function _IsKenl(itemId)
         itemId = itemId.TypeSpecificID
     end
     local tags = UGCItemSystemV2.GetItemTagsV2(itemId)
-    return Lib.Table.Contain(tags, GameplayTag.EquipmentSlot.Kenl)
+    return Lib.Table.Contain(tags, GameplayTag.EquipmentSlot.Suit.Kenl)
 end
 
 

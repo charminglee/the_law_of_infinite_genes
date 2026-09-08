@@ -158,32 +158,6 @@ function UGCGameState:EndGame()
     return GameFlow.Session.Finish(self)
 end
 
----【服务端】增加分数。
----@param score number 分数
-function UGCGameState:AddScore(score)
-    if not Lib.IsServer() then
-        return
-    end
-    local oldScore = self.score
-    self.score = self.score + score
-    Lib.EventSystem.Broadcast(Event.OnGameScoreChanged, oldScore, self.score)
-end
-
----【双端】获取当前分数。
----@return number @分数
-function UGCGameState:GetScore()
-    return self.score
-end
-
-function UGCGameState:_ResetScore()
-    if not Lib.IsServer() then
-        return
-    end
-    local oldScore = self.score
-    self.score = 0
-    Lib.EventSystem.Broadcast(Event.OnGameScoreChanged, oldScore, self.score)
-end
-
 ---【双端】获取当前回合数（关卡数）。
 function UGCGameState:GetWaveIndex()
     return self.MobSpawnerManager.waveIndex
