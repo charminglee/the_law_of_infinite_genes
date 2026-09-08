@@ -48,6 +48,7 @@ end
 function FirearmMain:Open()
     self:SetVisibility(ESlateVisibility.Visible);
     self:RefreshAll();
+    BroadcastManager:SendTip('消耗资源点可购买本局使用的枪械与弹药');
 end
 
 function FirearmMain:Exit()

@@ -89,6 +89,7 @@ function KenlComposeMain:Open(DefineID)
     KenlComposeManager.PendingFusion = false;
     self:SetVisibility(ESlateVisibility.Visible);
     self:Reload(DefineID, KenlComposeManager.EquipmentType[1].Type);
+    BroadcastManager:SendTip('选择主核心和材料核心进行合成，材料核心将被消耗');
 end
 
 function KenlComposeMain:Exit()
@@ -221,15 +222,15 @@ end
 
 function KenlComposeMain:Request()
     if KenlComposeManager.DefineId == nil then
-        UGCWidgetManagerSystem.ShowTipsUI('请选择主核心');
+        BroadcastManager:SendTip('请选择主核心');
         return;
     end
     if KenlComposeManager.MaterialDefineId == nil then
-        UGCWidgetManagerSystem.ShowTipsUI('请选择用于合成的核心');
+        BroadcastManager:SendTip('请选择用于合成的核心');
         return;
     end
     if KenlComposeManager.ComponentClass == nil then
-        UGCWidgetManagerSystem.ShowTipsUI('合成组件尚未初始化');
+        BroadcastManager:SendTip('合成组件尚未初始化');
         return;
     end
 

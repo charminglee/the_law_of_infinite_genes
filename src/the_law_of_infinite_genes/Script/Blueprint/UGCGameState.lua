@@ -21,6 +21,7 @@ UGCGameSystem.UGCRequire("Script.Common.TimingListUtils")
 UGCGameSystem.UGCRequire("Script.Common.RichText")
 UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.UGCItem.UGCItemManager")
 UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
+UGCGameSystem.UGCRequire("Script.Blueprint.Prefabs.UI.Broadcast.BroadcastManager")
 
 local GameFlow = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.GameFlow")
 

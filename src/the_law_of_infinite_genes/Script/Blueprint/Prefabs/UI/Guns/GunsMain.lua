@@ -94,6 +94,7 @@ end
 function GunsMain:Open()
     self:SetVisibility(ESlateVisibility.Visible);
     self:Reload(nil, GunsManager.GunsType[1].Type);
+    BroadcastManager:SendTip('消耗指定资源可解锁枪械');
 end
 
 function GunsMain:Exit()

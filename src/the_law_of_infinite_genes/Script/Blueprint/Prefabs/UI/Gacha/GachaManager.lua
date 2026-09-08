@@ -35,6 +35,7 @@ function GachaManager:OpenMainUI()
     self.PreviewDAT = nil;
     self.RefreshPreviewUI = false;
     self.RefreshUI = true;
+    BroadcastManager:SendTip('购买并装备卡牌可激活对应套装效果');
 end
 
 function GachaManager:CloseMainUI()

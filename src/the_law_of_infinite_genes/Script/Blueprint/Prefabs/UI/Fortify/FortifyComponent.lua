@@ -64,7 +64,7 @@ function FortifyComponent:OnFortifyResult(Success, ItemDefineId)
         return;
     end
     FortifyManager.RefreshUI = true;
-    UGCWidgetManagerSystem.ShowTipsUI(Success == true and '强化成功' or '强化失败');
+    BroadcastManager:SendTip(Success == true and '强化成功' or '强化失败');
 end
 
 ---@param PlayerKey number

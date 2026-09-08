@@ -72,6 +72,7 @@ end
 function FortifyMain:Open(DefineID)
     self:SetVisibility(ESlateVisibility.Visible);
     self:Reload(DefineID, FortifyManager.EquipmentType[1].Type);
+    BroadcastManager:SendTip('强化可提升装备属性，强化等级越高消耗越多');
 end
 
 function FortifyMain:Exit()
@@ -228,17 +229,17 @@ end
 
 function FortifyMain:Request()
     if FortifyManager.DefineId == nil then
-        UGCWidgetManagerSystem.ShowTipsUI('请选择需要强化的装备');
+        BroadcastManager:SendTip('请选择需要强化的装备');
         return;
     end
     local materialCount = self:GetItemCount(self.MaterialItemId);
     if self.MaterialItemId == nil or materialCount < self.MaterialRequiredCount then
-        UGCWidgetManagerSystem.ShowTipsUI('强化材料不足');
+        BroadcastManager:SendTip('强化材料不足');
         self:SetPreview(FortifyManager.DefineId);
         return;
     end
     if FortifyManager.ComponentClass == nil then
-        UGCWidgetManagerSystem.ShowTipsUI('强化组件尚未初始化');
+        BroadcastManager:SendTip('强化组件尚未初始化');
         return;
     end
     UnrealNetwork.CallUnrealRPC(

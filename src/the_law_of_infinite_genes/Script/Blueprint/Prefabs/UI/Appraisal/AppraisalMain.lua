@@ -57,6 +57,7 @@ end
 function AppraisalMain:Open(DefineID, FilterType)
     self:SetVisibility(ESlateVisibility.Visible);
     self:Reload(DefineID, FilterType);
+    BroadcastManager:SendTip('鉴定核心后将解锁核心属性');
 end
 
 function AppraisalMain:ReinfClick()

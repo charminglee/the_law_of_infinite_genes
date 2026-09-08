@@ -96,6 +96,7 @@ function ReinfMain:Open(DefineID, FilterType)
     self:ResetReinfDat();
     self:SetVisibility(ESlateVisibility.Visible);
     self:Reload(DefineID, FilterType);
+    BroadcastManager:SendTip('洗练会重新生成核心属性，可锁定需要保留的属性');
 end
 
 function ReinfMain:ResetReinfDat()

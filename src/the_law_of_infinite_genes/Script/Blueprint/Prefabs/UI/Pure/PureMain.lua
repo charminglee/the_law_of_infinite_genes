@@ -114,6 +114,7 @@ function PureMain:Open(DefineID)
     self:SetVisibility(ESlateVisibility.Visible);
     self.NewCheckBox_0:SetIsChecked(false);
     self:Reload(DefineID, PureManager.EquipmentType[1].Type);
+    BroadcastManager:SendTip('精炼可提升装备品质，使用宇宙晶石可提高成功率');
 end
 
 function PureMain:Exit()
@@ -131,7 +132,7 @@ end
 function PureMain:OnAdvancedChanged(IsChecked)
     if IsChecked == true and self:GetItemCount(GetAdvancedItemId()) <= 0 then
         self.NewCheckBox_0:SetIsChecked(false);
-        UGCWidgetManagerSystem.ShowTipsUI('宇宙晶石不足');
+        BroadcastManager:SendTip('宇宙晶石不足');
         return;
     end
     self:SetPreview(PureManager.DefineId);
@@ -323,22 +324,22 @@ function PureMain:Request()
     local defineId = PureManager.DefineId;
     local reforgeData = PureManager:GetReforgeData(defineId);
     if defineId == nil or reforgeData == nil then
-        UGCWidgetManagerSystem.ShowTipsUI('当前装备无法继续精炼');
+        BroadcastManager:SendTip('当前装备无法继续精炼');
         return;
     end
     for _, requirement in ipairs(reforgeData.Requirement or {}) do
         if self:GetItemCount(requirement.ItemId) < (tonumber(requirement.Count) or 0) then
-            UGCWidgetManagerSystem.ShowTipsUI('精炼材料不足');
+            BroadcastManager:SendTip('精炼材料不足');
             return;
         end
     end
     local useAdvanced = self.NewCheckBox_0:IsChecked() == true;
     if useAdvanced and self:GetItemCount(GetAdvancedItemId()) <= 0 then
-        UGCWidgetManagerSystem.ShowTipsUI('宇宙晶石不足');
+        BroadcastManager:SendTip('宇宙晶石不足');
         return;
     end
     if PureManager.ComponentClass == nil then
-        UGCWidgetManagerSystem.ShowTipsUI('精炼组件尚未初始化');
+        BroadcastManager:SendTip('精炼组件尚未初始化');
         return;
     end
 
@@ -348,7 +349,7 @@ function PureMain:Request()
     if not PureManager:Request(defineId, useAdvanced) then
         self.RequestRefreshCountdown = nil;
         self:SetPreview(defineId);
-        UGCWidgetManagerSystem.ShowTipsUI('精炼请求发送失败');
+        BroadcastManager:SendTip('精炼请求发送失败');
     end
 end
 
