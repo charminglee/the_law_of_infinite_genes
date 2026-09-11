@@ -1,24 +1,5 @@
 ---@class RecruitMain_C:UAEUserWidget
 ---@field Button_0 UButton
----@field Button_1 UButton
----@field Button_3 UButton
----@field Button_4 UButton
----@field Button_5 UButton
----@field CanvasPanel_8 UCanvasPanel
----@field CanvasPanel_9 UCanvasPanel
----@field ComboBoxString_0 UComboBoxString
----@field CreateRoom UButton
----@field Details UCanvasPanel
----@field Fold UCanvasPanel
----@field MapImage UImage
----@field MemberItem1 MemberItem_C
----@field MemberItem2 MemberItem_C
----@field MemberItem3 MemberItem_C
----@field MemberItem4 MemberItem_C
----@field Normal UCanvasPanel
----@field Room UCanvasPanel
----@field Selected UCanvasPanel
----@field TeamList UGC_ReuseList2_C
 --Edit Below--
 local RecruitMain = {
     bInitDoOnce = false,
