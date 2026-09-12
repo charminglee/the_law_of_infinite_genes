@@ -1,5 +1,9 @@
 ---@class RecruitMain_C:UAEUserWidget
 ---@field Button_0 UButton
+---@field CreateRoom CreateRoom_C
+---@field DefaultRoom DefaultRoom_C
+---@field ExistRoom ExistRoom_C
+---@field RoomList RoomList_C
 --Edit Below--
 local RecruitMain = {
     bInitDoOnce = false,
