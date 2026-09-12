@@ -1,6 +1,7 @@
 ---@class RoomItem_C:UUserWidget
 ---@field Button_0 UButton
 ---@field Image_3 UImage
+---@field Image_4 UImage
 ---@field Overlay_Selected UOverlay
 ---@field TextBlock_AllowJoin UTextBlock
 ---@field TextBlock_Degree UTextBlock
