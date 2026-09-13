@@ -1,20 +1,19 @@
 ---@class DefaultRoom_C:UAEUserWidget
 ---@field Button_0 UButton
 --Edit Below--
-local DefaultRoom = { bInitDoOnce = false } 
+local DefaultRoom = { bInitDoOnce = false }
 
---[==[ Construct
-function DefaultRoom:Construct()
-	
+function DefaultRoom:Init(OnCreate)
+    self.OnCreate = OnCreate
+    if self.bInitDoOnce then
+        return
+    end
+    self.bInitDoOnce = true
+    self.Button_0.OnClicked:Add(self.OnCreateClicked, self)
 end
--- Construct ]==]
 
--- function DefaultRoom:Tick(MyGeometry, InDeltaTime)
-
--- end
-
--- function DefaultRoom:Destruct()
-
--- end
+function DefaultRoom:OnCreateClicked()
+    self.OnCreate()
+end
 
 return DefaultRoom

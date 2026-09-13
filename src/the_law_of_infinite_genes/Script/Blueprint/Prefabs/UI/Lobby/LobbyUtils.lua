@@ -24,6 +24,12 @@ LobbyWidgetType = LobbyWidgetType or {
         Instance = nil,
         ZOrder = nil,
     },
+    LWT_SwitchMode = {
+        Name = "SwitchMode",
+        Path = "Asset/Blueprint/Prefabs/UI/Recruit/SwitchMode.SwitchMode_C",
+        Instance = nil,
+        ZOrder = 10001,
+    },
     LWT_RaidInstance = {
         Name = "RaidInstance",
         Path = "Asset/Blueprint/Prefabs/UI/RaidInstance/RaidInstanceMain.RaidInstanceMain_C",

@@ -149,7 +149,16 @@ end
 
 
 function Breakthrough_Result_UIBP:ReturnToLobby()
-    UGCMultiMode.RequestMatch(UGCGameData.ModeID.Lobby, nil, self)
+	if self.bReturningToLobby then
+		return nil
+	end
+
+	local PlayerController = UGCGameSystem.GetLocalPlayerController()
+	if not PlayerController or not PlayerController.bIsTeamLeader then
+		return nil
+	end
+
+	self.bReturningToLobby = UGCMultiMode.RequestMatch(UGCGameData.ModeID.Lobby, nil, nil, true) == true
 	return nil;
 end
 
