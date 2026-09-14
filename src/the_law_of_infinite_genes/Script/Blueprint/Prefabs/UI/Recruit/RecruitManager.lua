@@ -1,6 +1,7 @@
 ---@class RecruitManager
 RecruitManager = RecruitManager or {
     MainUI = nil,
+    TeamHUD = nil,
     ComponentClass = nil,
     Rooms = {},
     SelectedRoomIndex = nil,
@@ -52,6 +53,16 @@ function RecruitManager:RegisterMainUI(MainUI)
     self.MainUI = MainUI
 end
 
+function RecruitManager:RegisterTeamHUD(TeamHUD)
+    self.TeamHUD = TeamHUD
+end
+
+function RecruitManager:UnregisterTeamHUD(TeamHUD)
+    if self.TeamHUD == TeamHUD then
+        self.TeamHUD = nil
+    end
+end
+
 function RecruitManager:UnregisterMainUI(MainUI)
     if self.MainUI == MainUI then
         self.MainUI = nil
@@ -82,6 +93,9 @@ end
 function RecruitManager:NotifyChanged()
     if self.MainUI then
         self.MainUI:RefreshUI()
+    end
+    if self.TeamHUD then
+        self.TeamHUD:RefreshTeamState()
     end
 end
 
@@ -251,10 +265,29 @@ function RecruitManager:JoinSelectedRoom()
     self:NotifyChanged()
 end
 
-function RecruitManager:LeaveCurrentRoom()
+function RecruitManager:ClearCurrentRoom(bRemoveFromList)
+    if bRemoveFromList then
+        for Index = #self.Rooms, 1, -1 do
+            if self.Rooms[Index] == self.CurrentRoom then
+                table.remove(self.Rooms, Index)
+                break
+            end
+        end
+    end
     self.CurrentRoom = nil
     self.SelectedRoomIndex = nil
     self.Page = "Default"
+end
+
+function RecruitManager:ExitCurrentRoom()
+    UGCTeamSystem.QuitLobbyTeam()
+    self:ClearCurrentRoom(false)
+    self:NotifyChanged()
+end
+
+function RecruitManager:DisbandCurrentRoom()
+    UGCTeamSystem.QuitLobbyTeam()
+    self:ClearCurrentRoom(true)
     self:NotifyChanged()
 end
 
@@ -398,6 +431,32 @@ function RecruitManager:RefreshLobbyMembers()
     if self.CurrentRoom then
         self.CurrentRoom.Members = self:GetLobbyMembers()
     end
+end
+
+function RecruitManager:OnLobbyMembersChanged()
+    self:RefreshLobbyMembers()
+    local PlayerState = UGCGameSystem.GetLocalPlayerState()
+    if self.CurrentRoom and #self.CurrentRoom.Members <= 1 and not PlayerState.bIsLobbyTeamLeader then
+        self:ClearCurrentRoom(true)
+    end
+    self:NotifyChanged()
+end
+
+function RecruitManager:GetTeamState()
+    self:RefreshLobbyMembers()
+    local PlayerController = UGCGameSystem.GetLocalPlayerController()
+    local PlayerState = UGCGameSystem.GetLocalPlayerState()
+    local Room = self.CurrentRoom
+    local Members = Room and Room.Members or {}
+    return {
+        Room = Room,
+        Members = Members,
+        bHasTeam = Room ~= nil,
+        bLeader = PlayerState.bIsLobbyTeamLeader == true,
+        bReady = PlayerState.bIsReadyInLobby == true,
+        bTeamComplete = PlayerController.LobbyInfo.bTeamComplete == true,
+        bAllowRestock = Room and Room.Config.AllowRestock == true or false,
+    }
 end
 
 function RecruitManager:GetGlobalPlayers()

@@ -1,5 +1,6 @@
 ---@class LobbyTeamHUD_C:UAEUserWidget
 ---@field Button_0 UButton
+---@field Button_Disband UButton
 ---@field Button_ExitTeam UButton
 ---@field Button_OpenRecruit UButton
 ---@field Button_Prepare UButton
@@ -23,7 +24,9 @@ function LobbyTeamHUD:Construct()
         return
     end
     self.bInitDoOnce = true
+    RecruitManager:RegisterTeamHUD(self)
     self.Button_0.OnClicked:Add(self.OnSwitchModeClicked, self)
+    self.Button_Disband.OnClicked:Add(self.OnDisbandClicked, self)
     self.Button_ExitTeam.OnClicked:Add(self.OnExitTeamClicked, self)
     self.Button_OpenRecruit.OnClicked:Add(self.OnOpenRecruitClicked, self)
     self.Button_Prepare.OnClicked:Add(self.OnPrepareClicked, self)
@@ -33,7 +36,9 @@ function LobbyTeamHUD:Construct()
 end
 function LobbyTeamHUD:Destruct()
     self:StopMatchingTimer()
+    RecruitManager:UnregisterTeamHUD(self)
     self.Button_0.OnClicked:Remove(self.OnSwitchModeClicked, self)
+    self.Button_Disband.OnClicked:Remove(self.OnDisbandClicked, self)
     self.Button_ExitTeam.OnClicked:Remove(self.OnExitTeamClicked, self)
     self.Button_OpenRecruit.OnClicked:Remove(self.OnOpenRecruitClicked, self)
     self.Button_Prepare.OnClicked:Remove(self.OnPrepareClicked, self)
@@ -45,41 +50,25 @@ function LobbyTeamHUD:OnUpdate(Data)
     self.ViewData = Data
     self:SetMatchingState(Data.bIsMatching == true)
 end
-function LobbyTeamHUD:GetMembers()
-    local PlayerController = UGCGameSystem.GetLocalPlayerController()
-    local Members = {}
-    for _, PlayerKey in ipairs(PlayerController.LobbyTeammatePlayerKeys or {}) do
-        local PlayerState = UGCGameSystem.GetPlayerStateByPlayerKey(PlayerKey)
-        if PlayerState then
-            table.insert(Members, {
-                Name = tostring(PlayerState.PlayerName),
-                bReady = PlayerState.bIsReadyInLobby == true,
-                bLeader = PlayerState.bIsLobbyTeamLeader == true,
-            })
-        end
-    end
-    return Members
-end
 function LobbyTeamHUD:RefreshTeamState()
-    local PlayerController = UGCGameSystem.GetLocalPlayerController()
-    local PlayerState = UGCGameSystem.GetLocalPlayerState()
+    local TeamState = RecruitManager:GetTeamState()
     local bIsMatching = self.ViewData and self.ViewData.bIsMatching == true
-    local bLeader = PlayerState.bIsLobbyTeamLeader == true
-    local bReady = PlayerState.bIsReadyInLobby == true
-    local bHasTeam = #(PlayerController.LobbyTeammatePlayerKeys or {}) > 1
-    self.TeamList:SetMembers(self:GetMembers())
-    self.TeamList:SetVisibility(bHasTeam and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
-    self.CheckBox_AllowRestock:SetIsChecked(PlayerController.LobbyInfo.bFillTeammate == true)
-    self.CheckBox_AllowRestock:SetIsEnabled(bLeader and not bIsMatching)
-    self.Button_Start:SetVisibility(bLeader and not bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
-    self.Button_Start_Cancel:SetVisibility(bLeader and bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
-    self.Button_Prepare:SetVisibility(not bLeader and not bReady and not bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
-    self.Button_Prepare_Cancel:SetVisibility(not bLeader and bReady and not bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
-    self.Button_OpenRecruit:SetVisibility(not bHasTeam and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
+    self.TeamList:SetMembers(TeamState.Members)
+    self.TeamList:SetVisibility(TeamState.bHasTeam and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
+    self.CheckBox_AllowRestock:SetIsChecked(TeamState.bAllowRestock)
+    self.CheckBox_AllowRestock:SetVisibility(ESlateVisibility.Visible)
+    self.CheckBox_AllowRestock:SetIsEnabled(TeamState.bLeader and not bIsMatching)
+    self.Button_Start:SetVisibility(TeamState.bLeader and not bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
+    self.Button_Start_Cancel:SetVisibility(TeamState.bLeader and bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
+    self.Button_Prepare:SetVisibility(not TeamState.bLeader and not TeamState.bReady and not bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
+    self.Button_Prepare_Cancel:SetVisibility(not TeamState.bLeader and TeamState.bReady and not bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
+    self.Button_OpenRecruit:SetVisibility(not TeamState.bHasTeam and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
     self.Button_OpenRecruit:SetIsEnabled(not bIsMatching)
-    self.Button_ExitTeam:SetVisibility(bHasTeam and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
+    self.Button_Disband:SetVisibility(TeamState.bHasTeam and TeamState.bLeader and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
+    self.Button_Disband:SetIsEnabled(not bIsMatching)
+    self.Button_ExitTeam:SetVisibility(TeamState.bHasTeam and not TeamState.bLeader and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
     self.Button_ExitTeam:SetIsEnabled(not bIsMatching)
-    self.Button_0:SetIsEnabled(bLeader and not bIsMatching)
+    self.Button_0:SetIsEnabled(TeamState.bLeader and not bIsMatching)
 end
 function LobbyTeamHUD:SetMatchingState(bIsMatching)
     self.CanvasPanel_Tip:SetVisibility(bIsMatching and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
@@ -110,19 +99,19 @@ function LobbyTeamHUD:StopMatchingTimer()
     self.TextBlock_Time:SetText("00:00")
 end
 function LobbyTeamHUD:OnStartClicked()
-    local PlayerController = UGCGameSystem.GetLocalPlayerController()
+    local TeamState = RecruitManager:GetTeamState()
     local GameState = UGCGameSystem.GameState
     local ModeID = LobbyModel:GetCurrentSelectedModeID()
     local ModeSetting = UGCMultiMode.GetModeSetting(ModeID)
-    if not PlayerController or not GameState or not ModeSetting then
+    if not GameState or not ModeSetting then
         return
     end
-    if not PlayerController.LobbyInfo or not PlayerController.LobbyInfo.bTeamComplete then
+    if not TeamState.bTeamComplete then
         UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
         return
     end
     local MaxPlayers = tonumber(ModeSetting.TeamPlayers) or 0
-    if MaxPlayers <= 0 or #(PlayerController.LobbyTeammatePlayerKeys or {}) > MaxPlayers then
+    if MaxPlayers <= 0 or #TeamState.Members > MaxPlayers then
         UGCWidgetManagerSystem.ShowTipsUI("当前人数大于模式最大人数")
         return
     end
@@ -145,13 +134,12 @@ function LobbyTeamHUD:OnOpenRecruitClicked()
     RecruitManager:OpenMainUI()
 end
 function LobbyTeamHUD:OnSwitchModeClicked()
-    local PlayerController = UGCGameSystem.GetLocalPlayerController()
-    local PlayerState = UGCGameSystem.GetLocalPlayerState()
-    if not PlayerState.bIsLobbyTeamLeader then
+    local TeamState = RecruitManager:GetTeamState()
+    if not TeamState.bLeader then
         UGCWidgetManagerSystem.ShowTipsUI("只有队长才能选择模式")
         return
     end
-    if not PlayerController.LobbyInfo or not PlayerController.LobbyInfo.bTeamComplete then
+    if not TeamState.bTeamComplete then
         UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
         return
     end
@@ -160,6 +148,9 @@ function LobbyTeamHUD:OnSwitchModeClicked()
     })
 end
 function LobbyTeamHUD:OnExitTeamClicked()
-    LobbyFlow:Go(LobbyFlowState.LFS_ExitConfirm)
+    RecruitManager:ExitCurrentRoom()
+end
+function LobbyTeamHUD:OnDisbandClicked()
+    RecruitManager:DisbandCurrentRoom()
 end
 return LobbyTeamHUD

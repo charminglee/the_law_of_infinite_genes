@@ -18,7 +18,7 @@ function RecruitMain:Construct()
     local PlayerController = UGCGameSystem.GetLocalPlayerController()
     local PlayerState = UGCGameSystem.GetLocalPlayerState()
     PlayerController.OnLobbyTeammatePlayerKeysUpdate:Add(self.OnLobbyChanged, self)
-    PlayerState.ReadyStateUpdateDelegate:Add(self.OnLobbyChanged, self)
+    PlayerState.ReadyStateUpdateDelegate:Add(self.OnReadyChanged, self)
 
     self.RoomList:Init(
         function(Index)
@@ -64,11 +64,15 @@ function RecruitMain:Destruct()
     local PlayerController = UGCGameSystem.GetLocalPlayerController()
     local PlayerState = UGCGameSystem.GetLocalPlayerState()
     PlayerController.OnLobbyTeammatePlayerKeysUpdate:Remove(self.OnLobbyChanged, self)
-    PlayerState.ReadyStateUpdateDelegate:Remove(self.OnLobbyChanged, self)
+    PlayerState.ReadyStateUpdateDelegate:Remove(self.OnReadyChanged, self)
     RecruitManager:UnregisterMainUI(self)
 end
 
 function RecruitMain:OnLobbyChanged()
+    RecruitManager:OnLobbyMembersChanged()
+end
+
+function RecruitMain:OnReadyChanged()
     RecruitManager:RefreshLobbyMembers()
     RecruitManager:NotifyChanged()
 end
@@ -78,6 +82,7 @@ function RecruitMain:Exit()
 end
 
 function RecruitMain:RefreshUI()
+    local TeamState = RecruitManager:GetTeamState()
     local Page = RecruitManager.Page
     self.DefaultRoom:SetVisibility(Page == "Default" and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
     self.CreateRoom:SetVisibility(Page == "Create" and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
@@ -87,7 +92,7 @@ function RecruitMain:RefreshUI()
     if Page == "Create" then
         self.CreateRoom:OnOpen(RecruitManager:BuildDefaultRoomConfig())
     elseif Page == "Exist" then
-        self.ExistRoom:OnUpdate(RecruitManager:GetSelectedRoom(), RecruitManager.CurrentRoom == RecruitManager:GetSelectedRoom())
+        self.ExistRoom:OnUpdate(RecruitManager:GetSelectedRoom(), TeamState.Room == RecruitManager:GetSelectedRoom())
     end
 end
 

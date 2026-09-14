@@ -20,6 +20,7 @@ function RoomList:Refresh(Rooms, SelectedIndex, bShowCreateRoom)
     self.SelectedIndex = SelectedIndex
     local bEmpty = #Rooms == 0
     self.Button_0:SetVisibility(bShowCreateRoom and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
+    self.Button_Refresh:SetVisibility(bEmpty and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
     self.AuxCreateRoom:SetVisibility(bEmpty and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
     self.RoomReuseList:SetVisibility(bEmpty and ESlateVisibility.Collapsed or ESlateVisibility.SelfHitTestInvisible)
     self.RoomReuseList:Reload(#Rooms)
