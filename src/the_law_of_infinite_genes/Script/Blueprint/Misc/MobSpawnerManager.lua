@@ -64,9 +64,15 @@ function MobSpawnerManager:_DropBossReward()
     local waveMultiplier = bossLoot.WaveMultiplier[self.waveIndex]
     local mul = difficultyMultiplier * waveMultiplier
     local allPlayers = UGCGameSystem.GetAllPlayerController(false)
+    local difficultyIndex = {
+        [Difficulty.Simple] = 0,
+        [Difficulty.Normal] = 1,
+        [Difficulty.Hard] = 2,
+        [Difficulty.Nightmare] = 3,
+    }
 
     for _, material in pairs(bossLoot.RewardPool) do
-        if difficultyMultiplier >= material.MinDifficulty then
+        if difficultyIndex[difficulty] >= difficultyIndex[material.MinDifficulty] then
             local baseCount = math.random(material.Min, material.Max)
             local count = math.ceil(baseCount * mul)
 
