@@ -111,7 +111,7 @@ function MobSpawnerManager:NextWave()
         return
     end
     if self.waveIndex > 0 then
-        self:StopSpawnerManager()
+        self:ResetSpawnerManager(true)
         self:JumpToWave(0)
     end
     self.isInSpawnInterval = true
