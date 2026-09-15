@@ -43,9 +43,6 @@ function BaseMonster:BPDie(killingDamage, eventInstigator, damageCauser, damageE
     local loot = GameFlowCfg.Resource.OnKill.Loot[self.tag]
     pdm:AddCoin(loot.ItemId, loot.Count, false)
 
-    local score = GameFlowCfg.Resource.OnKill.Score[self.tag]
-    GameState:AddScore(score)
-
     local seasonExp = GameFlowCfg.Resource.OnKill.SeasonExp[self.tag]
     pdm:AddSeasonExp(seasonExp, false)
     local characterExp = GameFlowCfg.Resource.OnKill.CharacterExp[self.tag]
