@@ -13,6 +13,7 @@
 ---@field TeamList TeamList_C
 ---@field TextBlock_Degree UTextBlock
 ---@field TextBlock_Description UTextBlock
+---@field TextBlock_MapName UTextBlock
 ---@field UGC_ReuseList2 UGC_ReuseList2_C
 --Edit Below--
 local ExistRoom = { bInitDoOnce = false }
@@ -23,8 +24,6 @@ function ExistRoom:Init(Callbacks)
     end
     self.bInitDoOnce = true
     self.Button_Join.OnClicked:Add(self.OnJoinClicked, self)
-    self.Button_Prepare.OnClicked:Add(self.OnPrepareClicked, self)
-    self.Button_CancelParpare.OnClicked:Add(self.OnCancelPrepareClicked, self)
     self.Button_Begin.OnClicked:Add(self.OnBeginClicked, self)
     self.Button_Invitation.OnClicked:Add(self.OnInvitationClicked, self)
     self.Button_RoomConfig.OnClicked:Add(self.OnRoomConfigClicked, self)
@@ -41,10 +40,20 @@ function ExistRoom:OnUpdate(Room, bCurrentRoom)
     local PlayerController = UGCGameSystem.GetLocalPlayerController()
     self.bCanEditRoom = bCurrentRoom and PlayerController and PlayerController.bIsTeamLeader == true
     self.DropItems = Room.Config.DropItems or {}
+    self.TextBlock_MapName:SetText(Room.Config.MapName or "")
     self.TextBlock_Degree:SetText(Room.Config.Difficulty or "")
     self.TextBlock_Description:SetText(Room.Config.Description or "")
-    self.Image_Customs:SetBrushFromTexture(Room.Config.MapImage, false)
-    self.CheckBox_AllowRestock:SetIsChecked(Room.Config.AllowRestock == true)
+    self.Image_Customs:SetVisibility(Room.Config.MapImage and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
+    if Room.Config.MapImage then
+        self.Image_Customs:SetBrushFromTexture(Room.Config.MapImage, false)
+    end
+    local bAllowRestock = Room.Config.AllowRestock == true
+    if bCurrentRoom then
+        bAllowRestock = RecruitManager:GetAllowRestock()
+    end
+    self.bUpdatingFillTeammate = true
+    self.CheckBox_AllowRestock:SetIsChecked(bAllowRestock)
+    self.bUpdatingFillTeammate = false
     self.CheckBox_AllowServe:SetIsChecked(Room.Config.AllowServe == true)
     self.CheckBox_AllowRestock:SetIsEnabled(self.bCanEditRoom)
     self.CheckBox_AllowServe:SetIsEnabled(self.bCanEditRoom)
@@ -60,11 +69,10 @@ function ExistRoom:OnUpdate(Room, bCurrentRoom)
     self.Button_RoomConfig:SetVisibility(self.bCanEditRoom and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
 end
 function ExistRoom:OnAllowRestockChanged(IsChecked)
-    if not self.bCanEditRoom then
+    if self.bUpdatingFillTeammate or not self.bCanEditRoom then
         return
     end
-    self.Room.Config.AllowRestock = IsChecked == true
-    RecruitManager:NotifyChanged()
+    RecruitManager:SetAllowRestock(IsChecked)
 end
 function ExistRoom:OnAllowServeChanged(IsChecked)
     if not self.bCanEditRoom then
@@ -77,8 +85,6 @@ function ExistRoom:OnDropItemReload(Item, ZeroBasedIndex)
     Item:SetData(self.DropItems[ZeroBasedIndex + 1])
 end
 function ExistRoom:OnJoinClicked() self.Callbacks.OnJoin() end
-function ExistRoom:OnPrepareClicked() self.Callbacks.OnReady(true) end
-function ExistRoom:OnCancelPrepareClicked() self.Callbacks.OnReady(false) end
 function ExistRoom:OnBeginClicked() self.Callbacks.OnStart() end
 function ExistRoom:OnInvitationClicked() self.Callbacks.OnInvite() end
 function ExistRoom:OnRoomConfigClicked() self.Callbacks.OnConfig() end

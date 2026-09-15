@@ -11,21 +11,26 @@ function InvitationList:Construct()
         return
     end
     self.bInitDoOnce = true
-    self.InvitedUIDs = {}
     self.Button_Close.OnClicked:Add(self.OnCloseClicked, self)
     self.Button_Refresh.OnClicked:Add(self.OnRefreshClicked, self)
     self.UGC_ReuseList2.OnAfterNewItem:Add(self.OnInvitationItemReload, self)
 end
 function InvitationList:OnOpen(Data)
+    self.InvitedUIDs = {}
     self.Players = Data.Players
     self.FilterPlayers = Data.FilterPlayers
     self.OnInvite = Data.OnInvite
     self:RefreshList()
-    if not self.PlayerListActor then
-        self.PlayerListActor = UGCGamePartSystem.PlayerListManager.GetGlobalActor()
-        if self.PlayerListActor then
-            self.PlayerListActor.PlayerListUpdateDelegate:Add(self.OnPlayerListUpdated, self)
-        end
+    self.PlayerListActor = self.PlayerListActor or UGCGamePartSystem.PlayerListManager.GetGlobalActor()
+    if self.PlayerListActor and not self.bListeningPlayerList then
+        self.PlayerListActor.PlayerListUpdateDelegate:Add(self.OnPlayerListUpdated, self)
+        self.bListeningPlayerList = true
+    end
+end
+function InvitationList:OnClose()
+    if self.PlayerListActor and self.bListeningPlayerList then
+        self.PlayerListActor.PlayerListUpdateDelegate:Remove(self.OnPlayerListUpdated, self)
+        self.bListeningPlayerList = false
     end
 end
 function InvitationList:OnPlayerListUpdated(Players)
@@ -59,11 +64,9 @@ function InvitationList:Invite(Player)
     self.OnInvite(Player)
 end
 function InvitationList:Destruct()
+    self:OnClose()
     self.Button_Close.OnClicked:Remove(self.OnCloseClicked, self)
     self.Button_Refresh.OnClicked:Remove(self.OnRefreshClicked, self)
     self.UGC_ReuseList2.OnAfterNewItem:Remove(self.OnInvitationItemReload, self)
-    if self.PlayerListActor then
-        self.PlayerListActor.PlayerListUpdateDelegate:Remove(self.OnPlayerListUpdated, self)
-    end
 end
 return InvitationList

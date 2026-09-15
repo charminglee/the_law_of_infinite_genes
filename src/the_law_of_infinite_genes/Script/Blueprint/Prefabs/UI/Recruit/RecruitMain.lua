@@ -43,9 +43,6 @@ function RecruitMain:Construct()
         OnJoin = function()
             RecruitManager:JoinSelectedRoom()
         end,
-        OnReady = function(bReady)
-            RecruitManager:SetReady(bReady)
-        end,
         OnStart = function()
             RecruitManager:StartGame()
         end,
@@ -82,7 +79,6 @@ function RecruitMain:Exit()
 end
 
 function RecruitMain:RefreshUI()
-    local TeamState = RecruitManager:GetTeamState()
     local Page = RecruitManager.Page
     self.DefaultRoom:SetVisibility(Page == "Default" and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
     self.CreateRoom:SetVisibility(Page == "Create" and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
@@ -92,7 +88,9 @@ function RecruitMain:RefreshUI()
     if Page == "Create" then
         self.CreateRoom:OnOpen(RecruitManager:BuildDefaultRoomConfig())
     elseif Page == "Exist" then
-        self.ExistRoom:OnUpdate(RecruitManager:GetSelectedRoom(), TeamState.Room == RecruitManager:GetSelectedRoom())
+        local TeamState = RecruitManager:GetTeamState()
+        local SelectedRoom = RecruitManager:GetSelectedRoom()
+        self.ExistRoom:OnUpdate(SelectedRoom, TeamState.Room == SelectedRoom)
     end
 end
 

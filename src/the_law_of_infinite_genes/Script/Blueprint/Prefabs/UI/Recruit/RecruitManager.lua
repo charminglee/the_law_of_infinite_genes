@@ -2,7 +2,6 @@
 RecruitManager = RecruitManager or {
     MainUI = nil,
     TeamHUD = nil,
-    ComponentClass = nil,
     Rooms = {},
     SelectedRoomIndex = nil,
     CurrentRoom = nil,
@@ -13,9 +12,10 @@ RecruitManager = RecruitManager or {
     InviteRequestCallback = nil,
     ModeConfigByID = {},
     ModeIDsByDetailID = {},
-    ModeGroups = {},
     bModeConfigLoaded = false,
 }
+
+local GameTypes = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.Shared.GameTypes")
 
 local POPUP_PATHS = {
     Invitation = "Asset/Blueprint/Prefabs/UI/Recruit/InvitationList.InvitationList_C",
@@ -24,7 +24,6 @@ local POPUP_PATHS = {
 
 local GAME_MODE_CONFIG_PATH = "Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig"
 local GAME_MODE_DETAIL_PATH = "Asset/Data/Table/UGCGameModeDetail.UGCGameModeDetail"
-local LOBBY_MODE_ID = 1001
 
 local function CopyTable(Source)
     local Result = {}
@@ -43,10 +42,6 @@ local function CreatePopup(Path)
     local Widget = UserWidget.NewWidgetObjectBP(PlayerController, WidgetClass)
     Widget:AddToViewport(12001)
     return Widget
-end
-
-function RecruitManager:RegisterComponentClass(Component)
-    self.ComponentClass = Component
 end
 
 function RecruitManager:RegisterMainUI(MainUI)
@@ -84,10 +79,6 @@ function RecruitManager:CloseMainUI()
     end
     self:CloseInvitation()
     self:CloseRoomConfig()
-end
-
-function RecruitManager:GetMainUI()
-    return self.MainUI
 end
 
 function RecruitManager:NotifyChanged()
@@ -143,7 +134,7 @@ function RecruitManager:LoadModeConfig()
     for Index = 1, MultiModeConfigs:Num() do
         local Config = json.decode(MultiModeConfigs:Get(Index))
         local ModeID = Config and tonumber(Config.ModeID)
-        if ModeID and ModeID ~= LOBBY_MODE_ID then
+        if ModeID and ModeID ~= GameTypes.ModeID.Lobby then
             EnabledModeIDs[ModeID] = true
         end
     end
@@ -175,28 +166,27 @@ function RecruitManager:LoadModeConfig()
             end
         end
         self.ModeIDsByDetailID[Detail.ID] = DetailModeIDs
-        if not Detail.Hide and DetailModeIDs[1] then
-            table.insert(self.ModeGroups, self.ModeConfigByID[DetailModeIDs[1]])
-        end
     end
-    table.sort(self.ModeGroups, function(A, B)
-        return A.DetailID < B.DetailID
-    end)
     self.bModeConfigLoaded = true
 end
 
-function RecruitManager:GetModeGroups()
+function RecruitManager:GetMapConfigs()
     self:LoadModeConfig()
     local Result = {}
-    for _, Config in ipairs(self.ModeGroups) do
-        table.insert(Result, Config)
+    for _, MapInfo in ipairs(GameTypes.MapList) do
+        local ModeConfig = self.ModeConfigByID[tonumber(MapInfo.ModeID)]
+        if ModeConfig then
+            local Config = CopyTable(ModeConfig)
+            Config.ModeName = MapInfo.ModeName
+            table.insert(Result, Config)
+        end
     end
     return Result
 end
 
 function RecruitManager:GetDifficultyConfigs(ModeID)
     self:LoadModeConfig()
-    local Config = self.ModeConfigByID[tonumber(ModeID)]
+    local Config = self.ModeConfigByID[tonumber(ModeID or GameTypes.ModeID.DefaultGameplay)]
     local Result = {}
     if Config then
         for _, DifficultyModeID in ipairs(self.ModeIDsByDetailID[Config.DetailID]) do
@@ -204,11 +194,6 @@ function RecruitManager:GetDifficultyConfigs(ModeID)
         end
     end
     return Result
-end
-
-function RecruitManager:GetModeConfig(ModeID)
-    self:LoadModeConfig()
-    return self.ModeConfigByID[tonumber(ModeID)]
 end
 
 function RecruitManager:IsModeLocked(ModeID)
@@ -224,7 +209,14 @@ end
 function RecruitManager:BuildDefaultRoomConfig()
     local PlayerController = UGCGameSystem.GetLocalPlayerController()
     local SelectedModeID = PlayerController.LobbyInfo and PlayerController.LobbyInfo.SelectedModeID
-    local Mode = self:GetModeConfig(SelectedModeID) or self:GetModeGroups()[1]
+    local Maps = self:GetMapConfigs()
+    local Mode = Maps[1]
+    for _, Map in ipairs(Maps) do
+        if Map.ModeID == SelectedModeID then
+            Mode = Map
+            break
+        end
+    end
     return {
         ModeID = Mode and Mode.ModeID or nil,
         MapName = Mode and Mode.ModeName or "",
@@ -291,12 +283,19 @@ function RecruitManager:DisbandCurrentRoom()
     self:NotifyChanged()
 end
 
-function RecruitManager:SetReady(bReady)
-    local PlayerController = UGCGameSystem.GetLocalPlayerController()
-    if PlayerController then
-        PlayerController:SetLobbyReadyStatus(bReady == true)
+function RecruitManager:GetAllowRestock()
+    return self.CurrentRoom and self.CurrentRoom.Config.AllowRestock == true or false
+end
+
+function RecruitManager:SetAllowRestock(bAllowRestock)
+    if not self.CurrentRoom then
+        return
     end
-    self:RefreshLobbyMembers()
+    local bNewValue = bAllowRestock == true
+    if self.CurrentRoom.Config.AllowRestock == bNewValue then
+        return
+    end
+    self.CurrentRoom.Config.AllowRestock = bNewValue
     self:NotifyChanged()
 end
 
@@ -373,6 +372,7 @@ end
 
 function RecruitManager:CloseInvitation()
     if self.InvitationUI then
+        self.InvitationUI:OnClose()
         self.InvitationUI:SetVisibility(ESlateVisibility.Collapsed)
     end
 end
@@ -443,7 +443,6 @@ function RecruitManager:OnLobbyMembersChanged()
 end
 
 function RecruitManager:GetTeamState()
-    self:RefreshLobbyMembers()
     local PlayerController = UGCGameSystem.GetLocalPlayerController()
     local PlayerState = UGCGameSystem.GetLocalPlayerState()
     local Room = self.CurrentRoom
@@ -455,7 +454,7 @@ function RecruitManager:GetTeamState()
         bLeader = PlayerState.bIsLobbyTeamLeader == true,
         bReady = PlayerState.bIsReadyInLobby == true,
         bTeamComplete = PlayerController.LobbyInfo.bTeamComplete == true,
-        bAllowRestock = Room and Room.Config.AllowRestock == true or false,
+        bAllowRestock = self:GetAllowRestock(),
     }
 end
 

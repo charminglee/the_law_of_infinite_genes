@@ -10,7 +10,6 @@ function RecruitComponent:ReceiveBeginPlay()
     RecruitComponent.SuperClass.ReceiveBeginPlay(self);
     if Lib.IsServer() == false then
         self:InitUI();
-        RecruitManager:RegisterComponentClass(self);
     end
 end
 

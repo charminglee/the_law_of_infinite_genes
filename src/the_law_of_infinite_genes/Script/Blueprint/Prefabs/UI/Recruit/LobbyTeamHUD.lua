@@ -33,6 +33,7 @@ function LobbyTeamHUD:Construct()
     self.Button_Prepare_Cancel.OnClicked:Add(self.OnCancelPrepareClicked, self)
     self.Button_Start.OnClicked:Add(self.OnStartClicked, self)
     self.Button_Start_Cancel.OnClicked:Add(self.OnCancelMatchClicked, self)
+    self.CheckBox_AllowRestock.OnCheckStateChanged:Add(self.OnFillTeammateChanged, self)
 end
 function LobbyTeamHUD:Destruct()
     self:StopMatchingTimer()
@@ -45,6 +46,7 @@ function LobbyTeamHUD:Destruct()
     self.Button_Prepare_Cancel.OnClicked:Remove(self.OnCancelPrepareClicked, self)
     self.Button_Start.OnClicked:Remove(self.OnStartClicked, self)
     self.Button_Start_Cancel.OnClicked:Remove(self.OnCancelMatchClicked, self)
+    self.CheckBox_AllowRestock.OnCheckStateChanged:Remove(self.OnFillTeammateChanged, self)
 end
 function LobbyTeamHUD:OnUpdate(Data)
     self.ViewData = Data
@@ -55,7 +57,9 @@ function LobbyTeamHUD:RefreshTeamState()
     local bIsMatching = self.ViewData and self.ViewData.bIsMatching == true
     self.TeamList:SetMembers(TeamState.Members)
     self.TeamList:SetVisibility(TeamState.bHasTeam and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
+    self.bUpdatingFillTeammate = true
     self.CheckBox_AllowRestock:SetIsChecked(TeamState.bAllowRestock)
+    self.bUpdatingFillTeammate = false
     self.CheckBox_AllowRestock:SetVisibility(ESlateVisibility.Visible)
     self.CheckBox_AllowRestock:SetIsEnabled(TeamState.bLeader and not bIsMatching)
     self.Button_Start:SetVisibility(TeamState.bLeader and not bIsMatching and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
@@ -119,10 +123,16 @@ function LobbyTeamHUD:OnStartClicked()
         UGCWidgetManagerSystem.ShowTipsUI("有队友未准备，不能开始匹配")
         return
     end
-    LobbyModel:RequestMatch(self.CheckBox_AllowRestock:IsChecked())
+    LobbyModel:RequestMatch(TeamState.bAllowRestock)
 end
 function LobbyTeamHUD:OnCancelMatchClicked()
     LobbyModel:CancelMatch()
+end
+function LobbyTeamHUD:OnFillTeammateChanged(bFillTeammate)
+    if self.bUpdatingFillTeammate then
+        return
+    end
+    RecruitManager:SetAllowRestock(bFillTeammate)
 end
 function LobbyTeamHUD:OnPrepareClicked()
     UGCGameSystem.GetLocalPlayerController():SetLobbyReadyStatus(true)

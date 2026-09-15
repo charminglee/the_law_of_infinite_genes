@@ -29,33 +29,37 @@ function RoomConfig:OnOpen(Data)
     self.Config = Data.Config
     self.OnSave = Data.OnSave
     self.OnCancel = Data.OnCancel
-    self.Maps = RecruitManager:GetModeGroups()
+    self.Maps = RecruitManager:GetMapConfigs()
     self.MapIndex = 1
-    local CurrentMode = RecruitManager:GetModeConfig(self.Config.ModeID)
     for Index, Map in ipairs(self.Maps) do
-        if CurrentMode and Map.DetailID == CurrentMode.DetailID then
+        if Map.ModeID == self.Config.ModeID then
             self.MapIndex = Index
             break
         end
     end
     self.CheckBox_AllowRestock:SetIsChecked(self.Config.AllowRestock == true)
     self.CheckBox_AllowServe:SetIsChecked(self.Config.AllowServe == true)
-    self:ApplyMap(self.MapIndex, self.Config.ModeID)
+    self:ApplyMap(self.MapIndex)
 end
 
-function RoomConfig:ApplyMap(Index, SelectedModeID)
+function RoomConfig:ApplyMap(Index)
     local Map = self.Maps[Index]
     if not Map then
         return
     end
     self.MapIndex = Index
-    local Difficulties = RecruitManager:GetDifficultyConfigs(Map.ModeID)
-    local Selected = RecruitManager:GetModeConfig(SelectedModeID) and SelectedModeID or Difficulties[1].ModeID
-    self:ApplyMode(RecruitManager:GetModeConfig(Selected))
-    self.DegreeChoice:SetOptions(Difficulties, Selected, function(NewConfig)
-        self:ApplyMode(NewConfig)
+    self:ApplyMode(Map)
+    local Difficulties = RecruitManager:GetDifficultyConfigs()
+    local bMapLocked = RecruitManager:IsModeLocked(Map.ModeID)
+    self.Button_Save:SetIsEnabled(not bMapLocked)
+    local SelectedDifficultyModeID = not bMapLocked and Difficulties[1].ModeID or nil
+    if SelectedDifficultyModeID then
+        self.Config.Difficulty = Difficulties[1].Difficulty
+    end
+    self.DegreeChoice:SetOptions(Difficulties, SelectedDifficultyModeID, function(NewConfig)
+        self.Config.Difficulty = NewConfig.Difficulty
     end, function(ModeID)
-        return RecruitManager:IsModeLocked(ModeID)
+        return bMapLocked or RecruitManager:IsModeLocked(ModeID)
     end)
 end
 
@@ -67,7 +71,10 @@ function RoomConfig:ApplyMode(Mode)
     self.Config.Difficulty = Mode.Difficulty
     self.TextBlock_MapName:SetText(Mode.ModeName or "")
     self.TextBlock_Description:SetText(Mode.ModeDesc or "")
-    self.Image_Customs:SetBrushFromTexture(Mode.ModePost, false)
+    self.Image_Customs:SetVisibility(Mode.ModePost and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
+    if Mode.ModePost then
+        self.Image_Customs:SetBrushFromTexture(Mode.ModePost, false)
+    end
     self.DropItems = self.Config.DropItems or {}
     self.DropList:Reload(#self.DropItems)
 end

@@ -123,8 +123,10 @@ function Breakthrough_Result_UIBP:SetBackButtonCountDown()
 		if CountDownTime > 0 then
 			self.Text_BackNumber:SetText(tostring(CountDownTime))
 		else
-			self:ReturnToLobby()
-            self:CloseUI()  
+			UGCTimerUtility.RemoveLuaTimerByName("Result_CountDownTime")
+			if self:ReturnToLobby() then
+                self:CloseUI()
+            end
 		end
 	end
 	UGCTimerUtility.CreateLuaTimer(1,SetCountDown,true,"Result_CountDownTime",0)
@@ -142,24 +144,23 @@ function Breakthrough_Result_UIBP:SetDefeatState()
 end
 
 function Breakthrough_Result_UIBP:Button_Back_OnClicked()
-    self:ReturnToLobby()
-	self:CloseUI()
+	if self:ReturnToLobby() then
+		self:CloseUI()
+	end
 	return nil;
 end
 
 
 function Breakthrough_Result_UIBP:ReturnToLobby()
 	if self.bReturningToLobby then
-		return nil
-	end
-
-	local PlayerController = UGCGameSystem.GetLocalPlayerController()
-	if not PlayerController or not PlayerController.bIsTeamLeader then
-		return nil
+		return false
 	end
 
 	self.bReturningToLobby = UGCMultiMode.RequestMatch(UGCGameData.ModeID.Lobby, nil, nil, true) == true
-	return nil;
+	if not self.bReturningToLobby then
+		UGCWidgetManagerSystem.ShowTipsUI("返回大厅失败，请重试")
+	end
+	return self.bReturningToLobby
 end
 
 function Breakthrough_Result_UIBP:CloseUI()

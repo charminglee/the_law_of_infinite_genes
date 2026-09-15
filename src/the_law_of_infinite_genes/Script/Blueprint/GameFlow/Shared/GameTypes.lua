@@ -4,11 +4,24 @@ local GameTypes = {}
 GameTypes.ModeID = {
     Lobby = 1001,
     DefaultGameplay = 1002,
+    Helipad = 1002,
+    Desert = 1003,
 }
 
 GameTypes.ModeName = {
     Lobby = "大厅",
     SingleMode = "单人闯关",
+}
+
+GameTypes.MapList = {
+    {
+        ModeID = GameTypes.ModeID.Helipad,
+        ModeName = "停机坪",
+    },
+    {
+        ModeID = GameTypes.ModeID.Desert,
+        ModeName = "沙漠",
+    },
 }
 
 GameTypes.AliveState = {
