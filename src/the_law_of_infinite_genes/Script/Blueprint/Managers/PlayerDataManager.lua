@@ -231,17 +231,17 @@ function PlayerDataManager:AddScore(delta)
     if not Lib.IsServer() then
         return
     end
-    local oldScore = self.score
-    self.score = self.score + delta
+    local oldScore = self._score
+    self._score = self._score + delta
     UnrealNetwork.RepLazyProperty(self, "_score")
-    Lib.EventSystem.Broadcast_SinglePlayer(self, Event.OnGameScoreChanged, oldScore, self.score)
+    Lib.EventSystem.Broadcast_SinglePlayer(self, Event.OnGameScoreChanged, oldScore, self._score)
 end
 
 
 ---【双端】获取当前得分。
 ---@return number @得分
 function PlayerDataManager:GetScore()
-    return self.score
+    return self._score
 end
 
 
@@ -249,10 +249,10 @@ function PlayerDataManager:ResetScore()
     if not Lib.IsServer() then
         return
     end
-    local oldScore = self.score
-    self.score = 0
+    local oldScore = self._score
+    self._score = 0
     UnrealNetwork.RepLazyProperty(self, "_score")
-    Lib.EventSystem.Broadcast_SinglePlayer(self, Event.OnGameScoreChanged, oldScore, self.score)
+    Lib.EventSystem.Broadcast_SinglePlayer(self, Event.OnGameScoreChanged, oldScore, self._score)
 end
 
 

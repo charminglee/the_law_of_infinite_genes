@@ -148,7 +148,6 @@ end
 ---服务端从等待状态进入战斗，并启动第一波刷怪。
 ---@return boolean
 function UGCGameState:StartGame()
-    self:_ResetScore()
     return GameFlow.Session.Start(self)
 end
 
