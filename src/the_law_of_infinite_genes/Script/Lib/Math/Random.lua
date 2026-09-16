@@ -39,17 +39,21 @@ end
 ---@generic T
 ---@param list T[] @列表
 ---@param n number? @要抽取的元素个数，默认为 `1`
----@return T[] @抽取结果列表
+---@return T|(T[]) @抽取结果，当 n == 1 时，返回单个元素；当 n > 1 时，返回结果列表
 function Random.Pick(list, n)
-    list = Lib.Table.Copy(list)
     n = n or 1
     n = math.min(n, #list)
-    Random.Shuffle(list)
-    local result = {}
-    for i = 1, n do
-        result[i] = list[i]
+    if n == 1 then
+        return list[math.random(#list)]
+    else
+        list = Lib.Table.Copy(list)
+        Random.Shuffle(list)
+        local result = {}
+        for i = 1, n do
+            result[i] = list[i]
+        end
+        return result
     end
-    return result
 end
 
 

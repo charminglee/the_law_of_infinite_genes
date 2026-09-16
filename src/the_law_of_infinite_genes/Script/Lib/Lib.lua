@@ -81,7 +81,7 @@ function Lib.CreateTimer(time, isLoop, callback, obj, ...)
             callback(table.unpack(args, 1, argCount))
         end
     end
-    return UGCTimerUtility.CreateUETimer(f, time, isLoop)[0]
+    return UGCTimerUtility.CreateUETimer(f, time, isLoop)
 end
 
 
