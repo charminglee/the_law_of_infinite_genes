@@ -150,3 +150,253 @@ GameFlowCfg.InitialWeapon = {
     WeaponId = 8310018,
     BulletId = 831301001,
 }
+
+
+local _ROOT = Lib.LONG_ROOT_PKG_PATH.."Asset/Blueprint/"
+
+
+-- 怪物组表
+GameFlowCfg.MonsterGroups = {
+    [0] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+    [1] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+    [2] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_SpeedInfected.Normal_SpeedInfected_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+    [3] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 1,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_SpeedInfected.Normal_SpeedInfected_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+    [4] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_SpeedInfected.Normal_SpeedInfected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_HeavyInfected.Normal_HeavyInfected_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+    [5] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_SpeedInfected.Normal_SpeedInfected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Elite_Speed.Elite_Speed_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+    [6] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_SpeedInfected.Normal_SpeedInfected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_HeavyInfected.Normal_HeavyInfected_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+    [7] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_SpeedInfected.Normal_SpeedInfected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_PoisonInfected.Normal_PoisonInfected_C",
+                },
+                Weight = 3,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_HeavyInfected.Normal_HeavyInfected_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+    [8] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 4,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_SpeedInfected.Normal_SpeedInfected_C",
+                },
+                Weight = 4,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_HeavyInfected.Normal_HeavyInfected_C",
+                },
+                Weight = 2,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Elite_Speed.Elite_Speed_C",
+                },
+                Weight = 1,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_PoisonInfected.Normal_PoisonInfected_C",
+                },
+                Weight = 2,
+            },
+        },
+    },
+    [9] = {
+        MobConfigList = {
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_Infected.Normal_Infected_C",
+                },
+                Weight = 4,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_SpeedInfected.Normal_SpeedInfected_C",
+                },
+                Weight = 4,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Normal_PoisonInfected.Normal_PoisonInfected_C",
+                },
+                Weight = 2,
+            },
+            {
+                SpawnParam = {
+                    CampID = 0,
+                    MobClass = _ROOT.."Prefabs/Monsters/Boss_RottenArmor.Boss_RottenArmor_C",
+                },
+                Weight = 1,
+            },
+        },
+    },
+}
+
+
+
+
+
+

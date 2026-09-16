@@ -38,6 +38,8 @@ function MobSpawnerManager:ReceiveBeginPlay()
         for i = 0, self.spawnerCount - 1 do
             local spawner = self:GetSpawner(0, i)
             table.insert(self.spawners, spawner)
+            -- 关闭自动刷怪，需手动刷怪
+            spawner:ModifyMinMaxSpawnCount(0, 0)
         end
     end
 end
@@ -93,18 +95,15 @@ function MobSpawnerManager:_StartWave()
     self.isInSpawnInterval = false
 
     -- 根据波次控制刷怪数量
-    local count = math.floor(_SpawnCountFormula(self.waveIndex) / self.spawnerCount)
-    for _, spawner in pairs(self.spawners) do
-        spawner:ModifyMinMaxSpawnCount(count, count)
-    end
+    --local count = math.floor(_SpawnCountFormula(self.waveIndex) / self.spawnerCount)
 
     -- 设置刷怪表
-    local mobConfig = {
-        ConfigMode = EUGCMobSpawnerConfigMode.MobGroup,
-        MobGroupID = self.waveIndex - 1,
-    }
-    self:SetMobConfigOverride(mobConfig)
-    self:StartSpawnerManager()
+    --local mobConfig = {
+    --    ConfigMode = EUGCMobSpawnerConfigMode.MobGroup,
+    --    MobGroupID = self.waveIndex - 1,
+    --}
+    --self:SetMobConfigOverride(mobConfig)
+    --self:StartSpawnerManager()
     
     UnrealNetwork.RepLazyProperty(self, "waveIndex")
     Lib.EventSystem.Broadcast(Event.OnWaveStart, self.waveIndex)
@@ -116,10 +115,10 @@ function MobSpawnerManager:NextWave()
     if not Lib.IsServer() then
         return
     end
-    if self.waveIndex > 0 then
-        self:ResetSpawnerManager(true)
-        self:JumpToWave(0)
-    end
+    --if self.waveIndex > 0 then
+    --    self:ResetSpawnerManager(true)
+    --    self:JumpToWave(0)
+    --end
     self.isInSpawnInterval = true
     Lib.CreateTimer(GameFlowCfg.SpawnerDelay, false, self._StartWave, self)
 end
