@@ -9,13 +9,11 @@ local BaseMonster = {
 
 function BaseMonster:ReceiveBeginPlay()
     BaseMonster.SuperClass.ReceiveBeginPlay(self)
-    GameState:_AddRemainMobCount()
 end
 
 
 function BaseMonster:ReceiveEndPlay()
     BaseMonster.SuperClass.ReceiveEndPlay(self)
-    GameState:_AddRemainMobCount(-1)
 end
 
 
@@ -27,10 +25,11 @@ end
 ---@param damageEvent DamageEvent 伤害事件
 ---@param damageTypeId int32 伤害类型
 function BaseMonster:BPDie(killingDamage, eventInstigator, damageCauser, damageEvent, damageTypeId)
+    Lib.EventSystem.Dispatch(Event.OnMobDie, killingDamage, eventInstigator, damageCauser, damageEvent, damageTypeId)
+
     if not Lib.IsServer() or not Lib.IsPlayer(eventInstigator) then
         return
     end
-
     self.UGCPresetCommonDropItemComponent:StartDrop(self, eventInstigator, {})
 
     -- 资源点掉落/称号条件相关逻辑

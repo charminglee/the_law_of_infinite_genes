@@ -1,7 +1,7 @@
 ---@class UGCGameState_C:BP_UGCGameState_C
+---@field MobSpawnerManager MobSpawnerManager_C
 ---@field GlobalEventComponent GlobalEventComponent_C
 ---@field SpecialEventManager SpecialEventManager_C
----@field MobSpawnerManager MobSpawnerManager_C
 --Edit Below--
 local UGCGameState = {}
 
@@ -37,7 +37,6 @@ UGCGameState.LevelStateEnum = {
 UGCGameState.LevelState = UGCGameState.LevelStateEnum.Waiting
 
 UGCGameState.score = 0
-UGCGameState.remainingMobCount = 0
 UGCGameState.difficulty = nil
 
 function UGCGameState:GetReplicatedProperties()
@@ -159,24 +158,19 @@ end
 
 ---【双端】获取当前回合数（关卡数）。
 function UGCGameState:GetWaveIndex()
-    return self.MobSpawnerManager.waveIndex
-end
-
-function UGCGameState:_AddRemainMobCount(delta)
-    delta = delta or 1
-    local oldCount = self.remainingMobCount
-    local newCount = math.max(0, oldCount + delta)
-    if newCount == oldCount then
-        return
+    if not self.MobSpawnerManager then
+        return 0
     end
-    self.remainingMobCount = newCount
-    Lib.EventSystem.Dispatch(Event.OnRemainingMobCountChanged, oldCount, newCount)
+    return self.MobSpawnerManager.waveIndex
 end
 
 ---【双端】获取剩余怪物数。
 ---@return number @剩余怪物数
 function UGCGameState:GetRemainingMobCount()
-    return self.remainingMobCount
+    if not self.MobSpawnerManager then
+        return 0
+    end
+    return self.MobSpawnerManager.remainingMonsters
 end
 
 ---按波次在关键点曲线上线性插值取倍率；曲线两端之外按最近的关键点取值。

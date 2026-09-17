@@ -21,6 +21,7 @@ Event = {
     OnRemainingMobCountChanged  = "OnRemainingMobCountChanged",
     OnCharacterExpChangeAfter   = "OnCharacterExpChangeAfter",
     OnSeasonExpChangeAfter      = "OnSeasonExpChangeAfter",
+    OnMobDie                    = "OnMobDie",
 }
 
 
