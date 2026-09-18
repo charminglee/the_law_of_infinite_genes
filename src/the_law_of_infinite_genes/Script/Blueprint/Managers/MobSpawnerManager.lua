@@ -186,7 +186,6 @@ end
 
 function MobSpawnerManager:ReceiveBeginPlay()
     MobSpawnerManager.SuperClass.ReceiveBeginPlay(self)
-    GameState.MobSpawnerManager = self
     Lib.EventSystem.Listen(Event.OnMobDie, self.OnMobDie, self)
 
     if Lib.IsServer() then
@@ -204,7 +203,6 @@ end
 
 function MobSpawnerManager:ReceiveEndPlay()
     MobSpawnerManager.SuperClass.ReceiveEndPlay(self)
-    GameState.MobSpawnerManager = nil
     self.spawnQueue = {}
     self.spawnTimer = 0
 end
