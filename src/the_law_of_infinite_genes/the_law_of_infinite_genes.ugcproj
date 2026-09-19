@@ -8,7 +8,7 @@ ProjectShortPath=/the_law_of_infinite_genes/
 StartMapName=/the_law_of_infinite_genes/UGCmap
 MapMode=0
 bIsBigWorld=0
-Version=1.38.12.15914
+Version=1.38.12.15916
 UpdateVersion=10
 GameModePath=/the_law_of_infinite_genes/Asset/Blueprint/UGCGameMode.UGCGameMode_C
 SourceTemplateDisplayName=
@@ -17,6 +17,7 @@ SourceTemplateDisplayName=
 bOpenItemEditorV1=0
 bOpenSkillEditorV1=0
 bOpenParticleEditorV1=0
+bExpandItemQuotaTo4000=0
 
 [MatchSetting]
 NumberOfTeams=1
