@@ -100,6 +100,14 @@ function GachaItem:OnDragDetected(MyGeometry, PointerEvent, Operation)
     return dragOperation;
 end
 function GachaItem:OnDragCancelled(PointerEvent, Operation)
+    local mainUI = GachaManager.MainUI;
+    if mainUI ~= nil and mainUI.StoreList ~= nil then
+        local screenPosition = KismetInputLibrary.PointerEvent_GetScreenSpacePosition(PointerEvent);
+        if SlateBlueprintLibrary.IsUnderLocation(mainUI.StoreList:GetCachedGeometry(), screenPosition)
+                and mainUI:HandleStoreAreaDrop(self) then
+            ugcprint("[GachaDrag] Store area drop fallback from=" .. tostring(self.Tag) .. ":" .. tostring(self.Index));
+        end
+    end
     self.DragOperation = nil;
     self.bDragDetected = false;
     ugcprint("[GachaDrag] OnDragCancelled");

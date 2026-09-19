@@ -492,6 +492,14 @@ function GachaMain:HandleItemDrop(sourceItem, targetItem)
     end
     return false;
 end
+function GachaMain:HandleStoreAreaDrop(sourceItem)
+    if sourceItem == nil or sourceItem.Data == nil or sourceItem.Tag ~= SelectTag.Shop then
+        return false;
+    end
+    UnrealNetwork.CallUnrealRPC(LocalPlayerController, GachaManager.ComponentClass, "PurchaseCard",
+            LocalPlayerController.PlayerKey, sourceItem.Index + 1);
+    return true;
+end
 function GachaMain:Purchase()
     local slot = self:_SelectedSlot();
     if slot == nil or GachaManager.SelectTag ~= SelectTag.Shop then
@@ -522,9 +530,29 @@ function GachaMain:_HasEquippedSuit(cardIndex)
     end
     return false;
 end
+function GachaMain:_HasMaxStarCard(cardIndex)
+    local manager = LocalPlayerState.PlayerDataManager;
+    local maxStar = CardCfg.Common.MaxCardStar;
+    local cardLists = {
+        manager:GetAllStoreCards(),
+        manager:GetAllEquippedCards(),
+    };
+    for _, cards in ipairs(cardLists) do
+        local count = cards.n or #cards;
+        for slot = 1, count do
+            local data = cards[slot];
+            if data ~= nil and data[1] == cardIndex and (data[2] or 1) >= maxStar then
+                return true;
+            end
+        end
+    end
+    return false;
+end
 function GachaMain:ShopListUpdate(Item, Index)
     local data = LocalPlayerState.PlayerDataManager:GetShopCard(Index + 1);
-    local showTips = data ~= nil and self:_HasEquippedSuit(data[1]);
+    local showTips = data ~= nil
+            and not self:_HasMaxStarCard(data[1])
+            and self:_HasEquippedSuit(data[1]);
     Item:SetData(Index, SelectTag.Shop, data, false, false, showTips);
 end
 function GachaMain:SlotListUpdate(Item, Index)

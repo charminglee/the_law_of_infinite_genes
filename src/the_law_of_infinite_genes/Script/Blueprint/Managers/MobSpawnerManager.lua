@@ -180,7 +180,15 @@ end
 
 
 function MobSpawnerManager:GetReplicatedProperties()
-    return { "waveIndex", "Lazy" }, "remainingMonsters", "isInSpawnInterval", { "rewardsRecord", "Lazy" }
+    return { "waveIndex", "Lazy" }, { "remainingMonsters", "Lazy" }, "isInSpawnInterval", { "rewardsRecord", "Lazy" }
+end
+
+
+function MobSpawnerManager:OnRep_remainingMonsters()
+    local oldCount = self._lastReplicatedRemainingMonsters or 0
+    local newCount = self.remainingMonsters or 0
+    self._lastReplicatedRemainingMonsters = newCount
+    Lib.EventSystem.Dispatch(Event.OnRemainingMobCountChanged, oldCount, newCount)
 end
 
 
@@ -233,6 +241,7 @@ function MobSpawnerManager:OnMobDie(killingDamage, eventInstigator, damageCauser
     end
     if self.remainingMonsters > 0 then
         self.remainingMonsters = self.remainingMonsters - 1
+        UnrealNetwork.RepLazyProperty(self, "remainingMonsters")
     end
     print("114514 1 "..tostring(self.remainingMonsters))
     if self.remainingMonsters <= 0 then
@@ -282,6 +291,7 @@ function MobSpawnerManager:_StartWave()
     local totalCount = _SpawnCountFormula(self.waveIndex)
     self.spawnQueue = _BuildWaveMobClassList(monsterGroup.MobConfigList, totalCount)
     self.remainingMonsters = #self.spawnQueue
+    UnrealNetwork.RepLazyProperty(self, "remainingMonsters")
 
     -- 第一只立即刷新，其余在 ReceiveTick 逐只刷新
     self:_SpawnNextMob()
@@ -297,6 +307,7 @@ function MobSpawnerManager:_SpawnNextMob()
     local rot = { Pitch=0, Yaw=0, Roll=0 }
     if not UE.IsValid(UGCMobPawnSystem.SpawnMob(self, mobClass, loc, rot)) then
         self.remainingMonsters = self.remainingMonsters - 1
+        UnrealNetwork.RepLazyProperty(self, "remainingMonsters")
     end
     return true
 end
