@@ -4,6 +4,7 @@
 --Edit Below--
 local BaseMonster = {
     tag = nil,
+    _healthBefore = 0,
 }
 
 
@@ -65,6 +66,18 @@ function BaseMonster:BPDie(killingDamage, eventInstigator, damageCauser, damageE
 end
 
 
+---受击前置事件
+---生效范围：服务器
+---@param damage float 伤害值
+---@param eventInstigator AController 伤害来源的Controller
+---@param damageCauser AActor 伤害来源
+---@param damageContext FGameMagnitudeContext  伤害上下文
+function BaseMonster:PreTakeDamageEvent(damage, eventInstigator, damageCauser, damageContext)
+    local health = UGCAttributeSystem.GetGameAttributeValue(self, UGCNativeGameAttributeType.Character_Health)
+    self._healthBefore = health
+end
+
+
 ---受击后置事件
 ---生效范围：服务器
 ---@param damage float 伤害值
@@ -76,8 +89,10 @@ function BaseMonster:PostTakeDamageEvent(damage, eventInstigator, damageCauser, 
         return
     end
 
+    local am = UGCGameSystem.GetPlayerPawnByPlayerController(eventInstigator).AttrManager
+    damage = math.min(damage, self._healthBefore)
     local pdm = UGCGameSystem.GetPlayerStateByPlayerController(eventInstigator).PlayerDataManager
-    local delta = math.ceil(damage * GameFlowCfg.Resource.OnDamage.ScoreMultiplier)
+    local delta = math.floor(damage * GameFlowCfg.Resource.OnDamage.ScoreMultiplier)
     pdm:AddScore(delta)
 end
 
@@ -88,23 +103,12 @@ end
 
 
 -- function BaseMonster:ReceiveEndPlay()
---     BaseMonster.SuperClass.ReceiveEndPlay(self) 
+--     BaseMonster.SuperClass.ReceiveEndPlay(self)
 -- end
 
 
 -- function BaseMonster:GetReplicatedProperties()
 --     return
--- end
-
-
--- ---受击前置事件
--- ---生效范围：服务器
--- ---@param Damage float 伤害值
--- ---@param EventInstigator AController 伤害来源的Controller
--- ---@param DamageCauser AActor 伤害来源
--- ---@param DamageContext FGameMagnitudeContext  伤害上下文
--- function BaseMonster:PreTakeDamageEvent(Damage, EventInstigator, DamageCauser, DamageContext)
-
 -- end
 
 

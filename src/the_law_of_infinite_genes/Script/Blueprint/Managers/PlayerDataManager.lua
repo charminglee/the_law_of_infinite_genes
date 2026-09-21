@@ -234,7 +234,7 @@ function PlayerDataManager:AddScore(delta)
     local oldScore = self._score
     self._score = self._score + delta
     UnrealNetwork.RepLazyProperty(self, "_score")
-    Lib.EventSystem.Broadcast_SinglePlayer(self, Event.OnGameScoreChanged, oldScore, self._score)
+    Lib.EventSystem.Broadcast_SinglePlayer(self.owner, Event.OnGameScoreChanged, oldScore, self._score)
 end
 
 
@@ -252,7 +252,7 @@ function PlayerDataManager:ResetScore()
     local oldScore = self._score
     self._score = 0
     UnrealNetwork.RepLazyProperty(self, "_score")
-    Lib.EventSystem.Broadcast_SinglePlayer(self, Event.OnGameScoreChanged, oldScore, self._score)
+    Lib.EventSystem.Broadcast_SinglePlayer(self.owner, Event.OnGameScoreChanged, oldScore, self._score)
 end
 
 
