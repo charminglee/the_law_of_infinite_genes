@@ -27,6 +27,7 @@ function RaidInstanceMain:LuaInit()
     self.bInitDoOnce = true;
     RaidInstanceManager:RegisterMainUI(self);
     Lib.EventSystem.Listen(Event.OnCoinChangeAfter, self.OnCoinChangeAfter, self);
+    Lib.EventSystem.Listen(Event.OnGameScoreChanged, self.OnGameScoreChanged, self);
     Lib.EventSystem.Listen(Event.OnRemainingMobCountChanged, self.OnRemainingMobCountChanged, self);
     Lib.EventSystem.Listen(Event.OnWaveStart, self.OnWaveStart, self);
     self:RefreshResourceCoin();
@@ -66,10 +67,18 @@ function RaidInstanceMain:OnCoinChangeAfter(UID, CoinId, OldValue, NewValue)
     end
 end
 function RaidInstanceMain:RefreshCombatInfo()
+    local playerState = UGCGameSystem.GetLocalPlayerState();
+    self:RefreshScore(playerState.PlayerDataManager:GetScore());
     self:RefreshRemainingMobCount(GameState:GetRemainingMobCount());
     if GameState.MobSpawnerManager ~= nil then
         self:RefreshWave(GameState:GetWaveIndex());
     end
+end
+function RaidInstanceMain:RefreshScore(score)
+    self.Score:SetText(tostring(score));
+end
+function RaidInstanceMain:OnGameScoreChanged(OldScore, NewScore)
+    self:RefreshScore(NewScore);
 end
 function RaidInstanceMain:RefreshRemainingMobCount(count)
     self.Monster:SetText(string.format('剩余怪物:%s只', tostring(count)));
