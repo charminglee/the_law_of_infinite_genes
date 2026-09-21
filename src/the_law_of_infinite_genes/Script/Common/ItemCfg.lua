@@ -3,34 +3,34 @@ ItemCfg = ItemCfg or {}
 
 -- 装备词条数值范围
 ItemCfg.AttributeEntryRange = {
-    [Attribute.AttackPower]                 = { Min=0, Max=1 },
-    [Attribute.AttackPowerPct]              = { Min=0, Max=1 },
-    [Attribute.DamagePct]                   = { Min=0, Max=1 },
-    [Attribute.NormalMonsterDamagePct]      = { Min=0, Max=1 },
-    [Attribute.EliteMonsterDamagePct]       = { Min=0, Max=1 },
-    [Attribute.BossDamagePct]               = { Min=0, Max=1 },
-    [Attribute.CritChance]                  = { Min=0, Max=1 },
-    [Attribute.CritDamagePct]               = { Min=0, Max=1 },
-    [Attribute.Defence]                     = { Min=0, Max=1 },
-    [Attribute.DefensePct]                  = { Min=0, Max=1 },
-    [Attribute.HealthStealPct]              = { Min=0, Max=1 },
-    [Attribute.CounterAttackPct]            = { Min=0, Max=1 },
-    [Attribute.DamageDecreace]              = { Min=0, Max=1 },
-    [Attribute.DamageDecreacePct]           = { Min=0, Max=1 },
-    [Attribute.BreakDefencePct]             = { Min=0, Max=1 },
-    [Attribute.SeckillChance]               = { Min=0, Max=1 },
-    [Attribute.DodgeChance]                 = { Min=0, Max=1 },
-    [Attribute.HealthMax]                   = { Min=0, Max=1 },
-    [Attribute.HealthMaxPct]                = { Min=0, Max=1 },
-    [Attribute.RecoilPct]                   = { Min=0, Max=1 },
-    [Attribute.ReloadTime]                  = { Min=0, Max=1 },
-    [Attribute.ReloadTimePct]               = { Min=0, Max=1 },
-    [Attribute.MoveSpeedScale]              = { Min=0, Max=2 },
-    [Attribute.ShootSpeedScale]             = { Min=0, Max=2 },
-    [Attribute.EpidemicToxinRatio]          = { Min=0, Max=1 },
-    [Attribute.EpidemicToxinLevel]          = { Min=0, Max=1 },
-    [Attribute.EpidemicToxinOverlyLimit]    = { Min=0, Max=1 },
-    [Attribute.EpidemicToxinSettleRatio]    = { Min=0, Max=1 },
+    [Attribute.AttackPower]              = { Min=1,   Max=8 },    -- 攻击力（固定值）
+    [Attribute.AttackPowerPct]           = { Min=0,   Max=0.10 }, -- 攻击力+10%
+    [Attribute.DamagePct]                = { Min=0,   Max=0.10 }, -- 通用伤害+10%
+    [Attribute.NormalMonsterDamagePct]   = { Min=0,   Max=0.15 }, -- 普通怪伤害+15%
+    [Attribute.EliteMonsterDamagePct]    = { Min=0,   Max=0.15 }, -- 精锐怪伤害+15%
+    [Attribute.BossDamagePct]            = { Min=0,   Max=0.12 }, -- Boss伤害+12%
+    [Attribute.CritChance]               = { Min=0,   Max=0.08 }, -- 暴击率+8%
+    [Attribute.CritDamagePct]            = { Min=0,   Max=0.15 }, -- 暴击伤害+15%
+    [Attribute.Defence]                  = { Min=1,   Max=5 },    -- 防御（固定值）
+    [Attribute.DefensePct]               = { Min=0,   Max=0.10 }, -- 防御+10%
+    [Attribute.HealthStealPct]           = { Min=0,   Max=0.03 }, -- 吸血+3%
+    [Attribute.CounterAttackPct]         = { Min=0,   Max=0.10 }, -- 反伤+10%
+    [Attribute.DamageDecreace]           = { Min=1,   Max=3 },    -- 固定减伤
+    [Attribute.DamageDecreacePct]        = { Min=0,   Max=0.08 }, -- 减伤+8%
+    [Attribute.BreakDefencePct]          = { Min=0,   Max=0.15 }, -- 破防+15%
+    [Attribute.SeckillChance]            = { Min=0,   Max=0.02 }, -- 秒杀率+2%
+    [Attribute.DodgeChance]              = { Min=0,   Max=0.05 }, -- 闪避+5%
+    [Attribute.HealthMax]                = { Min=10,  Max=80 },   -- 生命上限（固定值）
+    [Attribute.HealthMaxPct]             = { Min=0,   Max=0.10 }, -- 生命+10%
+    [Attribute.RecoilPct]                = { Min=-1,  Max=0 },    -- 后坐力
+    [Attribute.ReloadTime]               = { Min=-1,  Max=0 },    -- 换弹时间
+    [Attribute.ReloadTimePct]            = { Min=0,   Max=0.15 }, -- 换弹速度+15%
+    [Attribute.MoveSpeedScale]           = { Min=0,   Max=0.20 }, -- 移速+20%
+    [Attribute.ShootSpeedScale]          = { Min=0,   Max=0.20 }, -- 射速+20%
+    [Attribute.EpidemicToxinRatio]       = { Min=0,   Max=0.10 }, -- 疫毒触发+10%
+    [Attribute.EpidemicToxinLevel]       = { Min=1,   Max=5 },    -- 疫毒等级+5
+    [Attribute.EpidemicToxinOverlyLimit] = { Min=1,   Max=5 },    -- 叠加上限+5层
+    [Attribute.EpidemicToxinSettleRatio] = { Min=0,   Max=0.03 }, -- 立即结算+3%
 }
 ItemCfg.AttributeEntryPool = Lib.Table.Keys(ItemCfg.AttributeEntryRange)
 
