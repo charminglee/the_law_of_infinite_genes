@@ -195,17 +195,6 @@ end
 function MobSpawnerManager:ReceiveBeginPlay()
     MobSpawnerManager.SuperClass.ReceiveBeginPlay(self)
     Lib.EventSystem.Listen(Event.OnMobDie, self.OnMobDie, self)
-
-    if Lib.IsServer() then
-        local spawnerCount = self:GetWaveSpawnerNum(0)
-        for i = 0, spawnerCount - 1 do
-            local spawner = self:GetSpawner(0, i)
-            if spawner ~= nil then
-                -- 关闭自动刷怪，需手动刷怪
-                spawner:ModifyMinMaxSpawnCount(0, 0)
-            end
-        end
-    end
 end
 
 
@@ -243,12 +232,10 @@ function MobSpawnerManager:OnMobDie(killingDamage, eventInstigator, damageCauser
         self.remainingMonsters = self.remainingMonsters - 1
         UnrealNetwork.RepLazyProperty(self, "remainingMonsters")
     end
-    print("114514 1 "..tostring(self.remainingMonsters))
     if self.remainingMonsters <= 0 then
         if GameFlowCfg.Resource.BossLoot.WaveMultiplier[self.waveIndex] then
             self:_DropBossReward()
         end
-        print("114514 2 "..tostring(self.remainingMonsters))
         self:NextWave()
     end
 end
@@ -265,14 +252,12 @@ function MobSpawnerManager:NextWave()
     if self.remainingMonsters > 0 then
         return
     end
-    print("114514 3 "..tostring(self.remainingMonsters))
     self.isInSpawnInterval = true
     Lib.CreateTimer(GameFlowCfg.SpawnerDelay, false, self._StartWave, self)
 end
 
 
 function MobSpawnerManager:_StartWave()
-    print("114514 4 "..tostring(self.remainingMonsters))
     self.waveIndex = self.waveIndex + 1
     self.isInSpawnInterval = false
 
