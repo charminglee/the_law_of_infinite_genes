@@ -1,6 +1,7 @@
 ItemCfg = ItemCfg or {}
 
---- 核心属性范围
+
+-- 装备词条数值范围
 ItemCfg.AttributeEntryRange = {
     [Attribute.AttackPower]              = { Min=1,   Max=8 },    -- 攻击力（固定值）
     [Attribute.AttackPowerPct]           = { Min=0,   Max=0.10 }, -- 攻击力+10%
@@ -21,8 +22,8 @@ ItemCfg.AttributeEntryRange = {
     [Attribute.DodgeChance]              = { Min=0,   Max=0.05 }, -- 闪避+5%
     [Attribute.HealthMax]                = { Min=10,  Max=80 },   -- 生命上限（固定值）
     [Attribute.HealthMaxPct]             = { Min=0,   Max=0.10 }, -- 生命+10%
-    [Attribute.RecoilPct]                = { Min=0,   Max=0.30 }, -- 后坐力
-    [Attribute.ReloadTime]               = { Min=0.1, Max=0.5 },  -- 换弹时间
+    [Attribute.RecoilPct]                = { Min=-1,  Max=0 },    -- 后坐力
+    [Attribute.ReloadTime]               = { Min=-1,  Max=0 },    -- 换弹时间
     [Attribute.ReloadTimePct]            = { Min=0,   Max=0.15 }, -- 换弹速度+15%
     [Attribute.MoveSpeedScale]           = { Min=0,   Max=0.20 }, -- 移速+20%
     [Attribute.ShootSpeedScale]          = { Min=0,   Max=0.20 }, -- 射速+20%
@@ -31,7 +32,6 @@ ItemCfg.AttributeEntryRange = {
     [Attribute.EpidemicToxinOverlyLimit] = { Min=1,   Max=5 },    -- 叠加上限+5层
     [Attribute.EpidemicToxinSettleRatio] = { Min=0,   Max=0.03 }, -- 立即结算+3%
 }
-
 ItemCfg.AttributeEntryPool = Lib.Table.Keys(ItemCfg.AttributeEntryRange)
 
 
