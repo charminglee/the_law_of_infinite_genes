@@ -17,6 +17,9 @@ LobbyModel = LobbyModel or {
     GameModeConfigList = {},
     GameModeDetailList = {},
     CombinedModeConfigList = {},
+    ModeConfigByID = {},
+    ModeIDsByDetailID = {},
+    MultiModeIDSet = {},
     CurrentSelectedModeID = -1,
     bIsMatching = false,
 }
@@ -97,7 +100,12 @@ function LobbyModel:Init()
     self:LoadDataTables()
     self:CombineModeConfigTable()
 
-    local DefaultModeID = self:IsModeIDValid(self.CurrentSelectedModeID)
+    local PlayerController = GetLocalPlayerController()
+    local ReplicatedModeID = PlayerController and PlayerController.LobbyInfo
+            and tonumber(PlayerController.LobbyInfo.SelectedModeID) or nil
+    local DefaultModeID = self:IsModeIDValid(ReplicatedModeID)
+        and ReplicatedModeID
+        or self:IsModeIDValid(self.CurrentSelectedModeID)
         and self.CurrentSelectedModeID
         or self:GetAllModeID()[1]
     if DefaultModeID then
@@ -228,10 +236,10 @@ function LobbyModel:SelectMode(ModeID, bClientInit)
         ugcprint("[LobbyModel] invalid ModeID: " .. tostring(ModeID))
         return false
     end
-    if not bClientInit and self:IsModeLocked(ModeID) then
-        UGCWidgetManagerSystem.ShowTipsUI("该模式尚未解锁")
-        return false
-    end
+    --if not bClientInit and self:IsModeLocked(ModeID) then
+    --    UGCWidgetManagerSystem.ShowTipsUI("该模式尚未解锁")
+    --    return false
+    --end
 
     local PreviousConfig = self:GetCurrentSelectedMode()
     self.CurrentSelectedModeID = ModeID

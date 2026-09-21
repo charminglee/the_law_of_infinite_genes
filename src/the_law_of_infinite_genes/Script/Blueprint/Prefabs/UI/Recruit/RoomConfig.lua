@@ -31,8 +31,9 @@ function RoomConfig:OnOpen(Data)
     self.OnCancel = Data.OnCancel
     self.Maps = RecruitManager:GetMapConfigs()
     self.MapIndex = 1
+    local SelectedMap = RecruitManager:GetMapConfigByModeID(self.Config.ModeID)
     for Index, Map in ipairs(self.Maps) do
-        if Map.ModeID == self.Config.ModeID then
+        if SelectedMap and Map.MapKey == SelectedMap.MapKey then
             self.MapIndex = Index
             break
         end
@@ -47,16 +48,26 @@ function RoomConfig:ApplyMap(Index)
     if not Map then
         return
     end
+    local PreviousModeID = self.Config.ModeID
     self.MapIndex = Index
     self:ApplyMode(Map)
-    local Difficulties = RecruitManager:GetDifficultyConfigs()
+    local Difficulties = RecruitManager:GetDifficultyConfigs(Map.ModeID)
     local bMapLocked = RecruitManager:IsModeLocked(Map.ModeID)
     self.Button_Save:SetIsEnabled(not bMapLocked)
-    local SelectedDifficultyModeID = not bMapLocked and Difficulties[1].ModeID or nil
+    local SelectedDifficultyModeID = nil
+    local PreviousMode = RecruitManager:GetModeConfig(PreviousModeID)
+    if not bMapLocked and PreviousMode and PreviousMode.MapKey == Map.MapKey then
+        SelectedDifficultyModeID = PreviousMode.ModeID
+    elseif not bMapLocked and Difficulties[1] then
+        SelectedDifficultyModeID = Difficulties[1].ModeID
+    end
     if SelectedDifficultyModeID then
-        self.Config.Difficulty = Difficulties[1].Difficulty
+        local SelectedMode = RecruitManager:GetModeConfig(SelectedDifficultyModeID)
+        self.Config.ModeID = SelectedDifficultyModeID
+        self.Config.Difficulty = SelectedMode.Difficulty
     end
     self.DegreeChoice:SetOptions(Difficulties, SelectedDifficultyModeID, function(NewConfig)
+        self.Config.ModeID = NewConfig.ModeID
         self.Config.Difficulty = NewConfig.Difficulty
     end, function(ModeID)
         return bMapLocked or RecruitManager:IsModeLocked(ModeID)
@@ -64,11 +75,9 @@ function RoomConfig:ApplyMap(Index)
 end
 
 function RoomConfig:ApplyMode(Mode)
-    self.Config.ModeID = Mode.ModeID
     self.Config.MapName = Mode.ModeName
     self.Config.Description = Mode.ModeDesc
     self.Config.MapImage = Mode.ModePost
-    self.Config.Difficulty = Mode.Difficulty
     self.TextBlock_MapName:SetText(Mode.ModeName or "")
     self.TextBlock_Description:SetText(Mode.ModeDesc or "")
     self.Image_Customs:SetVisibility(Mode.ModePost and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)

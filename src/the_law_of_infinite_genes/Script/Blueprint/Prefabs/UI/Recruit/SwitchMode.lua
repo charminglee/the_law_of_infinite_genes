@@ -27,19 +27,20 @@ function SwitchMode:Construct()
     self.DropList.OnAfterNewItem:Add(self.OnDropItemReload, self)
 end
 
-function SwitchMode:OnOpen(Data)
-    self.FocusedModeID = Data.ModeID
+function SwitchMode:OnOpen()
+    self.FocusedModeID = RecruitManager:GetSelectedModeID()
 end
 
-function SwitchMode:OnUpdate(Data)
-    self.FocusedModeID = Data.ModeID or self.FocusedModeID
+function SwitchMode:OnUpdate()
+    self.FocusedModeID = RecruitManager:GetSelectedModeID()
     local PlayerController = UGCGameSystem.GetLocalPlayerController()
     local bHasTeam = #(PlayerController.LobbyTeammatePlayerKeys or {}) > 1
     self.Button_4:SetVisibility(not bHasTeam and ESlateVisibility.Visible or ESlateVisibility.Collapsed)
     self.Maps = RecruitManager:GetMapConfigs()
     self.MapIndex = 1
+    local SelectedMap = RecruitManager:GetMapConfigByModeID(self.FocusedModeID)
     for Index, Map in ipairs(self.Maps) do
-        if Map.ModeID == self.FocusedModeID then
+        if SelectedMap and Map.MapKey == SelectedMap.MapKey then
             self.MapIndex = Index
             break
         end
@@ -52,14 +53,22 @@ function SwitchMode:ApplyMap(Index)
     if not Map then
         return
     end
+    local PreviousModeID = self.SelectedDifficultyModeID or self.FocusedModeID
     self.MapIndex = Index
     self:ApplyMode(Map)
-    local DifficultyOptions = RecruitManager:GetDifficultyConfigs()
+    local DifficultyOptions = RecruitManager:GetDifficultyConfigs(Map.ModeID)
     local bMapLocked = RecruitManager:IsModeLocked(Map.ModeID)
     self.Button_5:SetIsEnabled(not bMapLocked)
-    self.SelectedDifficultyModeID = not bMapLocked and DifficultyOptions[1].ModeID or nil
+    self.SelectedDifficultyModeID = nil
+    local PreviousMode = RecruitManager:GetModeConfig(PreviousModeID)
+    if not bMapLocked and PreviousMode and PreviousMode.MapKey == Map.MapKey then
+        self.SelectedDifficultyModeID = PreviousMode.ModeID
+    elseif not bMapLocked and DifficultyOptions[1] then
+        self.SelectedDifficultyModeID = DifficultyOptions[1].ModeID
+    end
     self.DegreeChoice:SetOptions(DifficultyOptions, self.SelectedDifficultyModeID, function(Config)
         self.SelectedDifficultyModeID = Config.ModeID
+        self.FocusedModeID = Config.ModeID
     end, function(ModeID)
         return bMapLocked or RecruitManager:IsModeLocked(ModeID)
     end)
@@ -90,17 +99,18 @@ function SwitchMode:OnDropItemReload(Item, ZeroBasedIndex)
 end
 
 function SwitchMode:OnConfirmClicked()
-    if LobbyModel:SelectMode(self.FocusedModeID) then
-        LobbyUtils.CloseWidget(LobbyWidgetType.LWT_SwitchMode)
+    local ModeID = self.SelectedDifficultyModeID or self.FocusedModeID
+    if RecruitManager:SetSelectedModeID(ModeID) then
+        RecruitManager:CloseSwitchMode()
     end
 end
 
 function SwitchMode:OnCancelClicked()
-    LobbyUtils.CloseWidget(LobbyWidgetType.LWT_SwitchMode)
+    RecruitManager:CloseSwitchMode()
 end
 
 function SwitchMode:OnRecruitClicked()
-    LobbyUtils.CloseWidget(LobbyWidgetType.LWT_SwitchMode)
+    RecruitManager:CloseSwitchMode()
     RecruitManager:OpenMainUI()
 end
 

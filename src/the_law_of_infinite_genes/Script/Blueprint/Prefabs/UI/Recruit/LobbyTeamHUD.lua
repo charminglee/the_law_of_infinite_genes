@@ -10,12 +10,14 @@
 ---@field CanvasPanel_Tip UCanvasPanel
 ---@field CheckBox_AllowRestock UCheckBox
 ---@field CircularThrobber_0 UCircularThrobber
----@field Image_2 UImage
 ---@field Image_3 UImage
 ---@field Image_4 UImage
 ---@field Image_7 UImage
 ---@field Image_8 UImage
+---@field Image_Map UImage
 ---@field TeamList TeamList_C
+---@field TextBlock_Degree UTextBlock
+---@field TextBlock_MapName UTextBlock
 ---@field TextBlock_Time UTextBlock
 --Edit Below--
 local LobbyTeamHUD = { bInitDoOnce = false }
@@ -48,13 +50,31 @@ function LobbyTeamHUD:Destruct()
     self.Button_Start_Cancel.OnClicked:Remove(self.OnCancelMatchClicked, self)
     self.CheckBox_AllowRestock.OnCheckStateChanged:Remove(self.OnFillTeammateChanged, self)
 end
-function LobbyTeamHUD:OnUpdate(Data)
-    self.ViewData = Data
-    self:SetMatchingState(Data.bIsMatching == true)
+function LobbyTeamHUD:OnUpdate()
+    self:RefreshModeInfo(RecruitManager:GetSelectedModeID())
+    self:SetMatchingState(RecruitManager:IsMatching())
+end
+function LobbyTeamHUD:RefreshModeInfo(ModeID)
+    local SelectedModeID = tonumber(ModeID)
+    local ModeConfig = SelectedModeID and RecruitManager:GetModeConfig(SelectedModeID) or nil
+    if not ModeConfig then
+        SelectedModeID = RecruitManager:GetSelectedModeID()
+        ModeConfig = SelectedModeID and RecruitManager:GetModeConfig(SelectedModeID) or nil
+    end
+    local MapConfig = SelectedModeID and RecruitManager:GetMapConfigByModeID(SelectedModeID) or nil
+    if not ModeConfig or not MapConfig then
+        return
+    end
+    self.TextBlock_MapName:SetText(MapConfig.ModeName or "")
+    self.TextBlock_Degree:SetText(ModeConfig.Difficulty or "")
+    self.Image_Map:SetVisibility(MapConfig.ModePost and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
+    if MapConfig.ModePost then
+        self.Image_Map:SetBrushFromTexture(MapConfig.ModePost, false)
+    end
 end
 function LobbyTeamHUD:RefreshTeamState()
     local TeamState = RecruitManager:GetTeamState()
-    local bIsMatching = self.ViewData and self.ViewData.bIsMatching == true
+    local bIsMatching = RecruitManager:IsMatching()
     self.TeamList:SetMembers(TeamState.Members)
     self.TeamList:SetVisibility(TeamState.bHasTeam and ESlateVisibility.SelfHitTestInvisible or ESlateVisibility.Collapsed)
     self.bUpdatingFillTeammate = true
@@ -103,30 +123,10 @@ function LobbyTeamHUD:StopMatchingTimer()
     self.TextBlock_Time:SetText("00:00")
 end
 function LobbyTeamHUD:OnStartClicked()
-    local TeamState = RecruitManager:GetTeamState()
-    local GameState = UGCGameSystem.GameState
-    local ModeID = LobbyModel:GetCurrentSelectedModeID()
-    local ModeSetting = UGCMultiMode.GetModeSetting(ModeID)
-    if not GameState or not ModeSetting then
-        return
-    end
-    if not TeamState.bTeamComplete then
-        UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
-        return
-    end
-    local MaxPlayers = tonumber(ModeSetting.TeamPlayers) or 0
-    if MaxPlayers <= 0 or #TeamState.Members > MaxPlayers then
-        UGCWidgetManagerSystem.ShowTipsUI("当前人数大于模式最大人数")
-        return
-    end
-    if not GameState:IsAllLobbyTeammateReady() then
-        UGCWidgetManagerSystem.ShowTipsUI("有队友未准备，不能开始匹配")
-        return
-    end
-    LobbyModel:RequestMatch(TeamState.bAllowRestock)
+    RecruitManager:StartGame()
 end
 function LobbyTeamHUD:OnCancelMatchClicked()
-    LobbyModel:CancelMatch()
+    RecruitManager:CancelMatch()
 end
 function LobbyTeamHUD:OnFillTeammateChanged(bFillTeammate)
     if self.bUpdatingFillTeammate then
@@ -153,9 +153,7 @@ function LobbyTeamHUD:OnSwitchModeClicked()
         UGCWidgetManagerSystem.ShowTipsUI("队伍有成员退出，请退出玩法重新进入")
         return
     end
-    LobbyUtils.OpenAndUpdateWidget(LobbyWidgetType.LWT_SwitchMode, {
-        ModeID = LobbyModel:GetCurrentSelectedModeID(),
-    })
+    RecruitManager:OpenSwitchMode()
 end
 function LobbyTeamHUD:OnExitTeamClicked()
     RecruitManager:ExitCurrentRoom()

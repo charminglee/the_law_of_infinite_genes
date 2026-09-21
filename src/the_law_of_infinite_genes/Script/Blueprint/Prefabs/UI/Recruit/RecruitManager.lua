@@ -8,23 +8,26 @@ RecruitManager = RecruitManager or {
     Page = "Default",
     InvitationUI = nil,
     RoomConfigUI = nil,
+    SwitchModeUI = nil,
     JoinRequestCallback = nil,
     InviteRequestCallback = nil,
     ModeConfigByID = {},
-    ModeIDsByDetailID = {},
+    ModeIDsByMapKey = {},
+    MapConfigs = {},
     bModeConfigLoaded = false,
+    SelectedModeID = nil,
+    AllowRestock = true,
+    bIsMatching = false,
 }
-
-local GameTypes = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.Shared.GameTypes")
-
 local POPUP_PATHS = {
     Invitation = "Asset/Blueprint/Prefabs/UI/Recruit/InvitationList.InvitationList_C",
     RoomConfig = "Asset/Blueprint/Prefabs/UI/Recruit/RoomConfig.RoomConfig_C",
+    SwitchMode = "Asset/Blueprint/Prefabs/UI/Recruit/SwitchMode.SwitchMode_C",
 }
 
+local LOBBY_MODE_ID = 1001
 local GAME_MODE_CONFIG_PATH = "Asset/Data/Table/UGCGameModeConfig.UGCGameModeConfig"
 local GAME_MODE_DETAIL_PATH = "Asset/Data/Table/UGCGameModeDetail.UGCGameModeDetail"
-
 local function CopyTable(Source)
     local Result = {}
     for Key, Value in pairs(Source or {}) do
@@ -50,6 +53,9 @@ end
 
 function RecruitManager:RegisterTeamHUD(TeamHUD)
     self.TeamHUD = TeamHUD
+    local PlayerController = UGCGameSystem.GetLocalPlayerController()
+    self.bIsMatching = PlayerController and PlayerController.LobbyInfo
+            and PlayerController.LobbyInfo.bIsMatching == true or false
 end
 
 function RecruitManager:UnregisterTeamHUD(TeamHUD)
@@ -86,6 +92,7 @@ function RecruitManager:NotifyChanged()
         self.MainUI:RefreshUI()
     end
     if self.TeamHUD then
+        self.TeamHUD:RefreshModeInfo(self:GetSelectedModeID())
         self.TeamHUD:RefreshTeamState()
     end
 end
@@ -129,67 +136,89 @@ function RecruitManager:LoadModeConfig()
         return
     end
 
-    local EnabledModeIDs = {}
-    local MultiModeConfigs = GameFrontendHUD:UGCGetMultiModeConfig()
-    for Index = 1, MultiModeConfigs:Num() do
-        local Config = json.decode(MultiModeConfigs:Get(Index))
-        local ModeID = Config and tonumber(Config.ModeID)
-        if ModeID and ModeID ~= GameTypes.ModeID.Lobby then
-            EnabledModeIDs[ModeID] = true
-        end
-    end
+    self.ModeConfigByID = {}
+    self.ModeIDsByMapKey = {}
+    self.MapConfigs = {}
 
     local ModeRowsByID = {}
     local ModeRows = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath(GAME_MODE_CONFIG_PATH)) or {}
     for _, ModeRow in pairs(ModeRows) do
-        ModeRowsByID[tonumber(ModeRow.ModeID)] = ModeRow
+        local ModeID = tonumber(ModeRow.ModeID)
+        if ModeID then
+            ModeRowsByID[ModeID] = ModeRow
+        end
     end
 
     local DetailRows = UGCGameSystem.GetTableData(UGCGameSystem.GetUGCResourcesFullPath(GAME_MODE_DETAIL_PATH)) or {}
     for _, Detail in pairs(DetailRows) do
-        local DetailModeIDs = {}
+        local MapConfigsByKey = {}
         for _, RawModeID in ipairs(Detail.ModeIDs or {}) do
             local ModeID = tonumber(RawModeID)
             local ModeRow = ModeRowsByID[ModeID]
-            if EnabledModeIDs[ModeID] and ModeRow then
-                self.ModeConfigByID[ModeID] = {
-                    ModeID = ModeID,
-                    DetailID = Detail.ID,
-                    ModeName = Detail.ModeName,
-                    ModeDesc = Detail.ModeDesc,
-                    ModeBanner = Detail.ModeBanner,
-                    ModePost = Detail.ModePost,
-                    Difficulty = ModeRow.Difficulty,
-                    UnlockDesc = ModeRow.UnlockDesc,
-                }
-                table.insert(DetailModeIDs, ModeID)
+            if ModeID ~= LOBBY_MODE_ID and ModeRow then
+                local MapName = ModeRow.ModeName
+                local MapKey = tostring(Detail.ID) .. ":" .. tostring(MapName)
+                local Config = CopyTable(Detail)
+                Config.ModeID = ModeID
+                Config.DetailID = Detail.ID
+                Config.MapKey = MapKey
+                Config.ModeName = MapName
+                Config.Difficulty = ModeRow.Difficulty
+                Config.UnlockDesc = ModeRow.UnlockDesc
+                self.ModeConfigByID[ModeID] = Config
+                self.ModeIDsByMapKey[MapKey] = self.ModeIDsByMapKey[MapKey] or {}
+                table.insert(self.ModeIDsByMapKey[MapKey], ModeID)
+                if not MapConfigsByKey[MapKey] then
+                    MapConfigsByKey[MapKey] = CopyTable(Config)
+                end
             end
         end
-        self.ModeIDsByDetailID[Detail.ID] = DetailModeIDs
+        if not Detail.Hide then
+            for MapKey, MapConfig in pairs(MapConfigsByKey) do
+                MapConfig.ModeIDs = self.ModeIDsByMapKey[MapKey]
+                table.insert(self.MapConfigs, MapConfig)
+            end
+        end
     end
+    table.sort(self.MapConfigs, function(Left, Right)
+        return tonumber(Left.ModeID) < tonumber(Right.ModeID)
+    end)
     self.bModeConfigLoaded = true
 end
 
 function RecruitManager:GetMapConfigs()
     self:LoadModeConfig()
     local Result = {}
-    for _, MapInfo in ipairs(GameTypes.MapList) do
-        local ModeConfig = self.ModeConfigByID[tonumber(MapInfo.ModeID)]
-        if ModeConfig then
-            local Config = CopyTable(ModeConfig)
-            Config.ModeName = MapInfo.ModeName
-            table.insert(Result, Config)
-        end
+    for _, MapConfig in ipairs(self.MapConfigs) do
+        table.insert(Result, CopyTable(MapConfig))
     end
     return Result
 end
 
+function RecruitManager:GetModeConfig(ModeID)
+    self:LoadModeConfig()
+    return self.ModeConfigByID[tonumber(ModeID)]
+end
+
+function RecruitManager:GetMapConfigByModeID(ModeID)
+    local ModeConfig = self:GetModeConfig(ModeID)
+    if not ModeConfig then
+        return nil
+    end
+    for _, MapConfig in ipairs(self.MapConfigs) do
+        if MapConfig.MapKey == ModeConfig.MapKey then
+            return MapConfig
+        end
+    end
+    return nil
+end
+
 function RecruitManager:GetDifficultyConfigs(ModeID)
     self:LoadModeConfig()
-    local Config = self.ModeConfigByID[tonumber(ModeID or GameTypes.ModeID.DefaultGameplay)]
+    local Config = self.ModeConfigByID[tonumber(ModeID)]
     local Result = {}
     if Config then
-        for _, DifficultyModeID in ipairs(self.ModeIDsByDetailID[Config.DetailID]) do
+        for _, DifficultyModeID in ipairs(self.ModeIDsByMapKey[Config.MapKey] or {}) do
             table.insert(Result, self.ModeConfigByID[DifficultyModeID])
         end
     end
@@ -203,25 +232,111 @@ function RecruitManager:IsModeLocked(ModeID)
             return false
         end
     end
+    ---  默认先全部解锁
+    return false
+end
+
+function RecruitManager:GetSelectedModeID()
+    if self.CurrentRoom and self.CurrentRoom.Config then
+        local RoomModeID = tonumber(self.CurrentRoom.Config.ModeID)
+        if RoomModeID and RoomModeID ~= LOBBY_MODE_ID then
+            return RoomModeID
+        end
+    end
+    local SelectedModeID = tonumber(self.SelectedModeID)
+    if SelectedModeID and SelectedModeID ~= LOBBY_MODE_ID then
+        return SelectedModeID
+    end
+    local PlayerController = UGCGameSystem.GetLocalPlayerController()
+    SelectedModeID = PlayerController and PlayerController.LobbyInfo
+            and tonumber(PlayerController.LobbyInfo.SelectedModeID) or nil
+    if SelectedModeID and SelectedModeID ~= LOBBY_MODE_ID then
+        return SelectedModeID
+    end
+    local Maps = self:GetMapConfigs()
+    return Maps[1] and Maps[1].ModeID or nil
+end
+
+function RecruitManager:SetSelectedModeID(ModeID)
+    self:LoadModeConfig()
+    ModeID = tonumber(ModeID)
+    if not ModeID or ModeID == LOBBY_MODE_ID or not self.ModeConfigByID[ModeID] then
+        return false
+    end
+    self.SelectedModeID = ModeID
+    if self.CurrentRoom and self.CurrentRoom.Config then
+        local ModeConfig = self.ModeConfigByID[ModeID]
+        local MapConfig = self:GetMapConfigByModeID(ModeID)
+        self.CurrentRoom.Config.ModeID = ModeID
+        self.CurrentRoom.Config.Difficulty = ModeConfig.Difficulty
+        self.CurrentRoom.Config.MapName = MapConfig.ModeName
+        self.CurrentRoom.Config.Description = MapConfig.ModeDesc
+        self.CurrentRoom.Config.MapImage = MapConfig.ModePost
+    end
+    local PlayerController = UGCGameSystem.GetLocalPlayerController()
+    if PlayerController then
+        UnrealNetwork.CallUnrealRPC(
+            PlayerController,
+            PlayerController,
+            "RPC_Server_SetLobbySelectedModeID",
+            ModeID
+        )
+    end
+    self:NotifyChanged()
+    return true
+end
+
+function RecruitManager:IsMatching()
+    return self.bIsMatching == true
+end
+
+function RecruitManager:SetMatchingState(bIsMatching)
+    self.bIsMatching = bIsMatching == true
+    if self.TeamHUD then
+        self.TeamHUD:SetMatchingState(self.bIsMatching)
+    end
+end
+
+function RecruitManager:OnMatchResponse(bSucceeded)
+    self:SetMatchingState(bSucceeded)
+    local PlayerController = UGCGameSystem.GetLocalPlayerController()
+    if PlayerController and PlayerController.bIsTeamLeader then
+        UnrealNetwork.CallUnrealRPC(
+            PlayerController,
+            PlayerController,
+            "RPC_Server_SetLobbybIsMatching",
+            bSucceeded
+        )
+    end
+end
+
+function RecruitManager:CancelMatch()
+    if not self:IsMatching() or not UGCMultiMode.RequestCancelMatch() then
+        return false
+    end
+    self:SetMatchingState(false)
+    local PlayerController = UGCGameSystem.GetLocalPlayerController()
+    if PlayerController and PlayerController.bIsTeamLeader then
+        UnrealNetwork.CallUnrealRPC(
+            PlayerController,
+            PlayerController,
+            "RPC_Server_SetLobbybIsMatching",
+            false
+        )
+    end
     return true
 end
 
 function RecruitManager:BuildDefaultRoomConfig()
-    local PlayerController = UGCGameSystem.GetLocalPlayerController()
-    local SelectedModeID = PlayerController.LobbyInfo and PlayerController.LobbyInfo.SelectedModeID
+    local SelectedModeID = self:GetSelectedModeID()
     local Maps = self:GetMapConfigs()
-    local Mode = Maps[1]
-    for _, Map in ipairs(Maps) do
-        if Map.ModeID == SelectedModeID then
-            Mode = Map
-            break
-        end
-    end
+    local Mode = self:GetModeConfig(SelectedModeID) or Maps[1]
+    local Map = self:GetMapConfigByModeID(SelectedModeID) or Maps[1]
     return {
         ModeID = Mode and Mode.ModeID or nil,
-        MapName = Mode and Mode.ModeName or "",
-        Description = Mode and Mode.ModeDesc or "",
-        MapImage = Mode and Mode.ModePost or nil,
+        MapName = Map and Map.ModeName or "",
+        Description = Map and Map.ModeDesc or "",
+        MapImage = Map and Map.ModePost or nil,
         Difficulty = Mode and Mode.Difficulty or "",
         AllowRestock = true,
         AllowServe = true,
@@ -238,6 +353,8 @@ function RecruitManager:CreateRoom(Config)
     }
     table.insert(self.Rooms, 1, Room)
     self.CurrentRoom = Room
+    self.SelectedModeID = tonumber(Room.Config.ModeID)
+    self.AllowRestock = Room.Config.AllowRestock == true
     self.SelectedRoomIndex = 1
     self.Page = "Exist"
     self:NotifyChanged()
@@ -252,6 +369,8 @@ function RecruitManager:JoinSelectedRoom()
         self.JoinRequestCallback(Room)
     end
     self.CurrentRoom = Room
+    self.SelectedModeID = tonumber(Room.Config.ModeID)
+    self.AllowRestock = Room.Config.AllowRestock == true
     self.Page = "Exist"
     self:RefreshLobbyMembers()
     self:NotifyChanged()
@@ -284,29 +403,31 @@ function RecruitManager:DisbandCurrentRoom()
 end
 
 function RecruitManager:GetAllowRestock()
-    return self.CurrentRoom and self.CurrentRoom.Config.AllowRestock == true or false
+    if self.CurrentRoom then
+        return self.CurrentRoom.Config.AllowRestock == true
+    end
+    return self.AllowRestock == true
 end
 
 function RecruitManager:SetAllowRestock(bAllowRestock)
-    if not self.CurrentRoom then
-        return
-    end
     local bNewValue = bAllowRestock == true
-    if self.CurrentRoom.Config.AllowRestock == bNewValue then
+    if self:GetAllowRestock() == bNewValue then
         return
     end
-    self.CurrentRoom.Config.AllowRestock = bNewValue
+    self.AllowRestock = bNewValue
+    if self.CurrentRoom then
+        self.CurrentRoom.Config.AllowRestock = bNewValue
+    end
     self:NotifyChanged()
 end
 
 function RecruitManager:StartGame()
     local Room = self.CurrentRoom
-    if not Room then
-        return
-    end
     local PlayerController = UGCGameSystem.GetLocalPlayerController()
     local GameState = UGCGameSystem.GameState
-    local ModeSetting = UGCMultiMode.GetModeSetting(Room.Config.ModeID)
+    local ModeID = self:GetSelectedModeID()
+    local bAllowRestock = Room and Room.Config.AllowRestock == true or self:GetAllowRestock()
+    local ModeSetting = UGCMultiMode.GetModeSetting(ModeID)
     if not PlayerController or not GameState or not ModeSetting or not PlayerController.bIsTeamLeader then
         return
     end
@@ -322,23 +443,24 @@ function RecruitManager:StartGame()
         UGCWidgetManagerSystem.ShowTipsUI("有队友未准备，不能开始匹配")
         return
     end
-    if self:IsModeLocked(Room.Config.ModeID) then
-        UGCWidgetManagerSystem.ShowTipsUI("该模式尚未解锁")
-        return
-    end
+    --if self:IsModeLocked(Room.Config.ModeID) then
+    --    UGCWidgetManagerSystem.ShowTipsUI("该模式尚未解锁")
+    --    return
+    --end
     UnrealNetwork.CallUnrealRPC(
         PlayerController,
         PlayerController,
         "RPC_Server_SetLobbySelectedModeID",
-        Room.Config.ModeID
+        ModeID
     )
     UnrealNetwork.CallUnrealRPC(
         PlayerController,
         PlayerController,
         "RPC_Server_SetFillTeammate",
-        Room.Config.AllowRestock == true
+        bAllowRestock
     )
-    UGCMultiMode.RequestMatch(Room.Config.ModeID, nil, nil, Room.Config.AllowRestock == true)
+    ugcprint("[Recruit] RequestMatch ModeID=" .. tostring(ModeID))
+    UGCMultiMode.RequestMatch(ModeID, self.OnMatchResponse, self, bAllowRestock)
 end
 
 function RecruitManager:SaveRoomConfig(Config)
@@ -346,6 +468,8 @@ function RecruitManager:SaveRoomConfig(Config)
         return
     end
     self.CurrentRoom.Config = CopyTable(Config)
+    self.SelectedModeID = tonumber(Config.ModeID)
+    self.AllowRestock = Config.AllowRestock == true
     self:CloseRoomConfig()
     self:NotifyChanged()
 end
@@ -401,6 +525,23 @@ end
 function RecruitManager:CloseRoomConfig()
     if self.RoomConfigUI then
         self.RoomConfigUI:SetVisibility(ESlateVisibility.Collapsed)
+    end
+end
+
+function RecruitManager:OpenSwitchMode()
+    if not self.SwitchModeUI then
+        self.SwitchModeUI = CreatePopup(POPUP_PATHS.SwitchMode)
+    end
+    if self.SwitchModeUI then
+        self.SwitchModeUI:SetVisibility(ESlateVisibility.Visible)
+        self.SwitchModeUI:OnOpen()
+        self.SwitchModeUI:OnUpdate()
+    end
+end
+
+function RecruitManager:CloseSwitchMode()
+    if self.SwitchModeUI then
+        self.SwitchModeUI:SetVisibility(ESlateVisibility.Collapsed)
     end
 end
 
