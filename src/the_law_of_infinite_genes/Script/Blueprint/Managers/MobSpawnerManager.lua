@@ -16,7 +16,7 @@ local MobSpawnerManager = {
 local SPAWNER_LOC = {
     { X=13420, Y=13200, Z=10 },
     { X=3670, Y=2780, Z=10 },
-    { X=3130, Y=10960, Z=190 },
+    { X=3480, Y=10500, Z=10 },
     { X=13960, Y=5010, Z=10 },
 }
 
