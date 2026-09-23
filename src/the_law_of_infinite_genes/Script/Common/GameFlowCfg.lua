@@ -187,68 +187,247 @@ GameFlowCfg.MonsterGroups = {
     },
     [11] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 4 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 4 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 2 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 2 },
+            { SpawnParam = _Elite_Speed          , Weight = 1 },
         },
     },
     [12] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 4 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 4 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 3 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 2 },
+            { SpawnParam = _Elite_Speed          , Weight = 1 },
         },
     },
     [13] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 4 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 4 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 3 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 3 },
+            { SpawnParam = _Elite_Speed          , Weight = 1 },
         },
     },
     [14] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 4 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 5 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 3 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 3 },
+            { SpawnParam = _Elite_Speed          , Weight = 1 },
         },
     },
     [15] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 4 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 5 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 4 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 3 },
+            { SpawnParam = _Elite_Speed          , Weight = 2 },
         },
     },
     [16] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 4 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 5 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 4 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 4 },
+            { SpawnParam = _Elite_Speed          , Weight = 2 },
         },
     },
     [17] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 5 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 5 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 4 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 4 },
+            { SpawnParam = _Elite_Speed          , Weight = 2 },
         },
     },
     [18] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 5 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 5 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 5 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 4 },
+            { SpawnParam = _Elite_Speed          , Weight = 2 },
         },
     },
     [19] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 5 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 6 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 5 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 4 },
+            { SpawnParam = _Elite_Speed          , Weight = 2 },
         },
     },
     [20] = {
         MobConfigList = {
-            { SpawnParam = _Normal_Infected, Weight = 1 },
+            { SpawnParam = _Normal_Infected      , Weight = 4 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 4 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 4 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 3 },
+            { SpawnParam = _Elite_Speed          , Weight = 2 },
+            { SpawnParam = _Boss_RottenArmor     , Weight = 1 },
+        },
+    },
+    [21] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 5 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 5 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 5 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 4 },
+            { SpawnParam = _Elite_Speed          , Weight = 2 },
+        },
+    },
+    [22] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 5 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 5 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 5 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 5 },
+            { SpawnParam = _Elite_Speed          , Weight = 3 },
+        },
+    },
+    [23] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 5 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 6 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 5 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 5 },
+            { SpawnParam = _Elite_Speed          , Weight = 3 },
+        },
+    },
+    [24] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 6 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 6 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 6 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 5 },
+            { SpawnParam = _Elite_Speed          , Weight = 3 },
+        },
+    },
+    [25] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 6 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 6 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 6 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 6 },
+            { SpawnParam = _Elite_Speed          , Weight = 3 },
+        },
+    },
+    [26] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 6 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 6 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 6 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 6 },
+            { SpawnParam = _Elite_Speed          , Weight = 4 },
+        },
+    },
+    [27] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 6 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 7 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 6 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 6 },
+            { SpawnParam = _Elite_Speed          , Weight = 4 },
+        },
+    },
+    [28] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 7 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 7 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 7 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 6 },
+            { SpawnParam = _Elite_Speed          , Weight = 4 },
+        },
+    },
+    [29] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 7 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 7 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 7 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 7 },
+            { SpawnParam = _Elite_Speed          , Weight = 4 },
+        },
+    },
+    [30] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 6 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 6 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 6 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 6 },
+            { SpawnParam = _Elite_Speed          , Weight = 4 },
+            { SpawnParam = _Boss_RottenArmor     , Weight = 1 },
+        },
+    },
+    [31] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 7 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 7 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 7 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 6 },
+            { SpawnParam = _Elite_Speed          , Weight = 4 },
+        },
+    },
+    [32] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 7 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 7 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 7 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 7 },
+            { SpawnParam = _Elite_Speed          , Weight = 5 },
+        },
+    },
+    [33] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 7 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 8 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 7 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 7 },
+            { SpawnParam = _Elite_Speed          , Weight = 5 },
+        },
+    },
+    [34] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 8 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 8 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 8 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 7 },
+            { SpawnParam = _Elite_Speed          , Weight = 5 },
+        },
+    },
+    [35] = {
+        MobConfigList = {
+            { SpawnParam = _Normal_Infected      , Weight = 7 },
+            { SpawnParam = _Normal_SpeedInfected , Weight = 7 },
+            { SpawnParam = _Normal_PoisonInfected, Weight = 7 },
+            { SpawnParam = _Normal_HeavyInfected , Weight = 7 },
+            { SpawnParam = _Elite_Speed          , Weight = 5 },
+            { SpawnParam = _Boss_RottenArmor     , Weight = 1 },
         },
     },
 }
 
+
 ---当前模式配置了有效波数时使用该值；未配置时使用怪物组的最后一波。
 function GameFlowCfg.GetMaxWave(ModeConfig)
-    local ConfiguredCount = ModeConfig and tonumber(ModeConfig.LevelCount)
-    if ConfiguredCount and ConfiguredCount >= 1 then
-        return math.floor(ConfiguredCount)
+    local configuredCount = ModeConfig and tonumber(ModeConfig.LevelCount)
+    if configuredCount and configuredCount >= 1 then
+        return configuredCount
     end
 
-    local LastGroupIndex = 0
-    for WaveIndex in pairs(GameFlowCfg.MonsterGroups) do
-        LastGroupIndex = math.max(LastGroupIndex, tonumber(WaveIndex) or 0)
+    local lastGroupIndex = 0
+    for waveIndex in pairs(GameFlowCfg.MonsterGroups) do
+        lastGroupIndex = math.max(lastGroupIndex, tonumber(waveIndex) or 0)
     end
-    return LastGroupIndex
+    return lastGroupIndex
 end
 
 
