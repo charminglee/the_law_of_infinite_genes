@@ -11,6 +11,29 @@ ELotteryMainUIType = {
 }; 
 
 
+---@enum EGiftPackOpenType
+EGiftPackOpenType = { 
+    ManuallyOpen = 0,
+    AutoOpen = 1,
+}; 
+
+
+---@enum EGiftPackType
+EGiftPackType = { 
+    Normal = 0,
+    Optional = 1,
+}; 
+
+
+---@enum ELotteryResetType
+ELotteryResetType = { 
+    NotReset = 0,
+    DailyReset = 1,
+    MonthlyReset = 2,
+    WeeklyReset = 3,
+}; 
+
+
 ---@enum Buff
 Buff = { 
     CorpseHuntingSurge = 0,
@@ -70,29 +93,6 @@ EModeDifficulty = {
     Simple = 0,
     Hard = 1,
     Nightmare = 2,
-}; 
-
-
----@enum EGiftPackOpenType
-EGiftPackOpenType = { 
-    ManuallyOpen = 0,
-    AutoOpen = 1,
-}; 
-
-
----@enum EGiftPackType
-EGiftPackType = { 
-    Normal = 0,
-    Optional = 1,
-}; 
-
-
----@enum ELotteryResetType
-ELotteryResetType = { 
-    NotReset = 0,
-    DailyReset = 1,
-    MonthlyReset = 2,
-    WeeklyReset = 3,
 }; 
 
 
