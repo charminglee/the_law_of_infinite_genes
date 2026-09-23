@@ -41,68 +41,6 @@ GameFlowCfg.Resource = {
         -- 得分倍率
         ScoreMultiplier = 1.0,
     },
-    OnKill = {
-        -- 每类怪物掉落的资源点
-        Loot = {
-            [Tag.Normal] = { ItemId=ItemId.Coin_6, Count=2 },
-            [Tag.Elite]  = { ItemId=ItemId.Coin_6, Count=10 },
-            [Tag.Boss]   = { ItemId=ItemId.Coin_6, Count=50 },
-        },
-        -- 加分
-        Score = {
-            [Tag.Normal] = 20,
-            [Tag.Elite]  = 100,
-            [Tag.Boss]   = 500,
-        },
-        -- 赛季经验
-        SeasonExp = {
-            [Tag.Normal] = 2,
-            [Tag.Elite]  = 10,
-            [Tag.Boss]   = 50,
-        },
-        -- 永久经验（角色经验）
-        CharacterExp = {
-            [Tag.Normal] = 2,
-            [Tag.Elite]  = 10,
-            [Tag.Boss]   = 50,
-        },
-    },
-    BossLoot = {
-        -- 难度倍率
-        DifficultyMultiplier = {
-            Min = 0.8,
-            Max = 2.0,
-            [Difficulty.Simple]    = 0.8,
-            [Difficulty.Normal]    = 1.0,
-            [Difficulty.Hard]      = 1.3,
-            [Difficulty.Nightmare] = 2.0,
-        },
-        -- 关卡倍率
-        WaveMultiplier = {
-            Min = 1.0,
-            Max = 2.0,
-            [5]  = 1.0,
-            [10] = 1.2,
-            [15] = 1.2,
-            [20] = 1.5,
-            [25] = 2.0,
-            [30] = 2.0,
-        },
-        -- 奖励物品池
-        RewardPool = {
-            { ItemId=ItemId.EquipmentMaterial_3_1, Min=8, Max=12, MinDifficulty=Difficulty.Simple },
-            { ItemId=ItemId.EquipmentMaterial_4_1, Min=6, Max=10, MinDifficulty=Difficulty.Simple },
-            { ItemId=ItemId.EquipmentMaterial_5_1, Min=4, Max=8,  MinDifficulty=Difficulty.Normal },
-            { ItemId=ItemId.BossMaterial_1,        Min=1, Max=3,  MinDifficulty=Difficulty.Hard },
-            { ItemId=ItemId.BossMaterial_0,        Min=1, Max=2,  MinDifficulty=Difficulty.Nightmare },
-            { ItemId=ItemId.BossMaterial_4,        Min=1, Max=3,  MinDifficulty=Difficulty.Hard },
-            { ItemId=ItemId.BossMaterial_5,        Min=1, Max=2,  MinDifficulty=Difficulty.Nightmare },
-            { ItemId=ItemId.BossMaterial_6,        Min=1, Max=3,  MinDifficulty=Difficulty.Hard },
-            { ItemId=ItemId.BossMaterial_7,        Min=1, Max=2,  MinDifficulty=Difficulty.Nightmare },
-            { ItemId=ItemId.BossMaterial_2,        Min=1, Max=3,  MinDifficulty=Difficulty.Hard },
-            { ItemId=ItemId.BossMaterial_3,        Min=1, Max=2,  MinDifficulty=Difficulty.Nightmare },
-        },
-    },
 }
 
 
@@ -298,6 +236,20 @@ GameFlowCfg.MonsterGroups = {
         },
     },
 }
+
+---当前模式配置了有效波数时使用该值；未配置时使用怪物组的最后一波。
+function GameFlowCfg.GetMaxWave(ModeConfig)
+    local ConfiguredCount = ModeConfig and tonumber(ModeConfig.LevelCount)
+    if ConfiguredCount and ConfiguredCount >= 1 then
+        return math.floor(ConfiguredCount)
+    end
+
+    local LastGroupIndex = 0
+    for WaveIndex in pairs(GameFlowCfg.MonsterGroups) do
+        LastGroupIndex = math.max(LastGroupIndex, tonumber(WaveIndex) or 0)
+    end
+    return LastGroupIndex
+end
 
 
 

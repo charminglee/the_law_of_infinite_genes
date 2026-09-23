@@ -47,6 +47,10 @@ end
 function PlayerDataManager:ReceiveBeginPlay()
     PlayerDataManager.SuperClass.ReceiveBeginPlay(self)
     self:_LoadData()
+    if Lib.IsServer() then
+        -- 资源点是纯局内货币，新对局不能继承上一局自动存档中的余额。
+        self:SetCoin(ItemId.Coin_6, 0)
+    end
     self:ResetCardData()
     self:ResetScore()
     

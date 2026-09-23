@@ -272,6 +272,21 @@ function UGCPlayerState:Settle(IsFinish)
     return GameFlow.Settlement.Settle(self, IsFinish)
 end
 
+---服务端登记玩家是否持续观战至结算。
+function UGCPlayerState:SetSettlementObservedToEnd(bObserved)
+    return GameFlow.Settlement.SetObservedToEnd(self, bObserved)
+end
+
+---服务端登记玩家是否中途退出。
+function UGCPlayerState:SetSettlementExitedEarly(bExited)
+    return GameFlow.Settlement.SetExitedEarly(self, bExited)
+end
+
+---服务端登记本局是否在结算时使用倍率币。
+function UGCPlayerState:SetSettlementUseMultiplierCoin(bUse)
+    return GameFlow.Settlement.SetUseMultiplierCoin(self, bUse)
+end
+
 ---客户端收到结算参数后打开结算界面。
 function UGCPlayerState:OnRep_SettleParams()
     GameFlow.ClientPresenter.OnSettleParamsReplicated(self)

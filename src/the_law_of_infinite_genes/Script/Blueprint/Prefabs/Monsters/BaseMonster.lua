@@ -40,14 +40,6 @@ function BaseMonster:BPDie(killingDamage, eventInstigator, damageCauser, damageE
     local playerHealthMax = pam:GetAttr(Attribute.HealthMax)
     local playerHealthPct = playerHealth / playerHealthMax
 
-    local loot = GameFlowCfg.Resource.OnKill.Loot[self.tag]
-    pdm:AddCoin(loot.ItemId, loot.Count, false)
-
-    local seasonExp = GameFlowCfg.Resource.OnKill.SeasonExp[self.tag]
-    pdm:AddSeasonExp(seasonExp, false)
-    local characterExp = GameFlowCfg.Resource.OnKill.CharacterExp[self.tag]
-    pdm:AddCharacterExp(characterExp, false)
-
     if self.tag == Tag.Boss then
         pdm:AddStat(Statistics.BossKillCount, 1, false)
     elseif self.tag == Tag.Elite then
@@ -89,11 +81,29 @@ function BaseMonster:PostTakeDamageEvent(damage, eventInstigator, damageCauser, 
         return
     end
 
-    local am = UGCGameSystem.GetPlayerPawnByPlayerController(eventInstigator).AttrManager
     damage = math.min(damage, self._healthBefore)
-    local pdm = UGCGameSystem.GetPlayerStateByPlayerController(eventInstigator).PlayerDataManager
+    local playerState = UGCGameSystem.GetPlayerStateByPlayerController(eventInstigator)
+    local pdm = playerState.PlayerDataManager
     local delta = math.floor(damage * GameFlowCfg.Resource.OnDamage.ScoreMultiplier)
+    local oldScore = pdm:GetScore()
     pdm:AddScore(delta)
+
+    -- 资源点按累计伤害整段换算，避免每次命中单独取整造成损失。
+    local oldResourcePoint = math.floor(oldScore / 10)
+    local newResourcePoint = math.floor((oldScore + delta) / 10)
+    if newResourcePoint > oldResourcePoint then
+        pdm:AddCoin(ItemId.Coin_6, newResourcePoint - oldResourcePoint, false)
+    end
+
+    local record = playerState.GameRecordData
+    record.TotalDamage = (tonumber(record.TotalDamage) or 0) + delta
+    local levelRecord = record.LevelInfo and record.LevelInfo[record.CurrentStage]
+    if levelRecord then
+        levelRecord.LevelDamage = (tonumber(levelRecord.LevelDamage) or 0) + delta
+    end
+    if self.tag == Tag.Boss then
+        record.BossDamage = (tonumber(record.BossDamage) or 0) + delta
+    end
 end
 
 

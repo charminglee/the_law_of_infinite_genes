@@ -1,5 +1,6 @@
 ---单人模式最终结算节点。只负责收集本关玩家并分发结算命令。
 local SingleModeSettlement = {}
+local GameFlow = UGCGameSystem.UGCRequire("Script.Blueprint.GameFlow.GameFlow")
 
 ---为当前关卡中的所有有效玩家执行一次幂等结算。
 ---@param InstanceID any 当前关卡实例 ID，由关卡流传入
@@ -18,13 +19,11 @@ function SingleModeSettlement:LuaExecuteWithFinish(InstanceID, IsFinish)
         return
     end
 
-    local SettledCount = 0
-    for _, PlayerController in pairs(PlayerControllers) do
-        local PlayerState = UGCGameSystem.GetPlayerStateByPlayerController(PlayerController)
-        if PlayerState and PlayerState:Settle(IsFinish) then
-            SettledCount = SettledCount + 1
-        end
-    end
+    local SettledCount = GameFlow.Settlement.SettlePlayers(
+        PlayerControllers,
+        IsFinish,
+        InstanceID
+    )
 
     UGCLog.Log(
         "[SingleModeSettlement] InstanceID=%s, IsFinish=%s, PlayerCount=%d, SettledCount=%d",

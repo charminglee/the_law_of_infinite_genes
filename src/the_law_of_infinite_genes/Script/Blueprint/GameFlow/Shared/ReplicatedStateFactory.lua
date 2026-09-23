@@ -44,6 +44,10 @@ function ReplicatedStateFactory.NewGameRecordData()
         LikeNum = 0,
         Likes = {},
         ReceivedLikes = {},
+        BossDamage = 0,
+        bObservedToEnd = false,
+        bExitedEarly = false,
+        bUseMultiplierCoin = false,
     }
 end
 
@@ -54,6 +58,8 @@ function ReplicatedStateFactory.NewSettleParams()
         bIsSettled = false,
         bIsFinished = true,
         bUnlockedNewMode = false,
+        MatchToken = "",
+        Result = nil,
     }
 end
 

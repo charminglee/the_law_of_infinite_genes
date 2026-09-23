@@ -70,6 +70,7 @@ end
 function GameClientPresenter.BuildResultPlayerData(PlayerState)
     return {
         GameRecordData = PlayerState.GameRecordData,
+        SettlementResult = PlayerState.SettleParams and PlayerState.SettleParams.Result or nil,
         UID = PlayerState:GetInt64UID(),
         IconURL = PlayerState.IconURL,
         Gender = PlayerState.Gender,
@@ -150,6 +151,7 @@ function GameClientPresenter.OnSettleParamsReplicated(PlayerState)
     if not PlayerState.SettleParams or not PlayerState.SettleParams.bIsSettled then
         return
     end
+    GameClientPresenter.RegisterResultPlayerState(PlayerState)
     local Controller = UGCGameSystem.GetPlayerControllerByPlayerState(PlayerState)
     if Controller then
         Controller:OnGameSettle()

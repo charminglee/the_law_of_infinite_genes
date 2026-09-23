@@ -7,10 +7,12 @@ local MobSpawnerManager = {
     ---@type UClass[]
     spawnQueue = {},            -- 本波待刷新的怪物类队列
     spawnTimer = 0,             -- 距离下一只怪的刷怪计时
-    ---@type table<string, table<number, {ItemId: number, Count: number}[]>>
-    rewardsRecord = {},
     remainingMonsters = 0,
+    isSettling = false,
 }
+
+UGCGameSystem.UGCRequire("Script.Common.UGCLog")
+local UGCGameData = UGCGameSystem.UGCRequire("Script.Blueprint.UGCGameData")
 
 
 local SPAWNER_LOC = {
@@ -180,7 +182,7 @@ end
 
 
 function MobSpawnerManager:GetReplicatedProperties()
-    return { "waveIndex", "Lazy" }, { "remainingMonsters", "Lazy" }, "isInSpawnInterval", { "rewardsRecord", "Lazy" }
+    return { "waveIndex", "Lazy" }, { "remainingMonsters", "Lazy" }, "isInSpawnInterval"
 end
 
 
@@ -233,9 +235,6 @@ function MobSpawnerManager:OnMobDie(killingDamage, eventInstigator, damageCauser
         UnrealNetwork.RepLazyProperty(self, "remainingMonsters")
     end
     if self.remainingMonsters <= 0 then
-        if GameFlowCfg.Resource.BossLoot.WaveMultiplier[self.waveIndex] then
-            self:_DropBossReward()
-        end
         self:NextWave()
     end
 end
@@ -246,10 +245,25 @@ function MobSpawnerManager:NextWave()
     if not Lib.IsServer() then
         return
     end
-    if GameFlowCfg.MonsterGroups[self.waveIndex + 1] == nil then
+    if self.remainingMonsters > 0 or self.isInSpawnInterval or self.isSettling then
         return
     end
-    if self.remainingMonsters > 0 then
+
+    local modeID = UGCMultiMode.GetModeID()
+    local modeConfig = UGCGameData.GetGameModeConfig(modeID)
+    local maxWave = GameFlowCfg.GetMaxWave(modeConfig)
+    if maxWave < 1 then
+        UGCLog.Log(string.format("[MobSpawnerManager] no wave configured, ModeID=%s", tostring(modeID)))
+        return
+    end
+    if self.waveIndex >= maxWave then
+        self.isSettling = true
+        UGCLog.Log(string.format("[MobSpawnerManager] final wave cleared, ModeID=%s, Wave=%d, MaxWave=%d", tostring(modeID), self.waveIndex, maxWave))
+        UGCLevelFlowSystem.GameSettle(true)
+        return
+    end
+    if GameFlowCfg.MonsterGroups[self.waveIndex + 1] == nil then
+        UGCLog.Log(string.format("[MobSpawnerManager] missing monster group, ModeID=%s, Wave=%d", tostring(modeID), self.waveIndex + 1))
         return
     end
     self.isInSpawnInterval = true
@@ -295,38 +309,6 @@ function MobSpawnerManager:_SpawnNextMob()
         UnrealNetwork.RepLazyProperty(self, "remainingMonsters")
     end
     return true
-end
-
-
-function MobSpawnerManager:_DropBossReward()
-    local bossLoot = GameFlowCfg.Resource.BossLoot
-    local difficulty = GameState.difficulty
-    local difficultyMultiplier = bossLoot.DifficultyMultiplier[difficulty]
-    local waveMultiplier = bossLoot.WaveMultiplier[self.waveIndex]
-    local mul = difficultyMultiplier * waveMultiplier
-    local allPlayers = UGCGameSystem.GetAllPlayerController(false)
-    local difficultyIndex = {
-        [Difficulty.Simple] = 0,
-        [Difficulty.Normal] = 1,
-        [Difficulty.Hard] = 2,
-        [Difficulty.Nightmare] = 3,
-    }
-
-    for _, material in pairs(bossLoot.RewardPool) do
-        if difficultyIndex[difficulty] >= difficultyIndex[material.MinDifficulty] then
-            local baseCount = math.random(material.Min, material.Max)
-            local count = math.ceil(baseCount * mul)
-
-            for _, player in pairs(allPlayers) do
-                UGCBackpackSystemV2.AddItemV2(player, material.ItemId, count)
-
-                local record = Lib.Table.SetDefault(self.rewardsRecord, player.PlayerUID, {})
-                local byWave = Lib.Table.SetDefault(record, self.waveIndex, {})
-                table.insert(byWave, { ItemId = material.ItemId, Count = count })
-            end
-        end
-    end
-    UnrealNetwork.RepLazyProperty(self, "rewardsRecord")
 end
 
 

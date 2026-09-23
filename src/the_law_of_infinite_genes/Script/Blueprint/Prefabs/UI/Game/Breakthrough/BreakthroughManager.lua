@@ -113,8 +113,9 @@ end
 
 function BreakthroughManager:AddOrUpdateResultPlayerState(InPlayerState)
     print("[BreakthroughManager:AddOrUpdateResultPlayerState]: AddOrUpdateResultPlayerState : " .. InPlayerState.PlayerKey)
-    for _, PlayerState in pairs(self.ResultPlayerState) do
+    for Index, PlayerState in pairs(self.ResultPlayerState) do
         if PlayerState.UID == InPlayerState.UID then
+            self.ResultPlayerState[Index] = InPlayerState
             return
         end
     end
